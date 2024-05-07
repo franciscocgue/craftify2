@@ -1,0 +1,17 @@
+{
+  "name": "craftify",
+  "version": "1.0.0",
+  "description": "Web app to build no-code / low-code web applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Francisco Carmona Guerrero",
+  "license": "ISC",
+  "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "framer-motion": "^11.1.9"
+  }
+}
