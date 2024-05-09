@@ -20,7 +20,7 @@ const Component = ({name, icon}: propsT) => {
     >
         <Icon as={icon} w={7} h={7} color="black.800" />
         <Box>
-            <Text align={'center'} fontSize='sm'>{name}</Text>
+            <Text align={'center'} fontSize='sm' userSelect={'none'}>{name}</Text>
         </Box>
     </Flex>
 }

@@ -9,12 +9,15 @@ import { useState } from "react";
 import Component from "../components/SidebarComponents/Component";
 import { compTypes } from "../helpers/components";
 import Draggable from "../helpers/Draggable";
+import { restrictToWindowEdges } from "@dnd-kit/modifiers";
+import useDesignerStore from "../stores/designer";
 
 
 // App component
 const Designer = () => {
 
-  const [draggingId, setDraggingId] = useState(null);
+  // const [draggingId_, setDraggingId] = useState(null);
+  const { setDraggingId, draggingId } = useDesignerStore();
 
   function handleDragEnd(event) {
     setDraggingId(null);
@@ -26,6 +29,7 @@ const Designer = () => {
     setDraggingId(event.active.id)
   }
 
+
   return (
     <Flex direction="column" h="100vh" minH='100vh' maxH='100vh' w='100vw' maxW='100vw'>
       <Navbar />
@@ -33,7 +37,7 @@ const Designer = () => {
       <Flex flex={1} overflow={'hidden'}>
 
         <SidebarMenu />
-        <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+        <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} modifiers={[restrictToWindowEdges]}>
           <SidebarComponents />
           <Canvas />
           <DragOverlay dropAnimation={null}>
