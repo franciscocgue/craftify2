@@ -4,19 +4,42 @@ import Navbar from "../components/Navbar";
 import SidebarMenu from "../components/SidebarMenu";
 import SidebarComponents from "../components/SidebarComponents";
 import SidebarProperties from "../components/SidebarProperties";
+import { DndContext, DragOverlay } from '@dnd-kit/core';
+import { useState } from "react";
 
 
 // App component
 const Designer = () => {
+
+  const [draggingId, setDraggingId] = useState(null);
+
+  function handleDragEnd(event) {
+    setDraggingId(null);
+    if (event.over && event.over.id === 'canvas') {
+      console.log('dropped');
+    }
+  }
+  function handleDragStart(event) {
+    setDraggingId(event.active.id)
+  }
+  
   return (
     <Flex direction="column" h="100vh" minH='100vh' maxH='100vh' w='100vw' maxW='100vw'>
       <Navbar />
       {/* main content */}
-      <Flex flex={1} overflow={'auto'}>
+      <Flex flex={1} overflow={'hidden'}>
 
         <SidebarMenu />
-        <SidebarComponents />
-        <Canvas />
+        <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+          <SidebarComponents />
+          <Canvas />
+          <DragOverlay>
+            {draggingId ? 
+              // <Item value={`Item ${activeId}`} />
+              'HolaHola'
+             : null}
+          </DragOverlay>
+        </DndContext>
         <SidebarProperties />
 
       </Flex>
