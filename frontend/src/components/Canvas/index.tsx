@@ -1,5 +1,8 @@
 import { Box, Flex } from "@chakra-ui/react";
 import Droppable from "../../helpers/Droppable";
+import TestDroppableArea from "../../helpers/TestDroppableArea";
+import useDesignerStore from "../../stores/designer";
+
 
 const screenSizes = {
     'Galaxy S10': [360, 760],
@@ -11,6 +14,9 @@ const device = "Galaxy S10";
 const canvasDropBorderPx = 2;
 
 const Canvas = () => {
+
+    const { components } = useDesignerStore();
+
     return <Flex flex={1} border={'1px solid grey'} alignItems={'center'} justifyContent={'center'} maxH='100vh' maxW='100vw' overflow={'auto'}>
 
         <Box maxW={'100%'} maxH={'100%'} overflow={'auto'}>
@@ -23,7 +29,7 @@ const Canvas = () => {
                 // border={'1px solid blue'}
                 overflowY={'auto'}
             >
-                <Droppable id='canvas'>
+                <Droppable componentId='canvas'  componentType={components['canvas'].type}>
                     {/* Example: */}
                     {/* Canvas
                 <Box overflow={'auto'}>
@@ -45,22 +51,34 @@ const Canvas = () => {
 
                     {/* Main container */}
                     <Flex direction={'column'} alignItems={'center'} gap={5} h={'100%'} w={'100%'}>
-                        <Box border={'1px solid gray'}>Box 1</Box>
-                        <Box border={'1px solid gray'} w={10} h={20}>Box 2</Box>
-                        <Box border={'1px solid gray'} w={'50%'}>Box 3</Box>
+                        <Box border={'1px solid gray'}>
+                            <Droppable componentId='component-id1' componentType={components['component-id1'].type}>
+                                Box 1
+                            </Droppable>
+                        </Box>
+                        <Box border={'1px solid gray'} w={10} h={20}>
+                            <Droppable componentId='component-id2' componentType={components['component-id2'].type}>
+                                Box 2
+                            </Droppable>
+                        </Box>
+                        <Box border={'1px solid gray'} w={'50%'}>
+                            <Droppable componentId='component-id3' componentType={components['component-id3'].type}>
+                                Box 3
+                            </Droppable>
+                        </Box>
                         {/* test sub container 1 */}
                         <Box border={'1px solid white'} w={'100%'} h={'100px'}>
-                            <Droppable id='subcontainer1'>
+                            <Droppable componentId='subcontainer1'  componentType={components['subcontainer1'].type}>
                                 test container
                             </Droppable>
                         </Box>
                         {/* test sub container 2 */}
                         <Box border={'1px solid white'} w={'100%'}>
-                            <Droppable id='subcontainer2'>
+                            <Droppable componentId='subcontainer2' componentType={components['subcontainer2'].type}>
                                 <Box border={'1px solid gray'} w={'50%'} h={10}>Box 3</Box>
                                 {/* test sub sub container 1 */}
-                                <Box border={'1px solid white'} w={'100%'} h={'100px'}>
-                                    <Droppable id='subsubcontainer1'>
+                                <Box border={'1px solid white'} w={'100%'} h={'50px'}>
+                                    <Droppable componentId='subsubcontainer1'  componentType={components['subsubcontainer1'].type}>
                                         test deeply nested container
                                     </Droppable>
                                 </Box>

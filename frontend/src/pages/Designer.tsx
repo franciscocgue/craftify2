@@ -4,13 +4,14 @@ import Navbar from "../components/Navbar";
 import SidebarMenu from "../components/SidebarMenu";
 import SidebarComponents from "../components/SidebarComponents";
 import SidebarProperties from "../components/SidebarProperties";
-import { DndContext, DragOverlay } from '@dnd-kit/core';
+import { DndContext, DragOverlay, closestCenter, pointerWithin, rectIntersection } from '@dnd-kit/core';
 import { useState } from "react";
 import Component from "../components/SidebarComponents/Component";
 import { compTypes } from "../helpers/components";
 import Draggable from "../helpers/Draggable";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import useDesignerStore from "../stores/designer";
+import { cornersOfRectangle } from "@dnd-kit/core/dist/utilities/algorithms/helpers";
 
 
 // App component
@@ -20,13 +21,21 @@ const Designer = () => {
   const { setDraggingId, draggingId } = useDesignerStore();
 
   function handleDragEnd(event) {
+    console.log('END DRAG')
+    console.log(event)
     setDraggingId(null);
-    if (event.over && event.over.id === 'canvas') {
-      console.log('dropped');
-    }
+    // if (event.over && event.over.id === 'canvas') {
+    //   console.log('dropped');
+    // }
   }
+
   function handleDragStart(event) {
     setDraggingId(event.active.id)
+  }
+
+  function handleDragOver(event) {
+    // console.log('dragging OVER')
+    // console.log(event)
   }
 
 
@@ -37,12 +46,19 @@ const Designer = () => {
       <Flex flex={1} overflow={'hidden'}>
 
         <SidebarMenu />
-        <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} modifiers={[restrictToWindowEdges]}>
+        <DndContext
+          onDragEnd={handleDragEnd}
+          onDragStart={handleDragStart}
+          modifiers={[restrictToWindowEdges]}
+          onDragOver={handleDragOver}
+          collisionDetection={pointerWithin}
+          // collisionDetection={rectIntersection}
+        >
           <SidebarComponents />
           <Canvas />
           <DragOverlay dropAnimation={null}>
             {draggingId ?
-              <Component name={compTypes[draggingId].name} icon={compTypes[draggingId].icon} />
+              <Component style={{opacity:'0.4'}} name={compTypes[draggingId].name} icon={compTypes[draggingId].icon} />
               : null}
           </DragOverlay>
         </DndContext>
