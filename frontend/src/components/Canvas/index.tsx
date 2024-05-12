@@ -2,6 +2,8 @@ import { Box, Flex } from "@chakra-ui/react";
 import Droppable from "../../helpers/Droppable";
 import TestDroppableArea from "../../helpers/TestDroppableArea";
 import useDesignerStore from "../../stores/designer";
+import DraggableCanvas from "../../helpers/DraggableCanvas";
+import ComponentWrapper from "../../helpers/ComponentWrapper";
 
 
 const screenSizes = {
@@ -25,11 +27,11 @@ const Canvas = () => {
                 w={screenSizes[device][0] + canvasDropBorderPx * 2}
                 h={screenSizes[device][1] + canvasDropBorderPx * 2}
                 maxH={screenSizes[device][1]}
-                bg='gray.500'
+                bg='gray.200'
                 // border={'1px solid blue'}
                 overflowY={'auto'}
             >
-                <Droppable componentId='canvas'  componentType={components['canvas'].type}>
+                <Droppable componentId='canvas' componentType={components['canvas'].type}>
                     {/* Example: */}
                     {/* Canvas
                 <Box overflow={'auto'}>
@@ -52,33 +54,49 @@ const Canvas = () => {
                     {/* Main container */}
                     <Flex direction={'column'} alignItems={'center'} gap={5} h={'100%'} w={'100%'}>
                         <Box border={'1px solid gray'}>
-                            <Droppable componentId='component-id1' componentType={components['component-id1'].type}>
-                                Box 1
-                            </Droppable>
+                            <DraggableCanvas id={"component-id1"}>
+                                <Droppable componentId='component-id1' componentType={components['component-id1'].type}>
+                                    Box 1
+                                </Droppable>
+                            </DraggableCanvas>
                         </Box>
-                        <Box border={'1px solid gray'} w={10} h={20}>
-                            <Droppable componentId='component-id2' componentType={components['component-id2'].type}>
-                                Box 2
-                            </Droppable>
+
+                        <Box border={'1px solid gray'} w={'100px'} h={'200px'}>
+                            <DraggableCanvas id={"component-id2"}>
+                                <Droppable componentId='component-id2' componentType={components['component-id2'].type}>
+                                    Box 2
+                                </Droppable>
+                            </DraggableCanvas>
                         </Box>
+                        {/* <ComponentWrapper id="">
+                            <Box>
+                                Testing
+                            </Box>
+                        </ComponentWrapper> */}
                         <Box border={'1px solid gray'} w={'50%'}>
-                            <Droppable componentId='component-id3' componentType={components['component-id3'].type}>
-                                Box 3
-                            </Droppable>
+                            <DraggableCanvas id={"component-id3"}>
+                                <Droppable componentId='component-id3' componentType={components['component-id3'].type}>
+                                    Box 3
+                                </Droppable>
+                            </DraggableCanvas>
                         </Box>
                         {/* test sub container 1 */}
-                        <Box border={'1px solid white'} w={'100%'} h={'100px'}>
-                            <Droppable componentId='subcontainer1'  componentType={components['subcontainer1'].type}>
+                        <ComponentWrapper id="" w={'80%'} h={'100px'} p={1}>
+                            {/* <Box border={'1px solid white'} w={'100%'} h={'100px'}> */}
+                                {/* <DraggableCanvas id={"subcontainer1"}>
+                                <Droppable componentId='subcontainer1' componentType={components['subcontainer1'].type}> */}
                                 test container
-                            </Droppable>
-                        </Box>
+                                {/* </Droppable>
+                            </DraggableCanvas> */}
+                            {/* </Box> */}
+                        </ComponentWrapper>
                         {/* test sub container 2 */}
                         <Box border={'1px solid white'} w={'100%'}>
                             <Droppable componentId='subcontainer2' componentType={components['subcontainer2'].type}>
                                 <Box border={'1px solid gray'} w={'50%'} h={10}>Box 3</Box>
                                 {/* test sub sub container 1 */}
                                 <Box border={'1px solid white'} w={'100%'} h={'50px'}>
-                                    <Droppable componentId='subsubcontainer1'  componentType={components['subsubcontainer1'].type}>
+                                    <Droppable componentId='subsubcontainer1' componentType={components['subsubcontainer1'].type}>
                                         test deeply nested container
                                     </Droppable>
                                 </Box>
@@ -88,9 +106,9 @@ const Canvas = () => {
 
                 </Droppable>
             </Box>
-        </Box>
+        </Box >
 
-    </Flex>
+    </Flex >
 };
 
 export default Canvas;

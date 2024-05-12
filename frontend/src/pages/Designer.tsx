@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import Canvas from "../components/Canvas";
 import Navbar from "../components/Navbar";
 import SidebarMenu from "../components/SidebarMenu";
@@ -52,14 +52,14 @@ const Designer = () => {
           modifiers={[restrictToWindowEdges]}
           onDragOver={handleDragOver}
           collisionDetection={pointerWithin}
-          // collisionDetection={rectIntersection}
+        // collisionDetection={rectIntersection}
         >
           <SidebarComponents />
           <Canvas />
           <DragOverlay dropAnimation={null}>
-            {draggingId ?
-              <Component style={{opacity:'0.4'}} name={compTypes[draggingId].name} icon={compTypes[draggingId].icon} />
-              : null}
+            {draggingId === 'TEST' && <Box p={0.5} bg={'rgba(255, 255, 255, 0.5)'} w={'max-content'} borderRadius={'7px'} border={'1px solid blue'}><Text fontSize='xs'>moving container</Text></Box>}
+            {draggingId && draggingId !== 'TEST' && <Component style={{ opacity: '0.4' }} name={compTypes[draggingId].name} icon={compTypes[draggingId].icon} />}
+            {!draggingId && null}
           </DragOverlay>
         </DndContext>
         <SidebarProperties />

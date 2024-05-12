@@ -1,5 +1,6 @@
 import { useDroppable } from '@dnd-kit/core';
 import { CSSProperties, ReactNode } from 'react';
+import useDesignerStore from '../stores/designer';
 
 /* 
 Needs a parent with size; Droppable will fit all space (100%)
@@ -120,6 +121,8 @@ const stylesOnlyOutline = (isOver: true | false) => ({
 
 function Droppable({ componentId, componentType, style, children }: propsT) {
 
+  const {draggingId} = useDesignerStore();
+
   const { isOver, setNodeRef } = useDroppable({
     id: `${componentId}_body`,
     data: {
@@ -179,14 +182,14 @@ function Droppable({ componentId, componentType, style, children }: propsT) {
       {/* droppable areas */}
       {/* top border */}
       {/* @TODO: if parent is row / column, use top / left; same for bottom and right below */}
-      {componentType === 'container-column' && <div ref={setNodeRefT} style={stylesTop(isOverT)}></div>}
+      {draggingId && draggingId !== componentId && componentId !== 'canvas' && componentType === 'container-column' && <div ref={setNodeRefT} style={stylesTop(isOverT)}></div>}
       {/* bottom border */}
-      {componentType === 'container-column' && <div ref={setNodeRefB} style={stylesBottom(isOverB)}></div>}
+      {draggingId && draggingId !== componentId && componentId !== 'canvas' && componentType === 'container-column' && <div ref={setNodeRefB} style={stylesBottom(isOverB)}></div>}
       {/* body drop */}
-      {componentType === 'container-column' && <div ref={setNodeRef} style={stylesBody(isOver)}></div>}
+      {draggingId && draggingId !== componentId && componentType === 'container-column' && <div ref={setNodeRef} style={stylesBody(isOver)}></div>}
       {/* no container component */}
-      {componentType !== 'container-column' && <div ref={setNodeRefT} style={stylesTopNoContainer(isOverT)}></div>}
-      {componentType !== 'container-column' && <div ref={setNodeRefB} style={stylesBottomNoContainer(isOverB)}></div>}
+      {draggingId && draggingId !== componentId && componentId !== 'canvas' && componentType !== 'container-column' && <div ref={setNodeRefT} style={stylesTopNoContainer(isOverT)}></div>}
+      {draggingId && draggingId !== componentId && componentId !== 'canvas' && componentType !== 'container-column' && <div ref={setNodeRefB} style={stylesBottomNoContainer(isOverB)}></div>}
     </div>
   );
 }
