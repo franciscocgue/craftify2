@@ -57,8 +57,8 @@ const Designer = () => {
           <SidebarComponents />
           <Canvas />
           <DragOverlay dropAnimation={null}>
-            {draggingId === 'TEST' && <Box p={0.5} bg={'rgba(255, 255, 255, 0.5)'} w={'max-content'} borderRadius={'7px'} border={'1px solid blue'}><Text fontSize='xs'>moving container</Text></Box>}
-            {draggingId && draggingId !== 'TEST' && <Component style={{ opacity: '0.4' }} name={compTypes[draggingId].name} icon={compTypes[draggingId].icon} />}
+            {draggingId === 'draggable_TEST' && <Box p={0.5} bg={'rgba(255, 255, 255, 0.5)'} w={'max-content'} borderRadius={'7px'} border={'1px solid blue'}><Text fontSize='xs'>moving container</Text></Box>}
+            {draggingId && draggingId !== 'draggable_TEST' && <Component style={{ opacity: '0.4' }} name={compTypes[draggingId].name} icon={compTypes[draggingId].icon} />}
             {!draggingId && null}
           </DragOverlay>
         </DndContext>

@@ -81,7 +81,7 @@ const Canvas = () => {
                             </DraggableCanvas>
                         </Box>
                         {/* test sub container 1 */}
-                        <ComponentWrapper id="" w={'80%'} h={'100px'} p={1}>
+                        <ComponentWrapper id="TEST" componentType="" parentType='container-column' w={'100%'} h={'100px'} p={1} border="1px solid grey">
                             {/* <Box border={'1px solid white'} w={'100%'} h={'100px'}> */}
                                 {/* <DraggableCanvas id={"subcontainer1"}>
                                 <Droppable componentId='subcontainer1' componentType={components['subcontainer1'].type}> */}
