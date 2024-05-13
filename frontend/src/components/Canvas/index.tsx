@@ -52,7 +52,7 @@ const Canvas = () => {
                 </Box> */}
 
                     {/* Main container */}
-                    <Flex direction={'column'} alignItems={'center'} gap={5} h={'100%'} w={'100%'}>
+                    <Flex direction={'column'} alignItems={'center'} gap={2} h={'100%'} w={'100%'}>
                         <Box border={'1px solid gray'}>
                             <DraggableCanvas id={"component-id1"}>
                                 <Droppable componentId='component-id1' componentType={components['component-id1'].type}>
@@ -81,14 +81,8 @@ const Canvas = () => {
                             </DraggableCanvas>
                         </Box>
                         {/* test sub container 1 */}
-                        <ComponentWrapper id="TEST" componentType="" parentType='container-column' w={'100%'} h={'100px'} p={1} border="1px solid grey">
-                            {/* <Box border={'1px solid white'} w={'100%'} h={'100px'}> */}
-                                {/* <DraggableCanvas id={"subcontainer1"}>
-                                <Droppable componentId='subcontainer1' componentType={components['subcontainer1'].type}> */}
-                                test container
-                                {/* </Droppable>
-                            </DraggableCanvas> */}
-                            {/* </Box> */}
+                        <ComponentWrapper id="TEST" componentType="" parentType='container-column' w={'100%'} h={'100px'} p={1} border="none">
+                            test container
                         </ComponentWrapper>
                         {/* test sub container 2 */}
                         <Box border={'1px solid white'} w={'100%'}>
