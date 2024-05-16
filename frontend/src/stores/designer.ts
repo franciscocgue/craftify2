@@ -36,14 +36,25 @@ const components = {
 
 type designerStore = {
   draggingId: string | null,
+  isResizing: true | false,
+  selectedId: string | null,
   components: any,
+  setIsResizing: (isResizing: true | false) => void,
   setDraggingId: (draggingId: string | null) => void,
+  setSelectedId: (selectedId: string | null) => void,
 }
 
 const useDesignerStore = create<designerStore>((set) => ({
   draggingId: null,
+  isResizing: false,
+  selectedId: null,
   components: components,
+  setIsResizing: (isResizing: true | false) => set({ isResizing: isResizing }),
   setDraggingId: (draggingId) => set({ draggingId: draggingId }),
+  setSelectedId: (selectedId) => {
+    // console.log('hoveredId:' + hoveredId)
+    set({ selectedId: selectedId })
+  },
 }));
 
 export default useDesignerStore;

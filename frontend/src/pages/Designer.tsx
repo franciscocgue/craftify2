@@ -4,33 +4,41 @@ import Navbar from "../components/Navbar";
 import SidebarMenu from "../components/SidebarMenu";
 import SidebarComponents from "../components/SidebarComponents";
 import SidebarProperties from "../components/SidebarProperties";
-import { DndContext, DragOverlay, closestCenter, pointerWithin, rectIntersection } from '@dnd-kit/core';
-import { useState } from "react";
+import { DndContext, DragOverlay, pointerWithin } from '@dnd-kit/core';
 import Component from "../components/SidebarComponents/Component";
 import { compTypes } from "../helpers/components";
-import Draggable from "../helpers/Draggable";
-import { restrictToWindowEdges } from "@dnd-kit/modifiers";
+import { restrictToWindowEdges, snapCenterToCursor } from "@dnd-kit/modifiers";
+// import { snapVertCenterToCursor } from "../helpers/dnd-kit";
 import useDesignerStore from "../stores/designer";
-import { cornersOfRectangle } from "@dnd-kit/core/dist/utilities/algorithms/helpers";
+import { useState } from "react";
 
 
 // App component
 const Designer = () => {
 
   // const [draggingId_, setDraggingId] = useState(null);
-  const { setDraggingId, draggingId } = useDesignerStore();
+  const { setDraggingId, draggingId, isResizing } = useDesignerStore();
+
+  const [hasMoved, setHasMoved] = useState(false);
+  const [delayHandler, setDelayHandler] = useState(null);
 
   function handleDragEnd(event) {
     console.log('END DRAG')
-    console.log(event)
+    // console.log(event)
     setDraggingId(null);
     // if (event.over && event.over.id === 'canvas') {
     //   console.log('dropped');
     // }
   }
 
-  function handleDragStart(event) {
+  // function handleDragStart(event) {
+  //   // setDraggingId(event.active.id)
+  //   console.log('STart dragging')
+  // }
+
+  function handleDragMove(event) {
     setDraggingId(event.active.id)
+    console.log(event.active.id)
   }
 
   function handleDragOver(event) {
@@ -38,6 +46,16 @@ const Designer = () => {
     // console.log(event)
   }
 
+  let overlayComp = 'test';
+  if (!isResizing && draggingId) {
+    if (draggingId?.startsWith('draggable_')) {
+      overlayComp = <Box p={0.5} bg={'rgba(255, 255, 255, 0.5)'} w={'max-content'} borderRadius={'7px'} border={'1px solid blue'}><Text fontSize='xs'>moving {draggingId}</Text></Box>
+    } else {
+      overlayComp = <Component style={{ opacity: '0.4' }} name={compTypes[draggingId].name} icon={compTypes[draggingId].icon} />
+    }
+  } else {
+    overlayComp = null;
+  }
 
   return (
     <Flex direction="column" h="100vh" minH='100vh' maxH='100vh' w='100vw' maxW='100vw'>
@@ -48,18 +66,17 @@ const Designer = () => {
         <SidebarMenu />
         <DndContext
           onDragEnd={handleDragEnd}
-          onDragStart={handleDragStart}
+          // onDragStart={handleDragStart}
           modifiers={[restrictToWindowEdges]}
           onDragOver={handleDragOver}
+          onDragMove={!draggingId ? handleDragMove : undefined}
           collisionDetection={pointerWithin}
         // collisionDetection={rectIntersection}
         >
           <SidebarComponents />
           <Canvas />
-          <DragOverlay dropAnimation={null}>
-            {draggingId === 'draggable_TEST' && <Box p={0.5} bg={'rgba(255, 255, 255, 0.5)'} w={'max-content'} borderRadius={'7px'} border={'1px solid blue'}><Text fontSize='xs'>moving container</Text></Box>}
-            {draggingId && draggingId !== 'draggable_TEST' && <Component style={{ opacity: '0.4' }} name={compTypes[draggingId].name} icon={compTypes[draggingId].icon} />}
-            {!draggingId && null}
+          <DragOverlay style={{ width: 'auto', height: 'auto' }} dropAnimation={null} modifiers={[snapCenterToCursor]}>
+            {overlayComp}
           </DragOverlay>
         </DndContext>
         <SidebarProperties />

@@ -30,7 +30,7 @@ const dropStyles = {
 const stylesTop = (isOver: true | false) => ({
     position: 'absolute' as 'absolute', // as 'absolute' "fixes" ts issue
     width: '100%',
-    height: '50%',
+    height: '6px',
     top: 0,
     left: 0,
     boxShadow: isOver ? `0 calc(-1 * min(${dropStyles.siblingWidth}, ${dropStyles.siblingMinWidth}) + 1px) 0 0 ${dropStyles.siblingColor}, 0 0px 0 0 ${dropStyles.siblingColor}` : undefined,
@@ -39,7 +39,7 @@ const stylesTop = (isOver: true | false) => ({
 
 const stylesLeft = (isOver: true | false) => ({
     position: 'absolute' as 'absolute', // as 'absolute' "fixes" ts issue
-    width: '50%',
+    width: '6px',
     height: '100%',
     top: 0,
     left: 0,
@@ -49,20 +49,32 @@ const stylesLeft = (isOver: true | false) => ({
 const stylesBottom = (isOver: true | false) => ({
     position: 'absolute' as 'absolute', // as 'absolute' "fixes" ts issue
     width: '100%',
-    height: '50%',
-    top: '50%',
+    height: '6px',
+    top: 'calc(100% - 6px)',
     left: 0,
     boxShadow: isOver ? `0 calc(min(${dropStyles.siblingWidth}, ${dropStyles.siblingMinWidth}) - 1px) 0 0 ${dropStyles.siblingColor}, 0 0px 0 0 ${dropStyles.siblingColor}` : undefined,
 })
 
 const stylesRight = (isOver: true | false) => ({
     position: 'absolute' as 'absolute', // as 'absolute' "fixes" ts issue
-    width: '50%',
+    width: '6px',
     height: '100%',
     top: '0',
-    left: '50%',
+    left: 'calc(100% - 6px)',
     boxShadow: isOver ? `calc(min(${dropStyles.siblingWidth}, ${dropStyles.siblingMinWidth}) - 1px) 0 0 0 ${dropStyles.siblingColor}, 0 0 0 0 ${dropStyles.siblingColor}` : undefined,
 })
+
+const stylesBody = (isOver: true | false) => ({
+    position: 'absolute' as 'absolute', // as 'absolute' "fixes" ts issue
+    width: 'calc(100% - 6px - 6px)',
+    height: 'calc(100% - 6px - 6px)',
+    top: '6px',
+    left: '6px',
+    backgroundColor: isOver ? 'green' : undefined,
+    opacity: isOver ? '0.4' : undefined
+    // boxShadow: isOver ? `calc(min(${dropStyles.siblingWidth}, ${dropStyles.siblingMinWidth}) - 1px) 0 0 0 ${dropStyles.siblingColor}, 0 0 0 0 ${dropStyles.siblingColor}` : undefined,
+})
+
 
 
 /* 
@@ -71,7 +83,7 @@ const stylesRight = (isOver: true | false) => ({
     It defined with wrapping box (size, border, ...)
     so that children only care about content.
 */
-const ComponentWrapper = ({ id, componentType, parentType, children, w, h, p, m, border }: propsT) => {
+const ContainerWrapper = ({ id, componentType, parentType, children, w, h, p, m, border }: propsT) => {
     const { attributes, listeners, setNodeRef } = useDraggable({ // transform
         id: `draggable_${id}`,
         disabled: id === 'canvas'
@@ -97,6 +109,15 @@ const ComponentWrapper = ({ id, componentType, parentType, children, w, h, p, m,
             componentId: id,
             componentType: componentType,
             side: 'side2'
+        }
+    });
+    // side3: bodz
+    const { isOver: isOver3, setNodeRef: setNodeRef3 } = useDroppable({
+        id: `droppable_side3_${id}`,
+        data: {
+            componentId: id,
+            componentType: componentType,
+            side: 'side3'
         }
     });
 
@@ -222,10 +243,14 @@ const ComponentWrapper = ({ id, componentType, parentType, children, w, h, p, m,
                 ref={setNodeRef2}
                 style={{...style2, display: !isResizing && draggingId && draggingId !== `draggable_${id}` && id !== 'canvas' ? 'block' : 'none'}}>
             </div>
+            <div
+                ref={setNodeRef3}
+                style={{...stylesBody(isOver3), display: !isResizing && draggingId && draggingId !== `draggable_${id}` ? 'block' : 'none'}}>
+            </div>
             {/* {!isResizing && draggingId && draggingId !== `draggable_${id}` && id !== 'canvas' && <div ref={setNodeRef1} style={{...style1}}></div>} */}
             {/* {!isResizing && draggingId && draggingId !== `draggable_${id}` && id !== 'canvas' && <div ref={setNodeRef2} style={style2}></div>} */}
         </Resizable>
     );
 };
 
-export default ComponentWrapper;
+export default ContainerWrapper;

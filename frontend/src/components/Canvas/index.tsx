@@ -1,9 +1,10 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Button, Center, Flex } from "@chakra-ui/react";
 import Droppable from "../../helpers/Droppable";
 import TestDroppableArea from "../../helpers/TestDroppableArea";
 import useDesignerStore from "../../stores/designer";
 import DraggableCanvas from "../../helpers/DraggableCanvas";
 import ComponentWrapper from "../../helpers/ComponentWrapper";
+import ContainerWrapper from "../../helpers/ContainerWrapper";
 
 
 const screenSizes = {
@@ -31,74 +32,85 @@ const Canvas = () => {
                 // border={'1px solid blue'}
                 overflowY={'auto'}
             >
-                <Droppable componentId='canvas' componentType={components['canvas'].type}>
-                    {/* Example: */}
-                    {/* Canvas
-                <Box overflow={'auto'}>
-                    <Flex justify={'space-between'} alignItems={'center'} border={'1px solid green'} wrap={'nowrap'} w={'fit-content'} overflow={'auto'}>
-                        <Box p={10} m={3} bg={'gray.500'}>Box</Box>
-                        <Box p={10} m={3} bg={'gray.500'}>Box</Box>
-                        <Box p={10} m={3} bg={'gray.500'}>Box</Box>
-                        <Box p={10} m={3} bg={'gray.500'}>Box</Box>
-                        <Box p={10} m={3} bg={'gray.500'}>Box</Box>
-                        <Flex direction={'column'} justifyContent={'center'} border={'1px solid green'} wrap={'nowrap'} overflow={'auto'}>
-                            <Box p={3} m={3} bg={'gray.200'}>Box</Box>
-                            <Box p={3} m={3} bg={'gray.200'}>Box</Box>
-                            <Box p={3} m={3} bg={'gray.200'}>Box</Box>
-                            <Box p={3} m={3} bg={'gray.200'}>Box</Box>
-                            <Box p={3} m={3} bg={'gray.200'}>Box</Box>
-                        </Flex>
-                    </Flex>
-                </Box> */}
+                {/* Main container */}
+                <ContainerWrapper id="canvas" componentType="container-column" parentType='container-column' w={'100%'} h={'100%'} p={1}>
 
-                    {/* Main container */}
                     <Flex direction={'column'} alignItems={'center'} gap={2} h={'100%'} w={'100%'}>
-                        <Box border={'1px solid gray'}>
-                            <DraggableCanvas id={"component-id1"}>
-                                <Droppable componentId='component-id1' componentType={components['component-id1'].type}>
-                                    Box 1
-                                </Droppable>
-                            </DraggableCanvas>
-                        </Box>
-
-                        <Box border={'1px solid gray'} w={'100px'} h={'200px'}>
-                            <DraggableCanvas id={"component-id2"}>
-                                <Droppable componentId='component-id2' componentType={components['component-id2'].type}>
-                                    Box 2
-                                </Droppable>
-                            </DraggableCanvas>
-                        </Box>
-                        {/* <ComponentWrapper id="">
-                            <Box>
-                                Testing
-                            </Box>
-                        </ComponentWrapper> */}
-                        <Box border={'1px solid gray'} w={'50%'}>
-                            <DraggableCanvas id={"component-id3"}>
-                                <Droppable componentId='component-id3' componentType={components['component-id3'].type}>
-                                    Box 3
-                                </Droppable>
-                            </DraggableCanvas>
-                        </Box>
-                        {/* test sub container 1 */}
-                        <ComponentWrapper id="TEST" componentType="" parentType='container-column' w={'100%'} h={'100px'} p={1} border="none">
-                            test container
+                        <ComponentWrapper id="comp1" componentType="" parentType='container-column' w={'100%'} h={'50px'}>
+                            <Button w={'100%'} h={'100%'} colorScheme='teal' size='md'>
+                                Button
+                            </Button>
                         </ComponentWrapper>
+
+                        <ComponentWrapper id="comp2" componentType="" parentType='container-column' p={1} border="1px solid grey">
+                            Box 3
+                        </ComponentWrapper>
+
+                        <ContainerWrapper id="container" componentType="container-column" parentType='container-column' w={'100%'} h={'max-content'} p={1} border="none">
+                            <Flex direction={'column'} alignItems={'center'} gap={2} h={'100%'} w={'100%'}>
+
+                                <ComponentWrapper id="box-1" componentType="button" parentType='container-column' w={'60%'} p={1} border="0px solid red">
+                                    <Center>Box A</Center>
+                                </ComponentWrapper>
+
+                                <ComponentWrapper id="box-b" componentType="some component" parentType='container-column' w={'60%'} p={1} border="0px solid red">
+                                    <Center>Box B</Center>
+                                </ComponentWrapper>
+
+                                <ContainerWrapper id="subcontainer" componentType="container-row" parentType='container-column' w={'100%'} h={'max-content'} p={1} border="none">
+                                    <Flex direction={'row'} alignItems={'center'} gap={2} h={'100%'} w={'100%'}>
+
+                                        <ComponentWrapper id="box-12" componentType="button" parentType='container-row' w={'20%'} p={1} border="0px solid red">
+                                            <Center>Box sub A</Center>
+                                        </ComponentWrapper>
+
+                                        <ComponentWrapper id="box-13" componentType="some component" parentType='container-row' w={'20%'} p={1} border="0px solid red">
+                                            <Center>Box sub B</Center>
+                                        </ComponentWrapper>
+
+                                        <ComponentWrapper id="box-14" componentType="test" parentType='container-row' w={'30%'} p={1} border="0px solid red">
+                                            <Center>Box sub C</Center>
+                                        </ComponentWrapper>
+                                    </Flex>
+                                </ContainerWrapper>
+                            </Flex>
+                        </ContainerWrapper>
+                        <ContainerWrapper id="container_" componentType="container-column" parentType='container-column' w={'100%'} h={'max-content'} p={1} border="none">
+                            <Flex direction={'column'} alignItems={'center'} gap={2} h={'100%'} w={'100%'}>
+
+                                <ComponentWrapper id="box-1_" componentType="button" parentType='container-column' w={'60%'} p={1} border="0px solid red">
+                                    <Center>Box A</Center>
+                                </ComponentWrapper>
+
+                                <ComponentWrapper id="box-b_" componentType="some component" parentType='container-column' w={'60%'} p={1} border="0px solid red">
+                                    <Center>Box B</Center>
+                                </ComponentWrapper>
+
+                                <ContainerWrapper id="subcontainer_" componentType="container-row" parentType='container-column' w={'100%'} h={'max-content'} p={1} border="none">
+                                    <Flex direction={'row'} alignItems={'center'} gap={2} h={'100%'} w={'100%'}>
+
+                                        <ComponentWrapper id="box-12_" componentType="button" parentType='container-row' w={'20%'} p={1} border="0px solid red">
+                                            <Center>Box sub A</Center>
+                                        </ComponentWrapper>
+
+                                        <ComponentWrapper id="box-13_" componentType="some component" parentType='container-row' w={'20%'} p={1} border="0px solid red">
+                                            <Center>Box sub B</Center>
+                                        </ComponentWrapper>
+
+                                        <ComponentWrapper id="box-14_" componentType="test" parentType='container-row' w={'30%'} p={1} border="0px solid red">
+                                            <Center>Box sub C</Center>
+                                        </ComponentWrapper>
+                                    </Flex>
+                                </ContainerWrapper>
+                            </Flex>
+                        </ContainerWrapper>
+
                         {/* test sub container 2 */}
-                        <Box border={'1px solid white'} w={'100%'}>
-                            <Droppable componentId='subcontainer2' componentType={components['subcontainer2'].type}>
-                                <Box border={'1px solid gray'} w={'50%'} h={10}>Box 3</Box>
-                                {/* test sub sub container 1 */}
-                                <Box border={'1px solid white'} w={'100%'} h={'50px'}>
-                                    <Droppable componentId='subsubcontainer1' componentType={components['subsubcontainer1'].type}>
-                                        test deeply nested container
-                                    </Droppable>
-                                </Box>
-                            </Droppable>
-                        </Box>
+                       
                     </Flex>
 
-                </Droppable>
+                    {/* </Droppable> */}
+                </ContainerWrapper>
             </Box>
         </Box >
 

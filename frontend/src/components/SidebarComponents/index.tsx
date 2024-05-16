@@ -10,8 +10,6 @@ import { compTypes } from '../../helpers/components';
 
 const SidebarComponents = () => {
 
-    console.log(compTypes)
-
     return <Flex
         w={'250px'}
         p={1}
