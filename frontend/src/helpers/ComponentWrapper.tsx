@@ -1,11 +1,8 @@
-import { Box, Icon, Text, Tooltip } from '@chakra-ui/react';
+import { Box, Tooltip } from '@chakra-ui/react';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { CSSProperties, ReactNode, useEffect, useState } from 'react';
-import { MdDragIndicator } from "react-icons/md";
 import useDesignerStore from '../stores/designer';
 import { Resizable } from 're-resizable';
-import styles from './ComponentWrapper.module.css';
-import { CiGrid2H, CiGrid2V } from 'react-icons/ci';
 
 type propsT = {
     id: string,
@@ -14,17 +11,15 @@ type propsT = {
     children: ReactNode,
     w?: string | number,
     h?: string | number,
-    p?: string | number,
+    p?: string | number, // normally undefined; manage in component
     m?: string | number,
-    border?: string
+    border?: string, // normally undefined; manage in component
 }
 
 const dropStyles = {
     siblingColor: 'green',
-    siblingOpacity: '1',
     siblingWidth: '6px',
     siblingMinWidth: '6px',
-    siblingBorderRadius: '6px',
 }
 
 const stylesTop = (isOver: true | false) => ({
@@ -71,17 +66,21 @@ const stylesRight = (isOver: true | false) => ({
     It defined with wrapping box (size, border, ...)
     so that children only care about content.
 */
-const ComponentWrapper = ({ id, componentType, parentType, children, w, h, p, m, border }: propsT) => {
+
+const ComponentWrapper = ({ id, componentType, parentType, w, h, p, m, border, children }: propsT) => {
     const { attributes, listeners, setNodeRef } = useDraggable({ // transform
         id: `draggable_${id}`,
         disabled: id === 'canvas'
     });
 
-    const { draggingId, selectedId, isResizing, setIsResizing } = useDesignerStore();
+    
+    const { draggingId, isResizing, setIsResizing } = useDesignerStore();
+    // const draggingId = 'box-b'
     const [isHovered, setIsHovered] = useState(false);
     const [size, setSize] = useState({ w: w || 'auto', h: h || 'auto' });
-
+    
     // side1: top / left, depending on parent container
+
     const { isOver: isOver1, setNodeRef: setNodeRef1 } = useDroppable({
         id: `droppable_side1_${id}`,
         data: {
@@ -99,6 +98,8 @@ const ComponentWrapper = ({ id, componentType, parentType, children, w, h, p, m,
             side: 'side2'
         }
     });
+
+
 
     let style1: CSSProperties;
     let style2: CSSProperties;
@@ -138,12 +139,14 @@ const ComponentWrapper = ({ id, componentType, parentType, children, w, h, p, m,
         }
     }, [isResizing])
 
+    useEffect(() => {
+        console.log('comp')   
+    })
 
     return (
         // container box
         <Resizable
             // className={id === 'canvas' ? '' : styles.wrapper}
-            // style={{ outline: (!isResizing && draggingId && id !== 'canvas') ? '1px solid grey' : selectedId === id ? '1px solid green' : undefined }}
             style={{ 
                 outline: id !== 'canvas' && (isHovered || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
                 backgroundColor: `draggable_${id}` == draggingId ? 'darkgray' : undefined
@@ -211,6 +214,7 @@ const ComponentWrapper = ({ id, componentType, parentType, children, w, h, p, m,
                     border={border || undefined}
                 >
                     {children}
+                    {/* <div>Test</div> */}
                 </Box>
             </Tooltip>
             {/* for dropping */}

@@ -10,7 +10,6 @@ import { compTypes } from "../helpers/components";
 import { restrictToWindowEdges, snapCenterToCursor } from "@dnd-kit/modifiers";
 // import { snapVertCenterToCursor } from "../helpers/dnd-kit";
 import useDesignerStore from "../stores/designer";
-import { useState } from "react";
 
 
 // App component
@@ -19,11 +18,8 @@ const Designer = () => {
   // const [draggingId_, setDraggingId] = useState(null);
   const { setDraggingId, draggingId, isResizing } = useDesignerStore();
 
-  const [hasMoved, setHasMoved] = useState(false);
-  const [delayHandler, setDelayHandler] = useState(null);
-
   function handleDragEnd(event) {
-    console.log('END DRAG')
+    // console.log('END DRAG')
     // console.log(event)
     setDraggingId(null);
     // if (event.over && event.over.id === 'canvas') {
@@ -38,7 +34,7 @@ const Designer = () => {
 
   function handleDragMove(event) {
     setDraggingId(event.active.id)
-    console.log(event.active.id)
+    // console.log(event.active.id)
   }
 
   function handleDragOver(event) {

@@ -1,11 +1,7 @@
 import { Box, Button, Center, Flex } from "@chakra-ui/react";
-import Droppable from "../../helpers/Droppable";
-import TestDroppableArea from "../../helpers/TestDroppableArea";
 import useDesignerStore from "../../stores/designer";
-import DraggableCanvas from "../../helpers/DraggableCanvas";
 import ComponentWrapper from "../../helpers/ComponentWrapper";
 import ContainerWrapper from "../../helpers/ContainerWrapper";
-
 
 const screenSizes = {
     'Galaxy S10': [360, 760],
@@ -19,6 +15,8 @@ const canvasDropBorderPx = 2;
 const Canvas = () => {
 
     const { components } = useDesignerStore();
+
+
 
     return <Flex flex={1} border={'1px solid grey'} alignItems={'center'} justifyContent={'center'} maxH='100vh' maxW='100vw' overflow={'auto'}>
 
@@ -89,8 +87,10 @@ const Canvas = () => {
                                 <ContainerWrapper id="subcontainer_" componentType="container-row" parentType='container-column' w={'100%'} h={'max-content'} p={1} border="none">
                                     <Flex direction={'row'} alignItems={'center'} gap={2} h={'100%'} w={'100%'}>
 
-                                        <ComponentWrapper id="box-12_" componentType="button" parentType='container-row' w={'20%'} p={1} border="0px solid red">
-                                            <Center>Box sub A</Center>
+                                        <ComponentWrapper id="box-12_" componentType="button" parentType='container-row' w={'20%'} h={'35px'}>
+                                            <Button w={'100%'} h={'100%'} colorScheme="blue" size='md'>
+                                                Button
+                                            </Button>
                                         </ComponentWrapper>
 
                                         <ComponentWrapper id="box-13_" componentType="some component" parentType='container-row' w={'20%'} p={1} border="0px solid red">
@@ -106,7 +106,7 @@ const Canvas = () => {
                         </ContainerWrapper>
 
                         {/* test sub container 2 */}
-                       
+
                     </Flex>
 
                     {/* </Droppable> */}

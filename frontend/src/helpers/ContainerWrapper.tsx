@@ -1,11 +1,8 @@
-import { Box, Icon, Text, Tooltip } from '@chakra-ui/react';
+import { Box, Tooltip } from '@chakra-ui/react';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { CSSProperties, ReactNode, useEffect, useState } from 'react';
-import { MdDragIndicator } from "react-icons/md";
 import useDesignerStore from '../stores/designer';
 import { Resizable } from 're-resizable';
-import styles from './ComponentWrapper.module.css';
-import { CiGrid2H, CiGrid2V } from 'react-icons/ci';
 
 type propsT = {
     id: string,
@@ -89,7 +86,7 @@ const ContainerWrapper = ({ id, componentType, parentType, children, w, h, p, m,
         disabled: id === 'canvas'
     });
 
-    const { draggingId, selectedId, isResizing, setIsResizing } = useDesignerStore();
+    const { draggingId, isResizing, setIsResizing } = useDesignerStore();
     const [isHovered, setIsHovered] = useState(false);
     const [size, setSize] = useState({ w: w || 'auto', h: h || 'auto' });
 
@@ -167,7 +164,7 @@ const ContainerWrapper = ({ id, componentType, parentType, children, w, h, p, m,
             // style={{ outline: (!isResizing && draggingId && id !== 'canvas') ? '1px solid grey' : selectedId === id ? '1px solid green' : undefined }}
             style={{ 
                 outline: id !== 'canvas' && (isHovered || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
-                backgroundColor: `draggable_${id}` == draggingId ? 'darkgray' : undefined
+                backgroundColor: `draggable_${id}` == draggingId && !isResizing ? 'darkgray' : undefined
             }}
             size={{ width: size.w, height: size.h }}
             onResizeStop={(e, direction, ref, d) => {
