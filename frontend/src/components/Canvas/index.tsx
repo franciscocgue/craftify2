@@ -56,17 +56,17 @@ const Canvas = () => {
                                 </ComponentWrapper>
 
                                 <ContainerWrapper id="subcontainer" componentType="container-row" parentType='container-column' w={'100%'} h={'max-content'} p={1} border="none">
-                                    <Flex direction={'row'} alignItems={'center'} gap={2} h={'100%'} w={'100%'}>
+                                    <Flex direction={'row'} wrap={'wrap'} alignItems={'center'} gap={2} h={'100%'} w={'100%'}>
 
-                                        <ComponentWrapper id="box-12" componentType="button" parentType='container-row' w={'20%'} p={1} border="0px solid red">
-                                            <Center>Box sub A</Center>
+                                        <ComponentWrapper id="box-12" componentType="button" parentType='container-row' w={'40%'} p={1} border="0px solid red">
+                                            <Center>Box sub A Box sub A Box sub A</Center>
                                         </ComponentWrapper>
 
-                                        <ComponentWrapper id="box-13" componentType="some component" parentType='container-row' w={'20%'} p={1} border="0px solid red">
+                                        <ComponentWrapper id="box-13" componentType="some component" parentType='container-row' w={'40%'} p={1} border="0px solid red">
                                             <Center>Box sub B</Center>
                                         </ComponentWrapper>
 
-                                        <ComponentWrapper id="box-14" componentType="test" parentType='container-row' w={'30%'} p={1} border="0px solid red">
+                                        <ComponentWrapper id="box-14" componentType="test" parentType='container-row' w={'40%'} p={1} border="0px solid red">
                                             <Center>Box sub C</Center>
                                         </ComponentWrapper>
                                     </Flex>

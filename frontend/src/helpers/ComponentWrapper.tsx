@@ -73,12 +73,12 @@ const ComponentWrapper = ({ id, componentType, parentType, w, h, p, m, border, c
         disabled: id === 'canvas'
     });
 
-    
+
     const { draggingId, isResizing, setIsResizing } = useDesignerStore();
     // const draggingId = 'box-b'
     const [isHovered, setIsHovered] = useState(false);
     const [size, setSize] = useState({ w: w || 'auto', h: h || 'auto' });
-    
+
     // side1: top / left, depending on parent container
 
     const { isOver: isOver1, setNodeRef: setNodeRef1 } = useDroppable({
@@ -140,16 +140,17 @@ const ComponentWrapper = ({ id, componentType, parentType, w, h, p, m, border, c
     }, [isResizing])
 
     useEffect(() => {
-        console.log('comp')   
+        console.log('comp')
     })
 
     return (
         // container box
         <Resizable
             // className={id === 'canvas' ? '' : styles.wrapper}
-            style={{ 
+            style={{
                 outline: id !== 'canvas' && (isHovered || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
-                backgroundColor: `draggable_${id}` == draggingId ? 'darkgray' : undefined
+                // backgroundColor: `draggable_${id}` == draggingId ? 'darkgray' : undefined,
+                // zIndex: `draggable_${id}` == draggingId ? 999999999999999999 : undefined,
             }}
             size={{ width: size.w, height: size.h }}
             onResizeStop={(e, direction, ref, d) => {
@@ -220,12 +221,21 @@ const ComponentWrapper = ({ id, componentType, parentType, w, h, p, m, border, c
             {/* for dropping */}
             <div
                 ref={setNodeRef1}
-                style={{...style1, display: !isResizing && draggingId && draggingId !== `draggable_${id}` && id !== 'canvas' ? 'block' : 'none'}}>
+                style={{ ...style1, display: !isResizing && draggingId && draggingId !== `draggable_${id}` && id !== 'canvas' ? 'block' : 'none' }}>
             </div>
             <div
                 ref={setNodeRef2}
-                style={{...style2, display: !isResizing && draggingId && draggingId !== `draggable_${id}` && id !== 'canvas' ? 'block' : 'none'}}>
+                style={{ ...style2, display: !isResizing && draggingId && draggingId !== `draggable_${id}` && id !== 'canvas' ? 'block' : 'none' }}>
             </div>
+            {draggingId === `draggable_${id}` && !isResizing && <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'grey',
+            }}>
+            </div>}
             {/* {!isResizing && draggingId && draggingId !== `draggable_${id}` && id !== 'canvas' && <div ref={setNodeRef1} style={{...style1}}></div>} */}
             {/* {!isResizing && draggingId && draggingId !== `draggable_${id}` && id !== 'canvas' && <div ref={setNodeRef2} style={style2}></div>} */}
         </Resizable>
