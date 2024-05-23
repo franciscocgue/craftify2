@@ -15,12 +15,23 @@ const compTypes = {
     'button': {
         icon: RxButton,
         name: 'Button',
+        properties: {
+            text: {
+                value: 'button',
+                displayName: 'Text',
+                editable: true,
+                visible: true,
+                valueType: 'string',
+                group: 'Display',
+            },
+        }
     },
     'text': {
         icon: BiText,
         name: 'Text',
     },
 }
+
 
 export {
     compTypes

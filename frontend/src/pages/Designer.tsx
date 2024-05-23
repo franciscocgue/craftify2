@@ -1,53 +1,56 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
 import Canvas from "../components/Canvas";
 import Navbar from "../components/Navbar";
 import SidebarMenu from "../components/SidebarMenu";
 import SidebarComponents from "../components/SidebarComponents";
 import SidebarProperties from "../components/SidebarProperties";
-import { DndContext, DragOverlay, pointerWithin } from '@dnd-kit/core';
-import Component from "../components/SidebarComponents/Component";
-import { compTypes } from "../helpers/components";
+import { DndContext, DragEndEvent, DragMoveEvent, DragOverlay, pointerWithin } from '@dnd-kit/core';
 import { restrictToWindowEdges, snapCenterToCursor } from "@dnd-kit/modifiers";
-// import { snapVertCenterToCursor } from "../helpers/dnd-kit";
+import PaletteComponent from "../components/SidebarComponents/Component";
+import { compTypes } from "../config/components";
 import useDesignerStore from "../stores/designer";
+import { ReactNode } from "react";
+import { LuMove } from "react-icons/lu";
 
 
-// App component
 const Designer = () => {
 
-  // const [draggingId_, setDraggingId] = useState(null);
-  const { setDraggingId, draggingId, isResizing } = useDesignerStore();
+  const { setDraggingId, draggingId, isResizing, moveComponent, addComponent, components } = useDesignerStore();
 
-  function handleDragEnd(event) {
-    // console.log('END DRAG')
-    // console.log(event)
+  function handleDragEnd(event: DragEndEvent) {
     setDraggingId(null);
-    // if (event.over && event.over.id === 'canvas') {
-    //   console.log('dropped');
-    // }
+    if (event.active.data.current?.componentId && event.over) {
+      // move component
+      moveComponent(event.active.data.current.componentId, event.over.data.current?.componentId, event.over.data.current?.location)
+    } else if (event.over) {
+      // add new component (componentId is null)
+      addComponent(event.active.data.current?.componentType, event.over.data.current?.componentId, event.over.data.current?.location)
+    }
   }
 
-  // function handleDragStart(event) {
-  //   // setDraggingId(event.active.id)
-  //   console.log('STart dragging')
-  // }
-
-  function handleDragMove(event) {
-    setDraggingId(event.active.id)
-    // console.log(event.active.id)
+  function handleDragCancel() {
+    setDraggingId(null);
   }
 
-  function handleDragOver(event) {
-    // console.log('dragging OVER')
-    // console.log(event)
+  function handleDragMove(event: DragMoveEvent) {
+    setDraggingId(event.active.id as string)
   }
 
-  let overlayComp = 'test';
+  let overlayComp: ReactNode = 'test';
   if (!isResizing && draggingId) {
     if (draggingId?.startsWith('draggable_')) {
-      overlayComp = <Box p={0.5} bg={'rgba(255, 255, 255, 0.5)'} w={'max-content'} borderRadius={'7px'} border={'1px solid blue'}><Text fontSize='xs'>moving {draggingId}</Text></Box>
+      overlayComp = <Box>
+        <Tag size={'md'} key={'md'} variant='solid' colorScheme='blackAlpha'>
+          <TagLeftIcon boxSize='15px' as={LuMove} />
+          <TagLabel>{components[draggingId.replace('draggable_', '')].name}</TagLabel>
+        </Tag>
+      </Box>
     } else {
-      overlayComp = <Component style={{ opacity: '0.4' }} name={compTypes[draggingId].name} icon={compTypes[draggingId].icon} />
+      overlayComp = <PaletteComponent
+        style={{ opacity: '0.6' }}
+        name={compTypes[draggingId as keyof typeof compTypes].name}
+        icon={compTypes[draggingId as keyof typeof compTypes].icon}
+      />
     }
   } else {
     overlayComp = null;
@@ -62,12 +65,10 @@ const Designer = () => {
         <SidebarMenu />
         <DndContext
           onDragEnd={handleDragEnd}
-          // onDragStart={handleDragStart}
+          onDragCancel={handleDragCancel}
           modifiers={[restrictToWindowEdges]}
-          onDragOver={handleDragOver}
           onDragMove={!draggingId ? handleDragMove : undefined}
           collisionDetection={pointerWithin}
-        // collisionDetection={rectIntersection}
         >
           <SidebarComponents />
           <Canvas />

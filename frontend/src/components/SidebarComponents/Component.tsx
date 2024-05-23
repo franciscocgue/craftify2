@@ -5,7 +5,7 @@ import { IconType } from "react-icons";
 type propsT = {
     name: string,
     icon: IconType,
-    style: CSSProperties,
+    style?: CSSProperties,
 }
 
 const Component = ({name, icon, style}: propsT) => {

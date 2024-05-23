@@ -1,13 +1,15 @@
-import { Box, Tooltip } from '@chakra-ui/react';
+import { Box, Flex, Icon, Tooltip } from '@chakra-ui/react';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { CSSProperties, ReactNode, useEffect, useState } from 'react';
 import useDesignerStore from '../stores/designer';
-import { Resizable } from 're-resizable';
+import { NumberSize, Resizable } from 're-resizable';
+import { compTypes } from '../config/components';
 
 type propsT = {
     id: string,
     componentType: string,
     parentType: string, // container
+    name: string,
     children: ReactNode,
     w?: string | number,
     h?: string | number,
@@ -17,7 +19,7 @@ type propsT = {
 }
 
 const dropStyles = {
-    siblingColor: 'green',
+    siblingColor: 'red',
     siblingWidth: '6px',
     siblingMinWidth: '6px',
 }
@@ -67,10 +69,14 @@ const stylesRight = (isOver: true | false) => ({
     so that children only care about content.
 */
 
-const ComponentWrapper = ({ id, componentType, parentType, w, h, p, m, border, children }: propsT) => {
+const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, border, children }: propsT) => {
     const { attributes, listeners, setNodeRef } = useDraggable({ // transform
         id: `draggable_${id}`,
-        disabled: id === 'canvas'
+        disabled: id === 'canvas',
+        data: {
+            componentId: id,
+            componentType: componentType,
+        }
     });
 
 
@@ -79,43 +85,50 @@ const ComponentWrapper = ({ id, componentType, parentType, w, h, p, m, border, c
     const [isHovered, setIsHovered] = useState(false);
     const [size, setSize] = useState({ w: w || 'auto', h: h || 'auto' });
 
-    // side1: top / left, depending on parent container
+    // before: top / left, depending on parent container
 
     const { isOver: isOver1, setNodeRef: setNodeRef1 } = useDroppable({
-        id: `droppable_side1_${id}`,
+        id: `droppable_before_${id}`,
         data: {
             componentId: id,
             componentType: componentType,
-            side: 'side1'
+            location: 'before'
         }
     });
-    // side2: bottom / right, depending on parent container
+    // after: bottom / right, depending on parent container
     const { isOver: isOver2, setNodeRef: setNodeRef2 } = useDroppable({
-        id: `droppable_side2_${id}`,
+        id: `droppable_after_${id}`,
         data: {
             componentId: id,
             componentType: componentType,
-            side: 'side2'
+            location: 'after'
         }
     });
 
+    const tooltipComp = <Flex gap={'5px'}>
+        <Icon as={compTypes[componentType as keyof typeof compTypes].icon} w={5} h={5} color="white.800" />
+        {name || componentType}
+    </Flex>
 
-
-    let style1: CSSProperties;
-    let style2: CSSProperties;
+    let styleBefore: CSSProperties;
+    let styleAfter: CSSProperties;
 
     switch (parentType) {
+        case 'canvas':
+            styleBefore = stylesTop(isOver1);
+            styleAfter = stylesBottom(isOver2);
+            break;
         case 'container-column':
-            style1 = stylesTop(isOver1);
-            style2 = stylesBottom(isOver2);
+            styleBefore = stylesTop(isOver1);
+            styleAfter = stylesBottom(isOver2);
             break;
         case 'container-row':
-            style1 = stylesLeft(isOver1);
-            style2 = stylesRight(isOver2);
+            styleBefore = stylesLeft(isOver1);
+            styleAfter = stylesRight(isOver2);
             break;
         default:
-            style1 = {};
-            style2 = {};
+            styleBefore = {};
+            styleAfter = {};
             break;
     }
 
@@ -123,7 +136,6 @@ const ComponentWrapper = ({ id, componentType, parentType, w, h, p, m, border, c
         style={{ height: '100%', width: '100%' }}
         onMouseOver={(e) => {
             e.stopPropagation();
-            // console.log(id)
             setIsHovered(true)
         }}
         onMouseOut={(e) => {
@@ -139,25 +151,18 @@ const ComponentWrapper = ({ id, componentType, parentType, w, h, p, m, border, c
         }
     }, [isResizing])
 
-    useEffect(() => {
-        console.log('comp')
-    })
-
     return (
         // container box
         <Resizable
-            // className={id === 'canvas' ? '' : styles.wrapper}
             style={{
                 outline: id !== 'canvas' && (isHovered || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
-                // backgroundColor: `draggable_${id}` == draggingId ? 'darkgray' : undefined,
-                // zIndex: `draggable_${id}` == draggingId ? 999999999999999999 : undefined,
             }}
             size={{ width: size.w, height: size.h }}
-            onResizeStop={(e, direction, ref, d) => {
-                setSize({ w: size.w + d.width, h: size.h + d.height })
+            onResizeStop={(_, __, ___, d: NumberSize) => {
+                setSize({ w: size.w as number + d.width, h: size.h as number + d.height })
                 setIsResizing(false)
             }}
-            onResizeStart={(e, direction, ref) => {
+            onResizeStart={() => {
                 setIsResizing(true)
             }}
             handleComponent={{
@@ -170,7 +175,7 @@ const ComponentWrapper = ({ id, componentType, parentType, w, h, p, m, border, c
             }}
 
             // style={{overflow:'hidden'}}
-            maxWidth={parentType === 'container-column' ? '100%' : undefined}
+            maxWidth={parentType === 'container-column' || parentType === 'canvas' ? '100%' : undefined}
             maxHeight={parentType === 'container-row' ? '100%' : undefined}
             enable={id === 'canvas' ? false : { top: true, right: true, bottom: true, left: true, topRight: false, bottomRight: true, bottomLeft: true, topLeft: false }}
             handleStyles={{
@@ -184,20 +189,11 @@ const ComponentWrapper = ({ id, componentType, parentType, w, h, p, m, border, c
             }}
         >
             {/* for dragging */}
-            <Tooltip placement='top-start' gutter={0} label={componentType} isOpen={isHovered && !!!draggingId && !isResizing}>
+            <Tooltip placement='top-start' gutter={0} label={tooltipComp} isOpen={isHovered && !!!draggingId && !isResizing}>
                 <Box
                     ref={setNodeRef}
                     {...listeners}
                     {...attributes}
-                    // onMouseDown={(e) => {
-                    //     e.stopPropagation();
-                    //     console.log(e.target)
-                    // }}
-                    // onScroll={() => console.log('is scrolling')}
-                    // onScroll={(e) => {
-                    //     const isScrollClick = e.target === e.currentTarget;
-                    //     console.log(isScrollClick)
-                    // }}
                     onMouseOver={(e) => {
                         e.stopPropagation();
                         setIsHovered(true)
@@ -215,17 +211,16 @@ const ComponentWrapper = ({ id, componentType, parentType, w, h, p, m, border, c
                     border={border || undefined}
                 >
                     {children}
-                    {/* <div>Test</div> */}
                 </Box>
             </Tooltip>
             {/* for dropping */}
             <div
                 ref={setNodeRef1}
-                style={{ ...style1, display: !isResizing && draggingId && draggingId !== `draggable_${id}` && id !== 'canvas' ? 'block' : 'none' }}>
+                style={{ ...styleBefore, display: !isResizing && draggingId && draggingId !== `draggable_${id}` && id !== 'canvas' ? 'block' : 'none' }}>
             </div>
             <div
                 ref={setNodeRef2}
-                style={{ ...style2, display: !isResizing && draggingId && draggingId !== `draggable_${id}` && id !== 'canvas' ? 'block' : 'none' }}>
+                style={{ ...styleAfter, display: !isResizing && draggingId && draggingId !== `draggable_${id}` && id !== 'canvas' ? 'block' : 'none' }}>
             </div>
             {draggingId === `draggable_${id}` && !isResizing && <div style={{
                 position: 'absolute',
@@ -236,8 +231,6 @@ const ComponentWrapper = ({ id, componentType, parentType, w, h, p, m, border, c
                 backgroundColor: 'grey',
             }}>
             </div>}
-            {/* {!isResizing && draggingId && draggingId !== `draggable_${id}` && id !== 'canvas' && <div ref={setNodeRef1} style={{...style1}}></div>} */}
-            {/* {!isResizing && draggingId && draggingId !== `draggable_${id}` && id !== 'canvas' && <div ref={setNodeRef2} style={style2}></div>} */}
         </Resizable>
     );
 };
