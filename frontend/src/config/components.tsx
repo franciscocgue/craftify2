@@ -2,6 +2,7 @@ import { CiGrid2V } from "react-icons/ci";
 import { CiGrid2H } from "react-icons/ci";
 import { RxButton } from "react-icons/rx";
 import { BiText } from "react-icons/bi";
+import { IoMdCheckboxOutline } from "react-icons/io";
 
 const compTypes = {
     'container-row': {
@@ -29,6 +30,10 @@ const compTypes = {
     'text': {
         icon: BiText,
         name: 'Text',
+    },
+    'checkbox': {
+        icon: IoMdCheckboxOutline,
+        name: 'Checkbox',
     },
 }
 

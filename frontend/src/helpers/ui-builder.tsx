@@ -4,6 +4,7 @@ import CContainerColumn from "../components/components/CContainerColumn";
 import CButton from "../components/components/CButton";
 import CanvasWrapper from "./CanvasWrapper";
 import { ComponentTree } from "../vite-env";
+import CCheckbox from "../components/components/CCheckbox";
 
 {/* <ContainerWrapper id="subcontainer" componentType="container-row" parentType='container-column' w={'100%'} h={'max-content'} p={1} border="none">
 <Flex direction={'row'} wrap={'wrap'} alignItems={'center'} gap={2} h={'100%'} w={'100%'}>
@@ -55,7 +56,12 @@ const uiMapper = {
         <ComponentWrapper key={id} id={id} componentType={components[id].type} parentType={components[components[id].parent as string].type} name={components[id].name} w={'100%'} h={'50px'} p={0} border="0px solid red">
             <CButton />
         </ComponentWrapper>
-    )
+    ),
+    'checkbox': (components: ComponentTree, id: string) => (
+        <ComponentWrapper key={id} id={id} componentType={components[id].type} parentType={components[components[id].parent as string].type} name={components[id].name} w={'100%'} h={'50px'} p={0} border="0px solid red">
+            <CCheckbox />
+        </ComponentWrapper>
+    ),
 }
 
 const renderNode = (components: ComponentTree, id: string) => {
