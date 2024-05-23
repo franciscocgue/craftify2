@@ -36,7 +36,7 @@ const Designer = () => {
     setDraggingId(event.active.id as string)
   }
 
-  let overlayComp: ReactNode = 'test';
+  let overlayComp: ReactNode;
   if (!isResizing && draggingId) {
     if (draggingId?.startsWith('draggable_')) {
       overlayComp = <Box>

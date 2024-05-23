@@ -49,6 +49,7 @@ const CanvasWrapper = ({ id, componentType, children, p, m, border }: propsT) =>
     return (
         <Box
             style={{
+                position:'relative',
                 outline: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? '2px solid red'
                     : (isHovered || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
             }}
