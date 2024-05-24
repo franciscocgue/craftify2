@@ -14,15 +14,16 @@ const Component = ({name, icon, style}: propsT) => {
         alignItems={'center'}
         border={'1px solid gray'}
         w={'75px'}
-        h={'75px'}
+        h={'65px'}
         borderRadius={5}
         justify={'center'}
         bg={'white'}
         style={{...style}}
+        cursor={'grab'}
     >
-        <Icon as={icon} w={7} h={7} color="black.800" />
+        <Icon as={icon} w={5} h={5} color="black.900" />
         <Box>
-            <Text align={'center'} fontSize='sm' userSelect={'none'}>{name}</Text>
+            <Text p={'2px'} align={'center'} fontSize='xs' userSelect={'none'}>{name}</Text>
         </Box>
     </Flex>
 }
