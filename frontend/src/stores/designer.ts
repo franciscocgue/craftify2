@@ -46,10 +46,12 @@ type designerStore = {
   draggingId: string | null,
   isResizing: true | false,
   selectedId: string | null,
+  hoveredId: string | null,
   components: any,
   setIsResizing: (isResizing: true | false) => void,
   setDraggingId: (draggingId: string | null) => void,
   setSelectedId: (selectedId: string | null) => void,
+  setHoveredId: (selectedId: string | null) => void,
   /**
    * Moves component in the component tree
    *
@@ -74,10 +76,12 @@ const useDesignerStore = create<designerStore>((set) => ({
   draggingId: null,
   isResizing: false,
   selectedId: null,
+  hoveredId: null,
   components: components,
   setIsResizing: (isResizing: true | false) => set({ isResizing: isResizing }),
   setDraggingId: (draggingId) => set({ draggingId: draggingId }),
   setSelectedId: (selectedId) => set({ selectedId: selectedId }),
+  setHoveredId: (hoveredId) => set({ hoveredId: hoveredId }),
   moveComponent: (movedCompId, movedOverCompId, location) => set((state) => {
     const comps = { ...state.components };
 

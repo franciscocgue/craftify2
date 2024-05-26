@@ -7,9 +7,18 @@ export interface Component {
     children: string[];
     name: string;
 }
-
-export interface ComponentTree {
+export interface ComponentCollection {
     [key: string]: Component;
+}
+
+
+
+export interface ComponentLeaf {
+    id: string;
+    name: string;
+    type: keyof typeof compTypes,
+    children?: string[];
+    readOnly: true | false,
 }
 
 export type PropertyType = {

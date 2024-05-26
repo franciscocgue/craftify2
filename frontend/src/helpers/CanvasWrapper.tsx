@@ -25,7 +25,7 @@ const stylesBody = {
 */
 const CanvasWrapper = ({ id, componentType, children, p, m, border }: propsT) => {
 
-    const { draggingId, isResizing } = useDesignerStore();
+    const { draggingId, isResizing, setHoveredId, hoveredId } = useDesignerStore();
     const [isHovered, setIsHovered] = useState(false);
 
     // inside: body
@@ -45,11 +45,10 @@ const CanvasWrapper = ({ id, componentType, children, p, m, border }: propsT) =>
         }
     }, [isResizing])
 
-
     return (
         <Box
             style={{
-                position:'relative',
+                position: 'relative',
                 outline: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? '2px solid red'
                     : (isHovered || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
             }}
@@ -58,27 +57,34 @@ const CanvasWrapper = ({ id, componentType, children, p, m, border }: propsT) =>
             maxW={'100%'}
             maxH={'100%'}
         >
-            <Tooltip placement='top-start' gutter={0} label={'canvas'} isOpen={isHovered && !!!draggingId && !isResizing}>
-                <Box
-                    onMouseOver={(e) => {
-                        e.stopPropagation();
-                        setIsHovered(true)
-                    }}
-                    onMouseOut={(e) => {
-                        e.stopPropagation();
-                        setIsHovered(false)
-                    }}
-                    cursor={'default'}
-                    style={{ position: 'relative', overflow: 'auto' }}
-                    w={'100%'}
-                    h={'100%'}
-                    p={p || undefined}
-                    m={m || undefined}
-                    border={border || undefined}
-                >
-                    {children}
-                </Box>
-            </Tooltip>
+            {/* <Tooltip placement='top-start' gutter={0} label={'canvas'} isOpen={isHovered && !!!draggingId && !isResizing}> */}
+            <Box
+                onMouseOver={(e) => {
+                    e.stopPropagation();
+                    setHoveredId(id);
+                    setIsHovered(true);
+                }}
+                onMouseLeave={(e) => {
+                    e.stopPropagation();
+                    setHoveredId(null);
+                    setIsHovered(false);
+                }}
+                onMouseOut={(e) => {
+                    e.stopPropagation();
+                    setHoveredId(null);
+                    setIsHovered(false);
+                }}
+                cursor={'default'}
+                style={{ position: 'relative', overflow: 'auto' }}
+                w={'100%'}
+                h={'100%'}
+                p={p || undefined}
+                m={m || undefined}
+                border={border || undefined}
+            >
+                {children}
+            </Box>
+            {/* </Tooltip> */}
             {/* for dropping */}
             <div
                 ref={setNodeRef3}

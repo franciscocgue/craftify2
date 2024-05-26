@@ -13,13 +13,22 @@ const canvasDropBorderPx = 2;
 
 const Canvas = () => {
 
-    const { components } = useDesignerStore();
+    const { components, setHoveredId } = useDesignerStore();
 
-    return <Flex flex={1} border={'1px solid grey'} alignItems={'center'} justifyContent={'center'} maxH='100vh' maxW='100vw' overflow={'auto'}>
+    return <Flex
+        flex={1}
+        border={'1px solid grey'}
+        p={'30px'}
+        alignItems={'center'}
+        justifyContent={'center'}
+        maxH='100vh'
+        maxW='100vw'
+        overflow={'auto'}
+    >
 
         <Box maxW={'100%'} maxH={'100%'} overflow={'auto'}>
             <Box
-                style={{ padding: canvasDropBorderPx, margin: '0 15px' }}
+                style={{ padding: canvasDropBorderPx, margin: '0px 15px' }}
                 w={screenSizes[device][0] + canvasDropBorderPx * 2}
                 h={screenSizes[device][1] + canvasDropBorderPx * 2}
                 maxH={screenSizes[device][1]}

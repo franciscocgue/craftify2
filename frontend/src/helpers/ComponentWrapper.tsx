@@ -1,9 +1,10 @@
 import { Box, Flex, Icon, Tooltip } from '@chakra-ui/react';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
-import { CSSProperties, ReactNode, useEffect, useState } from 'react';
+import { CSSProperties, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import useDesignerStore from '../stores/designer';
 import { NumberSize, Resizable } from 're-resizable';
 import { compTypes } from '../config/components';
+import { debounce, throttle } from 'lodash';
 
 type propsT = {
     id: string,
@@ -61,6 +62,37 @@ const stylesRight = (isOver: true | false) => ({
     boxShadow: isOver ? `calc(min(${dropStyles.siblingWidth}, ${dropStyles.siblingMinWidth}) - 1px) 0 0 0 ${dropStyles.siblingColor}, 0 0 0 0 ${dropStyles.siblingColor}` : undefined,
 })
 
+const useDebouncedMouseEnter = (setStatus) => {
+    // Use a ref to track the debounced update
+    const debouncedUpdateRef = useRef(null);
+
+    // Debounce function to ensure a final update after inactivity
+    const debouncedUpdate = useCallback(debounce((id) => {
+        setStatus(id);
+    }, 400), [setStatus]);
+
+    const handleMouseEnter = useCallback((id) => {
+        // Clear any existing debounce
+        if (debouncedUpdateRef.current) {
+            debouncedUpdateRef.current.cancel();
+        }
+
+        // Perform debounced update
+        debouncedUpdateRef.current = debouncedUpdate;
+        debouncedUpdate(id);
+    }, [debouncedUpdate]);
+
+    const handleMouseLeave = useCallback(() => {
+        // Clear the debounced update on mouse leave
+        if (debouncedUpdateRef.current) {
+            debouncedUpdateRef.current.cancel();
+        }
+        setStatus(null); // Optionally clear status on leave
+    }, [setStatus]);
+
+    return { handleMouseEnter, handleMouseLeave };
+};
+
 
 /* 
     Wrapper for no-container components.
@@ -79,11 +111,12 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
         }
     });
 
-
-    const { draggingId, isResizing, setIsResizing } = useDesignerStore();
+    const { draggingId, isResizing, setIsResizing, setHoveredId, hoveredId } = useDesignerStore();
     // const draggingId = 'box-b'
-    const [isHovered, setIsHovered] = useState(false);
     const [size, setSize] = useState({ w: w || 'auto', h: h || 'auto' });
+    const [showOutline, setShowOutline] = useState(false);
+
+    const { handleMouseEnter, handleMouseLeave } = useDebouncedMouseEnter(setHoveredId);
 
     // before: top / left, depending on parent container
 
@@ -136,26 +169,32 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
         style={{ height: '100%', width: '100%' }}
         onMouseOver={(e) => {
             e.stopPropagation();
-            setIsHovered(true)
+            handleMouseEnter(id);
+            setShowOutline(true);
         }}
         onMouseOut={(e) => {
             e.stopPropagation();
-            setIsHovered(false)
+            handleMouseLeave();
+            setShowOutline(false);
         }}>
     </div>
 
     // avoid parent tooltip after resizing
     useEffect(() => {
         if (!isResizing) {
-            setIsHovered(false)
+            setHoveredId(null);
         }
     }, [isResizing])
+    useEffect(() => {
+        console.log(name)
+    })
+
 
     return (
         // container box
         <Resizable
             style={{
-                outline: id !== 'canvas' && (isHovered || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
+                outline: id !== 'canvas' && ((showOutline || hoveredId === id) || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
             }}
             size={{ width: size.w, height: size.h }}
             onResizeStop={(_, __, ___, d: NumberSize) => {
@@ -189,21 +228,28 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
             }}
         >
             {/* for dragging */}
-            <Tooltip placement='top-start' gutter={0} label={tooltipComp} isOpen={isHovered && !!!draggingId && !isResizing}>
+            <Tooltip placement='top-start' gutter={0} label={tooltipComp} isOpen={hoveredId === id && !!!draggingId && !isResizing}>
                 <Box
                     ref={setNodeRef}
                     {...listeners}
                     {...attributes}
                     onMouseOver={(e) => {
                         e.stopPropagation();
-                        setIsHovered(true)
+                        // setHoveredId(id);
+                        // setIsHovered(true);
+                        handleMouseEnter(id);
+                        setShowOutline(true);
                     }}
                     onMouseOut={(e) => {
                         e.stopPropagation();
-                        setIsHovered(false)
+                        // setHoveredId(null);
+                        // setIsHovered(false)
+                        handleMouseLeave();
+                        setShowOutline(false);
                     }}
                     cursor={id === 'canvas' ? 'default' : 'grab'}
                     style={{ position: 'relative', overflow: 'auto' }}
+                    // _hover={{ outline: '1px solid darkgrey' }}
                     w={'100%'}
                     h={'100%'}
                     p={p || undefined}
