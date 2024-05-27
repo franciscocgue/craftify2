@@ -25,7 +25,11 @@ const stylesBody = {
 */
 const CanvasWrapper = ({ id, componentType, children, p, m, border }: propsT) => {
 
-    const { draggingId, isResizing, setHoveredId, hoveredId } = useDesignerStore();
+    // const { draggingId, isResizing, setHoveredId } = useDesignerStore();
+    const draggingId = useDesignerStore((state) => state.draggingId);
+    const isResizing = useDesignerStore((state) => state.isResizing);
+    const setHoveredId = useDesignerStore((state) => state.setHoveredId);
+
     const [isHovered, setIsHovered] = useState(false);
 
     // inside: body
@@ -61,7 +65,7 @@ const CanvasWrapper = ({ id, componentType, children, p, m, border }: propsT) =>
             <Box
                 onMouseOver={(e) => {
                     e.stopPropagation();
-                    setHoveredId(id);
+                    setHoveredId(null);
                     setIsHovered(true);
                 }}
                 onMouseLeave={(e) => {

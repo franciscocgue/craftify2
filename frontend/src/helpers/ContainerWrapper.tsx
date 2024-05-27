@@ -119,7 +119,14 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, w, h,
         }
     });
 
-    const { draggingId, isResizing, setIsResizing, setHoveredId, hoveredId } = useDesignerStore();
+    // const { draggingId, isResizing, setIsResizing, setHoveredId, hoveredId } = useDesignerStore();
+    const draggingId = useDesignerStore((state) => state.draggingId);
+    const isResizing = useDesignerStore((state) => state.isResizing);
+    const setIsResizing = useDesignerStore((state) => state.setIsResizing);
+    const setHoveredId = useDesignerStore((state) => state.setHoveredId);
+    const hoveredId = useDesignerStore((state) => state.hoveredId);
+
+
     const [size, setSize] = useState({ w: w || 'auto', h: h || 'auto' });
     const [showOutline, setShowOutline] = useState(false);
 

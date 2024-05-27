@@ -15,7 +15,14 @@ import { LuMove } from "react-icons/lu";
 
 const Designer = () => {
 
-  const { setDraggingId, draggingId, isResizing, moveComponent, addComponent, components } = useDesignerStore();
+  // const { setDraggingId, draggingId, isResizing, moveComponent, addComponent, components } = useDesignerStore();
+  const setDraggingId = useDesignerStore((state) => state.setDraggingId);
+  const draggingId = useDesignerStore((state) => state.draggingId);
+  const isResizing = useDesignerStore((state) => state.isResizing);
+  const moveComponent = useDesignerStore((state) => state.moveComponent);
+  const addComponent = useDesignerStore((state) => state.addComponent);
+  const components = useDesignerStore((state) => state.components);
+  // const setDraggingId = () => (null), draggingId = null, isResizing = false, moveComponent = () => (null), addComponent = () => (null), components = []
 
   function handleDragEnd(event: DragEndEvent) {
     setDraggingId(null);

@@ -1,6 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import useDesignerStore from "../../stores/designer";
 import { renderNode } from "../../helpers/ui-builder";
+import { useMemo } from "react";
 
 const screenSizes = {
     'Galaxy S10': [360, 760],
@@ -13,7 +14,16 @@ const canvasDropBorderPx = 2;
 
 const Canvas = () => {
 
-    const { components, setHoveredId } = useDesignerStore();
+    // const { components, setHoveredId } = useDesignerStore();
+
+    const components = useDesignerStore((state) => state.components);
+    const setHoveredId = useDesignerStore((state) => state.setHoveredId);
+
+    const comps = useMemo(
+        () => renderNode(components, 'canvas'),
+        [components]
+      );
+    // const { components, draggingId, isResizing, setIsResizing, setHoveredId, hoveredId } = useDesignerStore();
 
     return <Flex
         flex={1}
@@ -35,7 +45,7 @@ const Canvas = () => {
                 bg='gray.200'
                 overflowY={'auto'}
             >
-                {renderNode(components, 'canvas')}
+                {comps}
             </Box>
         </Box >
 

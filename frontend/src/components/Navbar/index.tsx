@@ -2,6 +2,7 @@ import { Button, Flex } from "@chakra-ui/react";
 
 // Top Navbar
 const Navbar = () => {
+  console.log('C - Navbar')
     return (
       <Flex justify="space-between" p={4} bg="gray.200">
         <Button variant="link">Home</Button>
