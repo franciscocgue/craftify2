@@ -24,12 +24,6 @@ function Node({ node, style, dragHandle }) {
             // _hover={{ outline: '2px solid grey' }}
             outline={node.isSelected && node.id !== 'canvas' ? '2px solid grey' : undefined}
             bg={node.isSelected && node.id !== 'canvas' ? 'rgba(192, 192, 192, 0.5)' : undefined}
-            onMouseEnter={() => {
-                node.select()
-            }}
-            onMouseLeave={() => {
-                node.deselect()
-            }}
         >
             <Flex
                 alignItems={'center'}
@@ -50,8 +44,14 @@ function Node({ node, style, dragHandle }) {
                     align={'center'}
                     fontSize='small'
                     userSelect={'none'}
-                    onClick={(e) => {
-                        node.edit();
+                    // onClick={(e) => {
+                    //     node.edit();
+                    // }}
+                    onMouseEnter={() => {
+                        node.select()
+                    }}
+                    onMouseLeave={() => {
+                        node.deselect()
                     }}
                 >
                     {node.data.name}
