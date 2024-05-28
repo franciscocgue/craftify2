@@ -64,7 +64,7 @@ const ComponentTree = () => {
     const setHoveredId = useDesignerStore((state) => state.setHoveredId);
     const isResizing = useDesignerStore((state) => state.isResizing);
 
-    console.log(hoveredId)
+    // console.log(hoveredId)
 
     // const { components, hoveredId, setHoveredId, isResizing } = useDesignerStore();
     const treeData: ComponentLeaf[] = [];

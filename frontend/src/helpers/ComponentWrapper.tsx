@@ -115,7 +115,26 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
     const isResizing = useDesignerStore((state) => state.isResizing);
     const setIsResizing = useDesignerStore((state) => state.setIsResizing);
     const setHoveredId = useDesignerStore((state) => state.setHoveredId);
-    const hoveredId = useDesignerStore((state) => state.hoveredId);
+    // const hoveredId = useDesignerStore((state) => state.hoveredId);
+
+    const [isHovered, setIsHovered] = useState(false);
+
+    useEffect(() => {
+        const unsub = useDesignerStore.subscribe(
+            // selector
+            (state) => state.hoveredId,
+            // callback
+            (hoveredId, prevHoveredId) => {
+                if (prevHoveredId !== id && hoveredId === id) {
+                    setIsHovered(true)
+                } else if (prevHoveredId === id && hoveredId !== id) {
+                    setIsHovered(false)
+                }
+            });
+
+        return unsub
+    }, [])
+
 
     // const { draggingId, isResizing, setIsResizing, setHoveredId, hoveredId } = useDesignerStore();
     // const draggingId = 'box-b'
@@ -192,7 +211,7 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
         }
     }, [isResizing])
     useEffect(() => {
-        console.log('name')
+        console.log('C - canvas comp: ' + name)
     })
 
 
@@ -200,7 +219,7 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
         // container box
         <Resizable
             style={{
-                outline: id !== 'canvas' && ((showOutline || hoveredId === id) || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
+                outline: id !== 'canvas' && ((showOutline || isHovered) || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
             }}
             size={{ width: size.w, height: size.h }}
             onResizeStop={(_, __, ___, d: NumberSize) => {
@@ -234,7 +253,7 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
             }}
         >
             {/* for dragging */}
-            <Tooltip placement='top-start' gutter={0} label={tooltipComp} isOpen={hoveredId === id && !!!draggingId && !isResizing}>
+            <Tooltip placement='top-start' gutter={0} label={tooltipComp} isOpen={(showOutline || isHovered) && !!!draggingId && !isResizing}>
                 <Box
                     ref={setNodeRef}
                     {...listeners}

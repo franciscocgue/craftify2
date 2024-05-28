@@ -1,4 +1,5 @@
-import { create } from 'zustand'
+import { create } from 'zustand';
+import { subscribeWithSelector } from 'zustand/middleware';
 
 const components = {
   'canvas': {
@@ -72,7 +73,7 @@ type designerStore = {
   addComponent: (compType: string, addedOverCompId: string, location: 'before' | 'after' | 'inside') => void
 }
 
-const useDesignerStore = create<designerStore>((set) => ({
+const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => ({
   draggingId: null,
   isResizing: false,
   selectedId: null,
@@ -180,6 +181,6 @@ const useDesignerStore = create<designerStore>((set) => ({
     }
 
   })
-}));
+})));
 
 export default useDesignerStore;
