@@ -139,7 +139,6 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
     // const { draggingId, isResizing, setIsResizing, setHoveredId, hoveredId } = useDesignerStore();
     // const draggingId = 'box-b'
     const [size, setSize] = useState({ w: w || 'auto', h: h || 'auto' });
-    const [showOutline, setShowOutline] = useState(false);
 
     const { handleMouseEnter, handleMouseLeave } = useDebouncedMouseEnter(setHoveredId);
 
@@ -195,12 +194,12 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
         onMouseOver={(e) => {
             e.stopPropagation();
             handleMouseEnter(id);
-            setShowOutline(true);
+            setIsHovered(true);
         }}
         onMouseOut={(e) => {
             e.stopPropagation();
             handleMouseLeave();
-            setShowOutline(false);
+            setIsHovered(false);
         }}>
     </div>
 
@@ -208,6 +207,7 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
     useEffect(() => {
         if (!isResizing) {
             setHoveredId(null);
+            setIsHovered(false);
         }
     }, [isResizing])
 
@@ -220,7 +220,7 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
         // container box
         <Resizable
             style={{
-                outline: id !== 'canvas' && ((showOutline || isHovered) || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
+                outline: id !== 'canvas' && (isHovered || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
             }}
             size={{ width: size.w, height: size.h }}
             onResizeStop={(_, __, ___, d: NumberSize) => {
@@ -254,7 +254,7 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
             }}
         >
             {/* for dragging */}
-            <Tooltip placement='top-start' gutter={0} label={tooltipComp} isOpen={(showOutline || isHovered) && !!!draggingId && !isResizing}>
+            <Tooltip placement='top-start' gutter={0} label={tooltipComp} isOpen={isHovered && !!!draggingId && !isResizing}>
                 <Box
                     ref={setNodeRef}
                     {...listeners}
@@ -264,14 +264,14 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
                         // setHoveredId(id);
                         // setIsHovered(true);
                         handleMouseEnter(id);
-                        setShowOutline(true);
+                        setIsHovered(true);
                     }}
                     onMouseOut={(e) => {
                         e.stopPropagation();
                         // setHoveredId(null);
                         // setIsHovered(false)
                         handleMouseLeave();
-                        setShowOutline(false);
+                        setIsHovered(false);
                     }}
                     cursor={id === 'canvas' ? 'default' : 'grab'}
                     style={{ position: 'relative', overflow: 'auto' }}
