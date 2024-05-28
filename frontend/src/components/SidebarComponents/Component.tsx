@@ -9,7 +9,7 @@ type propsT = {
 }
 
 const Component = ({name, icon, style}: propsT) => {
-    console.log('C - sidebar.Component')
+    console.log('C - sidebar.Component: ' + name)
     return <Flex
         direction={'column'}
         alignItems={'center'}

@@ -17,7 +17,7 @@ const Canvas = () => {
     // const { components, setHoveredId } = useDesignerStore();
 
     const components = useDesignerStore((state) => state.components);
-    const setHoveredId = useDesignerStore((state) => state.setHoveredId);
+    // const setHoveredId = useDesignerStore((state) => state.setHoveredId);
 
     const comps = useMemo(
         () => renderNode(components, 'canvas'),

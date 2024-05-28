@@ -210,6 +210,7 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
             setHoveredId(null);
         }
     }, [isResizing])
+
     useEffect(() => {
         console.log('C - canvas comp: ' + name)
     })

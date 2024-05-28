@@ -4,6 +4,7 @@ import Component from "./Component";
 import { compTypes } from '../../config/components';
 import { Resizable } from "re-resizable";
 import ComponentTree from "./ComponentTree";
+import { useMemo } from "react";
 
 
 const SidebarComponents = () => {
@@ -13,29 +14,30 @@ const SidebarComponents = () => {
 
     console.log('C - SidebarComponents')
 
-    // useEffect(() => {
-    //     console.log('selecttion changed')
-    //     console.log(treeRef.current?.selectedIds)
-    //     // setHoveredId(treeRef.current?.selectedIds[0])
-    // }, [treeRef.current?.selectedIds])
+    const compsInPalette = useMemo(
+        () => (
+            <Flex
+                w={'100%'}
+                p={1}
+                border={'1px solid grey'}
+                maxH={'100%'}
+                overflowY={'auto'}
+                gap={1}
+                justify={'flex-start'}
+                alignContent={'start'}
+                wrap={'wrap'}
+                flexGrow={1}
+            >
+                {Object.keys(compTypes).map(c => <Draggable componentType={c} key={c} id={c}>
+                    <Component name={compTypes[c as keyof typeof compTypes].name} icon={compTypes[c as keyof typeof compTypes].icon} />
+                </Draggable>)}
+            </Flex>
+        ),
+        [compTypes]
+    );
 
     return <Flex direction={'column'} w={'250px'} h={'100%'} maxH={'100%'} >
-        <Flex
-            w={'100%'}
-            p={1}
-            border={'1px solid grey'}
-            maxH={'100%'}
-            overflowY={'auto'}
-            gap={1}
-            justify={'flex-start'}
-            alignContent={'start'}
-            wrap={'wrap'}
-            flexGrow={1}
-        >
-            {Object.keys(compTypes).map(c => <Draggable componentType={c} key={c} id={c}>
-                <Component name={compTypes[c as keyof typeof compTypes].name} icon={compTypes[c as keyof typeof compTypes].icon} />
-            </Draggable>)}
-        </Flex>
+        {compsInPalette}
         <Resizable
             defaultSize={{
                 width: '100%',
