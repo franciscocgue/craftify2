@@ -126,6 +126,7 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, w, h,
     const setHoveredId = useDesignerStore((state) => state.setHoveredId);
     // const hoveredId = useDesignerStore((state) => state.hoveredId);
 
+    const [isActive, setIsActive] = useState(false); // might be activated externally
     const [isHovered, setIsHovered] = useState(false);
 
     useEffect(() => {
@@ -135,9 +136,9 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, w, h,
             // callback
             (hoveredId, prevHoveredId) => {
                 if (prevHoveredId !== id && hoveredId === id) {
-                    setIsHovered(true)
+                    setIsActive(true)
                 } else if (prevHoveredId === id && hoveredId !== id) {
-                    setIsHovered(false)
+                    setIsActive(false)
                 }
             });
 
@@ -236,7 +237,7 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, w, h,
         <Resizable
             style={{
                 outline: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? '2px solid red'
-                    : (isHovered || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
+                    : (!isResizing && !!!draggingId && (isHovered || isActive)) ? '2px solid green' : (isActive || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
             }}
             size={{ width: size.w, height: size.h }}
             onResizeStop={(_, __, ___, d: NumberSize) => {

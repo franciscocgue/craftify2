@@ -117,6 +117,7 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
     const setHoveredId = useDesignerStore((state) => state.setHoveredId);
     // const hoveredId = useDesignerStore((state) => state.hoveredId);
 
+    const [isActive, setIsActive] = useState(false); // might be activated externally
     const [isHovered, setIsHovered] = useState(false);
 
     useEffect(() => {
@@ -126,9 +127,9 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
             // callback
             (hoveredId, prevHoveredId) => {
                 if (prevHoveredId !== id && hoveredId === id) {
-                    setIsHovered(true)
+                    setIsActive(true)
                 } else if (prevHoveredId === id && hoveredId !== id) {
-                    setIsHovered(false)
+                    setIsActive(false)
                 }
             });
 
@@ -220,7 +221,9 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
         // container box
         <Resizable
             style={{
-                outline: id !== 'canvas' && (isHovered || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
+                outline: id === 'canvas' ? undefined
+                    : (!isResizing && !!!draggingId && (isHovered || isActive)) ? '2px solid green'
+                        : (isActive || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
             }}
             size={{ width: size.w, height: size.h }}
             onResizeStop={(_, __, ___, d: NumberSize) => {
@@ -262,14 +265,14 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
                     onMouseOver={(e) => {
                         e.stopPropagation();
                         // setHoveredId(id);
-                        // setIsHovered(true);
+                        // setIsActive(true);
                         handleMouseEnter(id);
                         setIsHovered(true);
                     }}
                     onMouseOut={(e) => {
                         e.stopPropagation();
                         // setHoveredId(null);
-                        // setIsHovered(false)
+                        // setIsActive(false)
                         handleMouseLeave();
                         setIsHovered(false);
                     }}

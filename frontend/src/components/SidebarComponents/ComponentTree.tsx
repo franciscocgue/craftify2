@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Icon, Text} from "@chakra-ui/react";
+import { Box, Button, Center, Divider, Flex, Icon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, Tag, TagLabel, TagLeftIcon, Text } from "@chakra-ui/react";
 import { Tree } from "react-arborist";
 import { IoMdArrowDropdown, IoMdArrowDropright } from "react-icons/io";
 import useDesignerStore from "../../stores/designer";
@@ -9,7 +9,9 @@ import { compTypes } from '../../config/components';
 import { FaRegSquare } from "react-icons/fa";
 import { debounce } from "lodash";
 import { RiDeleteBin2Line } from "react-icons/ri";
-import { IoMdAddCircleOutline } from "react-icons/io";
+import { MdOutlineAdd } from "react-icons/md";
+import { SlOptionsVertical } from "react-icons/sl";
+import useResizeObserver from "use-resize-observer";
 
 
 const useDebouncedMouseEnter = (setStatus) => {
@@ -111,27 +113,36 @@ function Node({ node, style, dragHandle }) {
                 >
                     {node.data.name}
                 </Text>
-                {isHovered && <Center
-                    // as={<span>TiDelete</span>}
-                    marginRight={3}
-                    w={'19px'}
-                    h={'19px'} //color='red.500' />}
-                    _hover={{ color: 'green' }}
-                    cursor={'pointer'}
-                >
-                    <IoMdAddCircleOutline />
-                    {/* test */}
-                </Center>}
-                {isHovered && node.id !== 'canvas' && <Center
-                    // as={<span>TiDelete</span>}
-                    w={'19px'}
-                    h={'19px'} //color='red.500' />}
-                    _hover={{ color: 'red' }}
-                    cursor={'pointer'}
-                >
-                    <RiDeleteBin2Line />
-                    {/* test */}
-                </Center>}
+                {node.id !== 'canvas' && <Popover isLazy placement="right" arrowSize={8}>
+                    <PopoverTrigger>
+                        <Box>
+                            <Icon cursor={'pointer'} as={SlOptionsVertical} w={'15px'} h={'12px'} />
+                        </Box>
+                    </PopoverTrigger>
+                    <Portal>
+                        <PopoverContent maxH={'300px'} overflow={'auto'}>
+                            <PopoverHeader>Tree Manager</PopoverHeader>
+                            <PopoverArrow bg='blue.800' />
+                            <PopoverCloseButton />
+                            <PopoverBody>
+                                <Button size={'sm'} leftIcon={<RiDeleteBin2Line />} colorScheme='red' variant='solid'>
+                                    Delete
+                                </Button>
+                                <Divider m={'10px 0'} />
+                                <Flex wrap={'wrap'} gap={1}>
+                                    {Object.keys(compTypes).map(c => (
+                                        // <Tag cursor={'pointer'} variant='solid' colorScheme='blue'></Tag>
+                                        <Tag cursor={'pointer'} size={'md'} key={c} variant='solid' colorScheme='blue'>
+                                            <TagLeftIcon boxSize='15px' as={MdOutlineAdd} />
+                                            <TagLabel>{compTypes[c as keyof typeof compTypes].name}</TagLabel>
+                                        </Tag>
+                                    ))}
+                                </Flex>
+                            </PopoverBody>
+                            {/* <PopoverFooter>This is the footer</PopoverFooter> */}
+                        </PopoverContent>
+                    </Portal>
+                </Popover>}
                 {/* <span>{node.isEditing ? 'editing' : null}</span> */}
             </Flex>
         </Box >
@@ -143,6 +154,7 @@ const ComponentTree = () => {
     const components = useDesignerStore((state) => state.components);
     // const hoveredId = useDesignerStore((state) => state.hoveredId);
     const setHoveredId = useDesignerStore((state) => state.setHoveredId);
+    const { ref, width, height } = useResizeObserver();
     // const isResizing = useDesignerStore((state) => state.isResizing);
 
     // console.log(hoveredId)
@@ -157,6 +169,7 @@ const ComponentTree = () => {
 
     return (
         <Box
+            ref={ref}
             h={'100%'}
             overflow={'auto'}
             p={1}
@@ -171,7 +184,8 @@ const ComponentTree = () => {
                 data={treeData}
                 ref={treeRef}
                 openByDefault={true}
-                width={240}
+                width={width}
+                height={height - 25}
                 // height={1000}
                 indent={27}
                 rowHeight={30}
