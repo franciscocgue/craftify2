@@ -3,7 +3,7 @@ import { memo } from "react";
 
 const SidebarProperties = memo(() => {
     console.log('C - SidebarProperties')
-    return <Box w={'300px'} border={'1px solid red'}>L1</Box>
+    return <Box w={'300px'} border={'1px solid grey'}>L1</Box>
 })
 
 export default SidebarProperties;

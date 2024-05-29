@@ -18,11 +18,10 @@ const Component = ({name, icon, style}: propsT) => {
         h={'65px'}
         borderRadius={5}
         justify={'center'}
-        bg={'white'}
         style={{...style}}
         cursor={'grab'}
     >
-        <Icon as={icon} w={5} h={5} color="black.900" />
+        <Icon as={icon} w={5} h={5} />
         <Box>
             <Text p={'2px'} align={'center'} fontSize='xs' userSelect={'none'}>{name}</Text>
         </Box>

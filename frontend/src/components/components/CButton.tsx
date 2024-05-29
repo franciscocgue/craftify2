@@ -1,7 +1,7 @@
 import { Button } from "@chakra-ui/react"
 
 const CButton = () => {
-    return <Button w={'100%'} h={'100%'} colorScheme='teal' size='md'>
+    return <Button w={'100%'} h={'100%'} size='md'>
         Button
     </Button>
 }

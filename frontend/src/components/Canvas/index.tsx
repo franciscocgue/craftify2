@@ -42,7 +42,7 @@ const Canvas = () => {
                 w={screenSizes[device][0] + canvasDropBorderPx * 2}
                 h={screenSizes[device][1] + canvasDropBorderPx * 2}
                 maxH={screenSizes[device][1]}
-                bg='gray.200'
+                // bg='blackAlpha.100'
                 overflowY={'auto'}
             >
                 {comps}
