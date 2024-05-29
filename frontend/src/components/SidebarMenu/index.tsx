@@ -1,11 +1,8 @@
 import { Box } from "@chakra-ui/react";
-import useDesignerStore from "../../stores/designer";
 
 const SidebarMenu = () => {
     // const { setHoveredId } = useDesignerStore();
     // const { setDraggingId } = useDesignerStore();
-
-    const setHoveredId = useDesignerStore((state) => state.setHoveredId);
 
     console.log('C - SidebarMenu')
 
