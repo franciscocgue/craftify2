@@ -65,12 +65,19 @@ type designerStore = {
   /**
    * Moves component in the component tree
    *
-   * @param {string} compType - Component ID to be moved.
+   * @param {string} compType - Component Type of new component.
    * @param {string} addedOverCompId - Component ID over which dragged.
    * @param {'before' | 'after' | 'inside'} location - Where to move.
    *
    */
-  addComponent: (compType: string, addedOverCompId: string, location: 'before' | 'after' | 'inside') => void
+  addComponent: (compType: string, addedOverCompId: string, location: 'before' | 'after' | 'inside') => void,
+  /**
+   * Removes component
+   *
+   * @param {string} compId - Component ID to be deleted.
+   *
+   */
+  removeComponent: (compId: string) => void,
 }
 
 const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => ({
@@ -180,7 +187,34 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
 
     }
 
-  })
+  }),
+  removeComponent: (compId) => set((state) => {
+    const comps = { ...state.components };
+
+    const getChildrenRecursive = (compId: string, childrenIds: string[], comps) => {
+      for (let c of comps[compId].children) {
+        childrenIds.push(c);
+        getChildrenRecursive(c, childrenIds, comps)
+      }
+      return
+    }
+
+    const compsToDelete: string[] = [compId];
+    getChildrenRecursive(compId, compsToDelete, comps)
+
+    // remove objects, and children
+    const newComponents = Object.keys(comps)
+      .filter(c => !compsToDelete.includes(c))
+      .reduce((obj, compId) => {
+        let comp = comps[compId];
+        comp.children = comp.children.filter(cc => !compsToDelete.includes(cc));
+        obj[compId] = comp;
+        return obj;
+      }, {});
+
+    return { components: newComponents }
+
+  }),
 })));
 
 export default useDesignerStore;

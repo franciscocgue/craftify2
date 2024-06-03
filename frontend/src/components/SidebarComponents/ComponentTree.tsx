@@ -52,6 +52,7 @@ function Node({ node, style, dragHandle }) {
     console.log('C - tree node')
 
     const setHoveredId = useDesignerStore((state) => state.setHoveredId);
+    const removeComponent = useDesignerStore((state) => state.removeComponent);
     const { handleMouseEnter, handleMouseLeave } = useDebouncedMouseEnter(setHoveredId)
     // const hoveredId = useDesignerStore((state) => state.hoveredId);
 
@@ -125,7 +126,7 @@ function Node({ node, style, dragHandle }) {
                             <PopoverArrow bg='blue.800' />
                             <PopoverCloseButton />
                             <PopoverBody>
-                                <Button size={'sm'} leftIcon={<RiDeleteBin2Line />} colorScheme='red' variant='solid'>
+                                <Button onClick={() => removeComponent(node.id)} size={'sm'} leftIcon={<RiDeleteBin2Line />} colorScheme='red' variant='solid'>
                                     Delete
                                 </Button>
                                 <Divider m={'10px 0'} />
