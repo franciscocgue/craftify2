@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
+import { compTypes } from '../config/components';
 
 const components = {
   'canvas': {
@@ -49,6 +50,7 @@ type designerStore = {
   selectedId: string | null,
   hoveredId: string | null,
   components: any,
+  componentNames: any,
   setIsResizing: (isResizing: true | false) => void,
   setDraggingId: (draggingId: string | null) => void,
   setSelectedId: (selectedId: string | null) => void,
@@ -61,16 +63,17 @@ type designerStore = {
    * @param {'before' | 'after' | 'inside'} location - Where to move.
    *
    */
-  moveComponent: (movedCompId: string, movedOverCompId: string, location: 'before' | 'after' | 'inside') => void,
+  moveComponent: (movedCompId: string, movedOverCompId: string, location: 'before' | 'after' | 'inside', index?: number) => void,
   /**
    * Moves component in the component tree
    *
    * @param {string} compType - Component Type of new component.
    * @param {string} addedOverCompId - Component ID over which dragged.
-   * @param {'before' | 'after' | 'inside'} location - Where to move.
+   * @param {'before' | 'after' | 'inside' | 'auto'} location - Where to move. 'auto' means inside if over container, else after
+   * @param {number} index - To use with react-arborist; if used, movedOverCompId is parent, location is ignored, and index is insertAt in children
    *
    */
-  addComponent: (compType: string, addedOverCompId: string, location: 'before' | 'after' | 'inside') => void,
+  addComponent: (compType: string, addedOverCompId: string, location: 'before' | 'after' | 'inside' | 'auto') => void,
   /**
    * Removes component
    *
@@ -86,17 +89,41 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   selectedId: null,
   hoveredId: null,
   components: components,
+  componentNames: {},
+  // setCompIdsToHighlight: (compIdsToHighlight) => set({ compIdsToHighlight: compIdsToHighlight }),
   setIsResizing: (isResizing: true | false) => set({ isResizing: isResizing }),
   setDraggingId: (draggingId) => set({ draggingId: draggingId }),
   setSelectedId: (selectedId) => set({ selectedId: selectedId }),
   setHoveredId: (hoveredId) => set({ hoveredId: hoveredId }),
-  moveComponent: (movedCompId, movedOverCompId, location) => set((state) => {
+  moveComponent: (movedCompId, movedOverCompId, location, index) => set((state) => {
     const comps = { ...state.components };
 
     let newParentId: string;
     let newParent;
     let component = comps[movedCompId];
     let oldParent = comps[component.parent];
+
+    if (index !== undefined) {
+      // To use with react-arborist;
+      // MovedOverCompId is parent, location is ignored, and index is insertAt in children
+
+      newParentId = movedOverCompId;
+      const droppedOnSelf = newParentId === movedCompId;
+      if (droppedOnSelf) {
+        // cancel
+        return { components: comps }
+      }
+      newParent = comps[newParentId];
+
+      // remove from prev parent
+      oldParent.children = oldParent.children.filter((c: string) => c !== movedCompId);
+      // add to new parent
+      component.parent = newParentId;
+      let insertAt = index;
+      newParent.children.splice(insertAt, 0, movedCompId);
+
+      return { components: comps }
+    }
 
     if (location === 'inside') {
       // dragged inside container
@@ -145,10 +172,28 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   }),
   addComponent: (compType, addedOverCompId, location) => set((state) => {
     const comps = { ...state.components };
+    const compsNames = { ...state.componentNames };
+
+    if (!Object.keys(compsNames).includes(compType)) {
+      compsNames[compType] = {
+        current: 1,
+      }
+    } else {
+      compsNames[compType].current += 1;
+    }
 
     let parentId: string;
     let parent;
     const compId = crypto.randomUUID();
+
+    if (location === 'auto') {
+      // @TODO: get all container types automatically
+      if (['container-row', 'container-column', 'canvas'].includes(comps[addedOverCompId].type)) {
+        location = 'inside';
+      } else {
+        location = 'after';
+      }
+    }
 
     if (location === 'inside') {
       // dragged inside container
@@ -160,12 +205,12 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
         type: compType,
         parent: parentId,
         children: [],
-        name: 'new component'
+        name: `${compTypes[compType].name} ${compsNames[compType].current}`
       }
       // add to parent
       parent.children.push(compId);
 
-      return { components: comps }
+      return { components: comps, componentNames: compsNames }
 
     } else {
       // dragged over another component (not container)
@@ -177,13 +222,13 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
         type: compType,
         parent: parentId,
         children: [],
-        name: 'new component'
+        name: `${compType} ${compsNames[compType].current}`
       }
       // add to parent
       let insertAt = parent.children.indexOf(addedOverCompId) + (location === 'after');
       parent.children.splice(insertAt, 0, compId);
 
-      return { components: comps }
+      return { components: comps, componentNames: compsNames }
 
     }
 

@@ -21,7 +21,7 @@ const Designer = () => {
   const isResizing = useDesignerStore((state) => state.isResizing);
   const moveComponent = useDesignerStore((state) => state.moveComponent);
   const addComponent = useDesignerStore((state) => state.addComponent);
-  const components = useDesignerStore((state) => state.components);
+  // const components = useDesignerStore((state) => state.components);
   // const setDraggingId = () => (null), draggingId = null, isResizing = false, moveComponent = () => (null), addComponent = () => (null), components = []
 
   function handleDragEnd(event: DragEndEvent) {
@@ -49,7 +49,8 @@ const Designer = () => {
       overlayComp = <Box>
         <Tag size={'md'} key={'md'} variant='solid' colorScheme='blackAlpha'>
           <TagLeftIcon boxSize='15px' as={LuMove} />
-          <TagLabel>{components[draggingId.replace('draggable_', '')].name}</TagLabel>
+          {/* <TagLabel>{components[draggingId.replace('draggable_', '')].name}</TagLabel> */}
+          <TagLabel>Moving ...</TagLabel>
         </Tag>
       </Box>
     } else {
@@ -73,7 +74,7 @@ const Designer = () => {
         <DndContext
           onDragEnd={handleDragEnd}
           onDragCancel={handleDragCancel}
-          modifiers={[restrictToWindowEdges]}
+          // modifiers={[restrictToWindowEdges]}
           onDragMove={!draggingId ? handleDragMove : undefined}
           collisionDetection={pointerWithin}
         >
