@@ -3,7 +3,7 @@ import Draggable from "../../helpers/Draggable";
 import Component from "./Component";
 import { compTypes } from '../../config/components';
 import { Resizable } from "re-resizable";
-import ComponentTree from "./ComponentTree";
+import ComponentTree1 from "./ComponentTree1";
 import { useMemo } from "react";
 
 
@@ -50,7 +50,7 @@ const SidebarComponents = () => {
             maxHeight={'100%'}
             enable={{ top: true, right: false, bottom: false, left: false, topRight: false, bottomRight: false, bottomLeft: false, topLeft: false }}
         >
-            <ComponentTree />
+            <ComponentTree1 />
         </Resizable>
     </Flex>
 }

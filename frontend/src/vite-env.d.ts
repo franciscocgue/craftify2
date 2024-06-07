@@ -20,6 +20,13 @@ export interface ComponentLeaf {
     children?: string[];
     readOnly: true | false,
 }
+export interface ComponentLeaf1 {
+    key: string;
+    title: string;
+    type: keyof typeof compTypes,
+    children?: string[];
+    readOnly: true | false,
+}
 
 export type PropertyType = {
     displayName?: string,

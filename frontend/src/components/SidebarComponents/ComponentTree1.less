@@ -1,0 +1,95 @@
+@treePrefix: ~'rc-tree';
+@treeNodePrefix: ~'@{treePrefix}-treenode';
+
+.@{treePrefix} {
+    margin: 0;
+    padding: 5px 0;
+    width: 100%;
+    // border: 1px solid red;
+
+    &-title {
+        font-size: small;
+    }
+
+    &.dragging {
+        background: rgba(100, 100, 255, 0.1);
+    }
+
+    &-treenode {
+        display: flex;
+        align-items: center;
+        height: 28px;
+        position: relative; /* or absolute/fixed */
+        z-index: 10; /* Adjust as needed */
+
+        &-selected {
+            // background-color:  green;
+            // color: white;
+            box-shadow: inset 2px 2px green, inset -2px -2px green;
+        }
+    }
+
+    // to shift switcher left and 
+    // align icons
+    &-node-content-wrapper-normal {
+        position: relative;
+        left: 14px;
+    }
+
+    &-switcher {
+        cursor: pointer;
+
+        &_close,
+        &_open {
+            width: 14px;
+        }
+    }
+
+    &-indent {
+        position: relative;
+        align-self: stretch;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        height: 0;
+        vertical-align: bottom;
+
+        .rc-tree-indent-unit {
+            position: relative;
+            height: 100%;
+            width: 15px;
+            // background-color: orange;
+
+            // &::before {
+            //     position: absolute;
+            //     top: 0;
+            //     bottom: 0;
+            //     border-right: 1px solid blue;
+            //     left: -10px;
+            //     content: '';
+            // }
+
+            // &-end {
+            //     &::before {
+            //         display: none;
+            //     }
+            // }
+
+            // End should ignore
+            // &-end {
+            //   &::before {
+            //     display: none;
+            //   }
+            // }
+        }
+    }
+
+    &-node-content-wrapper {
+        display: flex;
+        align-items: center;
+    }
+
+    &-iconEle {
+        width: 20px;
+    }
+}

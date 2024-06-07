@@ -16,6 +16,8 @@ import { useToast } from "@chakra-ui/react";
 import { keyframes } from "@chakra-ui/react";
 import { isEqual } from "lodash";
 
+import "rc-tree/assets/index.css"
+
 
 const useDebouncedMouseEnter = (setStatus) => {
     // Use a ref to track the debounced update
