@@ -7,11 +7,11 @@ import { IoMdCheckboxOutline } from "react-icons/io";
 const compTypes = {
     'container-row': {
         icon: CiGrid2V,
-        name: 'Container row',
+        name: 'Row',
     },
     'container-column': {
         icon: CiGrid2H,
-        name: 'Container column',
+        name: 'Column',
     },
     'button': {
         icon: RxButton,

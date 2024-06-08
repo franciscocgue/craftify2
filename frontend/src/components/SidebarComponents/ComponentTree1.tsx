@@ -222,7 +222,7 @@ const Demo = () => {
     )
   );
 
-  const [localHoveredId, setLocalHoveredId] = useState(null);
+  const [localHoveredId, setLocalHoveredId] = useState(false);
 
   const { handleMouseEnter, handleMouseLeave } = useDebouncedMouseEnter(setHoveredId)
 
@@ -258,11 +258,11 @@ const Demo = () => {
                 // height={250}
                 itemHeight={28}
                 onMouseEnter={(info) => {
-                  setLocalHoveredId(info.node.key);
+                  setLocalHoveredId(true);
                   handleMouseEnter(info.node.key);
                 }}
                 onMouseLeave={() => {
-                  setLocalHoveredId(null);
+                  setLocalHoveredId(false);
                   handleMouseLeave();
                 }}
                 // style={{ border: '1px solid #000' }}
@@ -275,7 +275,7 @@ const Demo = () => {
                 // icon={() => compTypes['button']?.icon}
                 icon={(node) => getIcon(node.data.type)}
                 showLine
-                selectedKeys={[localHoveredId || hoveredId]}
+                selectedKeys={[localHoveredId ? '' : hoveredId]}
                 // onDragStart={(e, node) => {
                 //   console.log('DEBUG - DRAG STARTED')
                 // }}
