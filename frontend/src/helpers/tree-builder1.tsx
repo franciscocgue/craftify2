@@ -4,11 +4,12 @@ import { compTypes } from "../config/components";
 import { CgScreen } from "react-icons/cg";
 import { FiPlusCircle } from "react-icons/fi";
 import { RiDeleteBin2Line } from "react-icons/ri";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useDesignerStore from "../stores/designer";
-import { Flex, Tag, TagLabel, TagLeftIcon, useColorMode, useToast } from "@chakra-ui/react";
+import { Flex, Input, Tag, TagLabel, TagLeftIcon, useColorMode, useToast } from "@chakra-ui/react";
 import { ArrowContainer, Popover } from "react-tiny-popover";
 import { MdOutlineAdd } from "react-icons/md";
+import { IoMdClose } from "react-icons/io";
 
 // convert components into
 // nested format required
@@ -60,10 +61,21 @@ const NodeTitle = ({ ...props }) => {
 
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
+    const [value, setValue] = useState('')
+    const handleChange = (event) => {
+        setValue(event.target.value);
+        setListOfCompTypes(Object.keys(compTypes).filter(ct => ct.indexOf(event.target.value) !== -1));
+    }
+    // myArray.filter(function (str) { return str.indexOf(PATTERN) === -1; }
+
+    const [listOfCompTypes, setListOfCompTypes] = useState(Object.keys(compTypes))
+
     return <Popover
         isOpen={isPopoverOpen}
         containerStyle={{ zIndex: '11' }}
-        onClickOutside={() => setIsPopoverOpen(false)}
+        onClickOutside={() => {
+            setIsPopoverOpen(false);
+        }}
         // reposition={false}
         positions={['right', 'top', 'bottom']} // preferred positions by priority
         content={({ position, childRect, popoverRect }) => (
@@ -71,7 +83,7 @@ const NodeTitle = ({ ...props }) => {
                 position={position}
                 childRect={childRect}
                 popoverRect={popoverRect}
-                arrowColor={colorMode === 'light' ? 'white' : 'black'}
+                arrowColor={'rgb(66, 153, 225)'}
                 arrowSize={10}
                 arrowStyle={{ opacity: 1 }}
                 className='popover-arrow-container'
@@ -81,12 +93,25 @@ const NodeTitle = ({ ...props }) => {
                     opacity={1}
                     wrap={'wrap'}
                     gap={1}
-                    bg={colorMode === 'light' ? 'white' : 'black'}
+                    bg={colorMode === 'light' ? 'white' : '#2D3748'}
+                    border={'1px solid lightgray'}
                     padding={'1rem'}
-                    borderRadius={'10px'}
-                    maxW={'500px'}
+                    borderRadius={'5px'}
+                    w={'400px'}
+                    boxShadow={"rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px"}
                 >
-                    {Object.keys(compTypes).map(c => (
+                    <IoMdClose cursor={'pointer'} onClick={() => {
+                        setIsPopoverOpen(false);
+                    }} />
+                    <Input
+                        value={value}
+                        onChange={handleChange}
+                        placeholder='Search...'
+                        size='sm'
+                        type='search'
+                        marginBottom={'1rem'}
+                    />
+                    {listOfCompTypes.map(c => (
                         // <Tag cursor={'pointer'} variant='solid' colorScheme='blue'></Tag>
                         <Tag
                             cursor={'pointer'}
@@ -121,8 +146,6 @@ const NodeTitle = ({ ...props }) => {
         >
             {props.node.title}
 
-            <FiPlusCircle className="my-add-icon" title="New" size={14} onClick={() => setIsPopoverOpen(!isPopoverOpen)} />
-
             {props.node.type !== 'canvas' && <RiDeleteBin2Line className="my-delete-icon" title="Delete" size={14} onClick={() => {
                 removeComponent(props.node.key);
                 toast({
@@ -132,6 +155,13 @@ const NodeTitle = ({ ...props }) => {
                     // isClosable: true,
                 });
             }} />}
+
+            <FiPlusCircle className="my-add-icon" title="New" size={14} onClick={() => {
+                setIsPopoverOpen(!isPopoverOpen);
+                setValue('');
+                setListOfCompTypes(Object.keys(compTypes));
+            }} />
+
         </span>
     </Popover>
 }

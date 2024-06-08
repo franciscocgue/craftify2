@@ -19,7 +19,8 @@ const SidebarComponents = () => {
             <Flex
                 w={'100%'}
                 p={1}
-                border={'1px solid grey'}
+                borderTop={'1px solid grey'}
+                borderBottom={'1px solid grey'}
                 maxH={'100%'}
                 overflowY={'auto'}
                 gap={1}
