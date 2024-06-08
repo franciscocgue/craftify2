@@ -4,9 +4,11 @@ import { compTypes } from "../config/components";
 import { CgScreen } from "react-icons/cg";
 import { FiPlusCircle } from "react-icons/fi";
 import { RiDeleteBin2Line } from "react-icons/ri";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import useDesignerStore from "../stores/designer";
-import { useToast } from "@chakra-ui/react";
+import { Flex, Tag, TagLabel, TagLeftIcon, useColorMode, useToast } from "@chakra-ui/react";
+import { ArrowContainer, Popover } from "react-tiny-popover";
+import { MdOutlineAdd } from "react-icons/md";
 
 // convert components into
 // nested format required
@@ -42,10 +44,13 @@ const getIcon = (compTypeName: string) => {
 
 const NodeTitle = ({ ...props }) => {
 
-    const { removeComponent } = useDesignerStore(
+    const { colorMode } = useColorMode();
+
+    const { removeComponent, addComponent } = useDesignerStore(
         useCallback(
             (state) => ({
                 removeComponent: state.removeComponent,
+                addComponent: state.addComponent,
             }),
             []
         )
@@ -53,23 +58,82 @@ const NodeTitle = ({ ...props }) => {
 
     const toast = useToast()
 
-    return <span
-        style={{ display: 'flex', alignItems: 'center' }}
-        className="rc-tree-title"
-        title={compTypes[props.node.type]?.name || 'Canvas'}
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
+    return <Popover
+        isOpen={isPopoverOpen}
+        containerStyle={{ zIndex: '11' }}
+        onClickOutside={() => setIsPopoverOpen(false)}
+        // reposition={false}
+        positions={['right', 'top', 'bottom']} // preferred positions by priority
+        content={({ position, childRect, popoverRect }) => (
+            <ArrowContainer // if you'd like an arrow, you can import the ArrowContainer!
+                position={position}
+                childRect={childRect}
+                popoverRect={popoverRect}
+                arrowColor={colorMode === 'light' ? 'white' : 'black'}
+                arrowSize={10}
+                arrowStyle={{ opacity: 1 }}
+                className='popover-arrow-container'
+                arrowClassName='popover-arrow'
+            >
+                <Flex
+                    opacity={1}
+                    wrap={'wrap'}
+                    gap={1}
+                    bg={colorMode === 'light' ? 'white' : 'black'}
+                    padding={'1rem'}
+                    borderRadius={'10px'}
+                    maxW={'500px'}
+                >
+                    {Object.keys(compTypes).map(c => (
+                        // <Tag cursor={'pointer'} variant='solid' colorScheme='blue'></Tag>
+                        <Tag
+                            cursor={'pointer'}
+                            size={'md'}
+                            key={c}
+                            variant='solid'
+                            colorScheme='blue'
+                            onClick={() => {
+                                // node.open();
+                                addComponent(c, props.node.key, 'auto');
+                                setIsPopoverOpen(false);
+                                toast({
+                                    title: `${compTypes[c as keyof typeof compTypes].name} created`,
+                                    status: 'success',
+                                    duration: 1500,
+                                    // isClosable: true,
+                                });
+                            }}
+                        >
+                            <TagLeftIcon boxSize='15px' as={MdOutlineAdd} />
+                            <TagLabel>{compTypes[c as keyof typeof compTypes].name}</TagLabel>
+                        </Tag>
+                    ))}
+                </Flex>
+            </ArrowContainer>
+        )}
     >
-        {props.node.title}
-        {props.node.type !== 'canvas' && <><FiPlusCircle className="my-add-icon" title="New" size={17} />
-            <RiDeleteBin2Line className="my-delete-icon" title="Delete" size={17} onClick={() => {
+        <span
+            style={{ display: 'flex', alignItems: 'center' }}
+            className="rc-tree-title"
+            title={compTypes[props.node.type]?.name || 'Canvas'}
+        >
+            {props.node.title}
+
+            <FiPlusCircle className="my-add-icon" title="New" size={14} onClick={() => setIsPopoverOpen(!isPopoverOpen)} />
+
+            {props.node.type !== 'canvas' && <RiDeleteBin2Line className="my-delete-icon" title="Delete" size={14} onClick={() => {
                 removeComponent(props.node.key);
                 toast({
                     title: 'Deleted',
                     status: 'success',
                     duration: 1500,
                     // isClosable: true,
-                })
-            }} /></>}
-    </span>
+                });
+            }} />}
+        </span>
+    </Popover>
 }
 
 const treeAsHtml = (node) => {

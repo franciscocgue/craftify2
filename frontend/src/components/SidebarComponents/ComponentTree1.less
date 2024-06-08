@@ -21,8 +21,10 @@
         display: flex;
         align-items: center;
         height: 28px;
-        position: relative; /* or absolute/fixed */
-        z-index: 10; /* Adjust as needed */
+        position: relative;
+        /* or absolute/fixed */
+        z-index: 10;
+        /* Adjust as needed */
 
         &-selected {
             // highlight
@@ -43,27 +45,40 @@
 
     // show delete icon on title hovered
     .my-delete-icon {
-        display: none;
+        // display: none;
+        color: grey;
         cursor: pointer;
         margin-left: 4px;
     }
+
+
+    &-title:hover .my-delete-icon {
+        display: block;
+        color: inherit;
+    }
+
+    // order important; this rule AFTER previous
     .my-delete-icon:hover {
         color: red;
     }
-    &-title:hover .my-delete-icon {
-        display: block;
-    }
+
     // show add icon on title hovered
     .my-add-icon {
-        display: none;
+        // display: none;
+        color: gray;
         cursor: pointer;
         margin-left: 10px;
     }
-    .my-add-icon:hover {
-        color: green;
-    }
+
+
     &-title:hover .my-add-icon {
         display: block;
+        color: inherit;
+    }
+
+    // order important; this rule AFTER previous
+    .my-add-icon:hover {
+        color: green;
     }
 
     &-switcher {
