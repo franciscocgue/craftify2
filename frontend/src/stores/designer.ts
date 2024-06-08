@@ -6,6 +6,14 @@ const components = {
   'canvas': {
     type: 'canvas',
     parent: null,
+    children: [],
+    name: 'Canvas'
+  },
+}
+const componentsTest = {
+  'canvas': {
+    type: 'canvas',
+    parent: null,
     children: ['994a18fa-b8d0-42e1-bc31-a510367b014b', '16586569-f34a-4066-9e17-192a9bbb6579', '460e5784-db2c-485b-9db1-216a4d706ed2'],
     name: 'Canvas'
   },

@@ -9,6 +9,8 @@
 
     &-title {
         font-size: small;
+        // avoid line break
+        white-space: nowrap;
     }
 
     &.dragging {
@@ -33,6 +35,35 @@
     &-node-content-wrapper-normal {
         position: relative;
         left: 14px;
+    }
+
+    // & .my-delete-icon {
+    //     color: green;
+    // }
+
+    // show delete icon on title hovered
+    .my-delete-icon {
+        display: none;
+        cursor: pointer;
+        margin-left: 4px;
+    }
+    .my-delete-icon:hover {
+        color: red;
+    }
+    &-title:hover .my-delete-icon {
+        display: block;
+    }
+    // show add icon on title hovered
+    .my-add-icon {
+        display: none;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+    .my-add-icon:hover {
+        color: green;
+    }
+    &-title:hover .my-add-icon {
+        display: block;
     }
 
     &-switcher {

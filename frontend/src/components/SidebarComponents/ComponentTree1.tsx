@@ -12,9 +12,11 @@ import { IoMdArrowDropdown, IoMdArrowDropright } from "react-icons/io";
 
 import './ComponentTree1.less';
 import { compTypes } from '../../config/components';
-import { Icon, useStatStyles } from '@chakra-ui/react';
+import { Box, Flex, Icon, Tooltip, useStatStyles } from '@chakra-ui/react';
 import { FaRegSquare } from 'react-icons/fa';
 import { debounce } from 'lodash';
+import { RiDeleteBin2Line } from "react-icons/ri";
+import { treeAsHtml } from '../../helpers/tree-builder1';
 
 
 const STYLE = `
@@ -228,9 +230,9 @@ const Demo = () => {
 
   console.log('Tree rc-tree')
 
-  setTimeout(() => {
-    treeRef.current.scrollTo({ key: '0-9-2' });
-  }, 100);
+  // setTimeout(() => {
+  //   treeRef.current.scrollTo({ key: '0-9-2' });
+  // }, 100);
 
   return (
     <Provider motion={true}>
@@ -247,14 +249,14 @@ const Demo = () => {
 
           >
             <div style={{ width: width }}>
-              <Tree
+              {treeData.length ? <Tree
                 ref={treeRef}
                 // defaultExpandAll={false}
                 defaultExpandAll
                 style={{ userSelect: 'none' }}
                 defaultExpandedKeys={defaultExpandedKeys}
                 motion={motion}
-                height={height - 25}
+                height={height - 50}
                 // height={250}
                 itemHeight={28}
                 onMouseEnter={(info) => {
@@ -267,13 +269,17 @@ const Demo = () => {
                 }}
                 // style={{ border: '1px solid #000' }}
                 // treeData={getTreeData()}
-                treeData={treeData[0].children} // canvas excluded
+                // treeData={treeData[0].children} // canvas excluded
                 // treeData={getTreeData1()}
                 // testing props
                 draggable
                 // icon={compTypes[node.data.type as keyof typeof compTypes]?.icon}
                 // icon={() => compTypes['button']?.icon}
-                icon={(node) => getIcon(node.data.type)}
+                // icon={(node) => getIcon(node.data.type)}
+                // icon={(node) => {
+                //   console.log('node', node)
+                //   return getIcon('button')
+                // }}
                 showLine
                 selectedKeys={[localHoveredId ? '' : hoveredId]}
                 // onDragStart={(e, node) => {
@@ -287,7 +293,17 @@ const Demo = () => {
                 //   return <div>DRAGGING</div>
                 // }}
                 expandAction={false}
-              />
+              >
+                {/* <TreeNode title="Parent">
+                  <TreeNode key={'460e5784-db2c-485b-9db1-216a4d706ed2'} title={<Tooltip label='Hover me'>
+                    <Flex alignItems={'center'}>
+                      <span>Tag Here</span>
+                      <RiDeleteBin2Line size={15} onClick={() => {console.log('clickedddddddd')}}/>
+                    </Flex>
+                  </Tooltip>} />
+                </TreeNode> */}
+                {treeAsHtml(treeData[0])}
+              </Tree> : 'loading tree'}
             </div>
             {/* <div style={{ flex: '1 1 50%' }}>
               <h3>Without Virtual</h3>
