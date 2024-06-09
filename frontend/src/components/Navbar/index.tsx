@@ -14,13 +14,14 @@ const ToggleColorMode = () => {
 
 // Top Navbar
 const Navbar = () => {
+
   console.log('C - Navbar')
+  
     return (
       <Flex justify="space-between" p={4}>
         <Button variant="link">Home</Button>
         <ToggleColorMode />
         <Button variant="link">About</Button>
-        {/* Add more navigation items */}
       </Flex>
     );
   };

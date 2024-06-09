@@ -5,7 +5,7 @@ import SidebarMenu from "../components/SidebarMenu";
 import SidebarComponents from "../components/SidebarComponents";
 import SidebarProperties from "../components/SidebarProperties";
 import { DndContext, DragEndEvent, DragMoveEvent, DragOverlay, pointerWithin } from '@dnd-kit/core';
-import { restrictToWindowEdges, snapCenterToCursor } from "@dnd-kit/modifiers";
+import { snapCenterToCursor } from "@dnd-kit/modifiers";
 import PaletteComponent from "../components/SidebarComponents/Component";
 import { compTypes } from "../config/components";
 import useDesignerStore from "../stores/designer";
@@ -49,8 +49,9 @@ const Designer = () => {
       overlayComp = <Box>
         <Tag size={'md'} key={'md'} variant='solid' colorScheme='blackAlpha'>
           <TagLeftIcon boxSize='15px' as={LuMove} />
+          {/* removed to avoud components dependency high up in the dom tree */}
           {/* <TagLabel>{components[draggingId.replace('draggable_', '')].name}</TagLabel> */}
-          <TagLabel>Moving ...</TagLabel>
+          <TagLabel>moving</TagLabel>
         </Tag>
       </Box>
     } else {

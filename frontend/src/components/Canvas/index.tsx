@@ -14,16 +14,14 @@ const canvasDropBorderPx = 2;
 
 const Canvas = () => {
 
-    // const { components, setHoveredId } = useDesignerStore();
+    console.log('C - Canvas')
 
     const components = useDesignerStore((state) => state.components);
-    // const setHoveredId = useDesignerStore((state) => state.setHoveredId);
 
     const comps = useMemo(
         () => renderNode(components, 'canvas'),
         [components]
       );
-    // const { components, draggingId, isResizing, setIsResizing, setHoveredId, hoveredId } = useDesignerStore();
 
     return <Flex
         flex={1}

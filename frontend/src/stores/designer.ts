@@ -10,44 +10,44 @@ const components = {
     name: 'Canvas'
   },
 }
-const componentsTest = {
-  'canvas': {
-    type: 'canvas',
-    parent: null,
-    children: ['994a18fa-b8d0-42e1-bc31-a510367b014b', '16586569-f34a-4066-9e17-192a9bbb6579', '460e5784-db2c-485b-9db1-216a4d706ed2'],
-    name: 'Canvas'
-  },
-  '994a18fa-b8d0-42e1-bc31-a510367b014b': {
-    type: 'button',
-    parent: 'canvas',
-    children: [],
-    name: 'Button 1'
-  },
-  '16586569-f34a-4066-9e17-192a9bbb6579': {
-    type: 'container-column',
-    parent: 'canvas',
-    children: ['b327b072-db49-4641-8079-69c5d8c06c97', 'aadbb64e-7c4e-4096-b67c-8b0658a592f8'],
-    name: 'Container column'
-  },
-  'b327b072-db49-4641-8079-69c5d8c06c97': {
-    type: 'button',
-    parent: '16586569-f34a-4066-9e17-192a9bbb6579',
-    children: [],
-    name: 'Sub button 1'
-  },
-  'aadbb64e-7c4e-4096-b67c-8b0658a592f8': {
-    type: 'button',
-    parent: '16586569-f34a-4066-9e17-192a9bbb6579',
-    children: [],
-    name: 'Sub button 2'
-  },
-  '460e5784-db2c-485b-9db1-216a4d706ed2': {
-    type: 'container-column',
-    parent: 'canvas',
-    children: [],
-    name: 'Empty container'
-  },
-}
+// const componentsTest = {
+//   'canvas': {
+//     type: 'canvas',
+//     parent: null,
+//     children: ['994a18fa-b8d0-42e1-bc31-a510367b014b', '16586569-f34a-4066-9e17-192a9bbb6579', '460e5784-db2c-485b-9db1-216a4d706ed2'],
+//     name: 'Canvas'
+//   },
+//   '994a18fa-b8d0-42e1-bc31-a510367b014b': {
+//     type: 'button',
+//     parent: 'canvas',
+//     children: [],
+//     name: 'Button 1'
+//   },
+//   '16586569-f34a-4066-9e17-192a9bbb6579': {
+//     type: 'container-column',
+//     parent: 'canvas',
+//     children: ['b327b072-db49-4641-8079-69c5d8c06c97', 'aadbb64e-7c4e-4096-b67c-8b0658a592f8'],
+//     name: 'Container column'
+//   },
+//   'b327b072-db49-4641-8079-69c5d8c06c97': {
+//     type: 'button',
+//     parent: '16586569-f34a-4066-9e17-192a9bbb6579',
+//     children: [],
+//     name: 'Sub button 1'
+//   },
+//   'aadbb64e-7c4e-4096-b67c-8b0658a592f8': {
+//     type: 'button',
+//     parent: '16586569-f34a-4066-9e17-192a9bbb6579',
+//     children: [],
+//     name: 'Sub button 2'
+//   },
+//   '460e5784-db2c-485b-9db1-216a4d706ed2': {
+//     type: 'container-column',
+//     parent: 'canvas',
+//     children: [],
+//     name: 'Empty container'
+//   },
+// }
 
 
 // types
@@ -69,16 +69,16 @@ type designerStore = {
    * @param {string} movedCompId - Component ID to be moved.
    * @param {string} movedOverCompId - Component ID over which dragged.
    * @param {'before' | 'after' | 'inside'} location - Where to move.
+   * @param {'last' | 'first'} positionInContainer - When location=inside, whether position is first or last in container
    *
    */
-  moveComponent: (movedCompId: string, movedOverCompId: string, location: 'before' | 'after' | 'inside', index?: number) => void,
+  moveComponent: (movedCompId: string, movedOverCompId: string, location: 'before' | 'after' | 'inside', positionInContainer?: 'last' | 'first') => void,
   /**
-   * Moves component in the component tree
+   * Adds component in the component tree
    *
    * @param {string} compType - Component Type of new component.
    * @param {string} addedOverCompId - Component ID over which dragged.
    * @param {'before' | 'after' | 'inside' | 'auto'} location - Where to move. 'auto' means inside if over container, else after
-   * @param {number} index - To use with react-arborist; if used, movedOverCompId is parent, location is ignored, and index is insertAt in children
    *
    */
   addComponent: (compType: string, addedOverCompId: string, location: 'before' | 'after' | 'inside' | 'auto') => void,
@@ -98,12 +98,11 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   hoveredId: null,
   components: components,
   componentNames: {},
-  // setCompIdsToHighlight: (compIdsToHighlight) => set({ compIdsToHighlight: compIdsToHighlight }),
   setIsResizing: (isResizing: true | false) => set({ isResizing: isResizing }),
   setDraggingId: (draggingId) => set({ draggingId: draggingId }),
   setSelectedId: (selectedId) => set({ selectedId: selectedId }),
   setHoveredId: (hoveredId) => set({ hoveredId: hoveredId }),
-  moveComponent: (movedCompId, movedOverCompId, location, index) => set((state) => {
+  moveComponent: (movedCompId, movedOverCompId, location, positionInContainer = 'last') => set((state) => {
     const comps = { ...state.components };
 
     let newParentId: string;
@@ -111,35 +110,14 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
     let component = comps[movedCompId];
     let oldParent = comps[component.parent];
 
-    if (index !== undefined) {
-      // To use with react-arborist;
-      // MovedOverCompId is parent, location is ignored, and index is insertAt in children
-
-      newParentId = movedOverCompId;
-      const droppedOnSelf = newParentId === movedCompId;
-      if (droppedOnSelf) {
-        // cancel
-        return { components: comps }
-      }
-      newParent = comps[newParentId];
-
-      // remove from prev parent
-      oldParent.children = oldParent.children.filter((c: string) => c !== movedCompId);
-      // add to new parent
-      component.parent = newParentId;
-      let insertAt = index;
-      newParent.children.splice(insertAt, 0, movedCompId);
-
-      return { components: comps }
-    }
-
     if (location === 'inside') {
       // dragged inside container
 
       newParentId = movedOverCompId;
       const droppedSameParent = newParentId === component.parent;
       const droppedOnSelf = newParentId === movedCompId;
-      if (droppedSameParent || droppedOnSelf) {
+      // if positionInContainer==='first', move is valid (happened in tree)
+      if (positionInContainer === 'last' && droppedSameParent || droppedOnSelf) {
         // cancel
         return { components: comps }
       }
@@ -149,7 +127,12 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
       oldParent.children = oldParent.children.filter((c: string) => c !== movedCompId);
       // add to new parent
       component.parent = newParentId;
-      newParent.children.push(movedCompId);
+      if (positionInContainer === 'last') {
+        newParent.children.push(movedCompId);
+      } else {
+        // first position in container
+        newParent.children.splice(0, 0, movedCompId);
+      }
 
       return { components: comps }
 
@@ -213,7 +196,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
         type: compType,
         parent: parentId,
         children: [],
-        name: `${compTypes[compType].name} ${compsNames[compType].current}`
+        name: `${compTypes[compType as keyof typeof compTypes].name} ${compsNames[compType].current}`
       }
       // add to parent
       parent.children.push(compId);

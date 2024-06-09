@@ -13,10 +13,6 @@
         white-space: nowrap;
     }
 
-    &.dragging {
-        background: rgba(100, 100, 255, 0.1);
-    }
-
     &-treenode {
         display: flex;
         align-items: center;
@@ -29,6 +25,13 @@
         &-selected {
             // highlight
             box-shadow: inset 2px 2px green, inset -2px -2px green;
+        }
+
+        &.dragging {
+            background: rgba(100, 100, 100, 0.2);
+        }
+        &.drop-target {
+            background: rgba(100, 255, 100, 0.2);
         }
     }
 

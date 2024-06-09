@@ -3,14 +3,11 @@ import Draggable from "../../helpers/Draggable";
 import Component from "./Component";
 import { compTypes } from '../../config/components';
 import { Resizable } from "re-resizable";
-import ComponentTree1 from "./ComponentTree1";
+import ComponentTree from "./ComponentTree";
 import { useMemo } from "react";
 
 
 const SidebarComponents = () => {
-
-
-    // const { components, hoveredId, setHoveredId, isResizing } = useDesignerStore();
 
     console.log('C - SidebarComponents')
 
@@ -51,7 +48,7 @@ const SidebarComponents = () => {
             maxHeight={'100%'}
             enable={{ top: true, right: false, bottom: false, left: false, topRight: false, bottomRight: false, bottomLeft: false, topLeft: false }}
         >
-            <ComponentTree1 />
+            <ComponentTree />
         </Resizable>
     </Flex>
 }
