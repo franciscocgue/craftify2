@@ -21,7 +21,7 @@ const Canvas = () => {
     const comps = useMemo(
         () => renderNode(components, 'canvas'),
         [components]
-      );
+    );
 
     return <Flex
         flex={1}

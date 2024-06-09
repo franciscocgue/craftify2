@@ -37,6 +37,12 @@ const componentsAsTree = (data: ComponentCollection, id: string, parent: Compone
     }
 }
 
+const getComponentsAsTree = (components: ComponentCollection) => {
+    const tree: ComponentLeaf1[] = [];
+    componentsAsTree(components, 'canvas', tree);
+    return tree;
+}
+
 // get icon from CompTypes based on type
 const getIcon = (compTypeName: string) => {
     const IconComponent = compTypes[compTypeName as keyof typeof compTypes].icon;
@@ -185,4 +191,4 @@ const treeAsHtml = (node: NodeType) => {
     )
 }
 
-export { componentsAsTree, treeAsHtml }
+export { getComponentsAsTree, treeAsHtml }

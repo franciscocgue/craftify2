@@ -1,13 +1,12 @@
 import { Provider } from 'rc-motion';
 import Tree from 'rc-tree';
-import React, { useState, useCallback, useRef } from 'react';
-import { componentsAsTree } from '../../helpers/tree-builder';
+import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { getComponentsAsTree } from '../../helpers/tree-builder';
 import useDesignerStore from '../../stores/designer';
 import { ComponentLeaf1 } from '../../vite-env';
 import useResizeObserver from "use-resize-observer";
 import { IoMdArrowDropdown, IoMdArrowDropright } from "react-icons/io";
 import './ComponentTree.less';
-import { compTypes } from '../../config/components';
 import { debounce } from 'lodash';
 import { treeAsHtml } from '../../helpers/tree-builder';
 
@@ -65,26 +64,37 @@ const useDebouncedMouseEnter = (setStatus: (selectedId: string | null) => void) 
   return { handleMouseEnter, handleMouseLeave };
 };
 
-const Demo = () => {
+const ComponentTree = () => {
   const treeRef = React.useRef();
   // const [enableMotion, setEnableMotion] = React.useState(true);
 
   const { ref, width, height } = useResizeObserver();
 
-  const treeData: ComponentLeaf1[] = [];
   const components = useDesignerStore((state) => state.components);
-  componentsAsTree(components, 'canvas', treeData);
+
+  const treeNodes = useMemo(
+    // () => renderNode(components, 'canvas'),
+    () => {
+      const treeData = getComponentsAsTree(components);
+      return treeAsHtml(treeData[0])
+    },
+    [components]
+  );
 
   const { setHoveredId, hoveredId, moveComponent } = useDesignerStore(
-    useCallback(
-      (state) => ({
-        setHoveredId: state.setHoveredId,
-        hoveredId: state.hoveredId,
-        moveComponent: state.moveComponent,
-      }),
-      []
-    )
+    // useCallback(
+    (state) => ({
+      setHoveredId: state.setHoveredId,
+      hoveredId: state.hoveredId,
+      moveComponent: state.moveComponent,
+    }),
+    //   []
+    // )
   );
+
+  useEffect(() => {
+    console.log('hoverId changed')
+  }, [hoveredId])
 
   const [localHoveredId, setLocalHoveredId] = useState(false);
 
@@ -107,7 +117,8 @@ const Demo = () => {
 
           >
             <div style={{ width: width }}>
-              {treeData.length ? <Tree
+              {/* {treeNodes.length ? <Tree */}
+              {true ? <Tree
                 ref={treeRef}
                 // to enable autoscroll at the expense of more rendering: virtual={false}
                 // defaultExpandAll={false}
@@ -139,7 +150,7 @@ const Demo = () => {
                 }}
                 onDrop={({ node, dragNode, dropPosition }) => {
                   const dropPos = node.pos.split('-');
-                  dropPosition = dropPosition - Number(dropPos[dropPos.length - 1]);  
+                  dropPosition = dropPosition - Number(dropPos[dropPos.length - 1]);
                   let location: 'after' | 'inside' = dropPosition === 1 ? 'after' : 'inside';
                   moveComponent(dragNode.key as string, node.key as string, location, 'first')
                 }}
@@ -152,7 +163,7 @@ const Demo = () => {
                 // }}
                 expandAction={false}
               >
-                {treeAsHtml(treeData[0])}
+                {treeNodes}
               </Tree> : 'loading tree'}
             </div>
           </div>
@@ -162,4 +173,4 @@ const Demo = () => {
   );
 };
 
-export default Demo;
+export default ComponentTree;
