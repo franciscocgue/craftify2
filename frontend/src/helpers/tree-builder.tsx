@@ -4,12 +4,13 @@ import { compTypes } from "../config/components";
 import { CgScreen } from "react-icons/cg";
 import { FiPlusCircle } from "react-icons/fi";
 import { RiDeleteBin2Line } from "react-icons/ri";
-import { useCallback, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import useDesignerStore from "../stores/designer";
 import { Flex, Input, Tag, TagLabel, TagLeftIcon, useColorMode, useToast } from "@chakra-ui/react";
 import { ArrowContainer, Popover } from "react-tiny-popover";
 import { MdOutlineAdd } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
+import { shallow } from "zustand/shallow";
 
 // convert components (flat list) into
 // nested format required by the (rc-)tree
@@ -50,19 +51,19 @@ const getIcon = (compTypeName: string) => {
 };
 
 // rc-tree component tree title
-const NodeTitle = ({ ...props }) => {
+const NodeTitle = memo(({ ...props }) => {
     console.log('C - rc-tree Title')
     const { colorMode } = useColorMode();
 
-    const { removeComponent, addComponent } = useDesignerStore(
-        useCallback(
-            (state) => ({
-                removeComponent: state.removeComponent,
-                addComponent: state.addComponent,
-            }),
-            []
-        )
-    );
+    // const { removeComponent, addComponent } = useDesignerStore(
+    //     (state) => ({
+    //         removeComponent: state.removeComponent,
+    //         addComponent: state.addComponent,
+    //     }),
+    // );
+
+    const removeComponent = useDesignerStore((state) => state.removeComponent);
+    const addComponent = useDesignerStore((state) => state.addComponent);
 
     const toast = useToast()
 
@@ -167,7 +168,7 @@ const NodeTitle = ({ ...props }) => {
 
         </span>
     </Popover>
-}
+})
 
 interface NodeType {
     type: string,

@@ -81,16 +81,20 @@ const ComponentTree = () => {
     [components]
   );
 
-  const { setHoveredId, hoveredId, moveComponent } = useDesignerStore(
-    // useCallback(
-    (state) => ({
-      setHoveredId: state.setHoveredId,
-      hoveredId: state.hoveredId,
-      moveComponent: state.moveComponent,
-    }),
-    //   []
-    // )
-  );
+  const setHoveredId = useDesignerStore((state) => state.setHoveredId);
+  const hoveredId = useDesignerStore((state) => state.hoveredId);
+  const moveComponent = useDesignerStore((state) => state.moveComponent);
+
+  // const { setHoveredId, hoveredId, moveComponent } = useDesignerStore(
+  //   // useCallback(
+  //   (state) => ({
+  //     setHoveredId: state.setHoveredId,
+  //     hoveredId: state.hoveredId,
+  //     moveComponent: state.moveComponent,
+  //   }),
+  //   //   []
+  //   // )
+  // );
 
   useEffect(() => {
     console.log('hoverId changed')
