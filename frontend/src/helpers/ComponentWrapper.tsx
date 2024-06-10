@@ -115,6 +115,7 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
     const isResizing = useDesignerStore((state) => state.isResizing);
     const setIsResizing = useDesignerStore((state) => state.setIsResizing);
     const setHoveredId = useDesignerStore((state) => state.setHoveredId);
+    const setSelectedId = useDesignerStore((state) => state.setSelectedId);
     // const hoveredId = useDesignerStore((state) => state.hoveredId);
 
     const [isActive, setIsActive] = useState(false); // might be activated externally
@@ -275,6 +276,10 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
                         // setIsActive(false)
                         handleMouseLeave();
                         setIsHovered(false);
+                    }}
+                    onClick={() => {
+                        // console.log('clicked')
+                        setSelectedId(id);
                     }}
                     cursor={id === 'canvas' ? 'default' : 'grab'}
                     style={{ position: 'relative', overflow: 'auto' }}

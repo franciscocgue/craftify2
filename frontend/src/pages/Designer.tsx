@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import SidebarMenu from "../components/SidebarMenu";
 import SidebarComponents from "../components/SidebarComponents";
 import SidebarProperties from "../components/SidebarProperties";
-import { DndContext, DragEndEvent, DragMoveEvent, DragOverlay, pointerWithin } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, DragMoveEvent, DragOverlay, PointerSensor, pointerWithin, useSensor, useSensors } from '@dnd-kit/core';
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
 import PaletteComponent from "../components/SidebarComponents/Component";
 import { compTypes } from "../config/components";
@@ -65,6 +65,15 @@ const Designer = () => {
     overlayComp = null;
   }
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+        activationConstraint: { 
+          // otherwise onClick events ignored;
+          // move 5px before dragging starts; else "normal" events
+          distance: 5
+         }
+    }),)
+
   return (
     <Flex direction="column" h="100vh" minH='100vh' maxH='100vh' w='100vw' maxW='100vw'>
       <Navbar />
@@ -78,6 +87,7 @@ const Designer = () => {
           // modifiers={[restrictToWindowEdges]}
           onDragMove={!draggingId ? handleDragMove : undefined}
           collisionDetection={pointerWithin}
+          sensors={sensors}
         >
           <SidebarComponents />
           <Canvas />
