@@ -121,16 +121,36 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
     const [isActive, setIsActive] = useState(false); // might be activated externally
     const [isHovered, setIsHovered] = useState(false);
 
+    // useEffect(() => {
+    //     const unsub = useDesignerStore.subscribe(
+    //         // selector
+    //         (state) => state.hoveredId,
+    //         // callback
+    //         (hoveredId, prevHoveredId) => {
+    //             if (prevHoveredId !== id && hoveredId === id) {
+    //                 setIsActive(true)
+    //             } else if (prevHoveredId === id && hoveredId !== id) {
+    //                 setIsActive(false)
+    //             }
+    //         });
+
+    //     return unsub
+    // }, [])
+
     useEffect(() => {
+        // active --> either hovered or selected
         const unsub = useDesignerStore.subscribe(
             // selector
-            (state) => state.hoveredId,
-            // callback
-            (hoveredId, prevHoveredId) => {
-                if (prevHoveredId !== id && hoveredId === id) {
-                    setIsActive(true)
-                } else if (prevHoveredId === id && hoveredId !== id) {
-                    setIsActive(false)
+            (state, prevState) => {
+                console.log('state, prevState')
+                if ((prevState.hoveredId !== id && state.hoveredId === id)
+                    || (prevState.selectedId !== id && state.selectedId === id)) {
+                    console.log('state, prevState 1111111111');
+                    setIsActive(true);
+                } else if ((state.selectedId !== id && prevState.hoveredId === id && state.hoveredId !== id)
+                    || (prevState.selectedId === id && state.selectedId !== id)) {
+                    console.log('state, prevState 222222222');
+                    setIsActive(false);
                 }
             });
 
@@ -145,7 +165,6 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
     const { handleMouseEnter, handleMouseLeave } = useDebouncedMouseEnter(setHoveredId);
 
     // before: top / left, depending on parent container
-
     const { isOver: isOver1, setNodeRef: setNodeRef1 } = useDroppable({
         id: `droppable_before_${id}`,
         data: {
@@ -277,8 +296,9 @@ const ComponentWrapper = ({ id, componentType, parentType, name, w, h, p, m, bor
                         handleMouseLeave();
                         setIsHovered(false);
                     }}
-                    onClick={() => {
-                        // console.log('clicked')
+                    onClick={(e) => {
+                        // prevent child clicks from reaching parent
+                        e.stopPropagation();
                         setSelectedId(id);
                     }}
                     cursor={id === 'canvas' ? 'default' : 'grab'}

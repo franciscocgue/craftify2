@@ -21,6 +21,7 @@ const Designer = () => {
   const isResizing = useDesignerStore((state) => state.isResizing);
   const moveComponent = useDesignerStore((state) => state.moveComponent);
   const addComponent = useDesignerStore((state) => state.addComponent);
+  const setSelectedId = useDesignerStore((state) => state.setSelectedId);
   // const components = useDesignerStore((state) => state.components);
   // const setDraggingId = () => (null), draggingId = null, isResizing = false, moveComponent = () => (null), addComponent = () => (null), components = []
 
@@ -40,7 +41,8 @@ const Designer = () => {
   }
 
   function handleDragMove(event: DragMoveEvent) {
-    setDraggingId(event.active.id as string)
+    setDraggingId(event.active.id as string);
+    setSelectedId(null);
   }
 
   let overlayComp: ReactNode;

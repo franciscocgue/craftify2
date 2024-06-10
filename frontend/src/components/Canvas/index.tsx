@@ -17,6 +17,7 @@ const Canvas = () => {
     console.log('C - Canvas')
 
     const components = useDesignerStore((state) => state.components);
+    const setSelectedId = useDesignerStore((state) => state.setSelectedId);
 
     const comps = useMemo(
         () => renderNode(components, 'canvas'),
@@ -32,9 +33,20 @@ const Canvas = () => {
         maxH='100vh'
         maxW='100vw'
         overflow={'auto'}
+        onClick={() => {
+            setSelectedId(null)
+        }}
     >
 
-        <Box maxW={'100%'} maxH={'100%'} overflow={'auto'}>
+        <Box
+            maxW={'100%'}
+            maxH={'100%'}
+            overflow={'auto'}
+            onClick={(e) => {
+                // prevent child clicks from reaching parent
+                e.stopPropagation();
+            }}
+        >
             <Box
                 style={{ padding: canvasDropBorderPx, margin: '0px 15px' }}
                 w={screenSizes[device][0] + canvasDropBorderPx * 2}
