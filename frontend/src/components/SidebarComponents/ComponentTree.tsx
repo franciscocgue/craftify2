@@ -84,6 +84,11 @@ const ComponentTree = () => {
   const setHoveredId = useDesignerStore((state) => state.setHoveredId);
   const hoveredId = useDesignerStore((state) => state.hoveredId);
   const moveComponent = useDesignerStore((state) => state.moveComponent);
+  const selectedId = useDesignerStore((state) => state.selectedId);
+
+  useEffect(()=>{
+    console.log('selected id changesdddd' + selectedId)
+  }, [selectedId])
 
   // const { setHoveredId, hoveredId, moveComponent } = useDesignerStore(
   //   // useCallback(
@@ -97,7 +102,7 @@ const ComponentTree = () => {
   // );
 
   useEffect(() => {
-    console.log('hoverId changed')
+    console.log('hoverId changed ' + hoveredId)
   }, [hoveredId])
 
   const [localHoveredId, setLocalHoveredId] = useState(false);
@@ -105,6 +110,8 @@ const ComponentTree = () => {
   const { handleMouseEnter, handleMouseLeave } = useDebouncedMouseEnter(setHoveredId)
 
   console.log('Tree rc-tree')
+
+  console.log([localHoveredId ? '' : hoveredId, selectedId])
 
   return (
     <Provider motion={true}>
@@ -127,6 +134,7 @@ const ComponentTree = () => {
                 // to enable autoscroll at the expense of more rendering: virtual={false}
                 // defaultExpandAll={false}
                 defaultExpandAll
+                multiple
                 style={{ userSelect: 'none' }}
                 defaultExpandedKeys={defaultExpandedKeys}
                 motion={motion}
@@ -158,7 +166,10 @@ const ComponentTree = () => {
                   let location: 'after' | 'inside' = dropPosition === 1 ? 'after' : 'inside';
                   moveComponent(dragNode.key as string, node.key as string, location, 'first')
                 }}
-                selectedKeys={[localHoveredId ? '' : hoveredId]}
+                // if hovering tree comp, do not highlight (there was a reason ...)
+                // if clicked (selected) --> highlight; clicking again unselects
+                // hoveredId is true if comp hovered in canvas --> highlight after debounce time
+                selectedKeys={[localHoveredId ? '' : hoveredId, selectedId]}
                 switcherIcon={(props) => {
                   return <>{props.isLeaf ? null : props.expanded ? <IoMdArrowDropdown /> : <IoMdArrowDropright />}</>
                 }}

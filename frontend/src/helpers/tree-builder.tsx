@@ -64,6 +64,7 @@ const NodeTitle = memo(({ ...props }) => {
 
     const removeComponent = useDesignerStore((state) => state.removeComponent);
     const addComponent = useDesignerStore((state) => state.addComponent);
+    const setSelectedId = useDesignerStore((state) => state.setSelectedId);
 
     const toast = useToast()
 
@@ -148,7 +149,12 @@ const NodeTitle = memo(({ ...props }) => {
             className="rc-tree-title"
             title={compTypes[props.node.type as keyof typeof compTypes]?.name || 'Canvas'}
         >
-            {props.node.title}
+            <span style={{ cursor: 'pointer' }} onClick={() => {
+                setIsPopoverOpen(false);
+                setSelectedId(props.node.key);
+            }}>
+                {props.node.title}
+            </span>
 
             {props.node.type !== 'canvas' && <RiDeleteBin2Line className="my-delete-icon" title="Delete" size={14} onClick={() => {
                 removeComponent(props.node.key);
