@@ -104,14 +104,14 @@ const ComponentTree = () => {
   useEffect(() => {
     console.log('hoverId changed ' + hoveredId)
   }, [hoveredId])
-
-  const [localHoveredId, setLocalHoveredId] = useState(false);
+  
+  // const [localHoveredId, setLocalHoveredId] = useState(false);
 
   const { handleMouseEnter, handleMouseLeave } = useDebouncedMouseEnter(setHoveredId)
-
+  
   console.log('Tree rc-tree')
 
-  console.log([localHoveredId ? '' : hoveredId, selectedId])
+  // console.log([localHoveredId ? '' : hoveredId, selectedId])
 
   return (
     <Provider motion={true}>
@@ -141,11 +141,11 @@ const ComponentTree = () => {
                 height={height - 50}
                 itemHeight={28}
                 onMouseEnter={(info) => {
-                  setLocalHoveredId(true);
+                  // setLocalHoveredId(true);
                   handleMouseEnter(info.node.key as string);
                 }}
                 onMouseLeave={() => {
-                  setLocalHoveredId(false);
+                  // setLocalHoveredId(false);
                   handleMouseLeave();
                 }}
                 draggable={(node) => node.key !== 'canvas'}
@@ -169,7 +169,7 @@ const ComponentTree = () => {
                 // if hovering tree comp, do not highlight (there was a reason ...)
                 // if clicked (selected) --> highlight; clicking again unselects
                 // hoveredId is true if comp hovered in canvas --> highlight after debounce time
-                selectedKeys={[localHoveredId ? '' : hoveredId, selectedId]}
+                selectedKeys={[hoveredId, selectedId]}
                 switcherIcon={(props) => {
                   return <>{props.isLeaf ? null : props.expanded ? <IoMdArrowDropdown /> : <IoMdArrowDropright />}</>
                 }}
