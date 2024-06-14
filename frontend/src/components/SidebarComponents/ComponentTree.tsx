@@ -86,10 +86,6 @@ const ComponentTree = () => {
   const moveComponent = useDesignerStore((state) => state.moveComponent);
   const selectedId = useDesignerStore((state) => state.selectedId);
 
-  useEffect(()=>{
-    console.log('selected id changesdddd' + selectedId)
-  }, [selectedId])
-
   // const { setHoveredId, hoveredId, moveComponent } = useDesignerStore(
   //   // useCallback(
   //   (state) => ({
@@ -101,9 +97,6 @@ const ComponentTree = () => {
   //   // )
   // );
 
-  useEffect(() => {
-    console.log('hoverId changed ' + hoveredId)
-  }, [hoveredId])
   
   // const [localHoveredId, setLocalHoveredId] = useState(false);
 

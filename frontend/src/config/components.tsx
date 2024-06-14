@@ -37,7 +37,27 @@ const compTypes = {
     },
 }
 
+const compProperties = {
+    'canvas': {
+        p: 1, // padding
+    },
+    'container-column': {
+        w: '100%',
+        h: 'auto',
+        p: 1,
+        m: 0,
+        border: '1px solid gray'
+    },
+    'button': {
+        w: '100%',
+        h: '40px',
+        p: undefined,
+        m: undefined,
+        border: '0px solid cyan' 
+    }
+}
 
 export {
-    compTypes
+    compTypes,
+    compProperties
 }

@@ -6,17 +6,21 @@ import { NumberSize, Resizable } from 're-resizable';
 import { compTypes } from '../config/components';
 import { debounce } from 'lodash';
 
+type otherPropertiesT = {
+    w?: string | number,
+    h?: string | number,
+    p?: string | number,
+    m?: string | number,
+    border?: string
+}
+
 type propsT = {
     id: string,
     componentType: string,
     parentType: string, // container
     name: string,
     children: ReactNode,
-    w?: string | number,
-    h?: string | number,
-    p?: string | number,
-    m?: string | number,
-    border?: string
+    otherProperties?: otherPropertiesT
 }
 
 const dropStyles = {
@@ -106,10 +110,10 @@ const useDebouncedMouseEnter = (setStatus) => {
 /* 
     Wrapper for no-container components.
     
-    It defined with wrapping box (size, border, ...)
+    It defines wrapping box (size, border, ...)
     so that children only care about content.
 */
-const ContainerWrapper = ({ id, componentType, parentType, name, children, w, h, p, m, border }: propsT) => {
+const ContainerWrapper = ({ id, componentType, parentType, name, children, ...otherProperties }: propsT) => {
     const { attributes, listeners, setNodeRef } = useDraggable({ // transform
         id: `draggable_${id}`,
         disabled: id === 'canvas',
@@ -125,7 +129,19 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, w, h,
     const setIsResizing = useDesignerStore((state) => state.setIsResizing);
     const setHoveredId = useDesignerStore((state) => state.setHoveredId);
     const setSelectedId = useDesignerStore((state) => state.setSelectedId);
+    const updateProperty = useDesignerStore((state) => state.updateProperty);
+    // const properties = useDesignerStore((state) => state.properties);
     // const hoveredId = useDesignerStore((state) => state.hoveredId);
+
+
+    // useEffect(() => {
+    //     console.log(properties)
+    // }, [properties])
+
+    // console.log('***')
+    // console.log(otherProperties.h)
+    // console.log(otherProperties)
+
 
     const [isActive, setIsActive] = useState(false); // might be activated externally
     const [isHovered, setIsHovered] = useState(false);
@@ -151,21 +167,21 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, w, h,
         const unsub = useDesignerStore.subscribe(
             // selector
             (state, prevState) => {
-                console.log('state, prevState')
+                // console.log('state, prevState')
                 if ((prevState.hoveredId !== id && state.hoveredId === id)
                     || (prevState.selectedId !== id && state.selectedId === id)) {
-                    console.log('state, prevState 1111111111');
+                    // console.log('state, prevState 1111111111');
                     setIsActive(true);
                 } else if ((state.selectedId !== id && prevState.hoveredId === id && state.hoveredId !== id)
                     || (prevState.selectedId === id && state.selectedId !== id)) {
-                    console.log('state, prevState 222222222');
+                    // console.log('state, prevState 222222222');
                     setIsActive(false);
                 }
             });
 
         return unsub
     }, [])
-    const [size, setSize] = useState({ w: w || 'auto', h: h || 'auto' });
+    const [size, setSize] = useState({ w: otherProperties.w || '100%', h: otherProperties.h || 'auto' });
 
     const { handleMouseEnter, handleMouseLeave } = useDebouncedMouseEnter(setHoveredId);
 
@@ -255,13 +271,34 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, w, h,
         // container box
         <Resizable
             style={{
-                outline: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? '2px solid red'
-                    : (!isResizing && !!!draggingId && (isHovered || isActive)) ? '2px solid green' : (isActive || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
+                // boxShadow: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? 'inset 0 0 0 2px red'
+                //     : (!isResizing && !!!draggingId && (isHovered || isActive)) ? 'inset 0 0 0 2px green' : (isActive || isResizing || !!draggingId) ? 'inset 0 0 0 1px darkgrey' : undefined,
+                outline: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? '1px solid red'
+                    : (!isResizing && !!!draggingId && (isHovered || isActive)) ? '1px solid green' : (isActive || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
+                borderColor: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? 'red'
+                    : (!isResizing && !!!draggingId && (isHovered || isActive)) ? 'green' : (isActive || isResizing || !!draggingId) ? 'darkgrey' : undefined,
+                boxShadow: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? 'inset 0 0 0 1px red'
+                    : (!isResizing && !!!draggingId && (isHovered || isActive)) ? 'inset 0 0 0 1px green' : (isActive || isResizing || !!draggingId) ? 'inset 0 0 0 1px darkgrey' : undefined,
             }}
-            size={{ width: size.w, height: size.h }}
-            onResizeStop={(_, __, ___, d: NumberSize) => {
-                setSize({ w: size.w as number + d.width, h: size.h as number + d.height })
+            size={{ width: otherProperties.w || '100%', height: otherProperties.h || 'auto' }}
+            onResizeStop={(e, __, elem, d: NumberSize) => {
+                // console.log('DELTA - ')
+                // console.log(d)
+                // console.log(e)
+                // console.log(elem)
+                // console.log(window.getComputedStyle(elem).width) // px
+                // console.log(elem.style.width) // px or % or as in style
+                // console.log(elem.parentElement?.parentElement)
+                // console.log(elem.parentElement)
+                // console.log(elem.parentElement?.style.width)
+                // console.log(elem.parentElement?.parentElement?.style.width)
+                // console.log(window.getComputedStyle(elem.parentElement?.parentElement).width)
+                // setSize({ w: size.w as number + d.width, h: '500px'})
+                // setSize({ w: size.w as number + d.width, h: size.h as number + d.height })
                 setIsResizing(false)
+                // elem.style.height = '300px'
+                updateProperty(id, 'w', elem.style.width)
+                updateProperty(id, 'h', elem.style.height)
             }}
             onResizeStart={() => {
                 setIsResizing(true)
@@ -305,7 +342,8 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, w, h,
                         handleMouseLeave();
                         setIsHovered(false);
                     }}
-                    onClick={() => {
+                    onClick={(e) => {
+                        e.stopPropagation();
                         setSelectedId(id);
                     }}
                     cursor={id === 'canvas' ? 'default' : 'grab'}
@@ -313,9 +351,9 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, w, h,
                     // _hover={{ outline: '1px solid darkgrey' }}
                     w={'100%'}
                     h={'100%'}
-                    p={p || undefined}
-                    m={m || undefined}
-                    border={border || undefined}
+                    p={otherProperties.p || 1}
+                    m={otherProperties.m || undefined}
+                    // border={otherProperties.border || '0px solid grey'}
                 >
                     {children}
                 </Box>

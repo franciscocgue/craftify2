@@ -3,13 +3,15 @@ import { useDroppable } from '@dnd-kit/core';
 import { ReactNode, useEffect, useState } from 'react';
 import useDesignerStore from '../stores/designer';
 
+type otherPropertiesT = {
+    p?: string | number,
+}
+
 type propsT = {
     id: string,
     componentType: string,
     children: ReactNode,
-    p?: string | number,
-    m?: string | number,
-    border?: string
+    otherProperties?: otherPropertiesT,
 }
 
 const stylesBody = {
@@ -23,7 +25,7 @@ const stylesBody = {
 /* 
     Wrapper for canvas.
 */
-const CanvasWrapper = ({ id, componentType, children, p, m, border }: propsT) => {
+const CanvasWrapper = ({ id, componentType, children, ...otherProperties }: propsT) => {
 
     // const { draggingId, isResizing, setHoveredId } = useDesignerStore();
     const draggingId = useDesignerStore((state) => state.draggingId);
@@ -82,9 +84,8 @@ const CanvasWrapper = ({ id, componentType, children, p, m, border }: propsT) =>
                 style={{ position: 'relative', overflow: 'auto' }}
                 w={'100%'}
                 h={'100%'}
-                p={p || undefined}
-                m={m || undefined}
-                border={border || undefined}
+                p={otherProperties.p || undefined}
+                {...otherProperties}
             >
                 {children}
             </Box>

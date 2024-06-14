@@ -10,7 +10,7 @@ const styles: CSSProperties = {
 }
 
 const CContainerColumn = ({ children }: propsT) => {
-    return <Flex style={styles} direction={'row'} wrap={'wrap'} alignItems={'center'} gap={2} h={'auto'} w={'100%'}>
+    return <Flex style={styles} direction={'column'} wrap={'nowrap'} alignItems={'center'} gap={2} h={'auto'} w={'100%'}>
         {children}
     </Flex>
 }

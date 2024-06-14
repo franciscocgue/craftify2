@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import useDesignerStore from "../../stores/designer";
 import { renderNode } from "../../helpers/ui-builder";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 const screenSizes = {
     'Galaxy S10': [360, 760],
@@ -16,12 +16,17 @@ const Canvas = () => {
 
     console.log('C - Canvas')
 
+    
     const components = useDesignerStore((state) => state.components);
+    const properties = useDesignerStore((state) => state.properties);
     const setSelectedId = useDesignerStore((state) => state.setSelectedId);
-
+    
+    console.log(properties)
+    console.log(components)
+    
     const comps = useMemo(
-        () => renderNode(components, 'canvas'),
-        [components]
+        () => renderNode(components, 'canvas', properties),
+        [components, properties]
     );
 
     return <Flex

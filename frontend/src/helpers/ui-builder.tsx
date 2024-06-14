@@ -37,35 +37,37 @@ import CCheckbox from "../components/components/CCheckbox";
 //         name: 'Button 1'
 //     },
 
+// default properties directly inside wrapper
+// eg: p={p || '1px'}
 const uiMapper = {
-    'canvas': (components: ComponentCollection, id: string) => (
-        <CanvasWrapper key={id} id={id} componentType={components[id].type} p={1} border="0px solid grey">
+    'canvas': (components: ComponentCollection, id: string, properties) => (
+        <CanvasWrapper key={id} id={id} componentType={components[id].type} {...properties[id]}>
             <CContainerColumn>
-                {components[id].children.map((id: string) => renderNode(components, id))}
+                {components[id].children.map((id: string) => renderNode(components, id, properties))}
             </CContainerColumn>
         </CanvasWrapper>
     ),
-    'container-column': (components: ComponentCollection, id: string) => (
-        <ContainerWrapper key={id} id={id} componentType={components[id].type} parentType={components[components[id].parent as string]?.type} name={components[id].name} w={'100%'} h={'auto'} p={1} border="0px solid grey">
+    'container-column': (components: ComponentCollection, id: string, properties) => (
+        <ContainerWrapper key={id} id={id} componentType={components[id].type} parentType={components[components[id].parent as string]?.type} name={components[id].name} {...properties[id]}>
             <CContainerColumn>
-                {components[id].children.map((id: string) => renderNode(components, id))}
+                {components[id].children.map((id: string) => renderNode(components, id, properties))}
             </CContainerColumn>
         </ContainerWrapper>
     ),
-    'button': (components: ComponentCollection, id: string) => (
-        <ComponentWrapper key={id} id={id} componentType={components[id].type} parentType={components[components[id].parent as string].type} name={components[id].name} w={'100%'} h={'50px'} p={0} border="0px solid red">
-            <CButton />
+    'button': (components: ComponentCollection, id: string, properties) => (
+        <ComponentWrapper key={id} id={id} componentType={components[id].type} parentType={components[components[id].parent as string].type} name={components[id].name} {...properties[id]}>
+            <CButton {...properties[id]}/>
         </ComponentWrapper>
     ),
-    'checkbox': (components: ComponentCollection, id: string) => (
+    'checkbox': (components: ComponentCollection, id: string, properties) => (
         <ComponentWrapper key={id} id={id} componentType={components[id].type} parentType={components[components[id].parent as string].type} name={components[id].name} w={'100%'} h={'50px'} p={0} border="0px solid red">
             <CCheckbox />
         </ComponentWrapper>
     ),
 }
 
-const renderNode = (components: ComponentCollection, id: string) => {
-    return uiMapper[components[id].type as keyof typeof uiMapper](components, id)
+const renderNode = (components: ComponentCollection, id: string, properties) => {
+    return uiMapper[components[id].type as keyof typeof uiMapper](components, id, properties)
 }
 
 export {

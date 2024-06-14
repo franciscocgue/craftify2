@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import { compTypes } from '../config/components';
+import { compProperties, compTypes } from '../config/components';
 
-const components = {
+const initialComponents = {
   'canvas': {
     type: 'canvas',
     parent: null,
@@ -10,6 +10,7 @@ const components = {
     name: 'Canvas'
   },
 }
+
 // const componentsTest = {
 //   'canvas': {
 //     type: 'canvas',
@@ -58,6 +59,7 @@ type designerStore = {
   selectedId: string | null,
   hoveredId: string | null,
   components: any,
+  properties: any,
   componentNames: any,
   setIsResizing: (isResizing: true | false) => void,
   setDraggingId: (draggingId: string | null) => void,
@@ -89,6 +91,7 @@ type designerStore = {
    *
    */
   removeComponent: (compId: string) => void,
+  updateProperty: (compId: string, propertyKey: string, propertyValue: any) => void,
 }
 
 const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => ({
@@ -96,7 +99,8 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   isResizing: false,
   selectedId: null,
   hoveredId: null,
-  components: components,
+  components: initialComponents,
+  properties: { canvas: compProperties['canvas'] },
   componentNames: {},
   setIsResizing: (isResizing: true | false) => set({ isResizing: isResizing }),
   setDraggingId: (draggingId) => set({ draggingId: draggingId }),
@@ -163,7 +167,9 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   }),
   addComponent: (compType, addedOverCompId, location) => set((state) => {
     const comps = { ...state.components };
+    const props = { ...state.properties };
     const compsNames = { ...state.componentNames };
+
 
     if (!Object.keys(compsNames).includes(compType)) {
       compsNames[compType] = {
@@ -176,6 +182,8 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
     let parentId: string;
     let parent;
     const compId = crypto.randomUUID();
+
+    props[compId] = compProperties[compType as keyof typeof compProperties];
 
     if (location === 'auto') {
       // @TODO: get all container types automatically
@@ -201,7 +209,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
       // add to parent
       parent.children.push(compId);
 
-      return { components: comps, componentNames: compsNames }
+      return { components: comps, componentNames: compsNames, properties: props }
 
     } else {
       // dragged over another component (not container)
@@ -219,7 +227,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
       let insertAt = parent.children.indexOf(addedOverCompId) + (location === 'after');
       parent.children.splice(insertAt, 0, compId);
 
-      return { components: comps, componentNames: compsNames }
+      return { components: comps, componentNames: compsNames, properties: props }
 
     }
 
@@ -251,6 +259,26 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
     return { components: newComponents }
 
   }),
+  updateProperty: (compId, key, value) => set((state) => {
+    // console.log('UPDATING PROPERTIES')
+    // const props = { ...state.properties };
+    // console.log(props)
+    // console.log('before')
+    // console.log(props[compId][key])
+    // props[compId][key] = value;
+    // console.log('after')
+    // console.log(props[compId][key])
+    // console.log('all')
+    // console.log(props)
+    // console.log('FINISHED UPDATING PROPERTIES')
+
+    const props = { ...state.properties };
+    const updatedComp = { ...props[compId] };
+    updatedComp[key] = value;
+    props[compId] = updatedComp;
+
+    return { properties: props }
+  })
 })));
 
 export default useDesignerStore;
