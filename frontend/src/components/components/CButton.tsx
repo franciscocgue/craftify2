@@ -5,10 +5,12 @@ const CButton = ({ ...otherProperties }) => {
         w={'100%'}
         h={'100%'}
         size='md'
-        p={otherProperties.p || undefined}
+        // padding removed, inconsistent with overall size and not needed
+        // as content in button centered --> padding through sizing
+        // p={otherProperties.p || undefined}
         border={otherProperties.border || undefined}
-        maxW={otherProperties.w || undefined}
-        maxH={otherProperties.h || undefined}
+        maxW='100%'
+        maxH='100%'
     >
         Button
     </Button>

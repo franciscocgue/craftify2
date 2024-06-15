@@ -1,10 +1,10 @@
-import { Box, Flex, Icon, Tooltip } from '@chakra-ui/react';
+import { Box, Flex, Icon, Tooltip, useColorMode } from '@chakra-ui/react';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
-import { CSSProperties, ReactNode, cloneElement, useCallback, useEffect, useRef, useState } from 'react';
+import { CSSProperties, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import useDesignerStore from '../stores/designer';
 import { NumberSize, Resizable } from 're-resizable';
 import { compTypes } from '../config/components';
-import { debounce, throttle } from 'lodash';
+import { debounce } from 'lodash';
 
 type otherPropertiesT = {
     w?: string | number,
@@ -120,6 +120,8 @@ const ComponentWrapper = ({ id, componentType, parentType, name, children, ...ot
         }
     });
 
+    const { colorMode } = useColorMode();
+    
     const draggingId = useDesignerStore((state) => state.draggingId);
     const isResizing = useDesignerStore((state) => state.isResizing);
     const setIsResizing = useDesignerStore((state) => state.setIsResizing);
@@ -256,7 +258,11 @@ const ComponentWrapper = ({ id, componentType, parentType, name, children, ...ot
             //         : (!isResizing && !!!draggingId && (isHovered || isActive)) ? '2px solid green'
             //             : (isActive || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
             // }}
-            style={{margin:otherProperties.m || undefined}}
+            style={{
+                margin: otherProperties.m || undefined,
+                // margin highlight using box-shadow
+                boxShadow: (!isResizing && !!!draggingId && (isHovered || isActive)) ? `0 0 0 ${otherProperties.m || 0} ${colorMode === 'dark' ? 'rgb(50,50,50)' : 'rgb(200,200,200)'}` : undefined
+            }}
             size={{ width: otherProperties.w || '100%', height: otherProperties.h || 'auto' }}
             onResizeStop={(e, __, elem, d: NumberSize) => {
                 setIsResizing(false)
@@ -321,9 +327,9 @@ const ComponentWrapper = ({ id, componentType, parentType, name, children, ...ot
                     // _hover={{ outline: '1px solid darkgrey' }}
                     w={'100%'}
                     h={'100%'}
-                    // p={otherProperties.p || undefined}
-                    // m={otherProperties.m || undefined}
-                    // border={otherProperties.border || undefined}
+                // p={otherProperties.p || undefined}
+                // m={otherProperties.m || undefined}
+                // border={otherProperties.border || undefined}
                 >
                     {/* {cloneElement(children, { otherProperties: otherProperties })} */}
                     {children}

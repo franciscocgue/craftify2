@@ -46,12 +46,13 @@ const compProperties = {
         h: 'auto',
         p: 1,
         m: 0,
-        border: '1px solid gray'
+        border: '1px solid grey'
     },
     'button': {
         w: '100%',
         h: '40px',
-        p: undefined,
+        // padding removed; see comment in button component
+        // p: undefined,
         m: undefined,
         border: '0px solid cyan' 
     }

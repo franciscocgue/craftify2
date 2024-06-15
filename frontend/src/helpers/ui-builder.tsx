@@ -49,7 +49,7 @@ const uiMapper = {
     ),
     'container-column': (components: ComponentCollection, id: string, properties) => (
         <ContainerWrapper key={id} id={id} componentType={components[id].type} parentType={components[components[id].parent as string]?.type} name={components[id].name} {...properties[id]}>
-            <CContainerColumn>
+            <CContainerColumn {...properties[id]}>
                 {components[id].children.map((id: string) => renderNode(components, id, properties))}
             </CContainerColumn>
         </ContainerWrapper>

@@ -1,4 +1,4 @@
-import { Box, Flex, Icon, Tooltip } from '@chakra-ui/react';
+import { Box, Flex, Icon, Tooltip, useColorMode } from '@chakra-ui/react';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { CSSProperties, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import useDesignerStore from '../stores/designer';
@@ -122,6 +122,8 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
             componentType: componentType,
         }
     });
+
+    const { colorMode } = useColorMode();
 
     // const { draggingId, isResizing, setIsResizing, setHoveredId, hoveredId } = useDesignerStore();
     const draggingId = useDesignerStore((state) => state.draggingId);
@@ -271,14 +273,17 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
         // container box
         <Resizable
             style={{
+                margin: otherProperties.m || undefined,
+                // boxShadow: (!isResizing && !!!draggingId && (isHovered || isActive)) ? `0 0 0 ${otherProperties.m || 0} ${colorMode === 'dark' ? 'rgb(50,50,50)' : 'rgb(200,200,200)'}` : undefined
                 // boxShadow: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? 'inset 0 0 0 2px red'
                 //     : (!isResizing && !!!draggingId && (isHovered || isActive)) ? 'inset 0 0 0 2px green' : (isActive || isResizing || !!draggingId) ? 'inset 0 0 0 1px darkgrey' : undefined,
-                outline: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? '1px solid red'
-                    : (!isResizing && !!!draggingId && (isHovered || isActive)) ? '1px solid green' : (isActive || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
-                borderColor: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? 'red'
-                    : (!isResizing && !!!draggingId && (isHovered || isActive)) ? 'green' : (isActive || isResizing || !!draggingId) ? 'darkgrey' : undefined,
-                boxShadow: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? 'inset 0 0 0 1px red'
-                    : (!isResizing && !!!draggingId && (isHovered || isActive)) ? 'inset 0 0 0 1px green' : (isActive || isResizing || !!draggingId) ? 'inset 0 0 0 1px darkgrey' : undefined,
+                // outline: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? '1px solid red'
+                //     : (!isResizing && !!!draggingId && (isHovered || isActive)) ? '1px solid green' : (isActive || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
+                // borderColor: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? 'red'
+                //     : (!isResizing && !!!draggingId && (isHovered || isActive)) ? 'green' : (isActive || isResizing || !!draggingId) ? 'darkgrey' : undefined,
+                // boxShadow: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? 'inset 0 0 0 1px red'
+                //     : (!isResizing && !!!draggingId && (isHovered || isActive)) ? `inset 0 0 0 1px green, 0 0 0 ${otherProperties.m || 0} ${colorMode === 'dark' ? 'rgb(50,50,50)' : 'rgb(200,200,200)'}` : (isActive || isResizing || !!draggingId) ? 'inset 0 0 0 1px darkgrey' : undefined,
+                boxShadow: (!isResizing && !!!draggingId && (isHovered || isActive)) ? `0 0 0 ${otherProperties.m || 0} ${colorMode === 'dark' ? 'rgb(50,50,50)' : 'rgb(200,200,200)'}` : undefined,
             }}
             size={{ width: otherProperties.w || '100%', height: otherProperties.h || 'auto' }}
             onResizeStop={(e, __, elem, d: NumberSize) => {
@@ -351,11 +356,136 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
                     // _hover={{ outline: '1px solid darkgrey' }}
                     w={'100%'}
                     h={'100%'}
-                    p={otherProperties.p || 1}
-                    m={otherProperties.m || undefined}
-                    // border={otherProperties.border || '0px solid grey'}
+                // p={otherProperties.p || 1}
+                // m={otherProperties.m || undefined}
+                // border={otherProperties.border || '0px solid grey'}
                 >
                     {children}
+                    {/* overlays for styling */}
+                    {/* top */}
+                    <div
+                        style={
+                            !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? {
+                                position: 'absolute',
+                                width: '100%',
+                                height: '2px',
+                                top: 0,
+                                left: 0,
+                                backgroundColor: 'red'
+                            }
+                                : (!isResizing && !!!draggingId && (isHovered || isActive)) ? {
+                                    position: 'absolute',
+                                    width: '100%',
+                                    height: '2px',
+                                    top: 0,
+                                    left: 0,
+                                    backgroundColor: 'green'
+                                } : (isActive || isResizing || !!draggingId) ? {
+                                    position: 'absolute',
+                                    width: '100%',
+                                    height: '1px',
+                                    top: 0,
+                                    left: 0,
+                                    backgroundColor: 'darkgrey'
+                                } : {
+                                    display: 'none'
+                                }
+
+                        }
+                    ></div>
+                    {/* bottom */}
+                    <div
+                        style={
+                            !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? {
+                                position: 'absolute',
+                                width: '100%',
+                                height: '2px',
+                                bottom: 0,
+                                left: 0,
+                                backgroundColor: 'red'
+                            }
+                                : (!isResizing && !!!draggingId && (isHovered || isActive)) ? {
+                                    position: 'absolute',
+                                    width: '100%',
+                                    height: '2px',
+                                    bottom: 0,
+                                    left: 0,
+                                    backgroundColor: 'green'
+                                } : (isActive || isResizing || !!draggingId) ? {
+                                    position: 'absolute',
+                                    width: '100%',
+                                    height: '1px',
+                                    bottom: 0,
+                                    left: 0,
+                                    backgroundColor: 'darkgrey'
+                                } : {
+                                    display: 'none'
+                                }
+
+                        }
+                    ></div>
+                    {/* left */}
+                    <div
+                        style={
+                            !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? {
+                                position: 'absolute',
+                                width: '2px',
+                                height: '100%',
+                                top: 0,
+                                left: 0,
+                                backgroundColor: 'red'
+                            }
+                                : (!isResizing && !!!draggingId && (isHovered || isActive)) ? {
+                                    position: 'absolute',
+                                    width: '2px',
+                                    height: '100%',
+                                    top: 0,
+                                    left: 0,
+                                    backgroundColor: 'green'
+                                } : (isActive || isResizing || !!draggingId) ? {
+                                    position: 'absolute',
+                                    width: '1px',
+                                    height: '100%',
+                                    top: 0,
+                                    left: 0,
+                                    backgroundColor: 'darkgrey'
+                                } : {
+                                    display: 'none'
+                                }
+
+                        }
+                    ></div>
+                    {/* right */}
+                    <div
+                        style={
+                            !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? {
+                                position: 'absolute',
+                                width: '2px',
+                                height: '100%',
+                                top: 0,
+                                right: 0,
+                                backgroundColor: 'red'
+                            }
+                                : (!isResizing && !!!draggingId && (isHovered || isActive)) ? {
+                                    position: 'absolute',
+                                    width: '2px',
+                                    height: '100%',
+                                    top: 0,
+                                    right: 0,
+                                    backgroundColor: 'green'
+                                } : (isActive || isResizing || !!draggingId) ? {
+                                    position: 'absolute',
+                                    width: '1px',
+                                    height: '100%',
+                                    top: 0,
+                                    right: 0,
+                                    backgroundColor: 'darkgrey'
+                                } : {
+                                    display: 'none'
+                                }
+
+                        }
+                    ></div>
                 </Box>
             </Tooltip>
             {/* for dropping */}
