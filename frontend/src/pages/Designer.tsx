@@ -69,11 +69,11 @@ const Designer = () => {
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
-        activationConstraint: { 
-          // otherwise onClick events ignored;
-          // move 5px before dragging starts; else "normal" events
-          distance: 5
-         }
+      activationConstraint: {
+        // otherwise onClick events ignored;
+        // move 5px before dragging starts; else "normal" events
+        distance: 5
+      }
     }),)
 
   return (
@@ -92,7 +92,59 @@ const Designer = () => {
           sensors={sensors}
         >
           <SidebarComponents />
-          <Canvas />
+          {/* <Canvas /> */}
+          <Flex
+            flex={1}
+            border={'1px solid orange'}
+            flexDirection={'column'}
+            alignContent={'center'}
+            justifyContent={'center'}
+            overflowY={'hidden'}
+            overflowX={'auto'}
+          >
+
+            {/* canvas */}
+            <Flex
+              border={'1px solid red'}
+              flexDirection={'column'}
+              overflow={'auto'}
+              minW={'360px'}
+              m={'0 auto'}
+              minH={'min(calc(100%), 760px)'}
+              maxW={'360px'}
+              maxH={'760px'}
+            >
+              <p>test11</p>
+              <p>test12</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test</p>
+              <p>test99</p>
+            </Flex>
+
+
+          </Flex>
           <DragOverlay style={{ width: 'auto', height: 'auto' }} dropAnimation={null} modifiers={[snapCenterToCursor]}>
             {overlayComp}
           </DragOverlay>
