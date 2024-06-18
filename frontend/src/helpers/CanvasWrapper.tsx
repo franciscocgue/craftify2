@@ -31,6 +31,7 @@ const CanvasWrapper = ({ id, componentType, children, ...otherProperties }: prop
     const draggingId = useDesignerStore((state) => state.draggingId);
     const isResizing = useDesignerStore((state) => state.isResizing);
     const setHoveredId = useDesignerStore((state) => state.setHoveredId);
+    const setSelectedId = useDesignerStore((state) => state.setSelectedId);
 
     const [isHovered, setIsHovered] = useState(false);
 
@@ -56,6 +57,7 @@ const CanvasWrapper = ({ id, componentType, children, ...otherProperties }: prop
             style={{
                 position: 'relative',
                 outline: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? '2px solid red'
+                    // : !isResizing && !!!draggingId && (isHovered) ? '2px solid green'
                     : (isHovered || isResizing || !!draggingId) ? '1px solid darkgrey' : '1px solid darkgrey',
             }}
             w={'100%'}
@@ -80,8 +82,16 @@ const CanvasWrapper = ({ id, componentType, children, ...otherProperties }: prop
                     setHoveredId(null);
                     setIsHovered(false);
                 }}
+                // onClick={(e) => {
+                //     // prevent child clicks from reaching parent
+                //     e.stopPropagation();
+                //     // console.log('name', name)
+                //     console.log('ph_ in canvas wrapper')
+                //     setSelectedId('canvas');
+                // }}
                 cursor={'default'}
-                style={{ position: 'relative', overflow: 'auto' }}
+                // @TODO: set in user config if overflow in X axes is allowed
+                style={{ position: 'relative', overflowY: 'auto', overflowX: 'hidden' }}
                 w={'100%'}
                 h={'100%'}
                 p={otherProperties.p || undefined}

@@ -40,13 +40,22 @@ const compTypes = {
 const compProperties = {
     'canvas': {
         p: 1, // padding
+        bg: undefined,
     },
     'container-column': {
         w: '100%',
         h: 'auto',
         p: 1,
         m: 0,
-        border: '1px solid grey'
+        marginTop: 0,
+        marginRight: 0,
+        marginBottom: 0,
+        marginLeft: 0,
+        border: '1px solid grey',
+        wrap: 'nowrap',
+        alignItems: 'center',
+        gap: 2,
+        bg: undefined,
     },
     'button': {
         w: '100%',
@@ -54,7 +63,11 @@ const compProperties = {
         // padding removed; see comment in button component
         // p: undefined,
         m: undefined,
-        border: '0px solid cyan' 
+        border: '0px solid cyan',
+        marginTop: 0,
+        marginRight: 0,
+        marginBottom: 0,
+        marginLeft: 0,
     }
 }
 

@@ -1,0 +1,29 @@
+.highlight-on-hover {
+  // position: relative;
+  // transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.highlight-on-hover::after {
+  content: '';
+  position: absolute;
+  // background-color: rgba(255, 0, 0, 0.5); /* Highlight color */
+  pointer-events: none;
+  /* Ensure it doesn't interfere with hover */
+  // transition: all 0.3s ease; /* Optional: add transition effect */
+  z-index: -1;
+  /* Move pseudo-elements below content */
+}
+
+.highlight-on-hover::after {
+  top: calc(-1 * var(--mTop));
+  left: calc(-1 * var(--mLeft));
+  right: calc(-1 * var(--mRight));
+  bottom: calc(-1 * var(--mBottom));
+}
+
+.highlight-on-hover::after {
+  background-color: var(--bgColor);
+}
+// .highlight-on-hover:hover::after {
+//   background-color: var(--bgColor);
+// }

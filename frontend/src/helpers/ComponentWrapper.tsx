@@ -6,11 +6,18 @@ import { NumberSize, Resizable } from 're-resizable';
 import { compTypes } from '../config/components';
 import { debounce } from 'lodash';
 
+import './ComponentWrapper.less';
+
+
 type otherPropertiesT = {
     w?: string | number,
     h?: string | number,
     p?: string | number,
     m?: string | number,
+    marginTop: string | number,
+    marginRight?: string | number,
+    marginBottom?: string | number,
+    marginLeft?: string | number,
     border?: string
 }
 
@@ -110,6 +117,21 @@ const useDebouncedMouseEnter = (setStatus) => {
     so that children only care about content.
 */
 
+const marginAsPx = (margin: string, parentPx: string) => {
+    // box-shadow is used to highlight margins.
+    // box-shadow does not accept %, so convertion to px (or others?) 
+    // parentPx: width or height depending on margin side
+
+    if (!margin || !parentPx || margin === '0px' || margin === '0%') return '0px'
+
+    if (margin.includes('%')) {
+        let m = parseFloat(margin.replace('%', ''))
+        let parentLength = parseFloat(parentPx.replace('px', ''))
+        return Math.floor(m / 100 * parentLength) + 'px'
+    }
+    return margin
+}
+
 const ComponentWrapper = ({ id, componentType, parentType, name, children, ...otherProperties }: propsT) => {
     const { attributes, listeners, setNodeRef } = useDraggable({ // transform
         id: `draggable_${id}`,
@@ -121,7 +143,9 @@ const ComponentWrapper = ({ id, componentType, parentType, name, children, ...ot
     });
 
     const { colorMode } = useColorMode();
-    
+
+    const refResizable = useRef(null);
+
     const draggingId = useDesignerStore((state) => state.draggingId);
     const isResizing = useDesignerStore((state) => state.isResizing);
     const setIsResizing = useDesignerStore((state) => state.setIsResizing);
@@ -132,7 +156,8 @@ const ComponentWrapper = ({ id, componentType, parentType, name, children, ...ot
     // const hoveredId = useDesignerStore((state) => state.hoveredId);
 
     const [isActive, setIsActive] = useState(false); // might be activated externally
-    const [isHovered, setIsHovered] = useState(false);
+    const [status, setStatus] = useState('none'); // might be activated externally
+    const [isHovered, setIsHovered] = useState(false); // locally
 
     // useEffect(() => {
     //     const unsub = useDesignerStore.subscribe(
@@ -155,15 +180,30 @@ const ComponentWrapper = ({ id, componentType, parentType, name, children, ...ot
         const unsub = useDesignerStore.subscribe(
             // selector
             (state, prevState) => {
-                // console.log('state, prevState')
-                if ((prevState.hoveredId !== id && state.hoveredId === id)
-                    || (prevState.selectedId !== id && state.selectedId === id)) {
-                    // console.log('state, prevState 1111111111');
-                    setIsActive(true);
+                // // console.log('state, prevState')
+                // if ((prevState.hoveredId !== id && state.hoveredId === id)
+                //     || (prevState.selectedId !== id && state.selectedId === id)) {
+                //     console.log('state, prevState 1111111111');
+                //     setIsActive(true);
+                // } else if ((state.selectedId !== id && prevState.hoveredId === id && state.hoveredId !== id)
+                //     || (prevState.selectedId === id && state.selectedId !== id)) {
+                //     console.log('state, prevState 222222222');
+                //     setIsActive(false);
+                // }
+
+                                // define status by priority.
+                // a comp might have one status at a time
+                if (prevState.selectedId !== id && state.selectedId === id) {
+                    setStatus('selected')
+                    console.log('statuss: selected')
+                    console.log('statuss: selected')
+                } else if (state.selectedId !== id && prevState.hoveredId !== id && state.hoveredId === id) {
+                    setStatus('hovered')
+                    console.log('statuss: hovered')
                 } else if ((state.selectedId !== id && prevState.hoveredId === id && state.hoveredId !== id)
                     || (prevState.selectedId === id && state.selectedId !== id)) {
-                    // console.log('state, prevState 222222222');
-                    setIsActive(false);
+                    setStatus('none');
+                    console.log('statuss: none')
                 }
             });
 
@@ -225,6 +265,7 @@ const ComponentWrapper = ({ id, componentType, parentType, name, children, ...ot
 
     const customResizeHandler = <div
         style={{ height: '100%', width: '100%' }}
+        onClick={(e) => e.stopPropagation()}
         onMouseOver={(e) => {
             e.stopPropagation();
             handleMouseEnter(id);
@@ -250,6 +291,21 @@ const ComponentWrapper = ({ id, componentType, parentType, name, children, ...ot
     })
 
 
+    // useEffect(() => {
+    //     if (refResizable.current) {
+    //         //   const computedStyles = window.getComputedStyle(divRef.current);
+    //         //   console.log(computedStyles.width); // Example: Log the computed width of the div
+
+    //         console.log('refResizable', window.getComputedStyle(refResizable.current.resizable)?.width)
+    //         console.log('refResizable parent', window.getComputedStyle(refResizable.current.resizable?.parentElement)?.width)
+    //         console.log('refResizable calcaulted', marginAsPx(otherProperties.marginLeft || '0', window.getComputedStyle(refResizable.current.resizable?.parentElement)?.width))
+    //         console.log('refResizable othercalcs', `${refResizable.current ? marginAsPx(otherProperties.marginLeft || '0px', window.getComputedStyle(refResizable.current.resizable?.parentElement)?.width) :  '30px'}`)
+    //         console.log('refResizable right', `${refResizable.current ? marginAsPx(otherProperties.marginRight || '0px', window.getComputedStyle(refResizable.current.resizable?.parentElement)?.width) :  '0px'}`)
+    //         // console.log('refResizable', window.getComputedStyle(refResizable).width)
+    //     }
+    // });
+
+
     return (
         // container box
         <Resizable
@@ -258,10 +314,32 @@ const ComponentWrapper = ({ id, componentType, parentType, name, children, ...ot
             //         : (!isResizing && !!!draggingId && (isHovered || isActive)) ? '2px solid green'
             //             : (isActive || isResizing || !!draggingId) ? '1px solid darkgrey' : undefined,
             // }}
+            ref={refResizable}
+            // className='highlight-on-hover'
             style={{
-                margin: otherProperties.m || undefined,
+                // '--mLeft': `${refResizable.current ? marginAsPx(otherProperties.marginLeft, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.width) : '0px'}`,
+                // '--mRight': `${refResizable.current ? marginAsPx(otherProperties.marginRight, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.width) : '0px'}`,
+                // '--mTop': `${refResizable.current ? marginAsPx(otherProperties.marginTop, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.height) : '0px'}`,
+                // '--mBottom': `${refResizable.current ? marginAsPx(otherProperties.marginBottom, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.height) : '0px'}`,
+                // '--bgColor': colorMode === 'dark' ? 'rgba(50,50,50, 1)' : 'lightgrey',
+                // '--widthMarginL_': marginAsPx(otherProperties.marginLeft || '0', window.getComputedStyle(refResizable.current.resizable?.parentElement)?.width),
+                // '--widthMarginR_': marginAsPx(otherProperties.marginRight || '0', window.getComputedStyle(refResizable.current.resizable?.parentElement)?.width),
+                // '--widthMarginT_': marginAsPx(otherProperties.marginTop || '0', window.getComputedStyle(refResizable.current.resizable?.parentElement)?.height),
+                // '--widthMarginB_': marginAsPx(otherProperties.marginBottom || '0', window.getComputedStyle(refResizable.current.resizable?.parentElement)?.height),
+                margin: `${otherProperties.marginTop || 0} ${otherProperties.marginRight || 0} ${otherProperties.marginBottom || 0} ${otherProperties.marginLeft || 0}`,
                 // margin highlight using box-shadow
-                boxShadow: (!isResizing && !!!draggingId && (isHovered || isActive)) ? `0 0 0 ${otherProperties.m || 0} ${colorMode === 'dark' ? 'rgb(50,50,50)' : 'rgb(200,200,200)'}` : undefined
+                // boxShadow: (!isResizing && !!!draggingId && (isHovered || isActive))
+                // top, letf, right, bottom
+                // ? `0 -${marginAsPx(otherProperties.marginTop || '0', window.getComputedStyle(refResizable.current.resizable?.parentElement)?.height)} 0 0 ${colorMode === 'dark' ? 'rgb(50,50,50),' : 'rgb(200,200,200),'}
+                // -${marginAsPx(otherProperties.marginLeft || '0', window.getComputedStyle(refResizable.current.resizable?.parentElement)?.width)} 0 0 0 ${colorMode === 'dark' ? 'rgb(50,50,50),' : 'rgb(200,200,200),'}
+                // ${marginAsPx(otherProperties.marginRight || '0', window.getComputedStyle(refResizable.current.resizable?.parentElement)?.width)} 0 0 0 ${colorMode === 'dark' ? 'rgb(50,50,50),' : 'rgb(200,200,200),'}
+                // 0 ${marginAsPx(otherProperties.marginBottom || '0', window.getComputedStyle(refResizable.current.resizable?.parentElement)?.height)} 0 0 ${colorMode === 'dark' ? 'rgb(50,50,50)' : 'rgb(200,200,200)'}`
+                // ? `0 -${otherProperties.marginTop || 0} 0 0 ${colorMode === 'dark' ? 'rgb(50,50,50),' : 'rgb(200,200,200),'}
+                // -${otherProperties.marginLeft || 0} 0 0 0 ${colorMode === 'dark' ? 'rgb(50,50,50),' : 'rgb(200,200,200),'}
+                // ${otherProperties.marginRight || 0} 0 0 0 ${colorMode === 'dark' ? 'rgb(50,50,50),' : 'rgb(200,200,200),'}
+                // 0 ${otherProperties.marginBottom || 0} 0 0 ${colorMode === 'dark' ? 'rgb(50,50,50)' : 'rgb(200,200,200)'}`
+                // : undefined
+                // boxShadow: '0 -10px 0 0 rgba(255, 0, 0, 0.5),  10px 0 0 0 rgba(0, 0, 255, 0.5)'
             }}
             size={{ width: otherProperties.w || '100%', height: otherProperties.h || 'auto' }}
             onResizeStop={(e, __, elem, d: NumberSize) => {
@@ -296,12 +374,31 @@ const ComponentWrapper = ({ id, componentType, parentType, name, children, ...ot
                 bottomLeft: { left: '0px', bottom: '0px', width: '5px', height: '5px' },
             }}
         >
+            {/* <div style={{
+                left: '-50%',
+                top: 0,
+                width: '50%',
+                height: '100%',
+                backgroundColor: 'red',
+                position: 'absolute',
+            }}></div> */}
             {/* for dragging */}
             <Tooltip placement='top-start' gutter={0} label={tooltipComp} isOpen={isHovered && !!!draggingId && !isResizing}>
                 <Box
                     ref={setNodeRef}
                     {...listeners}
                     {...attributes}
+                    // ref={refResizable}
+                    className='highlight-on-hover'
+                    // style={{position: 'relative', overflow: 'visible'}}
+                    style={(!isResizing && !!!draggingId && (status === 'selected')) ? {
+                        overflow: 'visible',
+                        '--mLeft': `${refResizable.current ? marginAsPx(otherProperties.marginLeft, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.width) : '0px'}`,
+                        '--mRight': `${refResizable.current ? marginAsPx(otherProperties.marginRight, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.width) : '0px'}`,
+                        '--mTop': `${refResizable.current ? marginAsPx(otherProperties.marginTop, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.height) : '0px'}`,
+                        '--mBottom': `${refResizable.current ? marginAsPx(otherProperties.marginBottom, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.height) : '0px'}`,
+                        '--bgColor': colorMode === 'dark' ? 'rgba(50,50,50, 1)' : 'lightgrey',
+                    }: {position: 'relative', overflow: 'visible'}}
                     onMouseOver={(e) => {
                         e.stopPropagation();
                         // setHoveredId(id);
@@ -320,10 +417,10 @@ const ComponentWrapper = ({ id, componentType, parentType, name, children, ...ot
                         // prevent child clicks from reaching parent
                         e.stopPropagation();
                         // console.log('name', name)
+                        console.log('ph_ in comp wrapper')
                         setSelectedId(id);
                     }}
                     cursor={id === 'canvas' ? 'default' : 'grab'}
-                    style={{ position: 'relative', overflow: 'auto' }}
                     // _hover={{ outline: '1px solid darkgrey' }}
                     w={'100%'}
                     h={'100%'}
@@ -341,7 +438,6 @@ const ComponentWrapper = ({ id, componentType, parentType, name, children, ...ot
                         boxShadow: (!isResizing && !!!draggingId && (isHovered || isActive)) ? 'inset 0 0 0 2px green'
                             : (isActive || isResizing || !!draggingId) ? 'inset 0 0 0 1px darkgrey' : undefined,
                         // boxShadow: 'inset 0 0 0 2px red'
-
                     }}></div>
                 </Box>
             </Tooltip>
@@ -354,16 +450,18 @@ const ComponentWrapper = ({ id, componentType, parentType, name, children, ...ot
                 ref={setNodeRef2}
                 style={{ ...styleAfter, display: !isResizing && draggingId && draggingId !== `draggable_${id}` && id !== 'canvas' ? 'block' : 'none' }}>
             </div>
-            {draggingId === `draggable_${id}` && !isResizing && <div style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                backgroundColor: 'grey',
-            }}>
-            </div>}
-        </Resizable>
+            {
+                draggingId === `draggable_${id}` && !isResizing && <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'grey',
+                }}>
+                </div>
+            }
+        </Resizable >
     );
 };
 

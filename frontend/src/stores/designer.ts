@@ -104,7 +104,12 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   componentNames: {},
   setIsResizing: (isResizing: true | false) => set({ isResizing: isResizing }),
   setDraggingId: (draggingId) => set({ draggingId: draggingId }),
-  setSelectedId: (selectedId) => set((state) => { return { selectedId: state.selectedId === selectedId ? null : selectedId } }),
+  setSelectedId: (selectedId) => set((state) => { 
+    if (!!state.draggingId) {
+      return state
+    }
+    return { selectedId: selectedId } 
+  }),
   setHoveredId: (hoveredId) => set({ hoveredId: hoveredId }),
   moveComponent: (movedCompId, movedOverCompId, location, positionInContainer = 'last') => set((state) => {
     const comps = { ...state.components };

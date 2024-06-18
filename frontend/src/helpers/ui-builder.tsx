@@ -42,7 +42,7 @@ import CCheckbox from "../components/components/CCheckbox";
 const uiMapper = {
     'canvas': (components: ComponentCollection, id: string, properties) => (
         <CanvasWrapper key={id} id={id} componentType={components[id].type} {...properties[id]}>
-            <CContainerColumn>
+            <CContainerColumn  {...properties[id]}>
                 {components[id].children.map((id: string) => renderNode(components, id, properties))}
             </CContainerColumn>
         </CanvasWrapper>

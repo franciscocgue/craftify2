@@ -6,11 +6,17 @@ import { NumberSize, Resizable } from 're-resizable';
 import { compTypes } from '../config/components';
 import { debounce } from 'lodash';
 
+import './ComponentWrapper.less';
+
 type otherPropertiesT = {
     w?: string | number,
     h?: string | number,
     p?: string | number,
     m?: string | number,
+    marginTop: string | number,
+    marginRight?: string | number,
+    marginBottom?: string | number,
+    marginLeft?: string | number,
     border?: string
 }
 
@@ -35,8 +41,9 @@ const stylesTop = (isOver: true | false) => ({
     position: 'absolute' as 'absolute', // as 'absolute' "fixes" ts issue
     width: '100%',
     height: '6px',
-    top: 0,
+    top: '2px',
     left: 0,
+    zIndex: 5,
     boxShadow: isOver ? `0 calc(-1 * min(${dropStyles.siblingWidth}, ${dropStyles.siblingMinWidth}) + 1px) 0 0 ${dropStyles.siblingColor}, 0 0px 0 0 ${dropStyles.siblingColor}` : undefined,
 
 })
@@ -46,7 +53,8 @@ const stylesLeft = (isOver: true | false) => ({
     width: '6px',
     height: '100%',
     top: 0,
-    left: 0,
+    left: '2px',
+    zIndex: 5,
     boxShadow: isOver ? `calc(-1 * min(${dropStyles.siblingWidth}, ${dropStyles.siblingMinWidth}) + 1px) 0 0 0 ${dropStyles.siblingColor}, 0 0 0 0 ${dropStyles.siblingColor}` : undefined,
 })
 
@@ -54,8 +62,9 @@ const stylesBottom = (isOver: true | false) => ({
     position: 'absolute' as 'absolute', // as 'absolute' "fixes" ts issue
     width: '100%',
     height: '6px',
-    top: 'calc(100% - 6px)',
+    top: 'calc(100% - 8px)',
     left: 0,
+    zIndex: 5,
     boxShadow: isOver ? `0 calc(min(${dropStyles.siblingWidth}, ${dropStyles.siblingMinWidth}) - 1px) 0 0 ${dropStyles.siblingColor}, 0 0px 0 0 ${dropStyles.siblingColor}` : undefined,
 })
 
@@ -64,7 +73,8 @@ const stylesRight = (isOver: true | false) => ({
     width: '6px',
     height: '100%',
     top: '0',
-    left: 'calc(100% - 6px)',
+    left: 'calc(100% - 8px)',
+    zIndex: 5,
     boxShadow: isOver ? `calc(min(${dropStyles.siblingWidth}, ${dropStyles.siblingMinWidth}) - 1px) 0 0 0 ${dropStyles.siblingColor}, 0 0 0 0 ${dropStyles.siblingColor}` : undefined,
 })
 
@@ -113,6 +123,24 @@ const useDebouncedMouseEnter = (setStatus) => {
     It defines wrapping box (size, border, ...)
     so that children only care about content.
 */
+
+
+const marginAsPx = (margin: string, parentPx: string) => {
+    // box-shadow is used to highlight margins.
+    // box-shadow does not accept %, so convertion to px (or others?) 
+    // parentPx: width or height depending on margin side
+
+    if (!margin || !parentPx || margin === '0px' || margin === '0%') return '0px'
+
+    if (margin.includes('%')) {
+        let m = parseFloat(margin.replace('%', ''))
+        let parentLength = parseFloat(parentPx.replace('px', ''))
+        return Math.floor(m / 100 * parentLength) + 'px'
+    }
+    return margin
+}
+
+
 const ContainerWrapper = ({ id, componentType, parentType, name, children, ...otherProperties }: propsT) => {
     const { attributes, listeners, setNodeRef } = useDraggable({ // transform
         id: `draggable_${id}`,
@@ -124,6 +152,8 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
     });
 
     const { colorMode } = useColorMode();
+
+    const refResizable = useRef(null);
 
     // const { draggingId, isResizing, setIsResizing, setHoveredId, hoveredId } = useDesignerStore();
     const draggingId = useDesignerStore((state) => state.draggingId);
@@ -145,8 +175,9 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
     // console.log(otherProperties)
 
 
-    const [isActive, setIsActive] = useState(false); // might be activated externally
-    const [isHovered, setIsHovered] = useState(false);
+    // const [isActive, setIsActive] = useState(false); // might be activated externally
+    const [status, setStatus] = useState('none'); // might be activated externally
+    const [isHovered, setIsHovered] = useState(false); // locally
 
     // useEffect(() => {
     //     const unsub = useDesignerStore.subscribe(
@@ -169,16 +200,32 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
         const unsub = useDesignerStore.subscribe(
             // selector
             (state, prevState) => {
-                // console.log('state, prevState')
-                if ((prevState.hoveredId !== id && state.hoveredId === id)
-                    || (prevState.selectedId !== id && state.selectedId === id)) {
-                    // console.log('state, prevState 1111111111');
-                    setIsActive(true);
+                // // console.log('state, prevState')
+                // if ((prevState.hoveredId !== id && state.hoveredId === id)
+                //     || (prevState.selectedId !== id && state.selectedId === id)) {
+                //     // console.log('state, prevState 1111111111');
+                //     setIsActive(true);
+                // } else if ((state.selectedId !== id && prevState.hoveredId === id && state.hoveredId !== id)
+                //     || (prevState.selectedId === id && state.selectedId !== id)) {
+                //     // console.log('state, prevState 222222222');
+                //     setIsActive(false);
+                // }
+
+                // define status by priority.
+                // a comp might have one status at a time
+                if (prevState.selectedId !== id && state.selectedId === id) {
+                    setStatus('selected')
+                    console.log('statuss: selected')
+                    console.log('statuss: selected')
+                } else if (state.selectedId !== id && prevState.hoveredId !== id && state.hoveredId === id) {
+                    setStatus('hovered')
+                    console.log('statuss: hovered')
                 } else if ((state.selectedId !== id && prevState.hoveredId === id && state.hoveredId !== id)
                     || (prevState.selectedId === id && state.selectedId !== id)) {
-                    // console.log('state, prevState 222222222');
-                    setIsActive(false);
+                    setStatus('none');
+                    console.log('statuss: none')
                 }
+
             });
 
         return unsub
@@ -268,12 +315,28 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
         console.log('C - canvas cont: ' + name)
     })
 
+    // useEffect(() => {
+    //     if (refResizable.current) {
+    //         console.log('someKey2', otherProperties.marginTop)
+    //         console.log('someKey2', window.getComputedStyle(refResizable.current.resizable?.parentElement)?.height)
+    //         console.log('someKey',marginAsPx(otherProperties.marginTop, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.height))
+    //     }
+    // })
+
 
     return (
         // container box
         <Resizable
+            ref={refResizable}
+            // className='highlight-on-hover'
             style={{
-                margin: otherProperties.m || undefined,
+                position: 'relative',
+                margin: `${otherProperties.marginTop || 0} ${otherProperties.marginRight || 0} ${otherProperties.marginBottom || 0} ${otherProperties.marginLeft || 0}`,
+                // '--mLeft': `${refResizable.current ? marginAsPx(otherProperties.marginLeft, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.width) : '0px'}`,
+                // '--mRight': `${refResizable.current ? marginAsPx(otherProperties.marginRight, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.width) : '0px'}`,
+                // '--mTop': `${refResizable.current ? marginAsPx(otherProperties.marginTop, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.height) : '0px'}`,
+                // '--mBottom': `${refResizable.current ? marginAsPx(otherProperties.marginBottom, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.height) : '0px'}`,
+                // '--bgColor': colorMode === 'dark' ? 'rgba(50,50,50, 1)' : 'lightgrey',
                 // boxShadow: (!isResizing && !!!draggingId && (isHovered || isActive)) ? `0 0 0 ${otherProperties.m || 0} ${colorMode === 'dark' ? 'rgb(50,50,50)' : 'rgb(200,200,200)'}` : undefined
                 // boxShadow: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? 'inset 0 0 0 2px red'
                 //     : (!isResizing && !!!draggingId && (isHovered || isActive)) ? 'inset 0 0 0 2px green' : (isActive || isResizing || !!draggingId) ? 'inset 0 0 0 1px darkgrey' : undefined,
@@ -283,7 +346,7 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
                 //     : (!isResizing && !!!draggingId && (isHovered || isActive)) ? 'green' : (isActive || isResizing || !!draggingId) ? 'darkgrey' : undefined,
                 // boxShadow: !isResizing && draggingId && draggingId !== `draggable_${id}` && isOver3 ? 'inset 0 0 0 1px red'
                 //     : (!isResizing && !!!draggingId && (isHovered || isActive)) ? `inset 0 0 0 1px green, 0 0 0 ${otherProperties.m || 0} ${colorMode === 'dark' ? 'rgb(50,50,50)' : 'rgb(200,200,200)'}` : (isActive || isResizing || !!draggingId) ? 'inset 0 0 0 1px darkgrey' : undefined,
-                boxShadow: (!isResizing && !!!draggingId && (isHovered || isActive)) ? `0 0 0 ${otherProperties.m || 0} ${colorMode === 'dark' ? 'rgb(50,50,50)' : 'rgb(200,200,200)'}` : undefined,
+                // boxShadow: (!isResizing && !!!draggingId && (isHovered || isActive)) ? `0 0 0 ${otherProperties.m || 0} ${colorMode === 'dark' ? 'rgb(50,50,50)' : 'rgb(200,200,200)'}` : undefined,
             }}
             size={{ width: otherProperties.w || '100%', height: otherProperties.h || 'auto' }}
             onResizeStop={(e, __, elem, d: NumberSize) => {
@@ -337,6 +400,7 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
                     ref={setNodeRef}
                     {...listeners}
                     {...attributes}
+                    className='highlight-on-hover'
                     onMouseOver={(e) => {
                         e.stopPropagation();
                         handleMouseEnter(id);
@@ -350,9 +414,18 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
                     onClick={(e) => {
                         e.stopPropagation();
                         setSelectedId(id);
+                        console.log('ph_ in contaienr wrapper')
                     }}
                     cursor={id === 'canvas' ? 'default' : 'grab'}
-                    style={{ position: 'relative', overflow: 'auto' }}
+                    style={(!isResizing && !!!draggingId && (status === 'selected')) ? {
+                        overflow: 'visible',
+                        '--mLeft': `${refResizable.current ? marginAsPx(otherProperties.marginLeft, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.width) : '0px'}`,
+                        '--mRight': `${refResizable.current ? marginAsPx(otherProperties.marginRight, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.width) : '0px'}`,
+                        '--mTop': `${refResizable.current ? marginAsPx(otherProperties.marginTop, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.height) : '0px'}`,
+                        '--mBottom': `${refResizable.current ? marginAsPx(otherProperties.marginBottom, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.height) : '0px'}`,
+                        '--bgColor': colorMode === 'dark' ? 'rgba(50,50,50, 1)' : 'lightgray',
+                    } : { overflow: 'hidden' }}
+                    // style={{ overflow: 'hidden' }}
                     // _hover={{ outline: '1px solid darkgrey' }}
                     w={'100%'}
                     h={'100%'}
@@ -361,6 +434,14 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
                 // border={otherProperties.border || '0px solid grey'}
                 >
                     {children}
+                    {/* overlays for styling margin */}
+                    {/* {(!isResizing && !!!draggingId && (isActive)) && <div style={{
+                        position: 'absolute',
+                        top: `-${refResizable.current ? marginAsPx(otherProperties.marginTop, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.height) : '0px'}`,
+                        height: `${refResizable.current ? marginAsPx(otherProperties.marginTop, window.getComputedStyle(refResizable.current.resizable?.parentElement)?.height) : '0px'}`,
+                        width: '100%',
+                        backgroundColor: 'red'
+                    }}></div>} */}
                     {/* overlays for styling */}
                     {/* top */}
                     <div
@@ -373,14 +454,14 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
                                 left: 0,
                                 backgroundColor: 'red'
                             }
-                                : (!isResizing && !!!draggingId && (isHovered || isActive)) ? {
+                                : (!isResizing && !!!draggingId && (isHovered || status==='selected' || status==='hovered')) ? {
                                     position: 'absolute',
                                     width: '100%',
                                     height: '2px',
                                     top: 0,
                                     left: 0,
                                     backgroundColor: 'green'
-                                } : (isActive || isResizing || !!draggingId) ? {
+                                } : (isResizing || !!draggingId) ? {
                                     position: 'absolute',
                                     width: '100%',
                                     height: '1px',
@@ -404,14 +485,14 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
                                 left: 0,
                                 backgroundColor: 'red'
                             }
-                                : (!isResizing && !!!draggingId && (isHovered || isActive)) ? {
+                                : (!isResizing && !!!draggingId && (isHovered || status==='selected' || status==='hovered')) ? {
                                     position: 'absolute',
                                     width: '100%',
                                     height: '2px',
                                     bottom: 0,
                                     left: 0,
                                     backgroundColor: 'green'
-                                } : (isActive || isResizing || !!draggingId) ? {
+                                } : (isResizing || !!draggingId) ? {
                                     position: 'absolute',
                                     width: '100%',
                                     height: '1px',
@@ -435,14 +516,14 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
                                 left: 0,
                                 backgroundColor: 'red'
                             }
-                                : (!isResizing && !!!draggingId && (isHovered || isActive)) ? {
+                                : (!isResizing && !!!draggingId && (isHovered || status==='selected' || status==='hovered')) ? {
                                     position: 'absolute',
                                     width: '2px',
                                     height: '100%',
                                     top: 0,
                                     left: 0,
                                     backgroundColor: 'green'
-                                } : (isActive || isResizing || !!draggingId) ? {
+                                } : (isResizing || !!draggingId) ? {
                                     position: 'absolute',
                                     width: '1px',
                                     height: '100%',
@@ -466,14 +547,14 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
                                 right: 0,
                                 backgroundColor: 'red'
                             }
-                                : (!isResizing && !!!draggingId && (isHovered || isActive)) ? {
+                                : (!isResizing && !!!draggingId && (isHovered || status==='selected' || status==='hovered')) ? {
                                     position: 'absolute',
                                     width: '2px',
                                     height: '100%',
                                     top: 0,
                                     right: 0,
                                     backgroundColor: 'green'
-                                } : (isActive || isResizing || !!draggingId) ? {
+                                } : (isResizing || !!draggingId) ? {
                                     position: 'absolute',
                                     width: '1px',
                                     height: '100%',

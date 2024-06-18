@@ -1,6 +1,7 @@
 import { Box, Input, InputGroup, InputLeftAddon } from "@chakra-ui/react";
 import { memo } from "react";
 import useDesignerStore from "../../stores/designer";
+import Margin from "./Margin";
 
 const SidebarProperties = memo(() => {
 
@@ -18,7 +19,7 @@ const SidebarProperties = memo(() => {
     return <Box w={'300px'} border={'1px solid grey'}>
         {selectedId}
         {selectedId && <>{Object.keys(properties[selectedId]).map(p => (
-            <InputGroup key={p} size={'sm'}>
+            <InputGroup key={selectedId + p} size={'sm'}>
                 <InputLeftAddon>{p}</InputLeftAddon>
                 <Input
                     type='text'
@@ -30,6 +31,7 @@ const SidebarProperties = memo(() => {
                 />
             </InputGroup>
         ))}</>}
+        {selectedId && Object.keys(properties[selectedId]).includes('m') && <Margin />}
     </Box>
 })
 

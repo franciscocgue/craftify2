@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import useDesignerStore from "../../stores/designer";
 import { renderNode } from "../../helpers/ui-builder";
-import { useEffect, useMemo } from "react";
+import { memo, useEffect, useMemo } from "react";
 
 const screenSizes = {
     'Galaxy S10': [360, 760],
@@ -39,6 +39,7 @@ const Canvas = () => {
         maxW='100vw'
         overflow={'auto'}
         onClick={() => {
+            console.log('ph_ in Canvas index')
             setSelectedId(null)
         }}
     >
