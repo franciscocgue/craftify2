@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Tag, TagLabel, TagLeftIcon, position, useStatStyles } from "@chakra-ui/react";
+import { Box, Button, Checkbox, Flex, Tag, TagLabel, TagLeftIcon, position, useStatStyles } from "@chakra-ui/react";
 import Canvas from "../components/Canvas";
 import Navbar from "../components/Navbar";
 import SidebarMenu from "../components/SidebarMenu";
@@ -13,6 +13,10 @@ import { ReactNode, useRef, useState } from "react";
 import { LuMove } from "react-icons/lu";
 import { NumberSize, Resizable } from "re-resizable";
 import { MdDragIndicator } from "react-icons/md";
+import DraggableHandle from "../helpers/DraggableHandle";
+import DroppableComponent from "../helpers/DroppableComponent";
+import ResizableComponent from "../helpers/ResizableComponent";
+import ResizableContainer from "../helpers/ResizableContainer";
 
 
 const Designer = () => {
@@ -97,29 +101,73 @@ const Designer = () => {
           {/* <Canvas /> */}
           <Flex
             flex={1}
-            border={'1px solid orange'}
+            border={'1px solid grey'}
             flexDirection={'column'}
             alignContent={'center'}
             justifyContent={'center'}
             overflowY={'hidden'}
             overflowX={'auto'}
+          // backgroundColor={'red'}
           >
 
             {/* canvas */}
             <Flex
-              border={'1px solid red'}
+              border={'1px solid grey'}
               flexDirection={'column'}
-              overflow={'auto'}
+              overflowY={'auto'}
+              overflowX={'hidden'}
               minW={'360px'}
               m={'0 auto'}
               minH={'min(calc(100%), 760px)'}
               maxW={'360px'}
               maxH={'760px'}
-              // avoid overlapping with scrollbar
-              // @TODO: maybe better solution (inner div); alternatively, add pr to total width to keep effective width 
-              pr={'5px'}
+            // avoid overlapping with scrollbar
+            // @TODO: maybe better solution (inner div); alternatively, add pr to total width to keep effective width 
+            // p={'1px'}
             >
-              <ResizableWrapper />
+              <ResizableComponent
+                componentId="test1"
+                parentType="column"
+                componentName="Cool Component"
+                componentType="checkbox"
+                styles={{
+                  width: '150px',
+                  height: '50px',
+                  marginTop: '30px',
+                  marginLeft: '30px',
+                  marginBottom: '30px',
+                  marginRight: '30px',
+                }}
+              />
+              <ResizableContainer
+                componentId="test3"
+                parentType="column"
+                componentName="container"
+                componentType="checkbox"
+                styles={{
+                  width: '100%',
+                  height: 'auto',
+                  marginTop: '30px',
+                  marginLeft: '0px',
+                  marginBottom: '30px',
+                  marginRight: '0px',
+                }}
+              >
+                <ResizableComponent
+                  componentId="test2"
+                  parentType="column"
+                  componentName="component"
+                  componentType="checkbox"
+                  styles={{
+                    width: '150px',
+                    height: '50px',
+                    marginTop: '30px',
+                    marginLeft: '0px',
+                    marginBottom: '30px',
+                    marginRight: '30px',
+                  }}
+                />
+              </ResizableContainer>
             </Flex>
           </Flex>
           <DragOverlay style={{ width: 'auto', height: 'auto' }} dropAnimation={null}>
@@ -134,283 +182,216 @@ const Designer = () => {
 };
 
 
-// sample component; include overlay to hide functionality?
-const CompX = () => {
-  return <Button
-    w={'100%'}
-    h={'100%'}
-  >
-    Click me!
-  </Button>
-}
+// // sample component; include overlay to hide functionality?
+// const CompX = () => {
+//   return <Checkbox
+//     w={'100%'}
+//     h={'100%'}
+//   >
+//     Click me!
+//   </Checkbox>
+// }
 
 
-function Draggable(props) {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: 'draggable_test',
-  });
-  // const style = transform ? {
-  //   transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-  //   position: 'absolute',
-  //   top: 0,
-  //   left: 0,
-  // } : {
-  //   position: 'absolute',
-  //   top: 0,
-  //   left: 0,
-  // };
+// function Draggable(props) {
+//   const { attributes, listeners, setNodeRef, transform } = useDraggable({
+//     id: 'draggable_test',
+//   });
+//   // const style = transform ? {
+//   //   transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+//   //   position: 'absolute',
+//   //   top: 0,
+//   //   left: 0,
+//   // } : {
+//   //   position: 'absolute',
+//   //   top: 0,
+//   //   left: 0,
+//   // };
 
 
-  return (
-    <button ref={setNodeRef}
-      // style={style}
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        zIndex: 2,
-      }}
-      {...listeners} {...attributes}>
-      {props.children}
-    </button>
-  );
-}
+//   return (
+//     <button ref={setNodeRef}
+//       // style={style}
+//       style={{
+//         position: 'absolute',
+//         top: 0,
+//         left: 0,
+//         zIndex: 2,
+//       }}
+//       {...listeners} {...attributes}>
+//       {props.children}
+//     </button>
+//   );
+// }
 
 
-function DroppableSide(props) {
-  const { isOver: isOverTop, setNodeRef: setNodeRefTop } = useDroppable({
-    id: 'droppable_top',
-    disabled: !props.top
-  });
-  const { isOver: isOverBottom, setNodeRef: setNodeRefBottom } = useDroppable({
-    id: 'droppable_bottom',
-    disabled: !props.bottom
-  });
-  const { isOver: isOverLeft, setNodeRef: setNodeRefLeft } = useDroppable({
-    id: 'droppable_left',
-    disabled: !props.left
-  });
-  const { isOver: isOverRight, setNodeRef: setNodeRefRight } = useDroppable({
-    id: 'droppable_right',
-    disabled: !props.right
-  });
+// function DroppableSide(props) {
+//   const { isOver: isOverTop, setNodeRef: setNodeRefTop } = useDroppable({
+//     id: 'droppable_top',
+//     disabled: !props.top
+//   });
+//   const { isOver: isOverBottom, setNodeRef: setNodeRefBottom } = useDroppable({
+//     id: 'droppable_bottom',
+//     disabled: !props.bottom
+//   });
+//   const { isOver: isOverLeft, setNodeRef: setNodeRefLeft } = useDroppable({
+//     id: 'droppable_left',
+//     disabled: !props.left
+//   });
+//   const { isOver: isOverRight, setNodeRef: setNodeRefRight } = useDroppable({
+//     id: 'droppable_right',
+//     disabled: !props.right
+//   });
 
-  const styleTop = {
-    position: 'absolute',
-    width: '100%',
-    height: '50%',
-    top: 0,
-    left: 0,
-  };
+//   const styleTop = {
+//     position: 'absolute',
+//     width: '100%',
+//     height: '50%',
+//     top: 0,
+//     left: 0,
+//   };
 
-  const styleTopHighlight = {
-    backgroundColor: isOverTop ? 'green' : undefined,
-    position: 'absolute',
-    width: '100%',
-    height: '6px',
-    top: '-2px',
-    right: 0,
-  };
+//   const styleTopHighlight = {
+//     backgroundColor: isOverTop ? 'green' : undefined,
+//     position: 'absolute',
+//     width: '100%',
+//     height: '6px',
+//     top: '-2px',
+//     right: 0,
+//   };
 
-  const styleBottom = {
-    position: 'absolute',
-    width: '100%',
-    height: '50%',
-    top: '50%',
-    left: 0,
-  };
+//   const styleBottom = {
+//     position: 'absolute',
+//     width: '100%',
+//     height: '50%',
+//     top: '50%',
+//     left: 0,
+//   };
 
-  const styleBottomHighlight = {
-    backgroundColor: isOverBottom ? 'green' : undefined,
-    position: 'absolute',
-    width: '100%',
-    height: '6px',
-    bottom: '-2px',
-    right: 0,
-  };
-  const styleLeft = {
-    position: 'absolute',
-    width: '50%',
-    height: '100%',
-    top: 0,
-    left: 0,
-  };
+//   const styleBottomHighlight = {
+//     backgroundColor: isOverBottom ? 'green' : undefined,
+//     position: 'absolute',
+//     width: '100%',
+//     height: '6px',
+//     bottom: '-2px',
+//     right: 0,
+//   };
+//   const styleLeft = {
+//     position: 'absolute',
+//     width: '50%',
+//     height: '100%',
+//     top: 0,
+//     left: 0,
+//   };
 
-  const styleLeftHighlight = {
-    backgroundColor: isOverLeft ? 'green' : undefined,
-    position: 'absolute',
-    width: '6px',
-    height: '100%',
-    left: '-2px',
-    top: 0,
-  };
+//   const styleLeftHighlight = {
+//     backgroundColor: isOverLeft ? 'green' : undefined,
+//     position: 'absolute',
+//     width: '6px',
+//     height: '100%',
+//     left: '-2px',
+//     top: 0,
+//   };
 
-  const styleRight = {
-    position: 'absolute',
-    width: '50%',
-    height: '100%',
-    top: 0,
-    right: 0,
-  };
+//   const styleRight = {
+//     position: 'absolute',
+//     width: '50%',
+//     height: '100%',
+//     top: 0,
+//     right: 0,
+//   };
 
-  const styleRightHighlight = {
-    backgroundColor: isOverRight ? 'green' : undefined,
-    position: 'absolute',
-    width: '6px',
-    height: '100%',
-    right: '-2px',
-    top: 0,
-  };
+//   const styleRightHighlight = {
+//     backgroundColor: isOverRight ? 'green' : undefined,
+//     position: 'absolute',
+//     width: '6px',
+//     height: '100%',
+//     right: '-2px',
+//     top: 0,
+//   };
 
-  console.log(props.top)
+//   console.log(props.top)
 
-  return (
-    <>
-      {/* top */}
-      {props.top && <div ref={setNodeRefTop} style={styleTop} />}
-      {props.top && <div style={styleTopHighlight} />}
-      {/* bottom */}
-      {props.bottom && <div ref={setNodeRefBottom} style={styleBottom} />}
-      {props.bottom && <div style={styleBottomHighlight} />}
-      {/* left */}
-      {props.left && <div ref={setNodeRefLeft} style={styleLeft} />}
-      {props.left && <div style={styleLeftHighlight} />}
-      {/* right */}
-      {props.right && <div ref={setNodeRefRight} style={styleRight} />}
-      {props.right && <div style={styleRightHighlight} />}
-    </>
-  );
-}
-
-
-const ResizableWrapper = () => {
-
-  const refResizable = useRef(null);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isSelected, setIsSelected] = useState(false);
-  const draggingId = useDesignerStore((state) => state.draggingId);
+//   return (
+//     <>
+//       {/* top */}
+//       {props.top && <div ref={setNodeRefTop} style={styleTop} />}
+//       {props.top && <div style={styleTopHighlight} />}
+//       {/* bottom */}
+//       {props.bottom && <div ref={setNodeRefBottom} style={styleBottom} />}
+//       {props.bottom && <div style={styleBottomHighlight} />}
+//       {/* left */}
+//       {props.left && <div ref={setNodeRefLeft} style={styleLeft} />}
+//       {props.left && <div style={styleLeftHighlight} />}
+//       {/* right */}
+//       {props.right && <div ref={setNodeRefRight} style={styleRight} />}
+//       {props.right && <div style={styleRightHighlight} />}
+//     </>
+//   );
+// }
 
 
-  return <>
-    <Resizable
-      ref={refResizable}
-      defaultSize={{ width: '200px', height: '50px' }}
-      style={{ margin: '40px 0 0 0' }}
-      // resizing enabled only if comp selected!
-      enable={isSelected ? { top: true, right: true, bottom: true, left: true, topRight: true, bottomRight: true, bottomLeft: true, topLeft: true } : false}
-      onResizeStop={(e, __, elem, d: NumberSize) => {
-        console.log(elem.style.width)
-        console.log(elem.style.height)
-      }}
-    >
-      {/* why div? to handle click & mouse events */}
-      <Box
-        w={'100%'}
-        h={'100%'}
-        outline={isHovered || isSelected ? '1px solid red' : undefined}
-        onMouseOver={() => setIsHovered(true)}
-        onMouseOut={() => setIsHovered(false)}
-        onClick={() => {
-          console.log('clickeddd')
-          setIsSelected(prev => !prev)
-        }}
-      >
-        <CompX />
-        {isHovered && !!!draggingId && <Draggable><MdDragIndicator size={20} /></Draggable>}
-        {draggingId !== null && <DroppableSide top={true} bottom={true} />}
-        {/* @TODONEXT: add actiuon icons (delete, copy, plus) */}
-      </Box>
-      {/* margins */}
-      {isHovered && !!!draggingId && <Box style={{
-        position: 'absolute',
-        width: '100%',
-        height: '40px',
-        backgroundColor: 'yellow',
-        top: '-40px',
-        left: '0',
-        opacity: '0.2'
-      }}></Box>}
-    </Resizable>
-    <Resizable
-      ref={refResizable}
-      defaultSize={{ width: '200px', height: '50px' }}
-      style={{ margin: '40px 0 0 0' }}
-      // resizing enabled only if comp selected!
-      enable={isSelected ? { top: true, right: true, bottom: true, left: true, topRight: true, bottomRight: true, bottomLeft: true, topLeft: true } : false}
-      onResizeStop={(e, __, elem, d: NumberSize) => {
-        console.log(elem.style.width)
-        console.log(elem.style.height)
-      }}
-    >
-      {/* why div? to handle click & mouse events */}
-      <Box
-        w={'100%'}
-        h={'100%'}
-        outline={isHovered || isSelected ? '1px solid red' : undefined}
-        onMouseOver={() => setIsHovered(true)}
-        onMouseOut={() => setIsHovered(false)}
-        onClick={() => {
-          console.log('clickeddd')
-          setIsSelected(prev => !prev)
-        }}
-      >
-        <CompX />
-        {isHovered && !!!draggingId && <Draggable><MdDragIndicator size={20} /></Draggable>}
-        {draggingId !== null && <DroppableSide top={true} bottom={true} />}
-        {/* @TODONEXT: add actiuon icons (delete, copy, plus) */}
-      </Box>
-      {/* margins */}
-      {isHovered && !!!draggingId && <Box style={{
-        position: 'absolute',
-        width: '100%',
-        height: '40px',
-        backgroundColor: 'yellow',
-        top: '-40px',
-        left: '0',
-        opacity: '0.2'
-      }}></Box>}
-    </Resizable>
-    <Resizable
-      ref={refResizable}
-      defaultSize={{ width: '200px', height: '50px' }}
-      style={{ margin: '40px 0 0 0' }}
-      // resizing enabled only if comp selected!
-      enable={isSelected ? { top: true, right: true, bottom: true, left: true, topRight: true, bottomRight: true, bottomLeft: true, topLeft: true } : false}
-      onResizeStop={(e, __, elem, d: NumberSize) => {
-        console.log(elem.style.width)
-        console.log(elem.style.height)
-      }}
-    >
-      {/* why div? to handle click & mouse events */}
-      <Box
-        w={'100%'}
-        h={'100%'}
-        outline={isHovered || isSelected ? '1px solid red' : undefined}
-        onMouseOver={() => setIsHovered(true)}
-        onMouseOut={() => setIsHovered(false)}
-        onClick={() => {
-          console.log('clickeddd')
-          setIsSelected(prev => !prev)
-        }}
-      >
-        <CompX />
-        {isHovered && !!!draggingId && <Draggable><MdDragIndicator size={20} /></Draggable>}
-        {draggingId !== null && <DroppableSide top={true} bottom={true} />}
-        {/* @TODONEXT: add actiuon icons (delete, copy, plus) */}
-      </Box>
-      {/* margins */}
-      {isHovered && !!!draggingId && <Box style={{
-        position: 'absolute',
-        width: '100%',
-        height: '40px',
-        backgroundColor: 'yellow',
-        top: '-40px',
-        left: '0',
-        opacity: '0.2'
-      }}></Box>}
-    </Resizable>
-  </>
-}
+// const ResizableWrapper = () => {
+
+//   const refResizable = useRef(null);
+//   const [isHovered, setIsHovered] = useState(false);
+//   const [isSelected, setIsSelected] = useState(false);
+//   const draggingId = useDesignerStore((state) => state.draggingId);
+
+
+//   return <>
+//     <Resizable
+//       ref={refResizable}
+//       defaultSize={{ width: '200px', height: '50px' }}
+//       style={{ margin: '40px 0 0 0' }}
+//       // resizing enabled only if comp selected!
+//       enable={isSelected && draggingId === null ? { top: true, right: true, bottom: true, left: true, topRight: true, bottomRight: true, bottomLeft: true, topLeft: true } : false}
+//       onResizeStop={(e, __, elem, d: NumberSize) => {
+//         console.log(elem.style.width)
+//         console.log(elem.style.height)
+//       }}
+//     >
+//       {/* why div? to handle click & mouse events */}
+//       <Box
+//         w={'100%'}
+//         h={'100%'}
+//         outline={isHovered || isSelected ? '1px solid red' : undefined}
+//         onMouseOver={() => setIsHovered(true)}
+//         onMouseOut={() => setIsHovered(false)}
+//         onClick={() => {
+//           console.log('clickeddd')
+//           setIsSelected(prev => !prev)
+//         }}
+//       >
+//         <CompX />
+//         {isHovered && !!!draggingId && <DraggableHandle componentId="test" />}
+//         {draggingId !== null && <DroppableComponent componentId="test" parentType="column" />}
+//         {/* overlay - hide component interactions */}
+//         <Box
+//           w={'100%'}
+//           h={'100%'}
+//           position={"absolute"}
+//           left={0}
+//           right={0}
+//           top={0}
+//           bottom={0}
+//           // zIndex={1}
+//         />
+//         {/* @TODONEXT: add actiuon icons (delete, copy, plus) */}
+//       </Box>
+//       {/* margins */}
+//       {isHovered && !!!draggingId && <Box style={{
+//         position: 'absolute',
+//         width: '100%',
+//         height: '40px',
+//         backgroundColor: 'yellow',
+//         top: '-40px',
+//         left: '0',
+//         opacity: '0.2'
+//       }}></Box>}
+//     </Resizable>
+//   </>
+// }
 
 
 export default Designer;
