@@ -1,6 +1,6 @@
 import { Box, Flex, Icon, Tooltip, useToast } from "@chakra-ui/react";
 import { Resizable, NumberSize } from "re-resizable";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useDesignerStore from "../stores/designer";
 import DraggableHandle from "./DraggableHandle";
 import { compTypes } from "../config/components";
@@ -70,8 +70,25 @@ const ResizableContainer = (props: ResizableContainerProps) => {
     const draggable = useDesignerStore((state) => state.draggable);
     const removeComponent = useDesignerStore((state) => state.removeComponent);
     const setIsResizing = useDesignerStore((state) => state.setIsResizing);
+    const setSelectedId = useDesignerStore((state) => state.setSelectedId);
     // const isResizing = useDesignerStore((state) => state.isResizing);
     const components = useDesignerStore((state) => state.components);
+
+    useEffect(() => {
+        const unsub = useDesignerStore.subscribe(
+            // selector
+            (state) => state.selectedId,
+            // callback
+            (selectedId, prevSelectedId) => {
+                if (prevSelectedId !== props.componentId && selectedId === props.componentId) {
+                    setIsSelected(true)
+                } else if (prevSelectedId === props.componentId && selectedId !== props.componentId) {
+                    setIsSelected(false)
+                }
+            });
+
+        return unsub
+    }, [])
 
     const toast = useToast();
 
@@ -162,7 +179,7 @@ const ResizableContainer = (props: ResizableContainerProps) => {
                     }} onClick={(e) => {
                         e.stopPropagation();
                         // if (!isResizing) {
-                        setIsSelected(true);
+                        setSelectedId(props.componentId);
                         // }
                     }} />}
                     {!draggable && isSelected && <MdCheckBox size={'19px'} style={{
@@ -175,7 +192,7 @@ const ResizableContainer = (props: ResizableContainerProps) => {
                     }} onClick={(e) => {
                         e.stopPropagation();
                         // if (!isResizing) {
-                        setIsSelected(false);
+                        setSelectedId(null);
                         // }
                     }} />}
                     {/* overlay - if dragging */}

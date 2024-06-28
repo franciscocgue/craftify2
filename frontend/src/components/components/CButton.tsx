@@ -11,6 +11,10 @@ const CButton = ({ ...otherProperties }) => {
         border={otherProperties.border || undefined}
         maxW='100%'
         maxH='100%'
+        // @TODO / @NOTE / @THINKABOUTIT: 
+        // when app exported, remove zIndex; zINdex is to ensure highlight outline is
+        // seen and not cobered by buttons background 
+        zIndex={-1}
         // bg="whiteAlpha.200"
     >
         Button

@@ -1,6 +1,6 @@
 import { Box, Flex, Icon, Tooltip, useToast } from "@chakra-ui/react";
 import { Resizable, NumberSize } from "re-resizable";
-import { CSSProperties, useRef, useState } from "react";
+import { CSSProperties, useEffect, useRef, useState } from "react";
 import useDesignerStore from "../stores/designer";
 import DraggableHandle from "./DraggableHandle";
 import DroppableComponent from "./DroppableComponent";
@@ -65,12 +65,46 @@ const ResizableComponent = (props: ResizableComponentProps) => {
 
     const refResizable = useRef(null);
     const [isHovered, setIsHovered] = useState(false);
+    const [isHoveredRemote, setIsHoveredRemote] = useState(false);
     const [isSelected, setIsSelected] = useState(false);
     const draggable = useDesignerStore((state) => state.draggable);
     const removeComponent = useDesignerStore((state) => state.removeComponent);
     const setIsResizing = useDesignerStore((state) => state.setIsResizing);
+    const setSelectedId = useDesignerStore((state) => state.setSelectedId);
     // const isResizing = useDesignerStore((state) => state.isResizing);
     const components = useDesignerStore((state) => state.components);
+
+    useEffect(() => {
+        const unsub = useDesignerStore.subscribe(
+            // selector
+            (state) => state.selectedId,
+            // callback
+            (selectedId, prevSelectedId) => {
+                if (prevSelectedId !== props.componentId && selectedId === props.componentId) {
+                    setIsSelected(true)
+                } else if (prevSelectedId === props.componentId && selectedId !== props.componentId) {
+                    setIsSelected(false)
+                }
+            });
+
+        return unsub
+    }, [])
+
+    useEffect(() => {
+        const unsub = useDesignerStore.subscribe(
+            // selector
+            (state) => state.hoveredId,
+            // callback
+            (hoveredId, prevHoveredId) => {
+                if (prevHoveredId !== props.componentId && hoveredId === props.componentId) {
+                    setIsHoveredRemote(true)
+                } else if (prevHoveredId === props.componentId && hoveredId !== props.componentId) {
+                    setIsHoveredRemote(false)
+                }
+            });
+
+        return unsub
+    }, [])
 
     const toast = useToast();
 
@@ -173,7 +207,7 @@ const ResizableComponent = (props: ResizableComponentProps) => {
                     }} onClick={(e) => {
                         e.stopPropagation();
                         // if (!isResizing) {
-                        setIsSelected(true);
+                        setSelectedId(props.componentId);
                         // }
                     }} />}
                     {!draggable && isSelected && <MdCheckBox size={'19px'} style={{
@@ -186,7 +220,7 @@ const ResizableComponent = (props: ResizableComponentProps) => {
                     }} onClick={(e) => {
                         e.stopPropagation();
                         // if (!isResizing) {
-                        setIsSelected(false);
+                        setSelectedId(null);
                         // }
                     }} />}
                     {/* overlay - hide component interactions / if dragging */}
@@ -203,7 +237,7 @@ const ResizableComponent = (props: ResizableComponentProps) => {
                         opacity={draggable?.componentId === props.componentId ? '0.6' : undefined}
                         style={{
                             // highlights
-                            outline: draggable ? '1px dotted grey' : isHovered || isSelected ? '2px solid green' : undefined,
+                            outline: draggable ? '1px dotted grey' : isHovered || isSelected || isHoveredRemote ? '2px solid green' : undefined,
                             outlineOffset: draggable ? '-1px' : isHovered || isSelected ? '-2px' : undefined,
                         }}
                     // zIndex={1}
