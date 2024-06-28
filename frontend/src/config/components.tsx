@@ -68,7 +68,7 @@ type ComponentProperties = {
 
 const compProperties: ComponentProperties = {
     'canvas': {
-        gap: '0px',
+        gap: '7px',
         paddingTop: '8px',
         paddingBottom: '8px',
         paddingLeft: '8px',
@@ -101,7 +101,7 @@ const compProperties: ComponentProperties = {
         width: '100%',
         height: '40px',
         marginTop: '0px',
-        marginBottom: '40px',
+        marginBottom: '0px',
         marginLeft: '0px',
         marginRight: '0px',
         // padding removed; see comment in button component

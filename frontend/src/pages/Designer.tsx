@@ -18,7 +18,7 @@ const Designer = () => {
   // const { setDraggingId, draggingId, isResizing, moveComponent, addComponent, components } = useDesignerStore();
   const setDraggable = useDesignerStore((state) => state.setDraggable);
   const draggable = useDesignerStore((state) => state.draggable);
-  const isResizing = useDesignerStore((state) => state.isResizing);
+  // const isResizing = useDesignerStore((state) => state.isResizing);
   const moveComponent = useDesignerStore((state) => state.moveComponent);
   const addComponent = useDesignerStore((state) => state.addComponent);
   const setSelectedId = useDesignerStore((state) => state.setSelectedId);
@@ -54,7 +54,8 @@ const Designer = () => {
   }
 
   let overlayComp: ReactNode;
-  if (!isResizing && draggable) {
+  // if (!isResizing && draggable) {
+  if (draggable) {
     if (draggable && draggable.type === 'canvas-draggable') {
       overlayComp = <Box>
         <Tag size={'md'} key={'md'} variant='solid' colorScheme='blackAlpha'>

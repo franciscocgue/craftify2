@@ -68,7 +68,7 @@ const ResizableComponent = (props: ResizableComponentProps) => {
     const [isSelected, setIsSelected] = useState(false);
     const draggable = useDesignerStore((state) => state.draggable);
     const setIsResizing = useDesignerStore((state) => state.setIsResizing);
-    const isResizing = useDesignerStore((state) => state.isResizing);
+    // const isResizing = useDesignerStore((state) => state.isResizing);
     const components = useDesignerStore((state) => state.components);
 
     const [size, setSize] = useState({ width: props.otherProperties?.width || '100%', height: props.otherProperties?.height || 'auto' })
@@ -160,9 +160,9 @@ const ResizableComponent = (props: ResizableComponentProps) => {
                         cursor: 'pointer'
                     }} onClick={(e) => {
                         e.stopPropagation();
-                        if (!isResizing) {
+                        // if (!isResizing) {
                             setIsSelected(true);
-                        }
+                        // }
                     }} />}
                     {!draggable && isSelected && <MdCheckBox size={'19px'} style={{
                         position: 'absolute',
@@ -173,9 +173,9 @@ const ResizableComponent = (props: ResizableComponentProps) => {
                         cursor: 'pointer'
                     }} onClick={(e) => {
                         e.stopPropagation();
-                        if (!isResizing) {
+                        // if (!isResizing) {
                             setIsSelected(false);
-                        }
+                        // }
                     }} />}
                     {/* overlay - hide component interactions / if dragging */}
                     <Box
