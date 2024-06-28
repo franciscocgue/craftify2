@@ -9,6 +9,7 @@ import MarginOverlay from "./MarginOverlay";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { getChildrenNodes } from "./utils";
+import { Properties } from "../vite-env";
 
 
 /**
@@ -54,7 +55,7 @@ interface ResizableComponentProps {
     componentType: keyof typeof compTypes,
     componentName: string,
     parentType: 'column' | 'row',
-    otherProperties?: CSSProperties,
+    otherProperties?: Properties,
     children?: React.ReactNode,
 }
 

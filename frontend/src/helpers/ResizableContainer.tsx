@@ -66,6 +66,7 @@ const ResizableContainer = (props: ResizableContainerProps) => {
 
     const refResizable = useRef(null);
     const [isHovered, setIsHovered] = useState(false);
+    const [isHoveredRemote, setIsHoveredRemote] = useState(false);
     const [isSelected, setIsSelected] = useState(false);
     const draggable = useDesignerStore((state) => state.draggable);
     const removeComponent = useDesignerStore((state) => state.removeComponent);
@@ -90,6 +91,22 @@ const ResizableContainer = (props: ResizableContainerProps) => {
         return unsub
     }, [])
 
+    useEffect(() => {
+        const unsub = useDesignerStore.subscribe(
+            // selector
+            (state) => state.hoveredId,
+            // callback
+            (hoveredId, prevHoveredId) => {
+                if (prevHoveredId !== props.componentId && hoveredId === props.componentId) {
+                    setIsHoveredRemote(true)
+                } else if (prevHoveredId === props.componentId && hoveredId !== props.componentId) {
+                    setIsHoveredRemote(false)
+                }
+            });
+
+        return unsub
+    }, [])
+
     const toast = useToast();
 
     const [size, setSize] = useState({ width: props.otherProperties?.width || '100%', height: props.otherProperties?.height || 'auto' })
@@ -101,7 +118,7 @@ const ResizableContainer = (props: ResizableContainerProps) => {
             minHeight={props.otherProperties?.minHeight}
             style={{
                 // highlights
-                outline: draggable ? '1px dotted grey' : isHovered || isSelected ? '2px solid green' : undefined,
+                outline: draggable ? '1px dotted grey' : isHovered || isSelected || isHoveredRemote ? '2px solid green' : undefined,
                 outlineOffset: draggable ? '-1px' : isHovered || isSelected ? '-2px' : undefined,
                 // container margins
                 marginTop: props.otherProperties?.marginTop,
