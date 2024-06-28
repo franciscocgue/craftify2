@@ -1,4 +1,4 @@
-import { Box, Flex, Icon, Tooltip } from "@chakra-ui/react";
+import { Box, Flex, Icon, Tooltip, useToast } from "@chakra-ui/react";
 import { Resizable, NumberSize } from "re-resizable";
 import { CSSProperties, useRef, useState } from "react";
 import useDesignerStore from "../stores/designer";
@@ -67,9 +67,12 @@ const ResizableComponent = (props: ResizableComponentProps) => {
     const [isHovered, setIsHovered] = useState(false);
     const [isSelected, setIsSelected] = useState(false);
     const draggable = useDesignerStore((state) => state.draggable);
+    const removeComponent = useDesignerStore((state) => state.removeComponent);
     const setIsResizing = useDesignerStore((state) => state.setIsResizing);
     // const isResizing = useDesignerStore((state) => state.isResizing);
     const components = useDesignerStore((state) => state.components);
+
+    const toast = useToast();
 
     const [size, setSize] = useState({ width: props.otherProperties?.width || '100%', height: props.otherProperties?.height || 'auto' })
 
@@ -150,7 +153,16 @@ const ResizableComponent = (props: ResizableComponentProps) => {
                         right: 28,
                         zIndex: 2,
                         cursor: 'pointer'
-                    }} />}
+                    }}
+                        onClick={() => {
+                            removeComponent(props.componentId);
+                            toast({
+                                title: 'Deleted',
+                                status: 'success',
+                                duration: 1500,
+                                // isClosable: true,
+                            });
+                        }} />}
                     {isHovered && !draggable && !isSelected && <MdCheckBoxOutlineBlank size={'19px'} style={{
                         position: 'absolute',
                         // opacity: '0.5',
@@ -161,7 +173,7 @@ const ResizableComponent = (props: ResizableComponentProps) => {
                     }} onClick={(e) => {
                         e.stopPropagation();
                         // if (!isResizing) {
-                            setIsSelected(true);
+                        setIsSelected(true);
                         // }
                     }} />}
                     {!draggable && isSelected && <MdCheckBox size={'19px'} style={{
@@ -174,7 +186,7 @@ const ResizableComponent = (props: ResizableComponentProps) => {
                     }} onClick={(e) => {
                         e.stopPropagation();
                         // if (!isResizing) {
-                            setIsSelected(false);
+                        setIsSelected(false);
                         // }
                     }} />}
                     {/* overlay - hide component interactions / if dragging */}
