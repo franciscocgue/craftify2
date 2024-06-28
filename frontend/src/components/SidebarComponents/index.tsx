@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import Draggable from "../../helpers/Draggable";
+import DraggableCompPalette from "../../helpers/DraggableCompPalette";
 import Component from "./Component";
 import { compTypes } from '../../config/components';
 import { Resizable } from "re-resizable";
@@ -26,9 +26,9 @@ const SidebarComponents = () => {
                 wrap={'wrap'}
                 flexGrow={1}
             >
-                {Object.keys(compTypes).map(c => <Draggable componentType={c} key={c} id={c}>
+                {Object.keys(compTypes).map(c => <DraggableCompPalette componentType={c} key={c} id={c}>
                     <Component name={compTypes[c as keyof typeof compTypes].name} icon={compTypes[c as keyof typeof compTypes].icon} />
-                </Draggable>)}
+                </DraggableCompPalette>)}
             </Flex>
         ),
         [compTypes]

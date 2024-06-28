@@ -1,6 +1,12 @@
 /// <reference types="vite/client" />
 import { compTypes } from "./config/components";
 
+export type draggableData = {
+    type: 'canvas-draggable' | 'palette-draggable',
+    componentId: string,
+    componentType?: keyof typeof compTypes
+  } | null
+
 export interface Component {
     type: keyof typeof compTypes;
     parent: string | null;
@@ -11,6 +17,22 @@ export interface ComponentCollection {
     [key: string]: Component;
 }
 
+// otherProperties in resizable wrappers
+export type Properties = {
+    // wrapper styles
+    width: string | number,
+    height: number | string,
+    minHeight: number | string,
+    marginTop?: number | string,
+    marginBottom?: number | string,
+    marginLeft?: number | string,
+    marginRight?: number | string,
+    paddingTop?: number | string,
+    paddingBottom?: number | string,
+    paddingLeft?: number | string,
+    paddingRight?: number | string,
+    gap?: number | string,
+}
 
 
 export interface ComponentLeaf {

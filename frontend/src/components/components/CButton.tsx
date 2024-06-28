@@ -11,6 +11,7 @@ const CButton = ({ ...otherProperties }) => {
         border={otherProperties.border || undefined}
         maxW='100%'
         maxH='100%'
+        // bg="whiteAlpha.200"
     >
         Button
     </Button>

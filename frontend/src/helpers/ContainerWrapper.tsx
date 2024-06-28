@@ -215,15 +215,15 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
                 // a comp might have one status at a time
                 if (prevState.selectedId !== id && state.selectedId === id) {
                     setStatus('selected')
-                    console.log('statuss: selected')
-                    console.log('statuss: selected')
+                    // console.log('statuss: selected')
+                    // console.log('statuss: selected')
                 } else if (state.selectedId !== id && prevState.hoveredId !== id && state.hoveredId === id) {
                     setStatus('hovered')
-                    console.log('statuss: hovered')
+                    // console.log('statuss: hovered')
                 } else if ((state.selectedId !== id && prevState.hoveredId === id && state.hoveredId !== id)
                     || (prevState.selectedId === id && state.selectedId !== id)) {
                     setStatus('none');
-                    console.log('statuss: none')
+                    // console.log('statuss: none')
                 }
 
             });
@@ -414,7 +414,7 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
                     onClick={(e) => {
                         e.stopPropagation();
                         setSelectedId(id);
-                        console.log('ph_ in contaienr wrapper')
+                        // console.log('ph_ in contaienr wrapper')
                     }}
                     cursor={id === 'canvas' ? 'default' : 'grab'}
                     style={(!isResizing && !!!draggingId && (status === 'selected')) ? {

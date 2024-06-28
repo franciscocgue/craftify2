@@ -7,7 +7,7 @@ const ToggleColorMode = () => {
 
   return (
     <Button onClick={toggleColorMode}>
-      {colorMode === 'light' ? <Icon as={MdDarkMode}/> : <Icon as={MdSunny}/>}
+      {colorMode === 'light' ? <Icon as={MdDarkMode} /> : <Icon as={MdSunny} />}
     </Button>
   );
 };
@@ -16,14 +16,19 @@ const ToggleColorMode = () => {
 const Navbar = () => {
 
   console.log('C - Navbar')
-  
-    return (
-      <Flex justify="space-between" p={4}>
-        <Button variant="link">Home</Button>
-        <ToggleColorMode />
-        <Button variant="link">About</Button>
-      </Flex>
-    );
-  };
+
+  return (
+    <Flex
+      justify="space-between"
+      p={4}
+      // zIndex={2} // to hide overlay of highlighted components
+      // backgroundColor={'gray.50'}
+    >
+      <Button variant="link">Home</Button>
+      <ToggleColorMode />
+      <Button variant="link">About</Button>
+    </Flex>
+  );
+};
 
 export default Navbar;

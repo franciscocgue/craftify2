@@ -1,61 +1,17 @@
-import { Box, Checkbox, Flex, Icon, Tooltip } from "@chakra-ui/react";
+import { Box, Flex, Icon, Tooltip } from "@chakra-ui/react";
 import { Resizable, NumberSize } from "re-resizable";
-import { CSSProperties, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import useDesignerStore from "../stores/designer";
 import DraggableHandle from "./DraggableHandle";
-import DroppableComponent from "./DroppableComponent";
 import { compTypes } from "../config/components";
 import MarginOverlay from "./MarginOverlay";
+import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
+import { RiDeleteBin2Fill } from "react-icons/ri";
+import { getChildrenNodes } from "./utils";
+import { Properties } from "../vite-env";
+import DroppableContainer from "./DroppableContainer";
 
 
-interface CompXProps {
-    children: React.ReactNode
-}
-const CompX = (props:CompXProps) => {
-    console.log('C - CompX column')
-    return <Flex
-    // style={styles}
-    direction={'column'}
-    // wrap={otherProperties.wrap || undefined}
-    // alignItems={otherProperties.alignItems || undefined}
-    // gap={otherProperties.gap || undefined}
-    h={'100%'}
-    w={'100%'}
-    // maxW='100%'
-    // maxH='100%'
-    // border={otherProperties.border || undefined}
-    // p={otherProperties.p || undefined}
-    // bg={otherProperties.bg || undefined}
-    border={'1px solid grey'}
-    // p={'2px'}
->
-    {props.children}
-</Flex>
-}
-
-
-// interface MarginOverlayProps {
-//     width: string | number | undefined;
-//     height: string | number | undefined;
-//     top?: string | number | undefined;
-//     left?: string | number | undefined;
-//     right?: string | number | undefined;
-//     bottom?: string | number | undefined;
-// }
-// const MarginOverlay = (props: MarginOverlayProps) => {
-//     console.log('C - MarginOverlay')
-//     return <Box style={{
-//         position: 'absolute',
-//         width: props.width, // '100%',
-//         height: props.height, // '40px',
-//         backgroundColor: 'yellow',
-//         top: props.top, // '-40px',
-//         left: props.left, // '0',
-//         right: props.right, // '0',
-//         bottom: props.bottom, // '0',
-//         opacity: '0.2'
-//     }}></Box>
-// }
 
 /**
  * Convert a CSS length to px. 
@@ -100,83 +56,141 @@ interface ResizableContainerProps {
     componentType: keyof typeof compTypes,
     componentName: string,
     parentType: 'column' | 'row',
-    styles?: CSSProperties,
-    children?: React.ReactNode
+    otherProperties?: Properties,
+    children?: React.ReactNode,
 }
 
 const ResizableContainer = (props: ResizableContainerProps) => {
 
-    console.log('C - ResizableContainer')
+    console.log('C - ResizableContainer ' + props.componentId.slice(0,5))
 
     const refResizable = useRef(null);
     const [isHovered, setIsHovered] = useState(false);
     const [isSelected, setIsSelected] = useState(false);
-    const draggingId = useDesignerStore((state) => state.draggingId);
+    const draggable = useDesignerStore((state) => state.draggable);
+    const setIsResizing = useDesignerStore((state) => state.setIsResizing);
+    const isResizing = useDesignerStore((state) => state.isResizing);
+    const components = useDesignerStore((state) => state.components);
 
-    const [size, setSize] = useState({ width: props.styles?.width || '100%', height: props.styles?.height || 'auto' })
+    const [size, setSize] = useState({ width: props.otherProperties?.width || '100%', height: props.otherProperties?.height || 'auto' })
 
     return <>
         <Resizable
             ref={refResizable}
             size={{ width: size.width, height: size.height }}
+            minHeight={props.otherProperties?.minHeight}
             style={{
+                // highlights
+                outline: draggable ? '1px dotted grey' : isHovered || isSelected ? '2px solid green' : undefined,
+                outlineOffset: draggable ? '-1px' : isHovered || isSelected ? '-2px' : undefined,
                 // container margins
-                marginTop: props.styles?.marginTop,
-                marginRight: props.styles?.marginRight,
-                marginBottom: props.styles?.marginBottom,
-                marginLeft: props.styles?.marginLeft,
+                marginTop: props.otherProperties?.marginTop,
+                marginRight: props.otherProperties?.marginRight,
+                marginBottom: props.otherProperties?.marginBottom,
+                marginLeft: props.otherProperties?.marginLeft,
             }}
             // resizing enabled only if comp selected
-            enable={isSelected && draggingId === null ? { top: true, right: true, bottom: true, left: true, topRight: true, bottomRight: true, bottomLeft: true, topLeft: true } : false}
+            enable={isSelected && draggable === null ? { top: true, right: true, bottom: true, left: true, topRight: true, bottomRight: true, bottomLeft: true, topLeft: true } : false}
             onResizeStop={(_, __, elem, ___: NumberSize) => {
-                console.log(elem.style.width)
-                console.log(elem.style.height)
+                setIsResizing(false)
+                // console.log(elem.style.width)
+                // console.log(elem.style.height)
                 setSize({
                     width: elem.style.width,
                     height: elem.style.height
                 })
             }}
+            onResizeStart={() => {
+                setIsResizing(true)
+            }}
         >
             {/* why div? to handle click & mouse events */}
-            <Tooltip placement='top-start' gutter={0} label={TooltipComp(props.componentName, props.componentType)} isOpen={isHovered && !draggingId}>
+            <Tooltip placement='top-start' gutter={0} label={TooltipComp(props.componentName, props.componentType)} isOpen={isHovered && !draggable}>
                 <Box
                     w={'100%'}
                     h={'100%'}
                     overflow='hidden'
-                    outline={isHovered || isSelected ? '2px solid orange' : undefined}
-                    outlineOffset={'-2px'}
+                    // outline={draggable ? '1px solid grey' : isHovered || isSelected ? '2px solid orange' : undefined}
+                    // outlineOffset={draggable ? undefined : '-2px'}
                     onMouseOver={(e) => {
                         e.stopPropagation();
                         setIsHovered(true);
                     }}
-                    onMouseOut={(e) => {
-                        e.stopPropagation();
+                    onMouseOut={() => {
+                        // e.stopPropagation();
                         setIsHovered(false);
                     }}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        // @TODONEXT: only if not is resizing
-                        setIsSelected(prev => !prev);
-                    }}
                 >
-                    <CompX >
-                        {props.children}
-                    </CompX>
-                    {isHovered && !draggingId && <DraggableHandle componentId={props.componentId} />}
-                    {draggingId !== null && <DroppableComponent componentId={props.componentId} parentType={props.parentType} />}
-                    {/* @TODONEXT: create overlay and activate when dragging this componentId */}
-                    {/* @TODO?: add action icons (delete, copy, plus) */}
+                    {/* <CContainerColumn> */}
+                    {props.children}
+                    {/* </CContainerColumn> */}
+                    {/* <CompX >
+                    </CompX> */}
+                    {isHovered && !draggable && <DraggableHandle componentId={props.componentId} />}
+                    {draggable
+                        && draggable.componentId !== props.componentId
+                        && !getChildrenNodes(draggable?.componentId, components).includes(props.componentId)
+                        && <DroppableContainer componentId={props.componentId} parentType={props.parentType} />
+                    }
+                    {isHovered && !draggable && <RiDeleteBin2Fill size={'19px'} style={{
+                        position: 'absolute',
+                        // opacity: '0.5',
+                        top: 2,
+                        right: 28,
+                        zIndex: 2,
+                        cursor: 'pointer'
+                    }} />}
+                    {isHovered && !draggable && !isSelected && <MdCheckBoxOutlineBlank size={'19px'} style={{
+                        position: 'absolute',
+                        // opacity: '0.5',
+                        top: 2,
+                        right: 4,
+                        zIndex: 2,
+                        cursor: 'pointer'
+                    }} onClick={(e) => {
+                        e.stopPropagation();
+                        if (!isResizing) {
+                            setIsSelected(true);
+                        }
+                    }} />}
+                    {!draggable && isSelected && <MdCheckBox size={'19px'} style={{
+                        position: 'absolute',
+                        // opacity: '0.5',
+                        top: 2,
+                        right: 4,
+                        zIndex: 2,
+                        cursor: 'pointer'
+                    }} onClick={(e) => {
+                        e.stopPropagation();
+                        if (!isResizing) {
+                            setIsSelected(false);
+                        }
+                    }} />}
+                    {/* overlay - if dragging */}
+                    {draggable?.componentId === props.componentId && <Box
+                        w={'100%'}
+                        h={'100%'}
+                        position={"absolute"}
+                        left={0}
+                        right={0}
+                        top={0}
+                        bottom={0}
+                        // if dragging _this_ component, highlight overlay
+                        backgroundColor={draggable?.componentId === props.componentId ? 'grey' : undefined}
+                        opacity={draggable?.componentId === props.componentId ? '0.6' : undefined}
+                    // zIndex={9999999999}
+                    />}
                 </Box>
             </Tooltip>
             {/* margins */}
             {/* top */}
-            {isHovered && !draggingId && <MarginOverlay height={marginAsPx(String(props.styles?.marginTop), window.getComputedStyle(refResizable.current?.resizable?.parentElement))} width={'100%'} bottom={'100%'} left={'0'} />}
+            {isHovered && !draggable && <MarginOverlay height={marginAsPx(String(props.otherProperties?.marginTop), window.getComputedStyle(refResizable.current?.resizable?.parentElement))} width={'100%'} bottom={'100%'} left={'0'} />}
             {/* left */}
-            {isHovered && !draggingId && <MarginOverlay height={'100%'} width={marginAsPx(String(props.styles?.marginLeft), window.getComputedStyle(refResizable.current?.resizable?.parentElement))} top={'0'} right={'100%'} />}
+            {isHovered && !draggable && <MarginOverlay height={'100%'} width={marginAsPx(String(props.otherProperties?.marginLeft), window.getComputedStyle(refResizable.current?.resizable?.parentElement))} top={'0'} right={'100%'} />}
             {/* bottom */}
-            {isHovered && !draggingId && <MarginOverlay height={marginAsPx(String(props.styles?.marginBottom), window.getComputedStyle(refResizable.current?.resizable?.parentElement))} width={'100%'} top={'100%'} left={'0'} />}
+            {isHovered && !draggable && <MarginOverlay height={marginAsPx(String(props.otherProperties?.marginBottom), window.getComputedStyle(refResizable.current?.resizable?.parentElement))} width={'100%'} top={'100%'} left={'0'} />}
             {/* right */}
-            {isHovered && !draggingId && <MarginOverlay height={'100%'} width={marginAsPx(String(props.styles?.marginLeft), window.getComputedStyle(refResizable.current?.resizable?.parentElement))} top={'0'} left={'100%'} />}
+            {isHovered && !draggable && <MarginOverlay height={'100%'} width={marginAsPx(String(props.otherProperties?.marginRight), window.getComputedStyle(refResizable.current?.resizable?.parentElement))} top={'0'} left={'100%'} />}
         </Resizable >
     </>
 }

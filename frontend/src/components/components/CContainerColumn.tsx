@@ -10,6 +10,7 @@ const styles: CSSProperties = {
 }
 
 const CContainerColumn = ({ children, ...otherProperties }: propsT) => {
+    // console.log('ttt', otherProperties.gap)
     return <Flex
         style={styles}
         direction={'column'}
@@ -18,11 +19,15 @@ const CContainerColumn = ({ children, ...otherProperties }: propsT) => {
         gap={otherProperties.gap || undefined}
         h={'100%'}
         w={'100%'}
-        maxW='100%'
-        maxH='100%'
+        // maxW='100%'
+        // maxH='100%'
         border={otherProperties.border || undefined}
         p={otherProperties.p || undefined}
         bg={otherProperties.bg || undefined}
+        paddingTop={otherProperties.paddingTop}
+        paddingBottom={otherProperties.paddingBottom}
+        paddingLeft={otherProperties.paddingLeft}
+        paddingRight={otherProperties.paddingRight}
     >
         {children}
     </Flex>

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { compProperties, compTypes } from '../config/components';
+import { draggableData } from '../vite-env';
 
 const initialComponents = {
   'canvas': {
@@ -55,6 +56,7 @@ const initialComponents = {
 
 type designerStore = {
   draggingId: string | null,
+  draggable: draggableData,
   isResizing: true | false,
   selectedId: string | null,
   hoveredId: string | null,
@@ -63,6 +65,7 @@ type designerStore = {
   componentNames: any,
   setIsResizing: (isResizing: true | false) => void,
   setDraggingId: (draggingId: string | null) => void,
+  setDraggable: (draggable: draggableData) => void,
   setSelectedId: (selectedId: string | null) => void,
   setHoveredId: (selectedId: string | null) => void,
   /**
@@ -83,7 +86,7 @@ type designerStore = {
    * @param {'before' | 'after' | 'inside' | 'auto'} location - Where to move. 'auto' means inside if over container, else after
    *
    */
-  addComponent: (compType: string, addedOverCompId: string, location: 'before' | 'after' | 'inside' | 'auto') => void,
+  addComponent: (compType: keyof typeof compTypes, addedOverCompId: string, location: 'before' | 'after' | 'inside' | 'auto') => void,
   /**
    * Removes component
    *
@@ -96,6 +99,7 @@ type designerStore = {
 
 const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => ({
   draggingId: null,
+  draggable: null,
   isResizing: false,
   selectedId: null,
   hoveredId: null,
@@ -104,11 +108,12 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   componentNames: {},
   setIsResizing: (isResizing: true | false) => set({ isResizing: isResizing }),
   setDraggingId: (draggingId) => set({ draggingId: draggingId }),
-  setSelectedId: (selectedId) => set((state) => { 
+  setDraggable: (draggable) => set({ draggable: draggable }),
+  setSelectedId: (selectedId) => set((state) => {
     if (!!state.draggingId) {
       return state
     }
-    return { selectedId: selectedId } 
+    return { selectedId: selectedId }
   }),
   setHoveredId: (hoveredId) => set({ hoveredId: hoveredId }),
   moveComponent: (movedCompId, movedOverCompId, location, positionInContainer = 'last') => set((state) => {
@@ -192,7 +197,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
 
     if (location === 'auto') {
       // @TODO: get all container types automatically
-      if (['container-row', 'container-column', 'canvas'].includes(comps[addedOverCompId].type)) {
+      if (['row', 'column', 'canvas'].includes(comps[addedOverCompId].type)) {
         location = 'inside';
       } else {
         location = 'after';

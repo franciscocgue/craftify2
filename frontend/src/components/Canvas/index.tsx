@@ -21,8 +21,8 @@ const Canvas = () => {
     const properties = useDesignerStore((state) => state.properties);
     const setSelectedId = useDesignerStore((state) => state.setSelectedId);
     
-    console.log(properties)
-    console.log(components)
+    // console.log(properties)
+    // console.log(components)
     
     const comps = useMemo(
         () => renderNode(components, 'canvas', properties),
@@ -39,7 +39,7 @@ const Canvas = () => {
         maxW='100vw'
         overflow={'auto'}
         onClick={() => {
-            console.log('ph_ in Canvas index')
+            // console.log('ph_ in Canvas index')
             setSelectedId(null)
         }}
     >

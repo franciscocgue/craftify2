@@ -1,59 +1,61 @@
-import { Box, Button, Checkbox, Flex, Tag, TagLabel, TagLeftIcon, position, useStatStyles } from "@chakra-ui/react";
-import Canvas from "../components/Canvas";
+import { Box, Flex, Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import SidebarMenu from "../components/SidebarMenu";
 import SidebarComponents from "../components/SidebarComponents";
 import SidebarProperties from "../components/SidebarProperties";
-import { DndContext, DragEndEvent, DragMoveEvent, DragOverlay, PointerSensor, pointerWithin, useDraggable, useDroppable, useSensor, useSensors } from '@dnd-kit/core';
-import { snapCenterToCursor } from "@dnd-kit/modifiers";
+import { DndContext, DragEndEvent, DragMoveEvent, DragOverlay, PointerSensor, pointerWithin, useSensor, useSensors } from '@dnd-kit/core';
 import PaletteComponent from "../components/SidebarComponents/Component";
 import { compTypes } from "../config/components";
 import useDesignerStore from "../stores/designer";
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode } from "react";
 import { LuMove } from "react-icons/lu";
-import { NumberSize, Resizable } from "re-resizable";
-import { MdDragIndicator } from "react-icons/md";
-import DraggableHandle from "../helpers/DraggableHandle";
-import DroppableComponent from "../helpers/DroppableComponent";
-import ResizableComponent from "../helpers/ResizableComponent";
-import ResizableContainer from "../helpers/ResizableContainer";
+import { draggableData } from "../vite-env";
+import { renderNode } from "../helpers/ui-builder";
 
 
 const Designer = () => {
 
   // const { setDraggingId, draggingId, isResizing, moveComponent, addComponent, components } = useDesignerStore();
-  const setDraggingId = useDesignerStore((state) => state.setDraggingId);
-  const draggingId = useDesignerStore((state) => state.draggingId);
+  const setDraggable = useDesignerStore((state) => state.setDraggable);
+  const draggable = useDesignerStore((state) => state.draggable);
   const isResizing = useDesignerStore((state) => state.isResizing);
   const moveComponent = useDesignerStore((state) => state.moveComponent);
   const addComponent = useDesignerStore((state) => state.addComponent);
   const setSelectedId = useDesignerStore((state) => state.setSelectedId);
+  const components = useDesignerStore((state) => state.components);
+  const properties = useDesignerStore((state) => state.properties);
   // const components = useDesignerStore((state) => state.components);
   // const setDraggingId = () => (null), draggingId = null, isResizing = false, moveComponent = () => (null), addComponent = () => (null), components = []
 
   function handleDragEnd(event: DragEndEvent) {
-    setDraggingId(null);
-    if (event.active.data.current?.componentId && event.over) {
+    // setDraggingId(null);
+    // issue: https://github.com/clauderic/dnd-kit/issues/794
+    // workaround: instead of using event.active.data.current, use draggable directly (where draggable data was stored)
+    if (draggable?.type === 'canvas-draggable' && event.over) {
       // move component
-      moveComponent(event.active.data.current.componentId, event.over.data.current?.componentId, event.over.data.current?.location)
-    } else if (event.over) {
-      // add new component (componentId is null)
-      addComponent(event.active.data.current?.componentType, event.over.data.current?.componentId, event.over.data.current?.location)
+      moveComponent(draggable?.componentId, event.over.data.current?.componentId, event.over.data.current?.location)
+    } else if (draggable?.type === 'palette-draggable' && event.over) {
+      // add new component
+      addComponent(draggable?.componentType, event.over.data.current?.componentId, event.over.data.current?.location)
     }
+    setDraggable(null);
   }
 
   function handleDragCancel() {
-    setDraggingId(null);
+    // setDraggingId(null);
+    setDraggable(null);
   }
 
   function handleDragMove(event: DragMoveEvent) {
-    setDraggingId(event.active.id as string);
+    // console.log('event.active.data.componentId', event.active.data.current.componentId)
+    // setDraggingId(event.active.data.current as string);
+    setDraggable(event.active.data.current as draggableData);
     setSelectedId(null);
   }
 
   let overlayComp: ReactNode;
-  if (!isResizing && draggingId) {
-    if (draggingId?.startsWith('draggable_')) {
+  if (!isResizing && draggable) {
+    if (draggable && draggable.type === 'canvas-draggable') {
       overlayComp = <Box>
         <Tag size={'md'} key={'md'} variant='solid' colorScheme='blackAlpha'>
           <TagLeftIcon boxSize='15px' as={LuMove} />
@@ -62,12 +64,14 @@ const Designer = () => {
           <TagLabel>moving</TagLabel>
         </Tag>
       </Box>
-    } else {
+    } else if (draggable && draggable.type === 'palette-draggable' && draggable.componentType) {
       overlayComp = <PaletteComponent
         style={{ opacity: '0.6' }}
-        name={compTypes[draggingId as keyof typeof compTypes].name}
-        icon={compTypes[draggingId as keyof typeof compTypes].icon}
+        name={compTypes[draggable.componentType].name}
+        icon={compTypes[draggable.componentType].icon}
       />
+    } else {
+      overlayComp = null;
     }
   } else {
     overlayComp = null;
@@ -93,7 +97,7 @@ const Designer = () => {
           onDragEnd={handleDragEnd}
           onDragCancel={handleDragCancel}
           // modifiers={[restrictToWindowEdges]}
-          onDragMove={!draggingId ? handleDragMove : undefined}
+          onDragMove={!draggable ? handleDragMove : undefined}
           collisionDetection={pointerWithin}
           sensors={sensors}
         >
@@ -109,66 +113,7 @@ const Designer = () => {
             overflowX={'auto'}
           // backgroundColor={'red'}
           >
-
-            {/* canvas */}
-            <Flex
-              border={'1px solid grey'}
-              flexDirection={'column'}
-              overflowY={'auto'}
-              overflowX={'hidden'}
-              minW={'360px'}
-              m={'0 auto'}
-              minH={'min(calc(100%), 760px)'}
-              maxW={'360px'}
-              maxH={'760px'}
-            // avoid overlapping with scrollbar
-            // @TODO: maybe better solution (inner div); alternatively, add pr to total width to keep effective width 
-            // p={'1px'}
-            >
-              <ResizableComponent
-                componentId="test1"
-                parentType="column"
-                componentName="Cool Component"
-                componentType="checkbox"
-                styles={{
-                  width: '150px',
-                  height: '50px',
-                  marginTop: '30px',
-                  marginLeft: '30px',
-                  marginBottom: '30px',
-                  marginRight: '30px',
-                }}
-              />
-              <ResizableContainer
-                componentId="test3"
-                parentType="column"
-                componentName="container"
-                componentType="checkbox"
-                styles={{
-                  width: '100%',
-                  height: 'auto',
-                  marginTop: '30px',
-                  marginLeft: '0px',
-                  marginBottom: '30px',
-                  marginRight: '0px',
-                }}
-              >
-                <ResizableComponent
-                  componentId="test2"
-                  parentType="column"
-                  componentName="component"
-                  componentType="checkbox"
-                  styles={{
-                    width: '150px',
-                    height: '50px',
-                    marginTop: '30px',
-                    marginLeft: '0px',
-                    marginBottom: '30px',
-                    marginRight: '30px',
-                  }}
-                />
-              </ResizableContainer>
-            </Flex>
+            {renderNode(components, 'canvas', properties)}
           </Flex>
           <DragOverlay style={{ width: 'auto', height: 'auto' }} dropAnimation={null}>
             {overlayComp}

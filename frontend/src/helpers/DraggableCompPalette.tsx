@@ -7,12 +7,13 @@ type propsT = {
     componentType: string,
 }
 
-function Draggable({ id, componentType, children }: propsT) {
+function DraggableCompPalette({ id, componentType, children }: propsT) {
     const { attributes, listeners, setNodeRef } = useDraggable({ // transform
-        id: id,
+        id: `draggable_${id}`,
         data: {
-            componentId: null,
+            componentId: id,
             componentType: componentType,
+            type: 'palette-draggable'
         }
     });
     // const style = transform ? {
@@ -31,4 +32,4 @@ function Draggable({ id, componentType, children }: propsT) {
     );
 }
 
-export default Draggable;
+export default DraggableCompPalette;
