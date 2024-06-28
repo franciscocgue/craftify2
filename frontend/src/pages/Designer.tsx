@@ -39,17 +39,20 @@ const Designer = () => {
       addComponent(draggable?.componentType, event.over.data.current?.componentId, event.over.data.current?.location)
     }
     setDraggable(null);
+    document.body.style.cursor = 'auto'
   }
 
   function handleDragCancel() {
     // setDraggingId(null);
     setDraggable(null);
+    document.body.style.cursor = 'auto'
   }
 
   function handleDragMove(event: DragMoveEvent) {
     // console.log('event.active.data.componentId', event.active.data.current.componentId)
     // setDraggingId(event.active.data.current as string);
     setDraggable(event.active.data.current as draggableData);
+    document.body.style.cursor = 'grabbing'
     setSelectedId(null);
   }
 

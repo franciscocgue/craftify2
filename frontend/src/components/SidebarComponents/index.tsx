@@ -27,7 +27,7 @@ const SidebarComponents = () => {
                 flexGrow={1}
             >
                 {Object.keys(compTypes).map(c => <DraggableCompPalette componentType={c} key={c} id={c}>
-                    <Component name={compTypes[c as keyof typeof compTypes].name} icon={compTypes[c as keyof typeof compTypes].icon} />
+                    <Component type={c} name={compTypes[c as keyof typeof compTypes].name} icon={compTypes[c as keyof typeof compTypes].icon} style={{cursor:'pointer'}}/>
                 </DraggableCompPalette>)}
             </Flex>
         ),
