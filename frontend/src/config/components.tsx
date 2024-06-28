@@ -68,7 +68,7 @@ type ComponentProperties = {
 
 const compProperties: ComponentProperties = {
     'canvas': {
-        gap: '7px',
+        gap: '5px',
         paddingTop: '8px',
         paddingBottom: '8px',
         paddingLeft: '8px',
@@ -85,10 +85,10 @@ const compProperties: ComponentProperties = {
         marginLeft: '0px',
         marginRight: '0px',
         paddingTop: '4px',
-        paddingBottom: '4px',
-        paddingLeft: '4px',
-        paddingRight: '4px',
-        gap: '0px',
+        paddingBottom: '0px',
+        paddingLeft: '0px',
+        paddingRight: '0px',
+        gap: '5px',
         // p: 1,
         // border: '1px solid grey',
         m: 0,
