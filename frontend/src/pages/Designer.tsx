@@ -10,7 +10,8 @@ import useDesignerStore from "../stores/designer";
 import { ReactNode } from "react";
 import { LuMove } from "react-icons/lu";
 import { draggableData } from "../vite-env";
-import { renderNode } from "../helpers/ui-builder";
+// import { renderNode } from "../helpers/ui-builder";
+import Canvas from "../components/Canvas";
 
 
 const Designer = () => {
@@ -22,8 +23,8 @@ const Designer = () => {
   const moveComponent = useDesignerStore((state) => state.moveComponent);
   const addComponent = useDesignerStore((state) => state.addComponent);
   const setSelectedId = useDesignerStore((state) => state.setSelectedId);
-  const components = useDesignerStore((state) => state.components);
-  const properties = useDesignerStore((state) => state.properties);
+  // const components = useDesignerStore((state) => state.components);
+  // const properties = useDesignerStore((state) => state.properties);
   // const components = useDesignerStore((state) => state.components);
   // const setDraggingId = () => (null), draggingId = null, isResizing = false, moveComponent = () => (null), addComponent = () => (null), components = []
 
@@ -106,8 +107,8 @@ const Designer = () => {
           sensors={sensors}
         >
           <SidebarComponents />
-          {/* <Canvas /> */}
-          <Flex
+          <Canvas />
+          {/* <Flex
             flex={1}
             border={'1px solid grey'}
             flexDirection={'column'}
@@ -118,7 +119,7 @@ const Designer = () => {
           // backgroundColor={'red'}
           >
             {renderNode(components, 'canvas', properties)}
-          </Flex>
+          </Flex> */}
           <DragOverlay style={{ width: 'auto', height: 'auto' }} dropAnimation={null}>
             {overlayComp}
           </DragOverlay>

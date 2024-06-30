@@ -68,6 +68,8 @@ type ComponentProperties = {
 
 const compProperties: ComponentProperties = {
     'canvas': {
+        canvasWidthPx: 1280,
+        canvasHeightPx: 800,
         gap: '5px',
         paddingTop: '8px',
         paddingBottom: '8px',

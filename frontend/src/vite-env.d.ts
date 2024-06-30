@@ -19,6 +19,9 @@ export interface ComponentCollection {
 
 // otherProperties in resizable wrappers
 export type Properties = {
+    // canvas props
+    canvasWidthPx: number,
+    canvasHeightPx: number,
     // wrapper styles
     width: string | number,
     height: number | string,

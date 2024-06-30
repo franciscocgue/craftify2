@@ -5,7 +5,7 @@ import useDesignerStore from "../../stores/designer";
 import { compTypes } from "../../config/components";
 
 type propsT = {
-    type: keyof typeof compTypes,
+    type?: keyof typeof compTypes,
     name: string,
     icon: IconType,
     style?: CSSProperties,
@@ -26,7 +26,7 @@ const Component = ({ type, name, icon, style }: propsT) => {
         borderRadius={5}
         justify={'center'}
         style={{ ...style }}
-        onClick={() => addComponent(type, 'canvas', 'inside')}
+        onClick={type ? () => addComponent(type, 'canvas', 'inside') : undefined}
     >
         <Icon as={icon} w={5} h={5} />
         <Box>
