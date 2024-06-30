@@ -1,4 +1,4 @@
-import { Box, Flex, Icon, Text } from "@chakra-ui/react";
+import { Box, Flex, Icon, Text, useColorMode } from "@chakra-ui/react";
 import { CSSProperties } from "react";
 import { IconType } from "react-icons";
 import useDesignerStore from "../../stores/designer";
@@ -16,6 +16,7 @@ const Component = ({ type, name, icon, style }: propsT) => {
     console.log('C - sidebar.Component: ' + name)
 
     const addComponent = useDesignerStore((state) => state.addComponent);
+    const { colorMode } = useColorMode();
 
     return <Flex
         direction={'column'}
@@ -26,6 +27,7 @@ const Component = ({ type, name, icon, style }: propsT) => {
         borderRadius={5}
         justify={'center'}
         style={{ ...style }}
+        bg={colorMode === 'dark' ? 'blackAlpha.400' : 'whiteAlpha.800'}
         onClick={type ? () => addComponent(type, 'canvas', 'inside') : undefined}
     >
         <Icon as={icon} w={5} h={5} />

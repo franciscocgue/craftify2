@@ -55,6 +55,7 @@ const initialComponents = {
 // types
 
 type designerStore = {
+  activeMenu: 'designer' | 'variables' | 'data' | 'styles',
   draggingId: string | null,
   draggable: draggableData,
   isResizing: true | false,
@@ -63,6 +64,7 @@ type designerStore = {
   components: any,
   properties: any,
   componentNames: any,
+  setActiveMenu: (menu: 'designer' | 'variables' | 'data' | 'styles') => void,
   setIsResizing: (isResizing: true | false) => void,
   setDraggingId: (draggingId: string | null) => void,
   setDraggable: (draggable: draggableData) => void,
@@ -98,6 +100,7 @@ type designerStore = {
 }
 
 const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => ({
+  activeMenu: 'designer',
   draggingId: null,
   draggable: null,
   isResizing: false,
@@ -106,6 +109,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   components: initialComponents,
   properties: { canvas: compProperties['canvas'] },
   componentNames: {},
+  setActiveMenu: (menu => set({ activeMenu: menu })),
   setIsResizing: (isResizing: true | false) => set({ isResizing: isResizing }),
   setDraggingId: (draggingId) => set({ draggingId: draggingId }),
   setDraggable: (draggable) => set({ draggable: draggable }),

@@ -15,7 +15,7 @@ const SidebarComponents = () => {
         () => (
             <Flex
                 w={'100%'}
-                p={1}
+                p={'8px'}
                 borderTop={'1px solid grey'}
                 borderBottom={'1px solid grey'}
                 maxH={'100%'}
