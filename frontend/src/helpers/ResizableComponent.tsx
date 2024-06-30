@@ -1,6 +1,6 @@
 import { Box, Flex, Icon, Tooltip, useToast } from "@chakra-ui/react";
 import { Resizable, NumberSize } from "re-resizable";
-import { CSSProperties, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useDesignerStore from "../stores/designer";
 import DraggableHandle from "./DraggableHandle";
 import DroppableComponent from "./DroppableComponent";
@@ -10,6 +10,7 @@ import { RiDeleteBin2Fill } from "react-icons/ri";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { getChildrenNodes } from "./utils";
 import { Properties } from "../vite-env";
+import { debounce } from "lodash";
 
 
 /**
@@ -50,6 +51,37 @@ const TooltipComp = (name: string, componentType: keyof typeof compTypes) => (<F
     {name || componentType}
 </Flex>)
 
+const useDebouncedMouseEnter = (setStatus: (selectedId: string | null) => void) => {
+    // Use a ref to track the debounced update
+    const debouncedUpdateRef = useRef(null);
+
+    // Debounce function to ensure a final update after inactivity
+    const debouncedUpdate = useCallback(debounce((id) => {
+        setStatus(id);
+    }, 500), [setStatus]);
+
+    const handleMouseEnter = useCallback((id: string) => {
+        // Clear any existing debounce
+        if (debouncedUpdateRef.current) {
+            debouncedUpdateRef.current.cancel();
+        }
+
+        // Perform debounced update
+        debouncedUpdateRef.current = debouncedUpdate;
+        debouncedUpdate(id);
+    }, [debouncedUpdate]);
+
+    const handleMouseLeave = useCallback(() => {
+        // Clear the debounced update on mouse leave
+        if (debouncedUpdateRef.current) {
+            debouncedUpdateRef.current.cancel();
+        }
+        setStatus(null); // Optionally clear status on leave
+    }, [setStatus]);
+
+    return { handleMouseEnter, handleMouseLeave };
+};
+
 interface ResizableComponentProps {
     componentId: string,
     componentType: keyof typeof compTypes,
@@ -69,11 +101,14 @@ const ResizableComponent = (props: ResizableComponentProps) => {
     const [isHoveredRemote, setIsHoveredRemote] = useState(false);
     const [isSelected, setIsSelected] = useState(false);
     const draggable = useDesignerStore((state) => state.draggable);
+    const setHoveredId = useDesignerStore((state) => state.setHoveredId);
     const removeComponent = useDesignerStore((state) => state.removeComponent);
     const setIsResizing = useDesignerStore((state) => state.setIsResizing);
     const setSelectedId = useDesignerStore((state) => state.setSelectedId);
     // const isResizing = useDesignerStore((state) => state.isResizing);
     const components = useDesignerStore((state) => state.components);
+
+    const { handleMouseEnter, handleMouseLeave } = useDebouncedMouseEnter(setHoveredId)
 
     useEffect(() => {
         const unsub = useDesignerStore.subscribe(
@@ -168,10 +203,12 @@ const ResizableComponent = (props: ResizableComponentProps) => {
                     onMouseOver={(e) => {
                         e.stopPropagation();
                         setIsHovered(true);
+                        handleMouseEnter(props.componentId)
                     }}
                     onMouseOut={() => {
                         // e.stopPropagation();
                         setIsHovered(false);
+                        handleMouseLeave()
                     }}
                 >
                     {/* <CompX /> */}
