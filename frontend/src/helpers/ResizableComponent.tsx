@@ -58,7 +58,7 @@ const useDebouncedMouseEnter = (setStatus: (selectedId: string | null) => void) 
     // Debounce function to ensure a final update after inactivity
     const debouncedUpdate = useCallback(debounce((id) => {
         setStatus(id);
-    }, 500), [setStatus]);
+    }, 300), [setStatus]);
 
     const handleMouseEnter = useCallback((id: string) => {
         // Clear any existing debounce
