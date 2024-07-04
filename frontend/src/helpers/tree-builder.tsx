@@ -68,8 +68,8 @@ const NodeTitle = memo(({ ...props }) => {
 
     // const toast = useToast()
     const notify = {
-        created: (msg: string) => toast(msg, { type: 'info', autoClose: 1000 }),
-        deleted: () => toast("Deleted", { type: 'info', autoClose: 1000 }),
+        created: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-center' }),
+        deleted: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-center' }),
     }
 
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -191,13 +191,7 @@ const NodeTitle = memo(({ ...props }) => {
 
             {props.node.type !== 'canvas' && <RiDeleteBin2Line className="my-delete-icon" title="Delete" size={14} onClick={() => {
                 removeComponent(props.node.key);
-                notify.deleted()
-                // toast({
-                //     title: 'Deleted',
-                //     status: 'success',
-                //     duration: 1500,
-                //     // isClosable: true,
-                // });
+                notify.deleted(`${props.node.title} deleted`)
             }} />}
             <FiPlusCircle className="my-add-icon" title="New" size={14} onClick={() => {
                 setIsPopoverOpen(!isPopoverOpen);

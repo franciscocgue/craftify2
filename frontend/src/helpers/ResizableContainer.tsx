@@ -1,4 +1,3 @@
-import { Box, Flex, Icon, Tooltip, useToast } from "@chakra-ui/react";
 import { Resizable, NumberSize } from "re-resizable";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useDesignerStore from "../stores/designer";
@@ -13,6 +12,7 @@ import DroppableContainer from "./DroppableContainer";
 import { debounce } from "lodash";
 import { IconType } from "react-icons";
 import MyTooltip from "./MyTooltip";
+import { toast } from "react-toastify";
 
 
 
@@ -164,7 +164,9 @@ const ResizableContainer = (props: ResizableContainerProps) => {
         return unsub
     }, [])
 
-    const toast = useToast();
+    const notify = {
+        deleted: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-center' }),
+    }
 
     const [size, setSize] = useState({ width: props.otherProperties?.width || '100%', height: props.otherProperties?.height || 'auto' })
 
@@ -243,12 +245,7 @@ const ResizableContainer = (props: ResizableContainerProps) => {
                 }}
                     onClick={() => {
                         removeComponent(props.componentId);
-                        toast({
-                            title: 'Deleted',
-                            status: 'success',
-                            duration: 1500,
-                            // isClosable: true,
-                        });
+                        notify.deleted(`${props.componentName} deleted`)
                     }} />}
                 {isHovered && !draggable && !isSelected && <MdCheckBoxOutlineBlank size={'19px'} style={{
                     position: 'absolute',
