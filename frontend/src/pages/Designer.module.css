@@ -1,9 +1,9 @@
 .theme-dark {
     color: #ffffff;
-    background-color: rgba(0, 0, 0, 0.04);
+    background-color: rgba(0, 0, 0, 0.87);
 }
 
 .theme-light {
     color: black;
-    background-color: rgba(255, 255, 255, 0.92);
+    background-color: rgba(0, 0, 0, 0.05);
 }

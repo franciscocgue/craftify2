@@ -64,11 +64,11 @@ const Designer = () => {
   // if (!isResizing && draggable) {
   if (draggable) {
     if (draggable && draggable.type === 'canvas-draggable') {
-      overlayComp = <div style={{display: 'flex', alignItems: 'center', gap:'5px'}}>
-          {/* removed to avoud components dependency high up in the dom tree */}
-          {/* <TagLabel>{components[draggingId.replace('draggable_', '')].name}</TagLabel> */}
-          <p>moving</p>
-          <LuMove/>
+      overlayComp = <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+        {/* removed to avoud components dependency high up in the dom tree */}
+        {/* <TagLabel>{components[draggingId.replace('draggable_', '')].name}</TagLabel> */}
+        <p>moving</p>
+        <LuMove />
       </div>
     } else if (draggable && draggable.type === 'palette-draggable' && draggable.componentType) {
       overlayComp = <PaletteComponent

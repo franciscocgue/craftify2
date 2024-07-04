@@ -59,11 +59,13 @@ const IconBox: React.FC<IconBoxProps> = ({ icon: Icon }) => {
     );
 };
 
-const TooltipComp = (name: string, componentType: keyof typeof compTypes) => (<div
+const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorMode: 'dark' | 'light') => (<div
     style={{
         display: 'flex',
         gap: '7px',
-        backgroundColor: 'rgba(0,0,0,0.92)',
+        backgroundColor: colorMode === 'dark' ? 'white' : 'black',
+        color: colorMode === 'dark' ? 'black' : 'white',
+        fontSize: 'small',
         padding: '5px',
         borderRadius: '3px',
         alignItems: 'center',
@@ -128,6 +130,7 @@ const ResizableComponent = (props: ResizableComponentProps) => {
     const setSelectedId = useDesignerStore((state) => state.setSelectedId);
     // const isResizing = useDesignerStore((state) => state.isResizing);
     const components = useDesignerStore((state) => state.components);
+    const colorMode = useDesignerStore((state) => state.colorMode);
 
     const { handleMouseEnter, handleMouseLeave } = useDebouncedMouseEnter(setHoveredId)
 
@@ -220,7 +223,7 @@ const ResizableComponent = (props: ResizableComponentProps) => {
             >TEST</div> */}
             {/* why div? to handle click & mouse events */}
             {isHovered && !draggable && <MyTooltip position={{ position: 'absolute', top: `calc(${refResizable.current?.resizable.getBoundingClientRect().top}px - 30px)`, left: refResizable.current?.resizable.getBoundingClientRect().left }}>
-                {TooltipComp(props.componentName, props.componentType)}
+                {TooltipComp(props.componentName, props.componentType, colorMode)}
             </MyTooltip>}
             {/* <Tooltip placement='top-start' gutter={0} label={TooltipComp(props.componentName, props.componentType)} isOpen={isHovered && !draggable}> */}
             <div
