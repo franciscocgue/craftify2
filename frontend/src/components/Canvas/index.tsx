@@ -1,4 +1,3 @@
-import { Flex } from "@chakra-ui/react";
 import useDesignerStore from "../../stores/designer";
 import { renderNode } from "../../helpers/ui-builder";
 import { useMemo } from "react";
@@ -26,18 +25,21 @@ const Canvas = () => {
         [components, properties]
     );
 
-    return <Flex
-        flex={1}
-        border={'1px solid grey'}
-        flexDirection={'column'}
-        alignContent={'center'}
-        justifyContent={'center'}
-        overflowY={'hidden'}
-        overflowX={'auto'}
+    return <div
+        style={{
+            flex:1,
+            display: 'flex',
+            border: '1px solid grey',
+            flexDirection: 'column',
+            alignContent: 'center',
+            justifyContent: 'center',
+            overflowY: 'hidden',
+            overflowX: 'auto'
+        }}
     // backgroundColor={'red'}
     >
         {comps}
-    </Flex>
+    </div>
 };
 
 export default Canvas;

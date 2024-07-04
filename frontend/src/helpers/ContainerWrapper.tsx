@@ -151,7 +151,8 @@ const ContainerWrapper = ({ id, componentType, parentType, name, children, ...ot
         }
     });
 
-    const { colorMode } = useColorMode();
+    // const { colorMode } = useColorMode();
+    const colorMode = useDesignerStore((state) => state.colorMode);
 
     const refResizable = useRef(null);
 

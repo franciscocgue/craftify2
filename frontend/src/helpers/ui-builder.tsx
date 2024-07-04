@@ -7,7 +7,6 @@ import { ComponentCollection } from "../vite-env";
 import CCheckbox from "../components/components/CCheckbox";
 import ResizableContainer from "./ResizableContainer";
 import ResizableComponent from "./ResizableComponent";
-import { Flex } from "@chakra-ui/react";
 import DroppableCanvas from "./DroppableCanvas";
 
 {/* <ContainerWrapper id="subcontainer" componentType="container-row" parentType='container-column' w={'100%'} h={'max-content'} p={1} border="none">
@@ -72,29 +71,47 @@ const uiMapper = {
 
 const uiMapper2 = {
     'canvas': (components: ComponentCollection, id: string, properties) => (
-        <Flex
-            position={'relative'}
-            border={'1px solid grey'}
-            flexDirection={'column'}
-            overflowY={'auto'}
-            overflowX={'hidden'}
-            minW={`${properties[id].canvasWidthPx}px`}
-            m={'0 auto'}
-            minH={`min(calc(100%), ${properties[id].canvasHeightPx}px)`}
-            maxW={`${properties[id].canvasWidthPx}px`}
-            maxH={`${properties[id].canvasHeightPx}px`}
-            gap={properties[id].gap || undefined}
-            paddingTop={properties[id].paddingTop || undefined}
-            paddingBottom={properties[id].paddingBottom || undefined}
-            paddingLeft={properties[id].paddingLeft || undefined}
-            paddingRight={properties[id].paddingRight || undefined}
+        <div
+        style={{
+            display: 'flex',
+            position:'relative',
+            border:'1px solid grey',
+            flexDirection:'column',
+            overflowY:'auto',
+            overflowX:'hidden',
+            minWidth:`${properties[id].canvasWidthPx}px`,
+            margin:'0 auto',
+            minHeight:`min(calc(100%), ${properties[id].canvasHeightPx}px)`,
+            maxWidth:`${properties[id].canvasWidthPx}px`,
+            maxHeight:`${properties[id].canvasHeightPx}px`,
+            gap: properties[id].gap || undefined,
+            paddingTop:properties[id].paddingTop || undefined,
+            paddingBottom:properties[id].paddingBottom || undefined,
+            paddingLeft:properties[id].paddingLeft || undefined,
+            paddingRight:properties[id].paddingRight || undefined,
+        }}
+            // position={'relative'}
+            // border={'1px solid grey'}
+            // flexDirection={'column'}
+            // overflowY={'auto'}
+            // overflowX={'hidden'}
+            // minW={`${properties[id].canvasWidthPx}px`}
+            // m={'0 auto'}
+            // minH={`min(calc(100%), ${properties[id].canvasHeightPx}px)`}
+            // maxW={`${properties[id].canvasWidthPx}px`}
+            // maxH={`${properties[id].canvasHeightPx}px`}
+            // gap={properties[id].gap || undefined}
+            // paddingTop={properties[id].paddingTop || undefined}
+            // paddingBottom={properties[id].paddingBottom || undefined}
+            // paddingLeft={properties[id].paddingLeft || undefined}
+            // paddingRight={properties[id].paddingRight || undefined}
         // avoid overlapping with scrollbar
         // @TODO: maybe better solution (inner div); alternatively, add pr to total width to keep effective width 
         // p={'1px'}
         >
             <DroppableCanvas componentId={id} />
             {components[id].children.map((id: string) => renderNode(components, id, properties))}
-        </Flex>
+        </div>
     ),
     'column': (components: ComponentCollection, id: string, properties) => (
         <ResizableContainer

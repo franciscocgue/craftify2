@@ -55,6 +55,7 @@ const initialComponents = {
 // types
 
 type designerStore = {
+  colorMode: 'light' | 'dark',
   activeMenu: 'designer' | 'variables' | 'data' | 'styles',
   draggingId: string | null,
   draggable: draggableData,
@@ -64,6 +65,7 @@ type designerStore = {
   components: any,
   properties: any,
   componentNames: any,
+  toggleColorMode: () => void,
   setActiveMenu: (menu: 'designer' | 'variables' | 'data' | 'styles') => void,
   setIsResizing: (isResizing: true | false) => void,
   setDraggingId: (draggingId: string | null) => void,
@@ -100,6 +102,7 @@ type designerStore = {
 }
 
 const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => ({
+  colorMode: 'dark',
   activeMenu: 'designer',
   draggingId: null,
   draggable: null,
@@ -109,6 +112,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   components: initialComponents,
   properties: { canvas: compProperties['canvas'] },
   componentNames: {},
+  toggleColorMode: () => set(state => ({ colorMode: state.colorMode === 'dark' ? 'light' : 'dark' })),
   setActiveMenu: (menu => set({ activeMenu: menu })),
   setIsResizing: (isResizing: true | false) => set({ isResizing: isResizing }),
   setDraggingId: (draggingId) => set({ draggingId: draggingId }),

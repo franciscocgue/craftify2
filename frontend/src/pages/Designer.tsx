@@ -1,4 +1,3 @@
-import { Box, Flex, Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import SidebarMenu from "../components/SidebarMenu";
 import SidebarComponents from "../components/SidebarComponents";
@@ -12,6 +11,9 @@ import { LuMove } from "react-icons/lu";
 import { draggableData } from "../vite-env";
 // import { renderNode } from "../helpers/ui-builder";
 import Canvas from "../components/Canvas";
+import style from './Designer.module.css';
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Designer = () => {
@@ -23,6 +25,7 @@ const Designer = () => {
   const moveComponent = useDesignerStore((state) => state.moveComponent);
   const addComponent = useDesignerStore((state) => state.addComponent);
   const setSelectedId = useDesignerStore((state) => state.setSelectedId);
+  const colorMode = useDesignerStore((state) => state.colorMode);
   // const components = useDesignerStore((state) => state.components);
   // const properties = useDesignerStore((state) => state.properties);
   // const components = useDesignerStore((state) => state.components);
@@ -61,14 +64,12 @@ const Designer = () => {
   // if (!isResizing && draggable) {
   if (draggable) {
     if (draggable && draggable.type === 'canvas-draggable') {
-      overlayComp = <Box>
-        <Tag size={'md'} key={'md'} variant='solid' colorScheme='blackAlpha'>
-          <TagLeftIcon boxSize='15px' as={LuMove} />
+      overlayComp = <div style={{display: 'flex', alignItems: 'center', gap:'5px'}}>
           {/* removed to avoud components dependency high up in the dom tree */}
           {/* <TagLabel>{components[draggingId.replace('draggable_', '')].name}</TagLabel> */}
-          <TagLabel>moving</TagLabel>
-        </Tag>
-      </Box>
+          <p>moving</p>
+          <LuMove/>
+      </div>
     } else if (draggable && draggable.type === 'palette-draggable' && draggable.componentType) {
       overlayComp = <PaletteComponent
         style={{ opacity: '0.6' }}
@@ -92,10 +93,35 @@ const Designer = () => {
     }),)
 
   return (
-    <Flex direction="column" h="100vh" minH='100vh' maxH='100vh' w='100vw' maxW='100vw'>
+    <div
+      style={{
+        flexDirection: 'column',
+        display: 'flex',
+        height: '100vh',
+        minHeight: '100vh',
+        maxHeight: '100vh',
+        width: '100vw',
+        maxWidth: '100vw',
+      }}
+      // direction="column"
+      // h="100vh"
+      // minH='100vh'
+      // maxH='100vh'
+      // w='100vw'
+      // maxW='100vw'
+      className={style[colorMode === 'dark' ? 'theme-dark' : 'theme-light']}
+    >
+      <ToastContainer />
       <Navbar />
       {/* main content */}
-      <Flex flex={1} overflow={'hidden'}>
+      <div style={{
+        flex: 1,
+        display: 'flex',
+        overflow: 'hidden'
+      }}
+      // flex={1} 
+      // overflow={'hidden'}
+      >
 
         <SidebarMenu />
         <DndContext
@@ -126,8 +152,8 @@ const Designer = () => {
         </DndContext>
         <SidebarProperties />
 
-      </Flex>
-    </Flex>
+      </div>
+    </div>
   );
 };
 

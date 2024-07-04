@@ -1,0 +1,31 @@
+.icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #007BFF; /* Primary blue color */
+    border: none;
+    border-radius: 10%;
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    outline: none; /* Remove default outline */
+}
+
+/* Hover effect */
+.icon-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
+}
+
+/* Focus effect for accessibility */
+.icon-button:focus {
+    /* box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.5); Blue outline on focus */
+}
+
+/* Active effect */
+.icon-button:active {
+    background-color: #004085; /* Even darker blue on active */
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) inset; */
+}

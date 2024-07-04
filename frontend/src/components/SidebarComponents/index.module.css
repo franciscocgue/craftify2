@@ -1,0 +1,9 @@
+.resize-handle:hover {
+    background-color: gray;
+    opacity: 0.5;
+}
+
+.resize-handle:active {
+    background-color: gray;
+    opacity: 0.5;
+}

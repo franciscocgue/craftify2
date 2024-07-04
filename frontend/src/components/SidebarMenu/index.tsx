@@ -1,9 +1,9 @@
-import { Box, Flex, IconButton, useColorMode } from "@chakra-ui/react";
 import { BiSolidData } from "react-icons/bi";
 import { IoMdColorPalette } from "react-icons/io";
 import { LuFunctionSquare } from "react-icons/lu";
 import { MdDraw } from "react-icons/md";
 import useDesignerStore from "../../stores/designer";
+import IconButton from "../../helpers/components/IconButton";
 
 const SidebarMenu = () => {
 
@@ -11,83 +11,96 @@ const SidebarMenu = () => {
 
     const activeMenu = useDesignerStore((state) => state.activeMenu);
     const setActiveMenu = useDesignerStore((state) => state.setActiveMenu);
+    const colorMode = useDesignerStore((state) => state.colorMode);
+    // const { colorMode } = useColorMode();
 
-    const { colorMode } = useColorMode();
-
-    return <Box w={'50px'} border={'1px solid grey'}>
-        <Flex direction={'column'} gap={'0px'}>
+    return <div
+        style={{ width: '50px', border: '1px solid grey' }}
+    >
+        <div
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+            }}
+        >
             <IconButton
-                variant='outline'
-                // colorScheme='teal'
-                aria-label='Designer'
-                fontSize='25px'
-                h={'50px'}
-                icon={<MdDraw />}
-                border={'none'}
-                borderRadius={0}
-                title="Designer"
-                isActive={activeMenu === 'designer'}
                 onClick={() => setActiveMenu('designer')}
-                _active={{
-                    // backgroundColor: colorMode === 'dark' ? 'grey' : '#555',
-                    // color: colorMode === 'dark' ? 'black' : 'white'
-                    backgroundColor: colorMode === 'dark' ? '#444' : 'lightgrey',
-                    // color:  colorMode === 'dark' ? 'red' : 'lightgrey',
+                icon={<MdDraw size={'23px'} />}
+                baseStylesOverwrite={{
+                    color: colorMode === 'dark' ? 'white' : '#222',
+                    width: '100%',
+                    borderRadius: 0,
+                    backgroundColor: activeMenu === 'designer' ?
+                        // active
+                        colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'
+                        // not active
+                        : 'transparent',
                 }}
+                // if active, hover has no effect
+                hoverStylesOverwrite={activeMenu === 'designer' ? {backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'} : {
+                    backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                }}
+                title="Designer"
             />
             <IconButton
-                variant='outline'
-                // colorScheme='teal'
-                aria-label='Variables'
-                fontSize='25px'
-                h={'50px'}
-                icon={<LuFunctionSquare />}
-                border={'none'}
-                borderRadius={0}
-                title="Variables"
-                isActive={activeMenu === 'variables'}
                 onClick={() => setActiveMenu('variables')}
-                _active={{
-                    backgroundColor: colorMode === 'dark' ? '#444' : 'lightgrey',
-                    // color:  colorMode === 'dark' ? 'red' : 'lightgrey',
+                icon={<LuFunctionSquare size={'23px'} />}
+                baseStylesOverwrite={{
+                    color: colorMode === 'dark' ? 'white' : '#222',
+                    width: '100%',
+                    borderRadius: 0,
+                    backgroundColor: activeMenu === 'variables' ?
+                        // active
+                        colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'
+                        // not active
+                        : 'transparent',
                 }}
+                // if active, hover has no effect
+                hoverStylesOverwrite={activeMenu === 'variables' ? {backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'} : {
+                    backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                }}
+                title="Variables"
             />
             <IconButton
-                variant='outline'
-                // colorScheme='teal'
-                aria-label='Data'
-                fontSize='25px'
-                h={'50px'}
-                icon={<BiSolidData />}
-                border={'none'}
-                borderRadius={0}
-                title="Data"
-                isActive={activeMenu === 'data'}
                 onClick={() => setActiveMenu('data')}
-                _active={{
-                    backgroundColor: colorMode === 'dark' ? '#444' : 'lightgrey',
-                    // color:  colorMode === 'dark' ? 'red' : 'lightgrey',
+                icon={<BiSolidData size={'23px'} />}
+                baseStylesOverwrite={{
+                    color: colorMode === 'dark' ? 'white' : '#222',
+                    width: '100%',
+                    borderRadius: 0,
+                    backgroundColor: activeMenu === 'data' ?
+                        // active
+                        colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'
+                        // not active
+                        : 'transparent',
                 }}
+                // if active, hover has no effect
+                hoverStylesOverwrite={activeMenu === 'data' ? {backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'} : {
+                    backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                }}
+                title="Data"
             />
             <IconButton
-                variant='outline'
-                // colorScheme='blue'
-                aria-label='Styles'
-                fontSize='25px'
-                h={'50px'}
-                icon={<IoMdColorPalette />}
-                border={'none'}
-                borderRadius={0}
-                title="Styles"
-                isActive={activeMenu === 'styles'}
                 onClick={() => setActiveMenu('styles')}
-                _active={{
-                    backgroundColor: colorMode === 'dark' ? '#444' : 'lightgrey',
-                    // color:  colorMode === 'dark' ? 'red' : 'lightgrey',
+                icon={<IoMdColorPalette size={'23px'} />}
+                baseStylesOverwrite={{
+                    color: colorMode === 'dark' ? 'white' : '#222',
+                    width: '100%',
+                    borderRadius: 0,
+                    backgroundColor: activeMenu === 'styles' ?
+                        // active
+                        colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'
+                        // not active
+                        : 'transparent',
                 }}
+                // if active, hover has no effect
+                hoverStylesOverwrite={activeMenu === 'styles' ? {backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'} : {
+                    backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                }}
+                title="Styles"
             />
-        </Flex>
-    </Box>
+        </div>
+    </div>
 }
 
 export default SidebarMenu;

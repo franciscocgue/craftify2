@@ -1,8 +1,21 @@
-import { Box, Flex, Icon, Text, useColorMode } from "@chakra-ui/react";
 import { CSSProperties } from "react";
 import { IconType } from "react-icons";
 import useDesignerStore from "../../stores/designer";
 import { compTypes } from "../../config/components";
+
+
+interface IconBoxProps {
+    icon: IconType;
+}
+
+const IconBox: React.FC<IconBoxProps> = ({ icon: Icon }) => {
+    return (
+        <div >
+            <Icon size="20px" />
+        </div>
+    );
+};
+
 
 type propsT = {
     type?: keyof typeof compTypes,
@@ -16,25 +29,37 @@ const Component = ({ type, name, icon, style }: propsT) => {
     console.log('C - sidebar.Component: ' + name)
 
     const addComponent = useDesignerStore((state) => state.addComponent);
-    const { colorMode } = useColorMode();
+    const colorMode = useDesignerStore((state) => state.colorMode);
 
-    return <Flex
-        direction={'column'}
-        alignItems={'center'}
-        border={'1px solid gray'}
-        w={'75px'}
-        h={'65px'}
-        borderRadius={5}
-        justify={'center'}
-        style={{ ...style }}
-        bg={colorMode === 'dark' ? 'blackAlpha.400' : 'whiteAlpha.800'}
+    return <div
+        style={{
+            ...style,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            border: '1px solid gray',
+            width: '75px',
+            height: '65px',
+            borderRadius: '5px',
+            justifyContent: 'center',
+            backgroundColor: colorMode === 'dark' ? 'rgba(0, 0, 0, 0.24)' : 'rgba(255, 255, 255, 0.80)'
+        }}
         onClick={type ? () => addComponent(type, 'canvas', 'inside') : undefined}
     >
-        <Icon as={icon} w={5} h={5} />
-        <Box>
-            <Text p={'2px'} align={'center'} fontSize='xs' userSelect={'none'}>{name}</Text>
-        </Box>
-    </Flex>
+        <IconBox icon={icon} />
+        <div>
+            <p
+                style={{
+                    padding: '2px',
+                    textAlign: 'center',
+                    fontSize: '12px',
+                    userSelect: 'none'
+                }}
+            >
+                {name}
+            </p>
+        </div>
+    </div>
 }
 
 export default Component;

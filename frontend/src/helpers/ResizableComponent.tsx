@@ -11,6 +11,7 @@ import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { getChildrenNodes } from "./utils";
 import { Properties } from "../vite-env";
 import { debounce } from "lodash";
+import { IconType } from "react-icons";
 
 
 /**
@@ -46,10 +47,21 @@ const marginAsPx = (margin: string, parentStyles: CSSStyleDeclaration) => {
     }
 }
 
-const TooltipComp = (name: string, componentType: keyof typeof compTypes) => (<Flex gap={'5px'}>
-    <Icon as={compTypes[componentType].icon} w={5} h={5} color="white.800" />
+interface IconBoxProps {
+    icon: IconType;
+}
+const IconBox: React.FC<IconBoxProps> = ({ icon: Icon }) => {
+    return (
+        <div >
+            <Icon size="20px" />
+        </div>
+    );
+};
+
+const TooltipComp = (name: string, componentType: keyof typeof compTypes) => (<div style={{ display: 'flex', gap: '5px' }}>
+    <IconBox icon={compTypes[componentType].icon} />
     {name || componentType}
-</Flex>)
+</div>)
 
 const useDebouncedMouseEnter = (setStatus: (selectedId: string | null) => void) => {
     // Use a ref to track the debounced update
@@ -94,7 +106,6 @@ interface ResizableComponentProps {
 const ResizableComponent = (props: ResizableComponentProps) => {
 
     console.log('C - ResizableComponent ' + props.componentId.slice(0, 5))
-    // console.log(props)
 
     const refResizable = useRef(null);
     const [isHovered, setIsHovered] = useState(false);

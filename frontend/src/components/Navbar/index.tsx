@@ -1,14 +1,22 @@
-import { Button, Flex, Icon, useColorMode } from "@chakra-ui/react";
 import { MdDarkMode } from "react-icons/md";
 import { MdSunny } from "react-icons/md";
+import useDesignerStore from "../../stores/designer";
+import IconButton from "../../helpers/components/IconButton";
 
 const ToggleColorMode = () => {
-  const { colorMode, toggleColorMode } = useColorMode();
+  const toggleColorMode = useDesignerStore((state) => state.toggleColorMode);
+  const colorMode = useDesignerStore((state) => state.colorMode);
 
   return (
-    <Button onClick={toggleColorMode}>
-      {colorMode === 'light' ? <Icon as={MdDarkMode} /> : <Icon as={MdSunny} />}
-    </Button>
+    <IconButton
+      icon={colorMode === 'light' ? <MdDarkMode/> : <MdSunny/>}
+      onClick={toggleColorMode}
+      baseStylesOverwrite={{
+        // backgroundColor: colorMode === 'light' ? 'darkgrey' : 'darkgrey',
+        color: 'white'
+      }}
+    >
+    </IconButton>
   );
 };
 
@@ -18,16 +26,17 @@ const Navbar = () => {
   console.log('C - Navbar')
 
   return (
-    <Flex
-      justify="space-between"
-      p={4}
-      // zIndex={2} // to hide overlay of highlighted components
-      // backgroundColor={'gray.50'}
+    <div
+      style={{
+        justifyContent: 'space-between',
+        padding: '16px',
+        display: 'flex',
+      }}
     >
-      <Button variant="link">Home</Button>
+      <button>Home</button>
       <ToggleColorMode />
-      <Button variant="link">About</Button>
-    </Flex>
+      <button>About</button>
+    </div>
   );
 };
 

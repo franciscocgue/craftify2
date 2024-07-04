@@ -1,8 +1,8 @@
-import { useColorMode } from "@chakra-ui/react";
 import { useDraggable } from "@dnd-kit/core";
 import { useEffect } from "react";
 // import { ReactNode } from "react";
 import { MdDragIndicator } from "react-icons/md";
+import useDesignerStore from "../stores/designer";
 
 type DraggableHandleProps = {
     componentId: string,
@@ -16,7 +16,8 @@ function DraggableHandle(props: DraggableHandleProps) {
 
     console.log('C - DraggableHanle ' + props.componentId.slice(0, 5))
 
-    const { colorMode } = useColorMode();
+    // const { colorMode } = useColorMode();
+    const colorMode = useDesignerStore((state) => state.colorMode);
 
     const { attributes, listeners, setNodeRef } = useDraggable({
         id: `draggable_${props.componentId}`,

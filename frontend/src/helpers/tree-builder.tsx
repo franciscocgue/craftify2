@@ -4,13 +4,12 @@ import { compTypes } from "../config/components";
 import { CgScreen } from "react-icons/cg";
 import { FiPlusCircle } from "react-icons/fi";
 import { RiDeleteBin2Line } from "react-icons/ri";
-import { memo, useCallback, useState } from "react";
+import { memo, useState } from "react";
 import useDesignerStore from "../stores/designer";
-import { Flex, Input, Tag, TagLabel, TagLeftIcon, useColorMode, useToast } from "@chakra-ui/react";
 import { ArrowContainer, Popover } from "react-tiny-popover";
 import { MdOutlineAdd } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
-import { shallow } from "zustand/shallow";
+import { toast } from "react-toastify";
 
 // convert components (flat list) into
 // nested format required by the (rc-)tree
@@ -53,7 +52,8 @@ const getIcon = (compTypeName: string) => {
 // rc-tree component tree title
 const NodeTitle = memo(({ ...props }) => {
     console.log('C - rc-tree Title')
-    const { colorMode } = useColorMode();
+    // const { colorMode } = useColorMode();
+    const colorMode = useDesignerStore((state) => state.colorMode);
 
     // const { removeComponent, addComponent } = useDesignerStore(
     //     (state) => ({
@@ -66,7 +66,11 @@ const NodeTitle = memo(({ ...props }) => {
     const addComponent = useDesignerStore((state) => state.addComponent);
     const setSelectedId = useDesignerStore((state) => state.setSelectedId);
 
-    const toast = useToast()
+    // const toast = useToast()
+    const notify = {
+        created: (msg: string) => toast(msg, { type: 'info', autoClose: 1000 }),
+        deleted: () => toast("Deleted", { type: 'info', autoClose: 1000 }),
+    }
 
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
@@ -96,51 +100,80 @@ const NodeTitle = memo(({ ...props }) => {
                 className='popover-arrow-container'
                 arrowClassName='popover-arrow'
             >
-                <Flex
-                    opacity={1}
-                    wrap={'wrap'}
-                    gap={1}
-                    bg={colorMode === 'light' ? 'white' : '#2D3748'}
-                    border={'1px solid lightgray'}
-                    padding={'1rem'}
-                    borderRadius={'5px'}
-                    w={'400px'}
-                    boxShadow={"rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px"}
+                <div
+                    style={{
+                        display: 'flex',
+                        opacity: 1,
+                        flexWrap: 'wrap',
+                        gap: '5px',
+                        backgroundColor: colorMode === 'light' ? 'white' : '#2D3748',
+                        border: '1px solid lightgray',
+                        padding: '1rem',
+                        borderRadius: '5px',
+                        width: '400px',
+                        boxShadow: "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
+                    }}
                 >
-                    <IoMdClose cursor={'pointer'} onClick={() => {
+                    <IoMdClose color={colorMode === 'dark' ? 'white' : 'black'} cursor={'pointer'} onClick={() => {
                         setIsPopoverOpen(false);
                     }} />
-                    <Input
+                    {/* <Input
                         value={value}
                         onChange={handleChange}
                         placeholder='Search...'
                         size='sm'
                         type='search'
                         marginBottom={'1rem'}
+                    /> */}
+                    <input placeholder="Search..."
+                        name="component-search"
+                        type="search"
+                        value={value}
+                        onChange={handleChange}
+                        style={{
+                            padding: '6px 10px',
+                            // outline: 'none',
+                            marginBottom: '1rem',
+                            backgroundColor: 'transparent',
+                            border: `1px solid ${colorMode === 'dark' ? 'white' : 'black'}`,
+                            color: colorMode === 'dark' ? 'white' : 'black',
+                            fontSize: 'small',
+                            borderRadius: '3px',
+                            width: '100%',
+                            opacity: 1
+                        }}
                     />
                     {listOfCompTypes.map(c => (
-                        <Tag
-                            cursor={'pointer'}
-                            size={'md'}
+                        <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            cursor: 'pointer',
+                            fontSize: 'small',
+                            backgroundColor: colorMode === 'dark' ? 'rgba(0, 0, 0, 0.24)' : 'rgba(255, 255, 255, 0.80)',
+                            color: colorMode === 'dark' ? 'white' : 'black',
+                            border: '1px solid grey',
+                            borderRadius: '5px',
+                            padding: '4px 7px'
+                        }}
                             key={c}
-                            variant='solid'
-                            colorScheme='blue'
                             onClick={() => {
                                 addComponent(c, props.node.key, 'auto');
                                 setIsPopoverOpen(false);
-                                toast({
-                                    title: `${compTypes[c as keyof typeof compTypes].name} created`,
-                                    status: 'success',
-                                    duration: 1500,
-                                    // isClosable: true,
-                                });
+                                notify.created(`${compTypes[c as keyof typeof compTypes].name} created`);
+                                // toast({
+                                //     title: `${compTypes[c as keyof typeof compTypes].name} created`,
+                                //     status: 'success',
+                                //     duration: 1500,
+                                //     // isClosable: true,
+                                // });
                             }}
                         >
-                            <TagLeftIcon boxSize='15px' as={MdOutlineAdd} />
-                            <TagLabel>{compTypes[c as keyof typeof compTypes].name}</TagLabel>
-                        </Tag>
+                            <MdOutlineAdd size={'15px'}/>
+                            <p>{compTypes[c as keyof typeof compTypes].name}</p>
+                        </div>
                     ))}
-                </Flex>
+                </div>
             </ArrowContainer>
         )}
     >
@@ -158,14 +191,14 @@ const NodeTitle = memo(({ ...props }) => {
 
             {props.node.type !== 'canvas' && <RiDeleteBin2Line className="my-delete-icon" title="Delete" size={14} onClick={() => {
                 removeComponent(props.node.key);
-                toast({
-                    title: 'Deleted',
-                    status: 'success',
-                    duration: 1500,
-                    // isClosable: true,
-                });
+                notify.deleted()
+                // toast({
+                //     title: 'Deleted',
+                //     status: 'success',
+                //     duration: 1500,
+                //     // isClosable: true,
+                // });
             }} />}
-
             <FiPlusCircle className="my-add-icon" title="New" size={14} onClick={() => {
                 setIsPopoverOpen(!isPopoverOpen);
                 setValue('');

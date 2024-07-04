@@ -1,11 +1,10 @@
-import { Box, Flex } from "@chakra-ui/react";
 import DraggableCompPalette from "../../helpers/DraggableCompPalette";
 import Component from "./Component";
 import { compTypes } from '../../config/components';
 import { Resizable } from "re-resizable";
 import ComponentTree from "./ComponentTree";
 import { useMemo } from "react";
-
+import styles from './index.module.css';
 
 const SidebarComponents = () => {
 
@@ -13,28 +12,39 @@ const SidebarComponents = () => {
 
     const compsInPalette = useMemo(
         () => (
-            <Flex
-                w={'100%'}
-                p={'8px'}
-                borderTop={'1px solid grey'}
-                borderBottom={'1px solid grey'}
-                maxH={'100%'}
-                overflowY={'auto'}
-                gap={1}
-                justify={'flex-start'}
-                alignContent={'start'}
-                wrap={'wrap'}
-                flexGrow={1}
+            <div
+            style={{
+                display: 'flex',
+                width: '100%',
+                padding: '8px',
+                borderTop:'1px solid grey',
+                borderBottom:'1px solid grey',
+                maxHeight:'100%',
+                overflowY:'auto',
+                gap:1,
+                justifyContent:'flex-start',
+                alignContent:'start',
+                flexWrap:'wrap',
+                flexGrow:1,
+            }}
             >
                 {Object.keys(compTypes).map(c => <DraggableCompPalette componentType={c} key={c} id={c}>
-                    <Component type={c} name={compTypes[c as keyof typeof compTypes].name} icon={compTypes[c as keyof typeof compTypes].icon} style={{cursor:'pointer'}}/>
+                    <Component type={c} name={compTypes[c as keyof typeof compTypes].name} icon={compTypes[c as keyof typeof compTypes].icon} style={{ cursor: 'pointer' }} />
                 </DraggableCompPalette>)}
-            </Flex>
+            </div>
         ),
         [compTypes]
     );
 
-    return <Flex direction={'column'} w={'250px'} h={'100%'} maxH={'100%'} >
+    return <div
+        style={{
+            flexDirection: 'column',
+            display: 'flex',
+            width: '250px',
+            height: '100%',
+            maxHeight: '100%'
+        }}
+    >
         {compsInPalette}
         <Resizable
             defaultSize={{
@@ -42,7 +52,14 @@ const SidebarComponents = () => {
                 height: '50%',
             }}
             handleComponent={{
-                top: <Box h={'100%'} w={'100%'} _hover={{ 'backgroundColor': 'darkgrey' }}></Box>
+                top: <div
+                className={styles['resize-handle']}
+                    style={{
+                        height: '100%',
+                        width: '100%',
+                    }}
+                    // h={'100%'} w={'100%'} _hover={{ 'backgroundColor': 'darkgrey' }}
+                ></div>
             }}
             maxWidth={'100%'}
             maxHeight={'100%'}
@@ -50,7 +67,7 @@ const SidebarComponents = () => {
         >
             <ComponentTree />
         </Resizable>
-    </Flex>
+    </div>
 }
 
 export default SidebarComponents;

@@ -1,4 +1,4 @@
-import { Box, useColorMode } from "@chakra-ui/react";
+import useDesignerStore from "../stores/designer";
 
 interface MarginOverlayProps {
     width: string | number | undefined;
@@ -11,9 +11,10 @@ interface MarginOverlayProps {
 const MarginOverlay = (props: MarginOverlayProps) => {
     console.log('C - MarginOverlay')
 
-    const { colorMode } = useColorMode();
+    // const { colorMode } = useColorMode();
+    const colorMode = useDesignerStore((state) => state.colorMode);
 
-    return <Box style={{
+    return <div style={{
         position: 'absolute',
         width: props.width, // '100%',
         height: props.height, // '40px',
@@ -24,7 +25,7 @@ const MarginOverlay = (props: MarginOverlayProps) => {
         backgroundColor: colorMode === 'dark' ? '#1d8348' : '#abebc6',
         opacity: colorMode === 'dark' ? '0.4' : '0.8',
     }}
-    ></Box>
+    ></div>
 }
 
 export default MarginOverlay;
