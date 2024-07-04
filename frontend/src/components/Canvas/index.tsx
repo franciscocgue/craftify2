@@ -27,7 +27,7 @@ const Canvas = () => {
 
     return <div
         style={{
-            flex:1,
+            flex: 1,
             display: 'flex',
             border: '1px solid grey',
             flexDirection: 'column',

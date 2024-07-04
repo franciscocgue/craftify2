@@ -12,6 +12,7 @@ import { getChildrenNodes } from "./utils";
 import { Properties } from "../vite-env";
 import { debounce } from "lodash";
 import { IconType } from "react-icons";
+import MyTooltip from "./MyTooltip";
 
 
 /**
@@ -58,7 +59,16 @@ const IconBox: React.FC<IconBoxProps> = ({ icon: Icon }) => {
     );
 };
 
-const TooltipComp = (name: string, componentType: keyof typeof compTypes) => (<div style={{ display: 'flex', gap: '5px' }}>
+const TooltipComp = (name: string, componentType: keyof typeof compTypes) => (<div
+    style={{
+        display: 'flex',
+        gap: '7px',
+        backgroundColor: 'rgba(0,0,0,0.92)',
+        padding: '5px',
+        borderRadius: '3px',
+        alignItems: 'center',
+        height: '30px',
+    }}>
     <IconBox icon={compTypes[componentType].icon} />
     {name || componentType}
 </div>)
@@ -153,6 +163,8 @@ const ResizableComponent = (props: ResizableComponentProps) => {
         return unsub
     }, [])
 
+    // console.log('DEBBB', refResizable.current?.resizable.getBoundingClientRect().top)
+
     const toast = useToast();
 
     const [size, setSize] = useState({ width: props.otherProperties?.width || '100%', height: props.otherProperties?.height || 'auto' })
@@ -204,95 +216,100 @@ const ResizableComponent = (props: ResizableComponentProps) => {
                 }}
             >TEST</div> */}
             {/* why div? to handle click & mouse events */}
-            <Tooltip placement='top-start' gutter={0} label={TooltipComp(props.componentName, props.componentType)} isOpen={isHovered && !draggable}>
-                <Box
-                    w={'100%'}
-                    h={'100%'}
-                    overflow='hidden'
-                    // outline={draggable ? '1px solid grey' : isHovered || isSelected ? '2px solid orange' : undefined}
-                    // outlineOffset={draggable ? '-1px' : '-2px'}
-                    onMouseOver={(e) => {
-                        e.stopPropagation();
-                        setIsHovered(true);
-                        handleMouseEnter(props.componentId)
-                    }}
-                    onMouseOut={() => {
-                        // e.stopPropagation();
-                        setIsHovered(false);
-                        handleMouseLeave()
-                    }}
-                >
-                    {/* <CompX /> */}
-                    {props.children}
-                    {isHovered && !draggable && <DraggableHandle top={6} componentId={props.componentId} />}
-                    {draggable
-                        && draggable.componentId !== props.componentId
-                        && !getChildrenNodes(draggable?.componentId, components).includes(props.componentId)
-                        && <DroppableComponent componentId={props.componentId} parentType={props.parentType} />}
-                    {isHovered && !draggable && <RiDeleteBin2Fill size={'19px'} style={{
-                        position: 'absolute',
-                        // opacity: '0.5',
-                        top: 6,
-                        right: 28,
-                        zIndex: 2,
-                        cursor: 'pointer'
-                    }}
-                        onClick={() => {
-                            removeComponent(props.componentId);
-                            toast({
-                                title: 'Deleted',
-                                status: 'success',
-                                duration: 1500,
-                                // isClosable: true,
-                            });
-                        }} />}
-                    {isHovered && !draggable && !isSelected && <MdCheckBoxOutlineBlank size={'19px'} style={{
-                        position: 'absolute',
-                        // opacity: '0.5',
-                        top: 6,
-                        right: 4,
-                        zIndex: 2,
-                        cursor: 'pointer'
-                    }} onClick={(e) => {
-                        e.stopPropagation();
-                        // if (!isResizing) {
-                        setSelectedId(props.componentId);
-                        // }
+            {isHovered && !draggable && <MyTooltip position={{ position: 'absolute', top: `calc(${refResizable.current?.resizable.getBoundingClientRect().top}px - 30px)`, left: refResizable.current?.resizable.getBoundingClientRect().left }}>
+                {TooltipComp(props.componentName, props.componentType)}
+            </MyTooltip>}
+            {/* <Tooltip placement='top-start' gutter={0} label={TooltipComp(props.componentName, props.componentType)} isOpen={isHovered && !draggable}> */}
+            <div
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    overflow: 'hidden',
+                }}
+                // outline={draggable ? '1px solid grey' : isHovered || isSelected ? '2px solid orange' : undefined}
+                // outlineOffset={draggable ? '-1px' : '-2px'}
+                onMouseOver={(e) => {
+                    e.stopPropagation();
+                    setIsHovered(true);
+                    handleMouseEnter(props.componentId)
+                }}
+                onMouseOut={() => {
+                    // e.stopPropagation();
+                    setIsHovered(false);
+                    handleMouseLeave()
+                }}
+            >
+                {/* <CompX /> */}
+                {props.children}
+                {isHovered && !draggable && <DraggableHandle top={6} componentId={props.componentId} />}
+                {draggable
+                    && draggable.componentId !== props.componentId
+                    && !getChildrenNodes(draggable?.componentId, components).includes(props.componentId)
+                    && <DroppableComponent componentId={props.componentId} parentType={props.parentType} />}
+                {isHovered && !draggable && <RiDeleteBin2Fill size={'19px'} style={{
+                    position: 'absolute',
+                    // opacity: '0.5',
+                    top: 6,
+                    right: 28,
+                    zIndex: 2,
+                    cursor: 'pointer'
+                }}
+                    onClick={() => {
+                        removeComponent(props.componentId);
+                        toast({
+                            title: 'Deleted',
+                            status: 'success',
+                            duration: 1500,
+                            // isClosable: true,
+                        });
                     }} />}
-                    {!draggable && isSelected && <MdCheckBox size={'19px'} style={{
-                        position: 'absolute',
-                        // opacity: '0.5',
-                        top: 6,
-                        right: 4,
-                        zIndex: 2,
-                        cursor: 'pointer'
-                    }} onClick={(e) => {
-                        e.stopPropagation();
-                        // if (!isResizing) {
-                        setSelectedId(null);
-                        // }
-                    }} />}
-                    {/* overlay - hide component interactions / if dragging */}
-                    <Box
-                        w={'100%'}
-                        h={'100%'}
-                        position={"absolute"}
-                        left={0}
-                        right={0}
-                        top={0}
-                        bottom={0}
+                {isHovered && !draggable && !isSelected && <MdCheckBoxOutlineBlank size={'19px'} style={{
+                    position: 'absolute',
+                    // opacity: '0.5',
+                    top: 6,
+                    right: 4,
+                    zIndex: 2,
+                    cursor: 'pointer'
+                }} onClick={(e) => {
+                    e.stopPropagation();
+                    // if (!isResizing) {
+                    setSelectedId(props.componentId);
+                    // }
+                }} />}
+                {!draggable && isSelected && <MdCheckBox size={'19px'} style={{
+                    position: 'absolute',
+                    // opacity: '0.5',
+                    top: 6,
+                    right: 4,
+                    zIndex: 2,
+                    cursor: 'pointer'
+                }} onClick={(e) => {
+                    e.stopPropagation();
+                    // if (!isResizing) {
+                    setSelectedId(null);
+                    // }
+                }} />}
+                {/* overlay - hide component interactions / if dragging */}
+                <div
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        position: "absolute",
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
                         // if dragging _this_ component, highlight overlay
-                        backgroundColor={draggable?.componentId === props.componentId ? 'grey' : undefined}
-                        opacity={draggable?.componentId === props.componentId ? '0.6' : undefined}
-                        style={{
-                            // highlights
-                            outline: draggable ? '1px dotted grey' : isHovered || isSelected || isHoveredRemote ? '2px solid green' : undefined,
-                            outlineOffset: draggable ? '-1px' : isHovered || isSelected || isHoveredRemote ? '-2px' : undefined,
-                        }}
-                    // zIndex={1}
-                    />
-                </Box>
-            </Tooltip>
+                        backgroundColor: draggable?.componentId === props.componentId ? 'grey' : undefined,
+                        opacity: draggable?.componentId === props.componentId ? '0.6' : undefined,
+                        // highlights
+                        outline: draggable ? '1px dotted grey' : isHovered || isSelected || isHoveredRemote ? '2px solid green' : undefined,
+                        outlineOffset: draggable ? '-1px' : isHovered || isSelected || isHoveredRemote ? '-2px' : undefined,
+                    }}
+                // zIndex={1}
+                />
+            </div>
+            {/* </Tooltip> */}
             {/* margins */}
             {/* top */}
             {isHovered && !draggable && <MarginOverlay height={marginAsPx(String(props.otherProperties?.marginTop), window.getComputedStyle(refResizable.current?.resizable?.parentElement))} width={'100%'} bottom={'100%'} left={'0'} />}

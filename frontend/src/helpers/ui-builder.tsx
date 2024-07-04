@@ -72,6 +72,7 @@ const uiMapper = {
 const uiMapper2 = {
     'canvas': (components: ComponentCollection, id: string, properties) => (
         <div
+        id="my-canvas"
         style={{
             display: 'flex',
             position:'relative',
