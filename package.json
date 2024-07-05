@@ -4,6 +4,11 @@
   "description": "Web app to build no-code / low-code web applications",
   "main": "index.js",
   "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "build": "cd backend && npm run build",
+    "start": "cd backend && npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Francisco Carmona Guerrero",
@@ -14,6 +19,9 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "axios": "^1.7.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
     "lodash": "^4.17.21",
     "rc-tree": "^5.8.7",
     "react": "^18.3.1",
@@ -28,6 +36,7 @@
   "devDependencies": {
     "@types/react": "^18.3.2",
     "@types/react-dom": "^18.3.0",
+    "concurrently": "^8.2.2",
     "less": "^4.2.0"
   }
 }
