@@ -16,6 +16,7 @@ const styleTopHighlight: (isOverTop: boolean) => CSSProperties = (isOverTop) => 
     height: '6px',
     top: '-2px',
     right: 0,
+    zIndex: 1,
 });
 
 const styleBottom: CSSProperties = {
@@ -33,6 +34,7 @@ const styleBottomHighlight: (isOverBottom: boolean) => CSSProperties = (isOverBo
     height: '6px',
     bottom: '-2px',
     right: 0,
+    zIndex: 1,
 });
 const styleLeft: CSSProperties = {
     position: 'absolute',
@@ -49,6 +51,7 @@ const styleLeftHighlight: (isOverLeft: boolean) => CSSProperties = (isOverLeft) 
     height: '100%',
     left: '-2px',
     top: 0,
+    zIndex: 1,
 });
 
 const styleRight: CSSProperties = {
@@ -66,6 +69,7 @@ const styleRightHighlight: (isOverRight: boolean) => CSSProperties = (isOverRigh
     height: '100%',
     right: '-2px',
     top: 0,
+    zIndex: 1,
 });
 
 type DroppableComponentProps = {

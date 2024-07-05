@@ -5,7 +5,7 @@ export type draggableData = {
     type: 'canvas-draggable' | 'palette-draggable',
     componentId: string,
     componentType?: keyof typeof compTypes
-  } | null
+} | null
 
 export interface Component {
     type: keyof typeof compTypes;
@@ -30,11 +30,28 @@ export type Properties = {
     marginBottom?: number | string,
     marginLeft?: number | string,
     marginRight?: number | string,
+    // component styles
     paddingTop?: number | string,
     paddingBottom?: number | string,
     paddingLeft?: number | string,
     paddingRight?: number | string,
     gap?: number | string,
+    flexWrap?: 'nowrap' | 'wrap',
+    alignItems?: 'center',
+    backgroundColor?: string | undefined,
+    outline: string | undefined,
+    borderTopStyle: string | undefined,
+    borderTopWidth: string | undefined,
+    borderTopColor: string | undefined,
+    borderBottomStyle: string | undefined,
+    borderBottomWidth: string | undefined,
+    borderBottomColor: string | undefined,
+    borderLeftStyle: string | undefined,
+    borderLeftWidth: string | undefined,
+    borderLeftColor: string | undefined,
+    borderRightStyle: string | undefined,
+    borderRightWidth: string | undefined,
+    borderRightColor: string | undefined,
 }
 
 

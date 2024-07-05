@@ -90,6 +90,7 @@ const uiMapper2 = {
             paddingBottom:properties[id].paddingBottom || undefined,
             paddingLeft:properties[id].paddingLeft || undefined,
             paddingRight:properties[id].paddingRight || undefined,
+            backgroundColor: properties[id].backgroundColor || undefined,
         }}
             // position={'relative'}
             // border={'1px solid grey'}

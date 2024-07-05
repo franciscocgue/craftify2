@@ -3,13 +3,23 @@ const CButton = ({ ...otherProperties }) => {
         style={{
             width: '100%',
             height: '100%',
-            border: otherProperties.border || undefined,
             maxWidth: '100%',
             maxHeight: '100%',
-            // @TODO / @NOTE / @THINKABOUTIT: 
-            // when app exported, remove zIndex; zINdex is to ensure highlight outline is
-            // seen and not cobered by buttons background 
-            // zIndex: '-1',
+            // border: otherProperties.border || undefined,
+            backgroundColor: otherProperties.backgroundColor || undefined,
+            outline: otherProperties.borderTopStyle || undefined,
+            borderTopStyle: otherProperties.borderTopStyle || undefined,
+            borderTopWidth: otherProperties.borderTopWidth || undefined,
+            borderTopColor: otherProperties.borderTopColor || undefined,
+            borderBottomStyle: otherProperties.borderBottomStyle || undefined,
+            borderBottomWidth: otherProperties.borderBottomWidth || undefined,
+            borderBottomColor: otherProperties.borderBottomColor || undefined,
+            borderLeftStyle: otherProperties.borderLeftStyle || undefined,
+            borderLeftWidth: otherProperties.borderLeftWidth || undefined,
+            borderLeftColor: otherProperties.borderLeftColor || undefined,
+            borderRightStyle: otherProperties.borderRightStyle || undefined,
+            borderRightWidth: otherProperties.borderRightWidth || undefined,
+            borderRightColor: otherProperties.borderRightColor || undefined,
         }}
     >
         Button

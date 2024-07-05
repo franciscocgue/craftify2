@@ -75,10 +75,10 @@ const compProperties: ComponentProperties = {
         paddingBottom: '8px',
         paddingLeft: '8px',
         paddingRight: '8px',
-        bg: undefined,
+        backgroundColor: undefined,
     },
     'column': {
-        // wrapperStyles
+        // wrapperStyles (resizer)
         width: '100%',
         height: 'auto',
         minHeight: '40px',
@@ -86,17 +86,15 @@ const compProperties: ComponentProperties = {
         marginBottom: '0px',
         marginLeft: '0px',
         marginRight: '0px',
+        // CContainerColumn styles
         paddingTop: '4px',
         paddingBottom: '0px',
         paddingLeft: '0px',
         paddingRight: '0px',
         gap: '5px',
-        // p: 1,
-        // border: '1px solid grey',
-        m: 0,
-        wrap: 'nowrap',
+        flexWrap: 'nowrap',
         alignItems: 'center',
-        bg: undefined,
+        backgroundColor: undefined,
     },
     'button': {
         // wrapperStyles
@@ -108,8 +106,20 @@ const compProperties: ComponentProperties = {
         marginRight: '0px',
         // padding removed; see comment in button component
         // p: undefined,
-        m: undefined,
-        border: '0px solid cyan',
+        backgroundColor: 'rgba(0,0,0,0.1)',
+        outline: 'none',
+        borderTopStyle: 'none',
+        borderTopWidth: undefined,
+        borderTopColor: undefined,
+        borderBottomStyle: 'none',
+        borderBottomWidth: undefined,
+        borderBottomColor: undefined,
+        borderLeftStyle: 'none',
+        borderLeftWidth: undefined,
+        borderLeftColor: undefined,
+        borderRightStyle: 'none',
+        borderRightWidth: undefined,
+        borderRightColor: undefined,
     }
 }
 

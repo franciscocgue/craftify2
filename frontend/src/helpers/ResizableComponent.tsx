@@ -250,7 +250,8 @@ const ResizableComponent = (props: ResizableComponentProps) => {
 
                 {/* outlines */}
                 {!draggable && (isHovered || isSelected || isHoveredRemote) && <MyOutline boundingRect={refResizable.current?.resizable.getBoundingClientRect()} color='green' thickness={3} />}
-                {draggable && <MyOutline boundingRect={refResizable.current?.resizable.getBoundingClientRect()} color='grey' thickness={1} />}
+                {/* issue out of canvas and viewport rendering */}
+                {/* {draggable && <MyOutline boundingRect={refResizable.current?.resizable.getBoundingClientRect()} color='grey' thickness={1} />} */}
 
                 {isHovered && !draggable && <DraggableHandle top={6} componentId={props.componentId} />}
                 {draggable

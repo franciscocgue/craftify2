@@ -16,7 +16,7 @@ const styleInnerHighlight: (isOverInner: boolean) => CSSProperties = (isOverInne
     height: 'calc(100% - 8px)',
     top: '4px',
     left: '4px',
-    outline: isOverInner ? '4px solid green' : undefined
+    outline: isOverInner ? '4px solid green' : undefined,
 });
 
 
