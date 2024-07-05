@@ -7,6 +7,7 @@
     "start": "node server.js",
     "build": "npm run build:frontend && xcopy ..\\frontend\\dist .\\public /e /y",
     "build:frontend": "cd ../frontend && npm run build",
+    "build:user-app": "cd ./user-app && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
