@@ -1,3 +1,5 @@
 {
-    "ignore": ["user-app/dist/*"]
-  }
+    "ignore": [
+        "user-app/dist/*"
+    ]
+}
