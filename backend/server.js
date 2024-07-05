@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const cors = require('cors');
+const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
 const { exec } = require('child_process');
@@ -29,11 +30,15 @@ app.post('/start-new-server', async (req, res) => {
   const { port, data } = req.body;
   // const port = '8080';
 
+  console.log('####### creating components.json ...')
+  fs.writeFileSync(path.join(__dirname, 'user-app', 'src', 'components.json'), JSON.stringify(data))
+
   if (serverRunning) {
+    console.log('####### stopping server ...')
     // res.status(400).json({ message: 'Server is already running' });
     // Stop the server
     serverInstance.close(() => {
-      console.log('Server stopped');
+      console.log('####### server stopped');
       serverRunning = false;
     });
   }
@@ -56,6 +61,7 @@ app.post('/start-new-server', async (req, res) => {
 
   // CREATE THE BUILD WITH LATEST COMPONENTS AND PROPERTIES
   // Execute the npm run build command using child_process.exec
+  console.log('####### building the React use-app =) ...')
   try {
     // Await the exec function to ensure it completes
     const { stdout, stderr } = await execPromise('npm run build:user-app');
@@ -72,20 +78,20 @@ app.post('/start-new-server', async (req, res) => {
     // res.status(500).send(`Error executing build: ${error.message}`);
   }
 
-  console.log('DOOOONNNEEE')
+  console.log('####### user-app probably built correctly ...')
 
 
   // Serve some HTML content
-  newApp.get('*', (req, res) => {
-    // res.sendFile(path.join(__dirname, 'user-app', 'dist', 'index.html'));
-    res.send(`
-        <html>
-          <head><title>New Server</title></head>
-          <body>
-            <p>Data Received: ${JSON.stringify(data)}</p>
-          </body>
-        </html>
-      `);
+  newApp.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'user-app', 'dist', 'index.html'));
+    // res.send(`
+    //     <html>
+    //       <head><title>New Server</title></head>
+    //       <body>
+    //         <p>Data Received: ${JSON.stringify(data)}</p>
+    //       </body>
+    //     </html>
+    //   `);
   });
 
   // Start the new server on the specified port

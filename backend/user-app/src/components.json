@@ -1,0 +1,1 @@
+{"canvas":{"type":"canvas","parent":null,"children":["8f222ed8-3e83-42e9-868e-226de7afeef7","b152ae3d-fd04-4084-b0ab-613f0cc8639e"],"name":"Canvas"},"b152ae3d-fd04-4084-b0ab-613f0cc8639e":{"type":"button","parent":"canvas","children":[],"name":"Button 1"},"8f222ed8-3e83-42e9-868e-226de7afeef7":{"type":"button","parent":"canvas","children":[],"name":"Button 2"}}
