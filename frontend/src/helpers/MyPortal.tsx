@@ -1,12 +1,12 @@
 import { CSSProperties, ReactElement } from 'react';
 import ReactDOM from 'react-dom';
 
-type MyTooltipProps = {
+type MyPortalProps = {
   children: ReactElement,
   position: CSSProperties
 }
 
-const MyTooltip = ({ children, position }: MyTooltipProps) => {
+const MyPortal = ({ children, position }: MyPortalProps) => {
   // Create a portal
   return ReactDOM.createPortal(
     <div style={position}>
@@ -16,4 +16,4 @@ const MyTooltip = ({ children, position }: MyTooltipProps) => {
   );
 };
 
-export default MyTooltip;
+export default MyPortal;

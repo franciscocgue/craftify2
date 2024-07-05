@@ -11,8 +11,9 @@ import { getChildrenNodes } from "./utils";
 import { Properties } from "../vite-env";
 import { debounce } from "lodash";
 import { IconType } from "react-icons";
-import MyTooltip from "./MyTooltip";
+import MyPortal from "./MyPortal";
 import { toast } from "react-toastify";
+import MyOutline from "./MyOutline";
 
 
 /**
@@ -175,10 +176,10 @@ const ResizableComponent = (props: ResizableComponentProps) => {
 
     const [size, setSize] = useState({ width: props.otherProperties?.width || '100%', height: props.otherProperties?.height || 'auto' })
 
-    // useEffect(() => {
-    //     console.log('refResizable', refResizable)
-    //     console.log('refResizable __', refResizable?.current?.resizable?.getBoundingClientRect())
-    // })
+    useEffect(() => {
+        console.log('refResizable', refResizable)
+        console.log('refResizable __', refResizable?.current?.resizable?.getBoundingClientRect())
+    })
 
     return <>
         <Resizable
@@ -222,9 +223,9 @@ const ResizableComponent = (props: ResizableComponentProps) => {
                 }}
             >TEST</div> */}
             {/* why div? to handle click & mouse events */}
-            {isHovered && !draggable && <MyTooltip position={{ position: 'absolute', top: `calc(${refResizable.current?.resizable.getBoundingClientRect().top}px - 30px)`, left: refResizable.current?.resizable.getBoundingClientRect().left }}>
+            {isHovered && !draggable && <MyPortal position={{ position: 'absolute', top: `calc(${refResizable.current?.resizable.getBoundingClientRect().top}px - 30px)`, left: refResizable.current?.resizable.getBoundingClientRect().left }}>
                 {TooltipComp(props.componentName, props.componentType, colorMode)}
-            </MyTooltip>}
+            </MyPortal>}
             {/* <Tooltip placement='top-start' gutter={0} label={TooltipComp(props.componentName, props.componentType)} isOpen={isHovered && !draggable}> */}
             <div
                 style={{
@@ -245,8 +246,12 @@ const ResizableComponent = (props: ResizableComponentProps) => {
                     handleMouseLeave()
                 }}
             >
-                {/* <CompX /> */}
                 {props.children}
+
+                {/* outlines */}
+                {!draggable && (isHovered || isSelected || isHoveredRemote) && <MyOutline boundingRect={refResizable.current?.resizable.getBoundingClientRect()} color='green' thickness={3} />}
+                {draggable && <MyOutline boundingRect={refResizable.current?.resizable.getBoundingClientRect()} color='grey' thickness={1} />}
+
                 {isHovered && !draggable && <DraggableHandle top={6} componentId={props.componentId} />}
                 {draggable
                     && draggable.componentId !== props.componentId
@@ -324,9 +329,9 @@ const ResizableComponent = (props: ResizableComponentProps) => {
                         // if dragging _this_ component, highlight overlay
                         backgroundColor: draggable?.componentId === props.componentId ? 'grey' : undefined,
                         opacity: draggable?.componentId === props.componentId ? '0.6' : undefined,
-                        // highlights
-                        outline: draggable ? '1px dotted grey' : isHovered || isSelected || isHoveredRemote ? '2px solid green' : undefined,
-                        outlineOffset: draggable ? '-1px' : isHovered || isSelected || isHoveredRemote ? '-2px' : undefined,
+                        // // highlights
+                        // outline: draggable ? '1px dotted grey' : isHovered || isSelected || isHoveredRemote ? '2px solid green' : undefined,
+                        // outlineOffset: draggable ? '-1px' : isHovered || isSelected || isHoveredRemote ? '-2px' : undefined,
                     }}
                 // zIndex={1}
                 />

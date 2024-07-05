@@ -11,8 +11,9 @@ import { Properties } from "../vite-env";
 import DroppableContainer from "./DroppableContainer";
 import { debounce } from "lodash";
 import { IconType } from "react-icons";
-import MyTooltip from "./MyTooltip";
+import MyPortal from "./MyPortal";
 import { toast } from "react-toastify";
+import MyOutline from "./MyOutline";
 
 
 
@@ -179,9 +180,9 @@ const ResizableContainer = (props: ResizableContainerProps) => {
             size={{ width: size.width, height: size.height }}
             minHeight={props.otherProperties?.minHeight}
             style={{
-                // highlights
-                outline: draggable ? '1px dotted grey' : isHovered || isSelected || isHoveredRemote ? '2px solid green' : undefined,
-                outlineOffset: draggable ? '-1px' : isHovered || isSelected || isHoveredRemote ? '-2px' : undefined,
+                // // highlights
+                // outline: draggable ? '1px dotted grey' : isHovered || isSelected || isHoveredRemote ? '2px solid green' : undefined,
+                // outlineOffset: draggable ? '-1px' : isHovered || isSelected || isHoveredRemote ? '-2px' : undefined,
                 // container margins
                 marginTop: props.otherProperties?.marginTop,
                 marginRight: props.otherProperties?.marginRight,
@@ -204,9 +205,9 @@ const ResizableContainer = (props: ResizableContainerProps) => {
             }}
         >
             {/* why div? to handle click & mouse events */}
-            {isHovered && !draggable && <MyTooltip position={{ position: 'absolute', top: `calc(${refResizable.current?.resizable.getBoundingClientRect().top}px - 30px)`, left: refResizable.current?.resizable.getBoundingClientRect().left }}>
+            {isHovered && !draggable && <MyPortal position={{ position: 'absolute', top: `calc(${refResizable.current?.resizable.getBoundingClientRect().top}px - 30px)`, left: refResizable.current?.resizable.getBoundingClientRect().left }}>
                 {TooltipComp(props.componentName, props.componentType, colorMode)}
-            </MyTooltip>}
+            </MyPortal>}
             {/* <Tooltip placement='top-start' gutter={0} label={TooltipComp(props.componentName, props.componentType)} isOpen={isHovered && !draggable}> */}
             <div
                 style={{
@@ -227,11 +228,12 @@ const ResizableContainer = (props: ResizableContainerProps) => {
                     handleMouseLeave()
                 }}
             >
-                {/* <CContainerColumn> */}
                 {props.children}
-                {/* </CContainerColumn> */}
-                {/* <CompX >
-                    </CompX> */}
+
+                {/* outlines */}
+                {!draggable && (isHovered || isSelected || isHoveredRemote) && <MyOutline boundingRect={refResizable.current?.resizable.getBoundingClientRect()} color='green' thickness={3} />}
+                {draggable && <MyOutline boundingRect={refResizable.current?.resizable.getBoundingClientRect()} color='grey' thickness={1} />}
+
                 {isHovered && !draggable && <DraggableHandle componentId={props.componentId} />}
                 {draggable
                     && draggable.componentId !== props.componentId
@@ -311,8 +313,8 @@ const ResizableContainer = (props: ResizableContainerProps) => {
                         backgroundColor: draggable?.componentId === props.componentId ? 'grey' : undefined,
                         opacity: draggable?.componentId === props.componentId ? '0.6' : undefined,
                         // if dragging _this_ component, show overlay (highlights)
-                        outline: draggable ? '1px dotted grey' : isHovered || isSelected || isHoveredRemote ? '2px solid green' : undefined,
-                        outlineOffset: draggable ? '-1px' : isHovered || isSelected || isHoveredRemote ? '-2px' : undefined,
+                        // outline: draggable ? '1px dotted grey' : isHovered || isSelected || isHoveredRemote ? '2px solid green' : undefined,
+                        // outlineOffset: draggable ? '-1px' : isHovered || isSelected || isHoveredRemote ? '-2px' : undefined,
                     }}
                 // zIndex={9999999999}
                 />}
