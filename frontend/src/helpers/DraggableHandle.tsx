@@ -42,14 +42,23 @@ function DraggableHandle(props: DraggableHandleProps) {
                 top: props.top || 2,
                 right: 54,
                 zIndex: 2,
-                width: `${length}px`,
-                height: `${length}px`,
-                cursor: 'grab'
+                // width: `${length}px`,
+                // height: `${length}px`,
+                width: 'auto',
+                cursor: 'grab',
+                // backgroundColor: 'red',
+                // overflow: 'hidden'
             }}
             {...listeners} {...attributes}>
-            <span style={{ display: 'inline-block', backgroundColor: colorMode === 'dark' ? 'lightgray' : '#676767', borderRadius: '4px', opacity: '0.75' }}>
-                <MdDragIndicator size={length} color={colorMode === 'dark' ? 'black' : 'white'} />
-            </span>
+            <div style={{
+                display: 'flex',
+                padding: '2px',
+                alignContent: 'center',
+                backgroundColor: '#555',
+                borderRadius: '100%',
+            }}>
+                <MdDragIndicator size={length} color='white' />
+            </div>
         </div>
     );
 }

@@ -3,6 +3,8 @@ import useDesignerStore from "../../stores/designer";
 import axios from "axios";
 import { useState } from "react";
 import QRCode from "react-qr-code";
+import { FaPlay } from "react-icons/fa6";
+import IconButton from "../../helpers/components/IconButton";
 
 const handleButtonClick = async (components, setLoading) => {
 
@@ -36,7 +38,31 @@ const PreviewButton = () => {
 
     return (
         <>
-            <button onClick={() => handleButtonClick(components, setLoading)}>Open Preview</button>
+
+            <IconButton
+                icon={<FaPlay />}
+                onClick={() => handleButtonClick(components, setLoading)}
+                baseStylesOverwrite={{
+                    color: 'white'
+                }}
+                title="Preview"
+            >
+            </IconButton>
+            {/* <button onClick={() => handleButtonClick(components, setLoading)}
+                style={{
+                    background: 'none',
+                    color: 'inherit',
+                    border: 'none',
+                    padding: 0,
+                    font: 'inherit',
+                    cursor: 'pointer',
+                    outline: 'inherit',
+                    display: 'flex',
+
+                }}>
+                <FaPlay />
+                <p>Preview</p>
+            </button> */}
             {loading && <div style={{
                 display: 'flex',
                 // gap: '3rem',

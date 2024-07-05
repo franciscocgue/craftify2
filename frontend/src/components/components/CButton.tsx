@@ -9,7 +9,7 @@ const CButton = ({ ...otherProperties }) => {
             // @TODO / @NOTE / @THINKABOUTIT: 
             // when app exported, remove zIndex; zINdex is to ensure highlight outline is
             // seen and not cobered by buttons background 
-            zIndex: '-1',
+            // zIndex: '-1',
         }}
     >
         Button

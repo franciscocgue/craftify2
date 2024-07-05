@@ -238,44 +238,65 @@ const ResizableContainer = (props: ResizableContainerProps) => {
                     && !getChildrenNodes(draggable?.componentId, components).includes(props.componentId)
                     && <DroppableContainer componentId={props.componentId} parentType={props.parentType} />
                 }
-                {isHovered && !draggable && <RiDeleteBin2Fill size={'19px'} style={{
+                {isHovered && !draggable && <div style={{
+                    display: 'flex',
+                    padding: '2px',
+                    alignContent: 'center',
+                    backgroundColor: '#555',
+                    borderRadius: '100%',
                     position: 'absolute',
                     // opacity: '0.5',
                     top: 2,
                     right: 28,
                     zIndex: 2,
                     cursor: 'pointer'
-                }}
-                    onClick={() => {
-                        removeComponent(props.componentId);
-                        notify.deleted(`${props.componentName} deleted`)
-                    }} />}
-                {isHovered && !draggable && !isSelected && <MdCheckBoxOutlineBlank size={'19px'} style={{
+                }}>
+                    <RiDeleteBin2Fill color="white" size={'19px'}
+                        onClick={() => {
+                            removeComponent(props.componentId);
+                            notify.deleted(`${props.componentName} deleted`)
+                        }} />
+                </div>}
+                {isHovered && !draggable && !isSelected && <div style={{
+                    display: 'flex',
+                    padding: '2px',
+                    alignContent: 'center',
+                    backgroundColor: '#555',
+                    borderRadius: '100%',
                     position: 'absolute',
                     // opacity: '0.5',
                     top: 2,
                     right: 4,
                     zIndex: 2,
                     cursor: 'pointer'
-                }} onClick={(e) => {
-                    e.stopPropagation();
-                    // if (!isResizing) {
-                    setSelectedId(props.componentId);
-                    // }
-                }} />}
-                {!draggable && isSelected && <MdCheckBox size={'19px'} style={{
+                }}>
+                    <MdCheckBoxOutlineBlank color="white" size={'19px'} onClick={(e) => {
+                        e.stopPropagation();
+                        // if (!isResizing) {
+                        setSelectedId(props.componentId);
+                        // }
+                    }} />
+                </div>}
+                {!draggable && isSelected && <div style={{
+                    display: 'flex',
+                    padding: '2px',
+                    alignContent: 'center',
+                    backgroundColor: '#555',
+                    borderRadius: '100%',
                     position: 'absolute',
                     // opacity: '0.5',
                     top: 2,
                     right: 4,
                     zIndex: 2,
                     cursor: 'pointer'
-                }} onClick={(e) => {
-                    e.stopPropagation();
-                    // if (!isResizing) {
-                    setSelectedId(null);
-                    // }
-                }} />}
+                }}>
+                    <MdCheckBox color="white" size={'19px'} onClick={(e) => {
+                        e.stopPropagation();
+                        // if (!isResizing) {
+                        setSelectedId(null);
+                        // }
+                    }} />
+                </div>}
                 {/* overlay - if dragging */}
                 {draggable?.componentId === props.componentId && <div
                     style={{
