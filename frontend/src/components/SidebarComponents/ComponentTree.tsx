@@ -1,9 +1,8 @@
 import { Provider } from 'rc-motion';
 import Tree from 'rc-tree';
-import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import React, { useCallback, useRef, useMemo } from 'react';
 import { getComponentsAsTree } from '../../helpers/tree-builder';
 import useDesignerStore from '../../stores/designer';
-import { ComponentLeaf1 } from '../../vite-env';
 import useResizeObserver from "use-resize-observer";
 import { IoMdArrowDropdown, IoMdArrowDropright } from "react-icons/io";
 import './ComponentTree.less';
@@ -71,20 +70,20 @@ const ComponentTree = () => {
   const { ref, width, height } = useResizeObserver();
 
   const components = useDesignerStore((state) => state.components);
+  const selectedId = useDesignerStore((state) => state.selectedId);
 
   const treeNodes = useMemo(
     // () => renderNode(components, 'canvas'),
     () => {
       const treeData = getComponentsAsTree(components);
-      return treeAsHtml(treeData[0])
+      return treeAsHtml(treeData[0], selectedId)
     },
-    [components]
+    [components, selectedId]
   );
 
   const setHoveredId = useDesignerStore((state) => state.setHoveredId);
   const hoveredId = useDesignerStore((state) => state.hoveredId);
   const moveComponent = useDesignerStore((state) => state.moveComponent);
-  const selectedId = useDesignerStore((state) => state.selectedId);
 
   // const { setHoveredId, hoveredId, moveComponent } = useDesignerStore(
   //   // useCallback(
@@ -162,7 +161,7 @@ const ComponentTree = () => {
                 // if hovering tree comp, do not highlight (there was a reason ...)
                 // if clicked (selected) --> highlight; clicking again unselects
                 // hoveredId is true if comp hovered in canvas --> highlight after debounce time
-                selectedKeys={[hoveredId, selectedId]}
+                selectedKeys={[hoveredId]}
                 switcherIcon={(props) => {
                   return <>{props.isLeaf ? null : props.expanded ? <IoMdArrowDropdown /> : <IoMdArrowDropright />}</>
                 }}

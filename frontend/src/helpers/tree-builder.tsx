@@ -64,7 +64,7 @@ const NodeTitle = memo(({ ...props }) => {
 
     const removeComponent = useDesignerStore((state) => state.removeComponent);
     const addComponent = useDesignerStore((state) => state.addComponent);
-    const setSelectedId = useDesignerStore((state) => state.setSelectedId);
+    const toggleSelectedId = useDesignerStore((state) => state.toggleSelectedId);
 
     // const toast = useToast()
     const notify = {
@@ -145,17 +145,17 @@ const NodeTitle = memo(({ ...props }) => {
                     />
                     {listOfCompTypes.map(c => (
                         <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            cursor: 'pointer',
-                            fontSize: 'small',
-                            backgroundColor: colorMode === 'dark' ? 'rgba(0, 0, 0, 0.24)' : 'rgba(255, 255, 255, 0.80)',
-                            color: colorMode === 'dark' ? 'white' : 'black',
-                            border: '1px solid grey',
-                            borderRadius: '5px',
-                            padding: '4px 7px'
-                        }}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                cursor: 'pointer',
+                                fontSize: 'small',
+                                backgroundColor: colorMode === 'dark' ? 'rgba(0, 0, 0, 0.24)' : 'rgba(255, 255, 255, 0.80)',
+                                color: colorMode === 'dark' ? 'white' : 'black',
+                                border: '1px solid grey',
+                                borderRadius: '5px',
+                                padding: '4px 7px'
+                            }}
                             key={c}
                             onClick={() => {
                                 addComponent(c, props.node.key, 'auto');
@@ -169,7 +169,7 @@ const NodeTitle = memo(({ ...props }) => {
                                 // });
                             }}
                         >
-                            <MdOutlineAdd size={'15px'}/>
+                            <MdOutlineAdd size={'15px'} />
                             <p>{compTypes[c as keyof typeof compTypes].name}</p>
                         </div>
                     ))}
@@ -184,7 +184,7 @@ const NodeTitle = memo(({ ...props }) => {
         >
             <span style={{ cursor: 'pointer' }} onClick={() => {
                 setIsPopoverOpen(false);
-                setSelectedId(props.node.key);
+                toggleSelectedId(props.node.key);
             }}>
                 {props.node.title}
             </span>
@@ -213,14 +213,25 @@ interface NodeType {
 // create nested tree structure for
 // TreeNodes in rc-tree (component tree)
 
-const treeAsHtml = (node: NodeType) => {
+const treeAsHtml = (node: NodeType, selectedId) => {
     if (!node.children) return null;
     return (
-        <TreeNode key={node.key} title={<NodeTitle node={node} />} icon={() => {
-            if (node.type === 'canvas') return <CgScreen />;
-            return getIcon(node.type)
-        }}>
-            {node?.children.map((c) => treeAsHtml(c))}
+        <TreeNode
+            style={{
+                // outline: node.key === selectedId ? '1px solid green' : undefined,
+                boxShadow: node.key === selectedId ? 'inset 2px 2px green, inset -2px -2px green' : undefined,
+                // box-shadow: inset 2px 2px orange, inset -2px -2px orange;
+                background: node.key === selectedId ? 'rgba(0,128,0,0.1)' : undefined,
+                // color: node.key === selectedId ? 'white' : undefined
+            }}
+            key={node.key}
+            title={<NodeTitle node={node} />}
+            icon={() => {
+                if (node.type === 'canvas') return <CgScreen />;
+                return getIcon(node.type)
+            }}
+        >
+            {node?.children.map((c) => treeAsHtml(c, selectedId))}
         </TreeNode>
     )
 }

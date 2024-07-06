@@ -5,8 +5,8 @@ import CButton from "../components/components/CButton";
 // import CanvasWrapper from "./CanvasWrapper";
 import { ComponentCollection } from "../vite-env";
 // import CCheckbox from "../components/components/CCheckbox";
-import ResizableContainer from "./ResizableContainer";
-import ResizableComponent from "./ResizableComponent";
+import WrapperContainer from "./WrapperContainer";
+import WrapperComponent from "./WrapperComponent";
 import DroppableCanvas from "./DroppableCanvas";
 
 {/* <ContainerWrapper id="subcontainer" componentType="container-row" parentType='container-column' w={'100%'} h={'max-content'} p={1} border="none">
@@ -116,7 +116,7 @@ const uiMapper2 = {
         </div>
     ),
     'column': (components: ComponentCollection, id: string, properties) => (
-        <ResizableContainer
+        <WrapperContainer
             key={id}
             componentId={id}
             componentName={components[id].name}
@@ -127,10 +127,10 @@ const uiMapper2 = {
             <CContainerColumn {...properties[id]}>
                 {components[id].children.map((id: string) => renderNode(components, id, properties))}
             </CContainerColumn>
-        </ResizableContainer>
+        </WrapperContainer>
     ),
     'button': (components: ComponentCollection, id: string, properties) => (
-        <ResizableComponent
+        <WrapperComponent
             key={id}
             componentId={id}
             componentName={components[id].name}
@@ -139,7 +139,7 @@ const uiMapper2 = {
             otherProperties={properties[id]}
         >
             <CButton {...properties[id]} />
-        </ResizableComponent>
+        </WrapperComponent>
     ),
     // 'checkbox': (components: ComponentCollection, id: string, properties) => (
     //     <ComponentWrapper key={id} id={id} componentType={components[id].type} parentType={components[components[id].parent as string].type} name={components[id].name} w={'100%'} h={'50px'} p={0} border="0px solid red">

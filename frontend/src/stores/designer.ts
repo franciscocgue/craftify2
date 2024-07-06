@@ -71,6 +71,7 @@ type designerStore = {
   setDraggingId: (draggingId: string | null) => void,
   setDraggable: (draggable: draggableData) => void,
   setSelectedId: (selectedId: string | null) => void,
+  toggleSelectedId: (selectedId: string) => void,
   setHoveredId: (selectedId: string | null) => void,
   /**
    * Moves component in the component tree
@@ -122,6 +123,12 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
       return state
     }
     return { selectedId: selectedId }
+  }),
+  toggleSelectedId: (selectedId) => set((state) => {
+    if (!!state.draggingId) {
+      return state
+    }
+    return { selectedId: state.selectedId === selectedId ? null : selectedId }
   }),
   setHoveredId: (hoveredId) => set({ hoveredId: hoveredId }),
   moveComponent: (movedCompId, movedOverCompId, location, positionInContainer = 'last') => set((state) => {

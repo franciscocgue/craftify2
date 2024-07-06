@@ -100,6 +100,7 @@ const compProperties: ComponentProperties = {
         // wrapperStyles
         width: '100%',
         height: '40px',
+        minHeight: '40px',
         marginTop: '0px',
         marginBottom: '0px',
         marginLeft: '0px',

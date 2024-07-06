@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode } from "react"
+import { ReactNode } from "react"
 
 interface propsT {
     children: ReactNode,
@@ -8,7 +8,6 @@ const CContainerColumn = ({ children, ...otherProperties }: propsT) => {
     // console.log('ttt', otherProperties.gap)
     return <div
         style={{
-            minHeight: '30px',
             display: 'flex',
             flexDirection: 'column',
             flexWrap: otherProperties.flexWrap || undefined,
