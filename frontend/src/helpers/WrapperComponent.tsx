@@ -182,7 +182,7 @@ const WrapperComponent = (props: WrapperComponentProps) => {
     }, [isHovered])
 
     const notify = {
-        deleted: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-center' }),
+        deleted: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-right' }),
     }
 
 

@@ -68,8 +68,8 @@ const NodeTitle = memo(({ ...props }) => {
 
     // const toast = useToast()
     const notify = {
-        created: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-center' }),
-        deleted: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-center' }),
+        created: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-right' }),
+        deleted: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-right' }),
     }
 
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
