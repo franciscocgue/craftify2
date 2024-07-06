@@ -1,5 +1,7 @@
 {
     "ignore": [
-        "user-app/dist/*", "user-app/src/components.json"
+        "user-app/dist/*", 
+        "user-app/src/components.json",
+        "user-app/src/properties.json"
     ]
 }

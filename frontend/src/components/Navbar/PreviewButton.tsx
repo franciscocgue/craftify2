@@ -6,7 +6,7 @@ import QRCode from "react-qr-code";
 import { FaPlay } from "react-icons/fa6";
 import IconButton from "../../helpers/components/IconButton";
 
-const handleButtonClick = async (components, setLoading) => {
+const handleButtonClick = async (components, properties, setLoading) => {
 
     setLoading(true);
 
@@ -16,7 +16,7 @@ const handleButtonClick = async (components, setLoading) => {
         // let time = d.getTime();
         const response = await axios.post('http://localhost:3000/start-new-server', {
             port: 4000,
-            data: components
+            data: { components, properties }
         });
         var win = window.open('http://localhost:4000/', '_blank');
         win.focus();
@@ -35,13 +35,14 @@ const PreviewButton = () => {
     const [loading, setLoading] = useState(false)
 
     const components = useDesignerStore((state) => state.components);
+    const properties = useDesignerStore((state) => state.properties);
 
     return (
         <>
 
             <IconButton
                 icon={<FaPlay />}
-                onClick={() => handleButtonClick(components, setLoading)}
+                onClick={() => handleButtonClick(components, properties, setLoading)}
                 baseStylesOverwrite={{
                     color: 'white'
                 }}

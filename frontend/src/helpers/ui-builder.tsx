@@ -8,6 +8,8 @@ import { ComponentCollection } from "../vite-env";
 import WrapperContainer from "./WrapperContainer";
 import WrapperComponent from "./WrapperComponent";
 import DroppableCanvas from "./DroppableCanvas";
+import CText from "../components/components/CText";
+import CHeader from "../components/components/CHeader";
 
 {/* <ContainerWrapper id="subcontainer" componentType="container-row" parentType='container-column' w={'100%'} h={'max-content'} p={1} border="none">
 <Flex direction={'row'} wrap={'wrap'} alignItems={'center'} gap={2} h={'100%'} w={'100%'}>
@@ -72,41 +74,43 @@ import DroppableCanvas from "./DroppableCanvas";
 const uiMapper2 = {
     'canvas': (components: ComponentCollection, id: string, properties) => (
         <div
-        id="my-canvas"
-        style={{
-            display: 'flex',
-            position:'relative',
-            border:'1px solid grey',
-            flexDirection:'column',
-            overflowY:'auto',
-            overflowX:'hidden',
-            minWidth:`${properties[id].canvasWidthPx}px`,
-            margin:'0 auto',
-            minHeight:`min(calc(100%), ${properties[id].canvasHeightPx}px)`,
-            maxWidth:`${properties[id].canvasWidthPx}px`,
-            maxHeight:`${properties[id].canvasHeightPx}px`,
-            gap: properties[id].gap || undefined,
-            paddingTop:properties[id].paddingTop || undefined,
-            paddingBottom:properties[id].paddingBottom || undefined,
-            paddingLeft:properties[id].paddingLeft || undefined,
-            paddingRight:properties[id].paddingRight || undefined,
-            backgroundColor: properties[id].backgroundColor || undefined,
-        }}
-            // position={'relative'}
-            // border={'1px solid grey'}
-            // flexDirection={'column'}
-            // overflowY={'auto'}
-            // overflowX={'hidden'}
-            // minW={`${properties[id].canvasWidthPx}px`}
-            // m={'0 auto'}
-            // minH={`min(calc(100%), ${properties[id].canvasHeightPx}px)`}
-            // maxW={`${properties[id].canvasWidthPx}px`}
-            // maxH={`${properties[id].canvasHeightPx}px`}
-            // gap={properties[id].gap || undefined}
-            // paddingTop={properties[id].paddingTop || undefined}
-            // paddingBottom={properties[id].paddingBottom || undefined}
-            // paddingLeft={properties[id].paddingLeft || undefined}
-            // paddingRight={properties[id].paddingRight || undefined}
+            id="my-canvas"
+            style={{
+                // frozen (not editable)
+                display: properties[id].display || 'flex',
+                // frozen (not editable)
+                flexDirection: properties[id].flexDirection || 'column',
+                position: 'relative',
+                border: '1px solid grey',
+                overflowY: 'auto',
+                overflowX: 'hidden',
+                minWidth: `${properties[id].canvasWidthPx}px`,
+                margin: '0 auto',
+                minHeight: `min(calc(100%), ${properties[id].canvasHeightPx}px)`,
+                maxWidth: `${properties[id].canvasWidthPx}px`,
+                maxHeight: `${properties[id].canvasHeightPx}px`,
+                gap: properties[id].gap || undefined,
+                paddingTop: properties[id].paddingTop || undefined,
+                paddingBottom: properties[id].paddingBottom || undefined,
+                paddingLeft: properties[id].paddingLeft || undefined,
+                paddingRight: properties[id].paddingRight || undefined,
+                backgroundColor: properties[id].backgroundColor || undefined,
+            }}
+        // position={'relative'}
+        // border={'1px solid grey'}
+        // flexDirection={'column'}
+        // overflowY={'auto'}
+        // overflowX={'hidden'}
+        // minW={`${properties[id].canvasWidthPx}px`}
+        // m={'0 auto'}
+        // minH={`min(calc(100%), ${properties[id].canvasHeightPx}px)`}
+        // maxW={`${properties[id].canvasWidthPx}px`}
+        // maxH={`${properties[id].canvasHeightPx}px`}
+        // gap={properties[id].gap || undefined}
+        // paddingTop={properties[id].paddingTop || undefined}
+        // paddingBottom={properties[id].paddingBottom || undefined}
+        // paddingLeft={properties[id].paddingLeft || undefined}
+        // paddingRight={properties[id].paddingRight || undefined}
         // avoid overlapping with scrollbar
         // @TODO: maybe better solution (inner div); alternatively, add pr to total width to keep effective width 
         // p={'1px'}
@@ -139,6 +143,30 @@ const uiMapper2 = {
             otherProperties={properties[id]}
         >
             <CButton {...properties[id]} />
+        </WrapperComponent>
+    ),
+    'text': (components: ComponentCollection, id: string, properties) => (
+        <WrapperComponent
+            key={id}
+            componentId={id}
+            componentName={components[id].name}
+            componentType={components[id].type}
+            parentType={components[components[id].parent as string]?.type}
+            otherProperties={properties[id]}
+        >
+            <CText {...properties[id]} />
+        </WrapperComponent>
+    ),
+    'header': (components: ComponentCollection, id: string, properties) => (
+        <WrapperComponent
+            key={id}
+            componentId={id}
+            componentName={components[id].name}
+            componentType={components[id].type}
+            parentType={components[components[id].parent as string]?.type}
+            otherProperties={properties[id]}
+        >
+            <CHeader {...properties[id]} />
         </WrapperComponent>
     ),
     // 'checkbox': (components: ComponentCollection, id: string, properties) => (

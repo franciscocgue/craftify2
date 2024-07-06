@@ -1,7 +1,7 @@
-import { CiGrid2V } from "react-icons/ci";
-import { CiGrid2H } from "react-icons/ci";
+import { CiGrid2V, CiGrid2H } from "react-icons/ci";
 import { RxButton } from "react-icons/rx";
 import { BiText } from "react-icons/bi";
+import { FaHeading } from "react-icons/fa6";
 import { IoMdCheckboxOutline } from "react-icons/io";
 import { Properties } from "../vite-env";
 
@@ -21,6 +21,10 @@ const compTypes = {
     'text': {
         icon: BiText,
         name: 'Text',
+    },
+    'header': {
+        icon: FaHeading,
+        name: 'Header',
     },
     'checkbox': {
         icon: IoMdCheckboxOutline,
@@ -70,12 +74,14 @@ const compProperties: ComponentProperties = {
     'canvas': {
         canvasWidthPx: 360,
         canvasHeightPx: 760,
+        display: 'flex', // not editable
+        flexDirection: 'column', // not editable
         gap: '5px',
         paddingTop: '8px',
         paddingBottom: '8px',
         paddingLeft: '8px',
         paddingRight: '8px',
-        backgroundColor: undefined,
+        backgroundColor: 'white',
     },
     'column': {
         // wrapperStyles (resizer)
@@ -107,8 +113,62 @@ const compProperties: ComponentProperties = {
         marginRight: '0px',
         // padding removed; see comment in button component
         // p: undefined,
-        color: 'white',
-        backgroundColor: 'rgba(0,0,0,0.4)',
+        color: 'black',
+        backgroundColor: 'rgba(0,0,0,0.2)',
+        outline: 'none',
+        borderTopStyle: 'none',
+        borderTopWidth: undefined,
+        borderTopColor: undefined,
+        borderBottomStyle: 'none',
+        borderBottomWidth: undefined,
+        borderBottomColor: undefined,
+        borderLeftStyle: 'none',
+        borderLeftWidth: undefined,
+        borderLeftColor: undefined,
+        borderRightStyle: 'none',
+        borderRightWidth: undefined,
+        borderRightColor: undefined,
+    },
+    'text': {
+        // wrapperStyles
+        width: '100%',
+        height: 'auto',
+        minHeight: undefined,
+        marginTop: '0px',
+        marginBottom: '0px',
+        marginLeft: '0px',
+        marginRight: '0px',
+        // padding removed; see comment in button component
+        // p: undefined,
+        color: 'black',
+        backgroundColor: undefined,
+        outline: 'none',
+        borderTopStyle: 'none',
+        borderTopWidth: undefined,
+        borderTopColor: undefined,
+        borderBottomStyle: 'none',
+        borderBottomWidth: undefined,
+        borderBottomColor: undefined,
+        borderLeftStyle: 'none',
+        borderLeftWidth: undefined,
+        borderLeftColor: undefined,
+        borderRightStyle: 'none',
+        borderRightWidth: undefined,
+        borderRightColor: undefined,
+    },
+    'header': {
+        // wrapperStyles
+        width: '100%',
+        height: 'auto',
+        minHeight: undefined,
+        marginTop: '0px',
+        marginBottom: '0px',
+        marginLeft: '0px',
+        marginRight: '0px',
+        // padding removed; see comment in button component
+        // p: undefined,
+        color: 'black',
+        backgroundColor: undefined,
         outline: 'none',
         borderTopStyle: 'none',
         borderTopWidth: undefined,

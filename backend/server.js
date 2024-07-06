@@ -30,8 +30,9 @@ app.post('/start-new-server', async (req, res) => {
   const { port, data } = req.body;
   // const port = '8080';
 
-  console.log('####### creating components.json ...')
-  fs.writeFileSync(path.join(__dirname, 'user-app', 'src', 'components.json'), JSON.stringify(data))
+  console.log('####### creating components and properties files ...')
+  fs.writeFileSync(path.join(__dirname, 'user-app', 'src', 'components.json'), JSON.stringify(data.components))
+  fs.writeFileSync(path.join(__dirname, 'user-app', 'src', 'properties.json'), JSON.stringify(data.properties))
 
   if (serverRunning) {
     console.log('####### stopping server ...')

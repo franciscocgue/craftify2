@@ -64,6 +64,8 @@ const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorM
         gap: '7px',
         backgroundColor: colorMode === 'dark' ? 'white' : 'black',
         color: colorMode === 'dark' ? 'black' : 'white',
+        border: colorMode === 'dark' ? '1px solid grey' : '1px solid white',
+        outline: colorMode === 'dark' ? '1px solid white' : undefined,
         fontSize: 'small',
         padding: '5px',
         borderRadius: '3px',
