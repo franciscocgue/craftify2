@@ -106,7 +106,8 @@ const compProperties: ComponentProperties = {
         marginRight: '0px',
         // padding removed; see comment in button component
         // p: undefined,
-        backgroundColor: 'rgba(0,0,0,0.1)',
+        color: 'white',
+        backgroundColor: 'rgba(0,0,0,0.4)',
         outline: 'none',
         borderTopStyle: 'none',
         borderTopWidth: undefined,

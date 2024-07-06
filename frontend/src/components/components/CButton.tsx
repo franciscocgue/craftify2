@@ -6,6 +6,7 @@ const CButton = ({ ...otherProperties }) => {
             maxWidth: '100%',
             maxHeight: '100%',
             // border: otherProperties.border || undefined,
+            color: otherProperties.color || undefined,
             backgroundColor: otherProperties.backgroundColor || undefined,
             outline: otherProperties.borderTopStyle || undefined,
             borderTopStyle: otherProperties.borderTopStyle || undefined,

@@ -38,6 +38,7 @@ export type Properties = {
     gap?: number | string,
     flexWrap?: 'nowrap' | 'wrap',
     alignItems?: 'center',
+    color?: string | undefined,
     backgroundColor?: string | undefined,
     outline: string | undefined,
     borderTopStyle: string | undefined,
