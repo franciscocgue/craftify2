@@ -40,7 +40,7 @@ function DraggableHandle(props: DraggableHandleProps) {
             style={{
                 position: 'absolute',
                 top: props.top || 2,
-                right: 54,
+                right: 28,
                 zIndex: 2,
                 // width: `${length}px`,
                 // height: `${length}px`,

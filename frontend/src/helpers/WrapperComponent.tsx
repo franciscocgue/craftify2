@@ -5,7 +5,6 @@ import DroppableComponent from "./DroppableComponent";
 import { compTypes } from "../config/components";
 import MarginOverlay from "./MarginOverlay";
 import { RiDeleteBin2Fill } from "react-icons/ri";
-import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { getChildrenNodes } from "./utils";
 import { Properties } from "../vite-env";
 import { debounce } from "lodash";
@@ -70,6 +69,7 @@ const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorM
         borderRadius: '3px',
         alignItems: 'center',
         height: '30px',
+        userSelect: 'none'
     }}>
     <IconBox icon={compTypes[componentType].icon} />
     {name || componentType}
@@ -140,7 +140,6 @@ const WrapperComponent = (props: WrapperComponentProps) => {
     const draggable = useDesignerStore((state) => state.draggable);
     const setHoveredId = useDesignerStore((state) => state.setHoveredId);
     const removeComponent = useDesignerStore((state) => state.removeComponent);
-    const setSelectedId = useDesignerStore((state) => state.setSelectedId);
     const toggleSelectedId = useDesignerStore((state) => state.toggleSelectedId);
     const components = useDesignerStore((state) => state.components);
     const colorMode = useDesignerStore((state) => state.colorMode);
@@ -228,7 +227,7 @@ const WrapperComponent = (props: WrapperComponentProps) => {
                 && draggable.componentId !== props.componentId
                 && !getChildrenNodes(draggable?.componentId, components).includes(props.componentId)
                 && <DroppableComponent componentId={props.componentId} parentType={props.parentType} />}
-            {isHovered && !draggable && <div style={actionBtnStyle(28, 6)}>
+            {isHovered && !draggable && <div style={actionBtnStyle(2, 6)}>
                 <RiDeleteBin2Fill color="white" size={'19px'}
                     onClick={() => {
                         removeComponent(props.componentId);

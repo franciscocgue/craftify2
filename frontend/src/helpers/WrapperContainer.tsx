@@ -71,6 +71,7 @@ const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorM
         borderRadius: '3px',
         alignItems: 'center',
         height: '30px',
+        userSelect: 'none'
     }}>
     <IconBox icon={compTypes[componentType].icon} />
     {name || componentType}
@@ -141,7 +142,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
     const draggable = useDesignerStore((state) => state.draggable);
     const setHoveredId = useDesignerStore((state) => state.setHoveredId);
     const removeComponent = useDesignerStore((state) => state.removeComponent);
-    const setSelectedId = useDesignerStore((state) => state.setSelectedId);
+    const toggleSelectedId = useDesignerStore((state) => state.toggleSelectedId);
     const components = useDesignerStore((state) => state.components);
     const colorMode = useDesignerStore((state) => state.colorMode);
 
@@ -215,6 +216,10 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                 setIsHovered(false);
                 handleMouseLeave()
             }}
+            onClick={(e) => {
+                e.stopPropagation();
+                toggleSelectedId(props.componentId);
+            }}
         >
             {isHovered && !draggable && <MyPortal position={{ position: 'absolute', top: `calc(${ref.current?.getBoundingClientRect().top}px - 30px)`, left: ref.current?.getBoundingClientRect().left }}>
                 {TooltipComp(props.componentName, props.componentType, colorMode)}
@@ -223,22 +228,22 @@ const WrapperContainer = (props: WrapperContainerProps) => {
             {props.children}
 
             {/* outlines */}
-            {!draggable && (isHovered || isSelected || isHoveredRemote) && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='green' thickness={3} />}
+            {!isSelected && !draggable && (isHovered || isHoveredRemote) && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='orange' thickness={3} />}
+            {isSelected && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='green' thickness={3} />}
 
             {isHovered && !draggable && <DraggableHandle componentId={props.componentId} />}
             {draggable
                 && draggable.componentId !== props.componentId
                 && !getChildrenNodes(draggable?.componentId, components).includes(props.componentId)
-                && <DroppableContainer componentId={props.componentId} parentType={props.parentType} />
-            }
-            {isHovered && !draggable && <div style={actionBtnStyle(28, 2)}>
+                && <DroppableContainer componentId={props.componentId} parentType={props.parentType} />}
+            {isHovered && !draggable && <div style={actionBtnStyle(2, 2)}>
                 <RiDeleteBin2Fill color="white" size={'19px'}
                     onClick={() => {
                         removeComponent(props.componentId);
                         notify.deleted(`${props.componentName} deleted`)
                     }} />
             </div>}
-            {isHovered && !draggable && !isSelected && <div style={actionBtnStyle(4, 2)}>
+            {/* {isHovered && !draggable && !isSelected && <div style={actionBtnStyle(4, 2)}>
                 <MdCheckBoxOutlineBlank color="white" size={'19px'} onClick={(e) => {
                     e.stopPropagation();
                     setSelectedId(props.componentId);
@@ -249,7 +254,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                     e.stopPropagation();
                     setSelectedId(null);
                 }} />
-            </div>}
+            </div>} */}
             {/* overlay - if dragging */}
             {draggable?.componentId === props.componentId && <div
                 style={{
