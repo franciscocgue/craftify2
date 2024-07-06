@@ -120,6 +120,10 @@ const ResizableComponent = (props: ResizableComponentProps) => {
 
     console.log('C - ResizableComponent ' + props.componentId.slice(0, 5))
 
+    // https://github.com/bokuweb/re-resizable/issues/727
+    const parentScrollOffsetX = useRef(0)
+    const parentScrollOffsetY = useRef(0)
+
     const refResizable = useRef(null);
     const [isHovered, setIsHovered] = useState(false);
     const [isHoveredRemote, setIsHoveredRemote] = useState(false);
@@ -206,8 +210,13 @@ const ResizableComponent = (props: ResizableComponentProps) => {
                     height: elem.style.height
                 })
             }}
-            onResizeStart={() => {
+            onResizeStart={(_, __, ref) => {
+                parentScrollOffsetX.current = ref.parentElement?.scrollLeft || 0
+                parentScrollOffsetY.current = ref.parentElement?.scrollTop || 0
                 setIsResizing(true)
+            }}
+            onResize={(_, __, ref) => {
+                ref.parentElement.scrollTo(parentScrollOffsetX.current, parentScrollOffsetY.current)
             }}
         >
             {/* <div

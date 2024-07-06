@@ -121,6 +121,10 @@ const ResizableContainer = (props: ResizableContainerProps) => {
 
     console.log('C - ResizableContainer ' + props.componentId.slice(0, 5))
 
+    // https://github.com/bokuweb/re-resizable/issues/727
+    const parentScrollOffsetX = useRef(0)
+    const parentScrollOffsetY = useRef(0)
+
     const refResizable = useRef(null);
     const [isHovered, setIsHovered] = useState(false);
     const [isHoveredRemote, setIsHoveredRemote] = useState(false);
@@ -200,8 +204,13 @@ const ResizableContainer = (props: ResizableContainerProps) => {
                     height: elem.style.height
                 })
             }}
-            onResizeStart={() => {
+            onResizeStart={(_, __, ref) => {
+                parentScrollOffsetX.current = ref.parentElement?.scrollLeft || 0
+                parentScrollOffsetY.current = ref.parentElement?.scrollTop || 0
                 setIsResizing(true)
+            }}
+            onResize={(_, __, ref) => {
+                ref.parentElement.scrollTo(parentScrollOffsetX.current, parentScrollOffsetY.current)
             }}
         >
             {/* why div? to handle click & mouse events */}
