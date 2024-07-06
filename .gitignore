@@ -24,3 +24,6 @@ dist-ssr
 *.sln
 *.sw?
 
+# user-app confirguration files
+backend/user-app/src/components.json
+backend/user-app/src/properties.json
