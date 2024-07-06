@@ -331,8 +331,8 @@ const ResizableComponent = (props: ResizableComponentProps) => {
                         backgroundColor: draggable?.componentId === props.componentId ? 'grey' : undefined,
                         opacity: draggable?.componentId === props.componentId ? '0.6' : undefined,
                         // // highlights
-                        // outline: draggable ? '1px dotted grey' : isHovered || isSelected || isHoveredRemote ? '2px solid green' : undefined,
-                        // outlineOffset: draggable ? '-1px' : isHovered || isSelected || isHoveredRemote ? '-2px' : undefined,
+                        outline: draggable ? '1px dotted grey' : undefined,
+                        outlineOffset: draggable ? '-1px' : undefined,
                     }}
                 // zIndex={1}
                 />

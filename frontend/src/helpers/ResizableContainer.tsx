@@ -181,8 +181,8 @@ const ResizableContainer = (props: ResizableContainerProps) => {
             minHeight={props.otherProperties?.minHeight}
             style={{
                 // // highlights
-                // outline: draggable ? '1px dotted grey' : isHovered || isSelected || isHoveredRemote ? '2px solid green' : undefined,
-                // outlineOffset: draggable ? '-1px' : isHovered || isSelected || isHoveredRemote ? '-2px' : undefined,
+                outline: draggable ? '1px dotted grey' : undefined,
+                outlineOffset: draggable ? '-1px' : undefined,
                 // container margins
                 marginTop: props.otherProperties?.marginTop,
                 marginRight: props.otherProperties?.marginRight,
