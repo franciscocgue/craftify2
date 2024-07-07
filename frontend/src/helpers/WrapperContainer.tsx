@@ -1,19 +1,17 @@
 import { CSSProperties, useCallback, useEffect, useRef, useState } from "react";
 import useDesignerStore from "../stores/designer";
 import DraggableHandle from "./DraggableHandle";
+import DroppableContainer from "./DroppableContainer";
 import { compTypes } from "../config/components";
 import MarginOverlay from "./MarginOverlay";
-import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import { getChildrenNodes } from "./utils";
 import { Properties } from "../vite-env";
-import DroppableContainer from "./DroppableContainer";
 import { debounce } from "lodash";
 import { IconType } from "react-icons";
 import MyPortal from "./MyPortal";
 import { toast } from "react-toastify";
 import MyOutline from "./MyOutline";
-
 
 
 /**
@@ -66,6 +64,8 @@ const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorM
         gap: '7px',
         backgroundColor: colorMode === 'dark' ? 'white' : 'black',
         color: colorMode === 'dark' ? 'black' : 'white',
+        border: colorMode === 'dark' ? '1px solid grey' : '1px solid white',
+        outline: colorMode === 'dark' ? '1px solid white' : undefined,
         fontSize: 'small',
         padding: '5px',
         borderRadius: '3px',
@@ -203,7 +203,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                 marginBottom: props.otherProperties?.marginBottom,
                 marginLeft: props.otherProperties?.marginLeft,
                 // other
-                overflow: 'hidden',
+                // overflow: 'auto',
                 position: 'relative',
             }}
             onMouseOver={(e) => {
