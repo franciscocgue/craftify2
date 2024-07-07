@@ -132,8 +132,8 @@ const compProperties: ComponentProperties = {
     'text': {
         // wrapperStyles
         width: '100%',
-        height: 'auto',
-        minHeight: undefined,
+        height: '26px',
+        minHeight: '26px',
         marginTop: '0px',
         marginBottom: '0px',
         marginLeft: '0px',
@@ -159,8 +159,8 @@ const compProperties: ComponentProperties = {
     'header': {
         // wrapperStyles
         width: '100%',
-        height: 'auto',
-        minHeight: undefined,
+        height: '40px',
+        minHeight: '40px',
         marginTop: '0px',
         marginBottom: '0px',
         marginLeft: '0px',
