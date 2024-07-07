@@ -200,7 +200,7 @@ const WrapperComponent = (props: WrapperComponentProps) => {
                 marginBottom: props.otherProperties?.marginBottom,
                 marginLeft: props.otherProperties?.marginLeft,
                 // other
-                overflow: 'hidden',
+                // overflow: 'hidden',
                 position: 'relative',
             }}
             onMouseOver={(e) => {
