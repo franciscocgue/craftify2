@@ -146,7 +146,7 @@ const ComponentTree = () => {
                   // no canvas sibling
                   if (
                     (dropNode.key === 'canvas' && dropPosition !== 0)
-                    || (!['container-row', 'container-column', 'canvas'].includes(components[dropNode.key as string].type) && dropPosition === 0)
+                    || (!['row', 'column', 'canvas'].includes(components[dropNode.key as string].type) && dropPosition === 0)
                   ) {
                     return false;
                   }
