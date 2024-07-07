@@ -246,7 +246,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
         type: compType,
         parent: parentId,
         children: [],
-        name: `${compType} ${compsNames[compType].current}`
+        name: `${compTypes[compType as keyof typeof compTypes].name} ${compsNames[compType].current}`
       }
       // add to parent
       let insertAt = parent.children.indexOf(addedOverCompId) + (location === 'after');
