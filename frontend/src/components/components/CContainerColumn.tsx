@@ -12,6 +12,7 @@ const CContainerColumn = ({ children, ...otherProperties }: propsT) => {
             // overwrite some styles (reason: using wrapper in dev)
             width: '100%',
             height: '100%',
+            minHeight: 'auto',
             // display: 'flex',
             // flexDirection: 'column',
             // flexWrap: otherProperties.flexWrap || undefined,

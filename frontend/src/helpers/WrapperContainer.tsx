@@ -203,7 +203,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                 marginBottom: props.otherProperties?.marginBottom,
                 marginLeft: props.otherProperties?.marginLeft,
                 // other
-                // overflow: 'auto',
+                // overflow: 'hidden',
                 position: 'relative',
             }}
             onMouseOver={(e) => {

@@ -2,7 +2,7 @@ import Navbar from "../components/Navbar";
 import SidebarMenu from "../components/SidebarMenu";
 import SidebarComponents from "../components/SidebarComponents";
 import SidebarProperties from "../components/SidebarProperties";
-import { DndContext, DragEndEvent, DragMoveEvent, DragOverlay, PointerSensor, pointerWithin, useSensor, useSensors } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, DragMoveEvent, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import PaletteComponent from "../components/SidebarComponents/Component";
 import { compTypes } from "../config/components";
 import useDesignerStore from "../stores/designer";
@@ -14,7 +14,7 @@ import Canvas from "../components/Canvas";
 import style from './Designer.module.css';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-
+import { myPointerWithin } from "../helpers/dnd-kit/collisions";
 
 const Designer = () => {
 
@@ -129,7 +129,8 @@ const Designer = () => {
           onDragCancel={handleDragCancel}
           // modifiers={[restrictToWindowEdges]}
           onDragMove={!draggable ? handleDragMove : undefined}
-          collisionDetection={pointerWithin}
+          // collisionDetection={pointerWithin}
+          collisionDetection={myPointerWithin}
           sensors={sensors}
         >
           <SidebarComponents />

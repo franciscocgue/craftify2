@@ -84,17 +84,19 @@ const compProperties: ComponentProperties = {
         backgroundColor: 'white',
     },
     'column': {
+        display: 'flex', // not editable
+        flexDirection: 'column', // not editable
         // wrapperStyles (resizer)
         width: '100%',
         height: 'auto',
-        minHeight: '40px',
+        minHeight: 'auto',
         marginTop: '0px',
         marginBottom: '0px',
         marginLeft: '0px',
         marginRight: '0px',
         // CContainerColumn styles
-        paddingTop: '4px',
-        paddingBottom: '0px',
+        paddingTop: '6px',
+        paddingBottom: '6px',
         paddingLeft: '0px',
         paddingRight: '0px',
         gap: '5px',

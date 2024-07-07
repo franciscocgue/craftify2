@@ -146,11 +146,11 @@ function DroppableContainer(props: DroppableContainerProps) {
             {<div ref={setNodeRefInner} style={styleInner} />}
             {<div style={styleInnerHighlight(isOverInner)} />}
             {/* top */}
-            {props.parentType === 'column' || props.parentType === 'canvas' && <div ref={setNodeRefTop} style={styleTop} />}
-            {props.parentType === 'column' || props.parentType === 'canvas' && <div style={styleTopHighlight(isOverTop)} />}
+            {(props.parentType === 'column' || props.parentType === 'canvas') && <div ref={setNodeRefTop} style={styleTop} />}
+            {(props.parentType === 'column' || props.parentType === 'canvas') && <div style={styleTopHighlight(isOverTop)} />}
             {/* bottom */}
-            {props.parentType === 'column' || props.parentType === 'canvas' && <div ref={setNodeRefBottom} style={styleBottom} />}
-            {props.parentType === 'column' || props.parentType === 'canvas' && <div style={styleBottomHighlight(isOverBottom)} />}
+            {(props.parentType === 'column' || props.parentType === 'canvas') && <div ref={setNodeRefBottom} style={styleBottom} />}
+            {(props.parentType === 'column' || props.parentType === 'canvas') && <div style={styleBottomHighlight(isOverBottom)} />}
             {/* left */}
             {props.parentType === 'row' && <div ref={setNodeRefLeft} style={styleLeft} />}
             {props.parentType === 'row' && <div style={styleLeftHighlight(isOverLeft)} />}
