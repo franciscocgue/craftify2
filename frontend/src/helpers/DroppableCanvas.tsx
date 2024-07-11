@@ -22,6 +22,7 @@ const styleInnerHighlight: (isOverInner: boolean) => CSSProperties = (isOverInne
 
 type DroppableCanvasProps = {
     componentId: string,
+    canvasRef: React.MutableRefObject<null>
 }
 
 function DroppableCanvas(props: DroppableCanvasProps) {
@@ -36,11 +37,29 @@ function DroppableCanvas(props: DroppableCanvasProps) {
         }
     });
 
+    const canvasElem = document.getElementById('my-canvas');
+
     return (
         <>
             {/* inside */}
-            {<div ref={setNodeRefInner} style={styleInner} />}
-            {<div style={styleInnerHighlight(isOverInner)} />}
+            {<div ref={setNodeRefInner} style={{
+                ...styleInner,
+                position: 'fixed',
+                top: canvasElem?.getBoundingClientRect().top,
+                left: canvasElem?.getBoundingClientRect().left,
+                width: canvasElem?.getBoundingClientRect().width,
+                height: canvasElem?.getBoundingClientRect().height,
+                pointerEvents: 'none',
+            }} />}
+            {<div style={{
+                ...styleInnerHighlight(isOverInner),
+                position: 'fixed',
+                top: canvasElem?.getBoundingClientRect().top,
+                left: canvasElem?.getBoundingClientRect().left,
+                width: canvasElem?.getBoundingClientRect().width,
+                height: canvasElem?.getBoundingClientRect().height,
+                pointerEvents: 'none',
+            }} />}
         </>
     );
 }
