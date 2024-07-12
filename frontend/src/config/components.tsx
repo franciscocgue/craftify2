@@ -103,6 +103,7 @@ const compProperties: ComponentProperties = {
         flexWrap: 'nowrap',
         alignItems: 'center',
         backgroundColor: undefined,
+        overflow: 'hidden',
     },
     'button': {
         // wrapperStyles

@@ -128,9 +128,9 @@ const uiMapper2 = {
             parentType={components[components[id].parent as string]?.type}
             otherProperties={properties[id]}
         >
-            <CContainerColumn {...properties[id]}>
+            {/* <CContainerColumn {...properties[id]}> */}
                 {components[id].children.map((id: string) => renderNode(components, id, properties))}
-            </CContainerColumn>
+            {/* </CContainerColumn> */}
         </WrapperContainer>
     ),
     'button': (components: ComponentCollection, id: string, properties) => (

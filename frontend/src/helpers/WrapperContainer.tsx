@@ -205,6 +205,9 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                 // other
                 // overflow: 'hidden',
                 position: 'relative',
+                overflow: 'hidden',
+
+                ...props.otherProperties
             }}
             onMouseOver={(e) => {
                 e.stopPropagation();
