@@ -5,14 +5,20 @@ interface propsT {
 }
 
 const CContainerColumn = ({ children, ...otherProperties }: propsT) => {
+
     // console.log('ttt', otherProperties.gap)
+
     return <div
         style={{
             ...otherProperties,
-            // overwrite some styles (reason: using wrapper in dev)
+            // overwrite some styles like size and margins (reason: using wrapper in dev)
             width: '100%',
             height: '100%',
             minHeight: 'auto',
+            marginTop: '0px',
+            marginBottom: '0px',
+            marginLeft: '0px',
+            marginRight: '0px',
             // display: 'flex',
             // flexDirection: 'column',
             // flexWrap: otherProperties.flexWrap || undefined,

@@ -203,12 +203,19 @@ const WrapperComponent = (props: WrapperComponentProps) => {
                 left: 0,
                 // minHeight: props.otherProperties?.minHeight || 'auto',
                 // margins
-                marginTop: props.otherProperties?.marginTop,
-                marginRight: props.otherProperties?.marginRight,
-                marginBottom: props.otherProperties?.marginBottom,
-                marginLeft: props.otherProperties?.marginLeft,
+                // marginTop: props.otherProperties?.marginTop,
+                // marginRight: props.otherProperties?.marginRight,
+                // marginBottom: props.otherProperties?.marginBottom,
+                // marginLeft: props.otherProperties?.marginLeft,
                 // other
                 // overflow: 'hidden',
+                // if dragging _this_ component, highlight overlay
+                backgroundColor: draggable?.componentId === props.componentId ? 'grey' : undefined,
+                opacity: draggable?.componentId === props.componentId ? '0.6' : undefined,
+                // // highlights
+                outline: draggable ? '1px dotted grey' : undefined,
+                outlineOffset: draggable ? '-1px' : undefined,
+                cursor: 'pointer',
                 position: 'absolute',
             }}
             onMouseOver={(e) => {
@@ -220,6 +227,10 @@ const WrapperComponent = (props: WrapperComponentProps) => {
                 // e.stopPropagation();
                 setIsHovered(false);
                 handleMouseLeave()
+            }}
+            onClick={(e) => {
+                e.stopPropagation();
+                toggleSelectedId(props.componentId);
             }}
         >
             {isHovered && !draggable && <MyPortal position={{ position: 'absolute', top: `calc(${props.componentRef.current?.getBoundingClientRect().top}px - 30px)`, left: props.componentRef.current?.getBoundingClientRect().left }}>
@@ -257,7 +268,7 @@ const WrapperComponent = (props: WrapperComponentProps) => {
                 }} />
             </div>} */}
             {/* overlay - hide component interactions / if dragging */}
-            <div
+            {/* <div
                 onClick={(e) => {
                     e.stopPropagation();
                     toggleSelectedId(props.componentId);
@@ -278,10 +289,20 @@ const WrapperComponent = (props: WrapperComponentProps) => {
                     outlineOffset: draggable ? '-1px' : undefined,
                     cursor: 'pointer'
                 }}
-            />
+            /> */}
             {/* </Tooltip> */}
             {/* margins */}
             {/* top */}
+            {/* <MyPortal position={{
+                position: 'absolute',
+                top: `${props.componentRef.current?.getBoundingClientRect().top}px`,
+                left: `${props.componentRef.current?.getBoundingClientRect().left}px`,
+                // right: `${props.componentRef.current?.getBoundingClientRect().right}px`,
+                backgroundColor: 'red',
+                width: `${props.componentRef.current?.getBoundingClientRect().width}px`,
+                height: `${props.componentRef.current?.getBoundingClientRect().height}px`
+            }}>
+            </MyPortal> */}
             {isHovered && !draggable && <MarginOverlay height={marginAsPx(String(props.otherProperties?.marginTop), window.getComputedStyle(props.componentRef.current?.parentElement))} width={'100%'} bottom={'100%'} left={'0'} />}
             {/* left */}
             {isHovered && !draggable && <MarginOverlay height={'100%'} width={marginAsPx(String(props.otherProperties?.marginLeft), window.getComputedStyle(props.componentRef.current?.parentElement))} top={'0'} right={'100%'} />}
