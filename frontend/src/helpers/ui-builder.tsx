@@ -134,16 +134,23 @@ const uiMapper2 = {
         </WrapperContainer>
     ),
     'button': (components: ComponentCollection, id: string, properties) => (
-        <WrapperComponent
+        // <WrapperComponent
+        //     key={id}
+        //     componentId={id}
+        //     componentName={components[id].name}
+        //     componentType={components[id].type}
+        //     parentType={components[components[id].parent as string]?.type}
+        //     otherProperties={properties[id]}
+        // >
+        <CButton
+            {...properties[id]}
             key={id}
             componentId={id}
             componentName={components[id].name}
             componentType={components[id].type}
             parentType={components[components[id].parent as string]?.type}
-            otherProperties={properties[id]}
-        >
-            <CButton {...properties[id]} />
-        </WrapperComponent>
+        />
+        // </WrapperComponent>
     ),
     'text': (components: ComponentCollection, id: string, properties) => (
         <WrapperComponent

@@ -128,17 +128,14 @@ interface WrapperComponentProps {
     componentName: string,
     parentType: 'column' | 'row',
     otherProperties?: Properties,
-    componentRef: React.MutableRefObject<null>,
-    // children?: React.ReactNode,
+    children?: React.ReactNode,
 }
 
 const WrapperComponent = (props: WrapperComponentProps) => {
 
     console.log('C - WrapperComponent ' + props.componentId.slice(0, 5))
-    console.log('C - WrapperComponent name' + props.componentName)
-    console.log('C - WrapperComponent ref' + props.componentRef)
 
-    // const ref = useRef(null);
+    const ref = useRef(null);
     const [isHovered, setIsHovered] = useState(false);
     const [isHoveredRemote, setIsHoveredRemote] = useState(false);
     const [isSelected, setIsSelected] = useState(false);
@@ -188,20 +185,15 @@ const WrapperComponent = (props: WrapperComponentProps) => {
         deleted: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-right' }),
     }
 
-    console.log('positioning:', props.componentRef.current?.getBoundingClientRect())
-
 
     return <>
         <div
-            // ref={ref}
+            ref={ref}
             style={{
                 // size
-                width: `${props.componentRef.current?.getBoundingClientRect().width}px`,
-                height: `${props.componentRef.current?.getBoundingClientRect().height}px`,
-                // position
-                top: 0,
-                left: 0,
-                // minHeight: props.otherProperties?.minHeight || 'auto',
+                width: props.otherProperties?.width || '100%',
+                height: props.otherProperties?.height || 'auto',
+                minHeight: props.otherProperties?.minHeight || 'auto',
                 // margins
                 marginTop: props.otherProperties?.marginTop,
                 marginRight: props.otherProperties?.marginRight,
@@ -209,7 +201,7 @@ const WrapperComponent = (props: WrapperComponentProps) => {
                 marginLeft: props.otherProperties?.marginLeft,
                 // other
                 // overflow: 'hidden',
-                position: 'absolute',
+                position: 'relative',
             }}
             onMouseOver={(e) => {
                 e.stopPropagation();
@@ -222,15 +214,15 @@ const WrapperComponent = (props: WrapperComponentProps) => {
                 handleMouseLeave()
             }}
         >
-            {isHovered && !draggable && <MyPortal position={{ position: 'absolute', top: `calc(${props.componentRef.current?.getBoundingClientRect().top}px - 30px)`, left: props.componentRef.current?.getBoundingClientRect().left }}>
+            {isHovered && !draggable && <MyPortal position={{ position: 'absolute', top: `calc(${ref.current?.getBoundingClientRect().top}px - 30px)`, left: ref.current?.getBoundingClientRect().left }}>
                 {TooltipComp(props.componentName, props.componentType, colorMode)}
             </MyPortal>}
 
-            {/* {props.children} */}
+            {props.children}
 
             {/* outlines */}
-            {!isSelected && !draggable && (isHovered || isHoveredRemote) && <MyOutline boundingRect={props.componentRef.current?.getBoundingClientRect()} color='orange' thickness={3} />}
-            {isSelected && <MyOutline boundingRect={props.componentRef.current?.getBoundingClientRect()} color='green' thickness={3} />}
+            {!isSelected && !draggable && (isHovered || isHoveredRemote) && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='orange' thickness={3} />}
+            {isSelected && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='green' thickness={3} />}
 
             {isHovered && !draggable && <DraggableHandle top={6} componentId={props.componentId} />}
             {draggable
@@ -282,13 +274,13 @@ const WrapperComponent = (props: WrapperComponentProps) => {
             {/* </Tooltip> */}
             {/* margins */}
             {/* top */}
-            {isHovered && !draggable && <MarginOverlay height={marginAsPx(String(props.otherProperties?.marginTop), window.getComputedStyle(props.componentRef.current?.parentElement))} width={'100%'} bottom={'100%'} left={'0'} />}
+            {isHovered && !draggable && <MarginOverlay height={marginAsPx(String(props.otherProperties?.marginTop), window.getComputedStyle(ref.current?.parentElement))} width={'100%'} bottom={'100%'} left={'0'} />}
             {/* left */}
-            {isHovered && !draggable && <MarginOverlay height={'100%'} width={marginAsPx(String(props.otherProperties?.marginLeft), window.getComputedStyle(props.componentRef.current?.parentElement))} top={'0'} right={'100%'} />}
+            {isHovered && !draggable && <MarginOverlay height={'100%'} width={marginAsPx(String(props.otherProperties?.marginLeft), window.getComputedStyle(ref.current?.parentElement))} top={'0'} right={'100%'} />}
             {/* bottom */}
-            {isHovered && !draggable && <MarginOverlay height={marginAsPx(String(props.otherProperties?.marginBottom), window.getComputedStyle(props.componentRef.current?.parentElement))} width={'100%'} top={'100%'} left={'0'} />}
+            {isHovered && !draggable && <MarginOverlay height={marginAsPx(String(props.otherProperties?.marginBottom), window.getComputedStyle(ref.current?.parentElement))} width={'100%'} top={'100%'} left={'0'} />}
             {/* right */}
-            {isHovered && !draggable && <MarginOverlay height={'100%'} width={marginAsPx(String(props.otherProperties?.marginRight), window.getComputedStyle(props.componentRef.current?.parentElement))} top={'0'} left={'100%'} />}
+            {isHovered && !draggable && <MarginOverlay height={'100%'} width={marginAsPx(String(props.otherProperties?.marginRight), window.getComputedStyle(ref.current?.parentElement))} top={'0'} left={'100%'} />}
         </div >
     </>
 }
