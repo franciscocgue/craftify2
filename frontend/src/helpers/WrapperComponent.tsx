@@ -71,7 +71,7 @@ const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorM
         borderRadius: '3px',
         alignItems: 'center',
         height: '30px',
-        userSelect: 'none'
+        userSelect: 'none',
     }}>
     <IconBox icon={compTypes[componentType].icon} />
     {name || componentType}
@@ -233,9 +233,6 @@ const WrapperComponent = (props: WrapperComponentProps) => {
                 toggleSelectedId(props.componentId);
             }}
         >
-            {isHovered && !draggable && <MyPortal position={{ position: 'absolute', top: `calc(${props.componentRef.current?.getBoundingClientRect().top}px - 30px)`, left: props.componentRef.current?.getBoundingClientRect().left }}>
-                {TooltipComp(props.componentName, props.componentType, colorMode)}
-            </MyPortal>}
 
             {/* {props.children} */}
 
@@ -245,7 +242,7 @@ const WrapperComponent = (props: WrapperComponentProps) => {
 
             {/* {isHovered && !draggable && <DraggableHandle top={6} componentId={props.componentId} />} */}
 
-            <MyPortal position={{ position: 'absolute', top: props.componentRef.current?.getBoundingClientRect().top, left: props.componentRef.current?.getBoundingClientRect().left + props.componentRef.current?.getBoundingClientRect().width}}>
+            <MyPortal position={{ position: 'absolute', top: props.componentRef.current?.getBoundingClientRect().top, left: props.componentRef.current?.getBoundingClientRect().left + props.componentRef.current?.getBoundingClientRect().width }}>
                 <>
                     {isHovered && !draggable && <DraggableHandle top={6} componentId={props.componentId} />}
                     {isHovered && !draggable && <div style={actionBtnStyle(2, 6)}>
@@ -268,13 +265,13 @@ const WrapperComponent = (props: WrapperComponentProps) => {
                         removeComponent(props.componentId);
                         notify.deleted(`${props.componentName} deleted`)
                     }} />
-            </div>} */}
+                    </div>} */}
             {/* {isHovered && !draggable && !isSelected && <div style={actionBtnStyle(4, 6)}>
                 <MdCheckBoxOutlineBlank color="white" size={'19px'} onClick={(e) => {
                     e.stopPropagation();
                     setSelectedId(props.componentId);
-                }} />
-            </div>} */}
+                    }} />
+                    </div>} */}
             {/* {isSelected && <div style={actionBtnStyle(4, 6)}>
                 <MdCheckBox color="white" size={'19px'} onClick={(e) => {
                     e.stopPropagation();
@@ -286,27 +283,26 @@ const WrapperComponent = (props: WrapperComponentProps) => {
                 onClick={(e) => {
                     e.stopPropagation();
                     toggleSelectedId(props.componentId);
-                }}
-                style={{
-                    width: '100%',
-                    height: '100%',
-                    position: "absolute",
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    // if dragging _this_ component, highlight overlay
-                    backgroundColor: draggable?.componentId === props.componentId ? 'grey' : undefined,
-                    opacity: draggable?.componentId === props.componentId ? '0.6' : undefined,
-                    // // highlights
-                    outline: draggable ? '1px dotted grey' : undefined,
-                    outlineOffset: draggable ? '-1px' : undefined,
-                    cursor: 'pointer'
-                }}
-            /> */}
+                    }}
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        position: "absolute",
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        // if dragging _this_ component, highlight overlay
+                        backgroundColor: draggable?.componentId === props.componentId ? 'grey' : undefined,
+                        opacity: draggable?.componentId === props.componentId ? '0.6' : undefined,
+                        // // highlights
+                        outline: draggable ? '1px dotted grey' : undefined,
+                        outlineOffset: draggable ? '-1px' : undefined,
+                        cursor: 'pointer'
+                        }}
+                        /> */}
             {/* </Tooltip> */}
             {/* margins */}
-            {/* top */}
             {/* <MyPortal position={{
                 position: 'absolute',
                 top: `${props.componentRef.current?.getBoundingClientRect().top}px`,
@@ -315,15 +311,71 @@ const WrapperComponent = (props: WrapperComponentProps) => {
                 backgroundColor: 'red',
                 width: `${props.componentRef.current?.getBoundingClientRect().width}px`,
                 height: `${props.componentRef.current?.getBoundingClientRect().height}px`
-            }}>
-            </MyPortal> */}
-            {isHovered && !draggable && <MarginOverlay height={marginAsPx(String(props.otherProperties?.marginTop), window.getComputedStyle(props.componentRef.current?.parentElement))} width={'100%'} bottom={'100%'} left={'0'} />}
+                }}>
+                </MyPortal> */}
+            {/* top */}
+            {(isHovered || isSelected)
+                && !draggable
+                && props.otherProperties?.marginTop
+                && !['0px', '0%'].includes(props.otherProperties?.marginTop)
+                && <MyPortal position={{
+                    position: 'absolute',
+                    top: `calc(${props.componentRef.current?.getBoundingClientRect().top}px - ${marginAsPx(String(props.otherProperties?.marginTop), window.getComputedStyle(props.componentRef.current?.parentElement))})`,
+                    left: props.componentRef.current?.getBoundingClientRect().left,
+                    width: props.componentRef.current?.getBoundingClientRect().width,
+                    height: marginAsPx(String(props.otherProperties?.marginTop), window.getComputedStyle(props.componentRef.current?.parentElement)),
+                    backgroundColor: colorMode === 'dark' ? '#1d8348' : '#abebc6',
+                    opacity: colorMode === 'dark' ? '0.4' : '0.8',
+                }}>
+                </MyPortal>}
             {/* left */}
-            {isHovered && !draggable && <MarginOverlay height={'100%'} width={marginAsPx(String(props.otherProperties?.marginLeft), window.getComputedStyle(props.componentRef.current?.parentElement))} top={'0'} right={'100%'} />}
+            {(isHovered || isSelected)
+                && !draggable
+                && props.otherProperties?.marginLeft
+                && !['0px', '0%'].includes(props.otherProperties?.marginLeft)
+                && <MyPortal position={{
+                    position: 'absolute',
+                    top: props.componentRef.current?.getBoundingClientRect().top,
+                    left: `calc(${props.componentRef.current?.getBoundingClientRect().left}px - ${marginAsPx(String(props.otherProperties?.marginLeft), window.getComputedStyle(props.componentRef.current?.parentElement))})`,
+                    width: marginAsPx(String(props.otherProperties?.marginLeft), window.getComputedStyle(props.componentRef.current?.parentElement)),
+                    height: props.componentRef.current?.getBoundingClientRect().height,
+                    backgroundColor: colorMode === 'dark' ? '#1d8348' : '#abebc6',
+                    opacity: colorMode === 'dark' ? '0.4' : '0.8',
+                }}>
+                </MyPortal>}
             {/* bottom */}
-            {isHovered && !draggable && <MarginOverlay height={marginAsPx(String(props.otherProperties?.marginBottom), window.getComputedStyle(props.componentRef.current?.parentElement))} width={'100%'} top={'100%'} left={'0'} />}
+            {(isHovered || isSelected)
+                && !draggable
+                && props.otherProperties?.marginBottom
+                && !['0px', '0%'].includes(props.otherProperties?.marginBottom)
+                && <MyPortal position={{
+                    position: 'absolute',
+                    top: `${props.componentRef.current?.getBoundingClientRect().bottom}px`,
+                    left: props.componentRef.current?.getBoundingClientRect().left,
+                    width: props.componentRef.current?.getBoundingClientRect().width,
+                    height: marginAsPx(String(props.otherProperties?.marginBottom), window.getComputedStyle(props.componentRef.current?.parentElement)),
+                    backgroundColor: colorMode === 'dark' ? '#1d8348' : '#abebc6',
+                    opacity: colorMode === 'dark' ? '0.4' : '0.8',
+                }}>
+                </MyPortal>}
             {/* right */}
-            {isHovered && !draggable && <MarginOverlay height={'100%'} width={marginAsPx(String(props.otherProperties?.marginRight), window.getComputedStyle(props.componentRef.current?.parentElement))} top={'0'} left={'100%'} />}
+            {(isHovered || isSelected)
+                && !draggable
+                && props.otherProperties?.marginRight
+                && !['0px', '0%'].includes(props.otherProperties?.marginRight)
+                && <MyPortal position={{
+                    position: 'absolute',
+                    top: props.componentRef.current?.getBoundingClientRect().top,
+                    left: `${props.componentRef.current?.getBoundingClientRect().right}px`,
+                    width: marginAsPx(String(props.otherProperties?.marginRight), window.getComputedStyle(props.componentRef.current?.parentElement)),
+                    height: props.componentRef.current?.getBoundingClientRect().height,
+                    backgroundColor: colorMode === 'dark' ? '#1d8348' : '#abebc6',
+                    opacity: colorMode === 'dark' ? '0.4' : '0.8',
+                }}>
+                </MyPortal>}
+            {isHovered && !draggable && <MyPortal position={{ position: 'absolute', top: `calc(${props.componentRef.current?.getBoundingClientRect().top}px - 30px)`, left: props.componentRef.current?.getBoundingClientRect().left }}>
+                {TooltipComp(props.componentName, props.componentType, colorMode)}
+            </MyPortal>}
         </div >
     </>
 }
