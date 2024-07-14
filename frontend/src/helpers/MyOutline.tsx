@@ -55,7 +55,7 @@ const MyOutline = ({ boundingRect, color, thickness }: myOutlineProps) => {
                 </MyPortal>
 
                 {/* right */}
-                <MyPortal position={{ position: 'absolute', top: `calc(${boundingRect.top}px)`, left: boundingRect.right }}>
+                <MyPortal position={{ position: 'absolute', top: `calc(${boundingRect.top}px)`, left: boundingRect.right - thickness }}>
                     <div style={{
                         height: `${boundingRect.height}px`,
                         width: `${thickness}px`,
