@@ -243,18 +243,32 @@ const WrapperComponent = (props: WrapperComponentProps) => {
             {!isSelected && !draggable && (isHovered || isHoveredRemote) && <MyOutline boundingRect={props.componentRef.current?.getBoundingClientRect()} color='orange' thickness={3} />}
             {isSelected && <MyOutline boundingRect={props.componentRef.current?.getBoundingClientRect()} color='green' thickness={3} />}
 
-            {isHovered && !draggable && <DraggableHandle top={6} componentId={props.componentId} />}
+            {/* {isHovered && !draggable && <DraggableHandle top={6} componentId={props.componentId} />} */}
+
+            <MyPortal position={{ position: 'absolute', top: props.componentRef.current?.getBoundingClientRect().top, left: props.componentRef.current?.getBoundingClientRect().left + props.componentRef.current?.getBoundingClientRect().width}}>
+                <>
+                    {isHovered && !draggable && <DraggableHandle top={6} componentId={props.componentId} />}
+                    {isHovered && !draggable && <div style={actionBtnStyle(2, 6)}>
+                        <RiDeleteBin2Fill color="white" size={'19px'}
+                            onClick={() => {
+                                removeComponent(props.componentId);
+                                notify.deleted(`${props.componentName} deleted`)
+                            }} />
+                    </div>}
+                </>
+            </MyPortal>
+
             {draggable
                 && draggable.componentId !== props.componentId
                 && !getChildrenNodes(draggable?.componentId, components).includes(props.componentId)
                 && <DroppableComponent componentId={props.componentId} parentType={props.parentType} />}
-            {isHovered && !draggable && <div style={actionBtnStyle(2, 6)}>
+            {/* {isHovered && !draggable && <div style={actionBtnStyle(2, 6)}>
                 <RiDeleteBin2Fill color="white" size={'19px'}
                     onClick={() => {
                         removeComponent(props.componentId);
                         notify.deleted(`${props.componentName} deleted`)
                     }} />
-            </div>}
+            </div>} */}
             {/* {isHovered && !draggable && !isSelected && <div style={actionBtnStyle(4, 6)}>
                 <MdCheckBoxOutlineBlank color="white" size={'19px'} onClick={(e) => {
                     e.stopPropagation();

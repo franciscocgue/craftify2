@@ -234,18 +234,24 @@ const WrapperContainer = (props: WrapperContainerProps) => {
             {!isSelected && !draggable && (isHovered || isHoveredRemote) && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='orange' thickness={3} />}
             {isSelected && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='green' thickness={3} />}
 
-            {isHovered && !draggable && <DraggableHandle componentId={props.componentId} />}
+
             {draggable
                 && draggable.componentId !== props.componentId
                 && !getChildrenNodes(draggable?.componentId, components).includes(props.componentId)
                 && <DroppableContainer componentId={props.componentId} parentType={props.parentType} />}
-            {isHovered && !draggable && <div style={actionBtnStyle(2, 2)}>
-                <RiDeleteBin2Fill color="white" size={'19px'}
-                    onClick={() => {
-                        removeComponent(props.componentId);
-                        notify.deleted(`${props.componentName} deleted`)
-                    }} />
-            </div>}
+
+            <MyPortal position={{ position: 'absolute', top: ref.current?.getBoundingClientRect().top, left: ref.current?.getBoundingClientRect().left + ref.current?.getBoundingClientRect().width}}>
+                <>
+                    {isHovered && !draggable && <DraggableHandle componentId={props.componentId} />}
+                    {isHovered && !draggable && <div style={actionBtnStyle(2, 2)}>
+                        <RiDeleteBin2Fill color="white" size={'19px'}
+                            onClick={() => {
+                                removeComponent(props.componentId);
+                                notify.deleted(`${props.componentName} deleted`)
+                            }} />
+                    </div>}
+                </>
+            </MyPortal>
             {/* {isHovered && !draggable && !isSelected && <div style={actionBtnStyle(4, 2)}>
                 <MdCheckBoxOutlineBlank color="white" size={'19px'} onClick={(e) => {
                     e.stopPropagation();
