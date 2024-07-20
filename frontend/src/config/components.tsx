@@ -185,7 +185,34 @@ const compProperties: ComponentProperties = {
         borderRightStyle: 'none',
         borderRightWidth: undefined,
         borderRightColor: undefined,
-    }
+    },
+    'checkbox': {
+        // wrapperStyles
+        width: '100%',
+        height: '40px',
+        minHeight: '40px',
+        marginTop: '0px',
+        marginBottom: '0px',
+        marginLeft: '0px',
+        marginRight: '0px',
+        // padding removed; see comment in button component
+        // p: undefined,
+        color: 'black',
+        backgroundColor: undefined,
+        outline: 'none',
+        borderTopStyle: 'none',
+        borderTopWidth: undefined,
+        borderTopColor: undefined,
+        borderBottomStyle: 'none',
+        borderBottomWidth: undefined,
+        borderBottomColor: undefined,
+        borderLeftStyle: 'none',
+        borderLeftWidth: undefined,
+        borderLeftColor: undefined,
+        borderRightStyle: 'none',
+        borderRightWidth: undefined,
+        borderRightColor: undefined,
+    },
 }
 
 export {

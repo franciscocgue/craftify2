@@ -4,6 +4,7 @@ import CButton from "../components/CButton"
 import CContainerColumn from '../components/CContainerColumn';
 import CText from '../components/CText';
 import CHeader from '../components/CHeader';
+import CCheckbox from '../components/CCheckbox';
 
 const uiMapper2 = {
     'canvas': (components: any, id: string, properties) => (
@@ -29,6 +30,9 @@ const uiMapper2 = {
     ),
     'header': (components: any, id: string, properties) => (
         <CHeader key={id} {...properties[id]} />
+    ),
+    'checkbox': (components: any, id: string, properties) => (
+        <CCheckbox key={id} {...properties[id]} />
     ),
 }
 

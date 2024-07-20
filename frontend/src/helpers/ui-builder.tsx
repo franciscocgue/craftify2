@@ -1,17 +1,10 @@
-// import ContainerWrapper from "./ContainerWrapper";
-// import ComponentWrapper from "./ComponentWrapper";
-// import CContainerColumn from "../components/components/CContainerColumn";
 import CButton from "../components/components/CButton";
-// import CanvasWrapper from "./CanvasWrapper";
 import { ComponentCollection } from "../vite-env";
-// import CCheckbox from "../components/components/CCheckbox";
 import WrapperContainer from "./WrapperContainer";
-import WrapperComponent from "./WrapperComponent";
 import DroppableCanvas from "./DroppableCanvas";
-import CContainerColumn from "../components/components/CContainerColumn";
-// import CText from "../components/components/CText";
-// import CHeader from "../components/components/CHeader";
-// import { useEffect, useRef, useState } from "react";
+import CHeader from "../components/components/CHeader";
+import CText from "../components/components/CText";
+import CCheckbox from "../components/components/CCheckbox";
 
 {/* <ContainerWrapper id="subcontainer" componentType="container-row" parentType='container-column' w={'100%'} h={'max-content'} p={1} border="none">
 <Flex direction={'row'} wrap={'wrap'} alignItems={'center'} gap={2} h={'100%'} w={'100%'}>
@@ -87,7 +80,7 @@ const uiMapper2 = {
             componentName={components[id].name}
             componentType={components[id].type}
             parentType={components[components[id].parent as string]?.type}
-            // otherProperties={properties[id]}
+        // otherProperties={properties[id]}
         >
             {/* <CContainerColumn componentId={id}> */}
             {components[id].children.map((id: string) => renderNode(components, id))}
@@ -95,53 +88,41 @@ const uiMapper2 = {
         </WrapperContainer>
     ),
     'button': (components: ComponentCollection, id: string) => (
-        // <WrapperComponent
-        //     key={id}
-        //     componentId={id}
-        //     componentName={components[id].name}
-        //     componentType={components[id].type}
-        //     parentType={components[components[id].parent as string]?.type}
-        //     otherProperties={properties[id]}
-        // >
         <CButton
-            // {...properties[id]}
             key={id}
             componentId={id}
             componentName={components[id].name}
             componentType={components[id].type}
             parentType={components[components[id].parent as string]?.type}
         />
-        // </WrapperComponent>
     ),
-    // 'text': (components: ComponentCollection, id: string) => (
-    //     <WrapperComponent
-    //         key={id}
-    //         componentId={id}
-    //         componentName={components[id].name}
-    //         componentType={components[id].type}
-    //         parentType={components[components[id].parent as string]?.type}
-    //         // otherProperties={properties[id]}
-    //     >
-    //         {/* <CText {...properties[id]} /> */}
-    //     </WrapperComponent>
-    // ),
-    // 'header': (components: ComponentCollection, id: string) => (
-    //     <WrapperComponent
-    //         key={id}
-    //         componentId={id}
-    //         componentName={components[id].name}
-    //         componentType={components[id].type}
-    //         parentType={components[components[id].parent as string]?.type}
-    //         // otherProperties={properties[id]}
-    //     >
-    //         {/* <CHeader {...properties[id]} /> */}
-    //     </WrapperComponent>
-    // ),
-    // 'checkbox': (components: ComponentCollection, id: string, properties) => (
-    //     <ComponentWrapper key={id} id={id} componentType={components[id].type} parentType={components[components[id].parent as string].type} name={components[id].name} w={'100%'} h={'50px'} p={0} border="0px solid red">
-    //         <CCheckbox />
-    //     </ComponentWrapper>
-    // ),
+    'text': (components: ComponentCollection, id: string) => (
+        <CText
+            key={id}
+            componentId={id}
+            componentName={components[id].name}
+            componentType={components[id].type}
+            parentType={components[components[id].parent as string]?.type}
+        />
+    ),
+    'header': (components: ComponentCollection, id: string) => (
+        <CHeader
+            key={id}
+            componentId={id}
+            componentName={components[id].name}
+            componentType={components[id].type}
+            parentType={components[components[id].parent as string]?.type}
+        />
+    ),
+    'checkbox': (components: ComponentCollection, id: string) => (
+        <CCheckbox
+            key={id}
+            componentId={id}
+            componentName={components[id].name}
+            componentType={components[id].type}
+            parentType={components[components[id].parent as string]?.type}
+        />
+    ),
 }
 
 const renderNode = (components: ComponentCollection, id: string) => {

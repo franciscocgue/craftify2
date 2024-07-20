@@ -1,42 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-import WrapperComponent from "../../helpers/WrapperComponent";
-import useDesignerStore from "../../stores/designer";
-import { isEqual } from "lodash";
+import { useEffect, useState } from "react";
+import { useWrapper } from "../../helpers/custom-hooks/hooks";
 
 const CButton = ({ componentId, componentType, componentName, parentType }) => {
 
     // exclude below from the built version
-
-    const ref = useRef(null);
-
     console.log('comp render: ' + componentId.slice(0, 5))
-
     const [isRefReady, setIsRefReady] = useState(false);
-    const [_, setRerender] = useState(false);
-    const otherProperties = useDesignerStore((state) => state.properties[componentId]);
-
-    // substcribe to external changes to re-render
-    useEffect(() => {
-        const unsub = useDesignerStore.subscribe(
-            // callback
-            (state, prevState) => {
-                // on canvas scroll, if THIS component is selected, 
-                // re-render so portal re-positioned.
-                if (state.selectedId === componentId && state.isCanvasScrolling !== prevState.isCanvasScrolling) {
-                    // just stoppped scrolling
-                    setRerender(prev => !prev)
-                }
-                // if THIS component's properties changed, re-render it
-                if (!isEqual(state.properties[componentId], prevState.properties[componentId])) {
-                    console.log('comp render: props changed for comp: ' + componentId.slice(0, 5))
-                    setRerender(prev => !prev)
-                    setTimeout(() => setRerender(prev => !prev), 100)
-                }
-            });
-
-        return unsub;
-    }, [])
-
+    const [ref, renderer, otherProperties, wrapperComponent] = useWrapper(componentId, componentType, componentName, parentType);
 
     // render twice so ref is not null
     useEffect(() => {
@@ -44,7 +14,6 @@ const CButton = ({ componentId, componentType, componentName, parentType }) => {
             setIsRefReady(true);
         }
     }, [isRefReady]);
-
     // end exclude block
 
     return <>
@@ -59,14 +28,7 @@ const CButton = ({ componentId, componentType, componentName, parentType }) => {
         >
             Button
             {/* exclude below from the built version */}
-            <WrapperComponent
-                componentId={componentId}
-                componentName={componentName}
-                componentRef={ref}
-                componentType={componentType}
-                parentType={parentType}
-                otherProperties={otherProperties}
-            />
+            {wrapperComponent}
             {/* end exclude block */}
         </button>
     </>
