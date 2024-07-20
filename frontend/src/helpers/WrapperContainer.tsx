@@ -6,13 +6,11 @@ import { compTypes } from "../config/components";
 import MarginOverlay from "./MarginOverlay";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import { getChildrenNodes } from "./utils";
-import { Properties } from "../vite-env";
-import { debounce } from "lodash";
+import { debounce, isEqual } from "lodash";
 import { IconType } from "react-icons";
 import MyPortal from "./MyPortal";
 import { toast } from "react-toastify";
 import MyOutline from "./MyOutline";
-import { marginAsPx } from "./utils";
 
 
 interface IconBoxProps {
@@ -39,7 +37,7 @@ const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorM
         borderRadius: '3px',
         alignItems: 'center',
         height: '30px',
-        userSelect: 'none'
+        userSelect: 'none',
     }}>
     <IconBox icon={compTypes[componentType].icon} />
     {name || componentType}
@@ -95,7 +93,7 @@ interface WrapperContainerProps {
     componentType: keyof typeof compTypes,
     componentName: string,
     parentType: 'column' | 'row',
-    otherProperties?: Properties,
+    // otherProperties?: Properties,
     children?: React.ReactNode,
 }
 
@@ -110,10 +108,33 @@ const WrapperContainer = (props: WrapperContainerProps) => {
     const draggable = useDesignerStore((state) => state.draggable);
     const setHoveredId = useDesignerStore((state) => state.setHoveredId);
     const removeComponent = useDesignerStore((state) => state.removeComponent);
-    // const toggleSelectedId = useDesignerStore((state) => state.toggleSelectedId);
-    const setSelectedId = useDesignerStore((state) => state.setSelectedId);
+    const toggleSelectedId = useDesignerStore((state) => state.toggleSelectedId);
     const components = useDesignerStore((state) => state.components);
     const colorMode = useDesignerStore((state) => state.colorMode);
+    const otherProperties = useDesignerStore((state) => state.properties[props.componentId]);
+    const [_, setRerender] = useState(false);
+
+    // substcribe to external changes to re-render
+    useEffect(() => {
+        const unsub = useDesignerStore.subscribe(
+            // callback
+            (state, prevState) => {
+                // on canvas scroll, if THIS component is selected, 
+                // re-render so portal re-positioned.
+                if (state.selectedId === props.componentId && state.isCanvasScrolling !== prevState.isCanvasScrolling) {
+                    // just stoppped scrolling
+                    setRerender(prev => !prev)
+                }
+                // if THIS component's properties changed, re-render it
+                if (!isEqual(state.properties[props.componentId], prevState.properties[props.componentId])) {
+                    console.log('comp render: props changed for comp: ' + props.componentId.slice(0, 5))
+                    setRerender(prev => !prev)
+                    setTimeout(() => setRerender(prev => !prev), 100)
+                }
+            });
+
+        return unsub;
+    }, [])
 
     const { handleMouseEnter, handleMouseLeave } = useDebouncedMouseEnter(setHoveredId)
 
@@ -151,7 +172,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
     }, [isHovered])
 
     const notify = {
-        deleted: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-center' }),
+        deleted: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-right' }),
     }
 
 
@@ -163,20 +184,20 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                 outline: draggable ? '1px dotted grey' : undefined,
                 outlineOffset: draggable ? '-1px' : undefined,
                 // size
-                width: props.otherProperties?.width || '100%',
-                height: props.otherProperties?.height || 'auto',
-                minHeight: props.otherProperties?.minHeight || 'auto',
+                width: otherProperties?.width || '100%',
+                height: otherProperties?.height || 'auto',
+                minHeight: otherProperties?.minHeight || 'auto',
                 // margins
-                marginTop: props.otherProperties?.marginTop,
-                marginRight: props.otherProperties?.marginRight,
-                marginBottom: props.otherProperties?.marginBottom,
-                marginLeft: props.otherProperties?.marginLeft,
+                marginTop: otherProperties?.marginTop,
+                marginRight: otherProperties?.marginRight,
+                marginBottom: otherProperties?.marginBottom,
+                marginLeft: otherProperties?.marginLeft,
                 // other
                 // overflow: 'hidden',
                 position: 'relative',
                 overflow: 'hidden',
 
-                ...props.otherProperties
+                ...otherProperties
             }}
             onMouseOver={(e) => {
                 e.stopPropagation();
@@ -190,7 +211,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
             }}
             onClick={(e) => {
                 e.stopPropagation();
-                setSelectedId(props.componentId);
+                toggleSelectedId(props.componentId);
             }}
         >
 
@@ -200,36 +221,24 @@ const WrapperContainer = (props: WrapperContainerProps) => {
             {!isSelected && !draggable && (isHovered || isHoveredRemote) && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='orange' thickness={3} />}
             {isSelected && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='green' thickness={3} />}
 
+            {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: ref.current?.getBoundingClientRect().top, left: ref.current?.getBoundingClientRect().left + ref.current?.getBoundingClientRect().width }}>
+                <>
+                    <DraggableHandle componentId={props.componentId} />
+                    <div style={actionBtnStyle(2, 2)}>
+                        <RiDeleteBin2Fill color="white" size={'19px'}
+                            onClick={() => {
+                                removeComponent(props.componentId);
+                                notify.deleted(`${props.componentName} deleted`)
+                            }} />
+                    </div>
+                </>
+            </MyPortal>}
 
             {draggable
                 && draggable.componentId !== props.componentId
                 && !getChildrenNodes(draggable?.componentId, components).includes(props.componentId)
                 && <DroppableContainer componentId={props.componentId} parentType={props.parentType} />}
 
-            <MyPortal styles={{ position: 'absolute', top: ref.current?.getBoundingClientRect().top, left: ref.current?.getBoundingClientRect().left + ref.current?.getBoundingClientRect().width }}>
-                <>
-                    {isHovered && !draggable && <DraggableHandle componentId={props.componentId} />}
-                    {isHovered && !draggable && <div style={actionBtnStyle(2, 2)}>
-                        <RiDeleteBin2Fill color="white" size={'19px'}
-                            onClick={() => {
-                                removeComponent(props.componentId);
-                                notify.deleted(`${props.componentName} deleted`)
-                            }} />
-                    </div>}
-                </>
-            </MyPortal>
-            {/* {isHovered && !draggable && !isSelected && <div style={actionBtnStyle(4, 2)}>
-                <MdCheckBoxOutlineBlank color="white" size={'19px'} onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedId(props.componentId);
-                }} />
-                </div>}
-            {!draggable && isSelected && <div style={actionBtnStyle(4, 2)}>
-                <MdCheckBox color="white" size={'19px'} onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedId(null);
-                    }} />
-                    </div>} */}
             {/* overlay - if dragging */}
             {draggable?.componentId === props.componentId && <div
                 style={{
@@ -245,67 +254,17 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                     opacity: draggable?.componentId === props.componentId ? '0.6' : undefined,
                 }}
             />}
-            {/* </Tooltip> */}
             {/* margins */}
             {(isHovered || isSelected)
                 && !draggable
-                && props.otherProperties?.marginTop
-                && !['0px', '0%'].includes(props.otherProperties?.marginTop)
-                && <MyPortal styles={{
-                    position: 'absolute',
-                    top: ref.current?.getBoundingClientRect().top - marginAsPx(String(props.otherProperties?.marginTop), window.getComputedStyle(ref.current?.parentElement)),
-                    left: ref.current?.getBoundingClientRect().left,
-                    width: ref.current?.getBoundingClientRect().width,
-                    height: marginAsPx(String(props.otherProperties?.marginTop), window.getComputedStyle(ref.current?.parentElement)),
-                    backgroundColor: colorMode === 'dark' ? '#1d8348' : '#abebc6',
-                    opacity: colorMode === 'dark' ? '0.4' : '0.8',
-                }}>
-                </MyPortal>}
-            {/* left */}
-            {(isHovered || isSelected)
-                && !draggable
-                && props.otherProperties?.marginLeft
-                && !['0px', '0%'].includes(props.otherProperties?.marginLeft)
-                && <MyPortal styles={{
-                    position: 'absolute',
-                    top: ref.current?.getBoundingClientRect().top,
-                    left: ref.current?.getBoundingClientRect().left - marginAsPx(String(props.otherProperties?.marginLeft), window.getComputedStyle(ref.current?.parentElement)),
-                    width: marginAsPx(String(props.otherProperties?.marginLeft), window.getComputedStyle(ref.current?.parentElement)),
-                    height: ref.current?.getBoundingClientRect().height,
-                    backgroundColor: colorMode === 'dark' ? '#1d8348' : '#abebc6',
-                    opacity: colorMode === 'dark' ? '0.4' : '0.8',
-                }}>
-                </MyPortal>}
-            {/* bottom */}
-            {(isHovered || isSelected)
-                && !draggable
-                && props.otherProperties?.marginBottom
-                && !['0px', '0%'].includes(props.otherProperties?.marginBottom)
-                && <MyPortal styles={{
-                    position: 'absolute',
-                    top: ref.current?.getBoundingClientRect().bottom,
-                    left: ref.current?.getBoundingClientRect().left,
-                    width: ref.current?.getBoundingClientRect().width,
-                    height: marginAsPx(String(props.otherProperties?.marginBottom), window.getComputedStyle(ref.current?.parentElement)),
-                    backgroundColor: colorMode === 'dark' ? '#1d8348' : '#abebc6',
-                    opacity: colorMode === 'dark' ? '0.4' : '0.8',
-                }}>
-                </MyPortal>}
-            {/* right */}
-            {(isHovered || isSelected)
-                && !draggable
-                && props.otherProperties?.marginRight
-                && !['0px', '0%'].includes(props.otherProperties?.marginRight)
-                && <MyPortal styles={{
-                    position: 'absolute',
-                    top: ref.current?.getBoundingClientRect().top,
-                    left: ref.current?.getBoundingClientRect().right,
-                    width: marginAsPx(String(props.otherProperties?.marginRight), window.getComputedStyle(ref.current?.parentElement)),
-                    height: ref.current?.getBoundingClientRect().height,
-                    backgroundColor: colorMode === 'dark' ? '#1d8348' : '#abebc6',
-                    opacity: colorMode === 'dark' ? '0.4' : '0.8',
-                }}>
-                </MyPortal>}
+                && <MarginOverlay
+                    componentRef={ref}
+                    marginTop={otherProperties?.marginTop}
+                    marginLeft={otherProperties?.marginLeft}
+                    marginRight={otherProperties?.marginRight}
+                    marginBottom={otherProperties?.marginBottom}
+                />}
+            {/* </Tooltip> */}
             {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: `calc(${ref.current?.getBoundingClientRect().top}px - 30px)`, left: ref.current?.getBoundingClientRect().left }}>
                 {TooltipComp(props.componentName, props.componentType, colorMode)}
             </MyPortal>}

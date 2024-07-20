@@ -15,12 +15,13 @@ const CButton = ({ componentId, componentType, componentName, parentType }) => {
     const [_, setRerender] = useState(false);
     const otherProperties = useDesignerStore((state) => state.properties[componentId]);
 
+    // substcribe to external changes to re-render
     useEffect(() => {
         const unsub = useDesignerStore.subscribe(
             // callback
             (state, prevState) => {
                 // on canvas scroll, if THIS component is selected, 
-                // re-render so ref is updated and portal re-positioned.
+                // re-render so portal re-positioned.
                 if (state.selectedId === componentId && state.isCanvasScrolling !== prevState.isCanvasScrolling) {
                     // just stoppped scrolling
                     setRerender(prev => !prev)
@@ -37,6 +38,7 @@ const CButton = ({ componentId, componentType, componentName, parentType }) => {
     }, [])
 
 
+    // render twice so ref is not null
     useEffect(() => {
         if (ref.current && !isRefReady) {
             setIsRefReady(true);

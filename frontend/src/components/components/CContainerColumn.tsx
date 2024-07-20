@@ -1,12 +1,15 @@
 import { ReactNode } from "react"
+import useDesignerStore from "../../stores/designer";
 
 interface propsT {
+    componentId: string,
     children: ReactNode,
 }
 
-const CContainerColumn = ({ children, ...otherProperties }: propsT) => {
+const CContainerColumn = ({ componentId, children }: propsT) => {
 
     // console.log('ttt', otherProperties.gap)
+    const otherProperties = useDesignerStore((state) => state.properties[componentId]);
 
     return <div
         style={{

@@ -8,6 +8,7 @@ import { ComponentCollection } from "../vite-env";
 import WrapperContainer from "./WrapperContainer";
 import WrapperComponent from "./WrapperComponent";
 import DroppableCanvas from "./DroppableCanvas";
+import CContainerColumn from "../components/components/CContainerColumn";
 // import CText from "../components/components/CText";
 // import CHeader from "../components/components/CHeader";
 // import { useEffect, useRef, useState } from "react";
@@ -88,8 +89,8 @@ const uiMapper2 = {
             parentType={components[components[id].parent as string]?.type}
             // otherProperties={properties[id]}
         >
-            {/* <CContainerColumn {...properties[id]}> */}
-            {components[id].children.map((id: string) => renderNode(components, id, properties))}
+            {/* <CContainerColumn componentId={id}> */}
+            {components[id].children.map((id: string) => renderNode(components, id))}
             {/* </CContainerColumn> */}
         </WrapperContainer>
     ),

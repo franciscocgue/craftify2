@@ -154,8 +154,6 @@ const WrapperComponent = (props: WrapperComponentProps) => {
         deleted: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-right' }),
     }
 
-    console.log('positioning:', props.componentRef.current?.getBoundingClientRect())
-
 
     return <>
         <div
@@ -205,9 +203,7 @@ const WrapperComponent = (props: WrapperComponentProps) => {
             {/* outlines */}
             {!isSelected && !draggable && (isHovered || isHoveredRemote) && <MyOutline boundingRect={props.componentRef.current?.getBoundingClientRect()} color='orange' thickness={3} />}
             {isSelected && <MyOutline boundingRect={props.componentRef.current?.getBoundingClientRect()} color='green' thickness={3} />}
-
-            {/* {isHovered && !draggable && <DraggableHandle top={6} componentId={props.componentId} />} */}
-
+            
             {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: props.componentRef.current?.getBoundingClientRect().top, left: props.componentRef.current?.getBoundingClientRect().left + props.componentRef.current?.getBoundingClientRect().width }}>
                 <>
                     <DraggableHandle top={6} componentId={props.componentId} />
