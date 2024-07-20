@@ -1,4 +1,4 @@
-import useDesignerStore from "../stores/designer"
+import { useEffect, useState } from "react"
 import MyPortal from "./MyPortal"
 
 type boundingRectType = {
@@ -13,7 +13,7 @@ type boundingRectType = {
 type myOutlineProps = {
     boundingRect: boundingRectType,
     color: string,
-    thickness: number
+    thickness: number,
 }
 
 const MyOutline = ({ boundingRect, color, thickness }: myOutlineProps) => {
@@ -22,13 +22,30 @@ const MyOutline = ({ boundingRect, color, thickness }: myOutlineProps) => {
 
     console.log('C - MyOutline ')
 
-    const isResizing = useDesignerStore((state) => state.isResizing);
+    // const setActivePortals = useDesignerStore((state) => state.setActivePortals);
+    const [isVisible, setIsVisible] = useState(true);
+
+    // useEffect(() => {
+    //     console.log('debb - first time')
+    //     // add to list of active portals
+    //     // setActivePortals('compId', true)
+    // }, [])
+
+    // hide outline if over the limits
+    // note: 72px ~ top navbar (toolbar) height
+    useEffect(() => {
+        if (boundingRect.top >= 72 && boundingRect.bottom <= window.innerHeight) {
+            setIsVisible(true)
+        } else {
+            setIsVisible(false)
+        }
+    }, [boundingRect.bottom, boundingRect.top])
 
     return <>
-        {!isResizing
+        {isVisible
             ? <>
                 {/* top */}
-                <MyPortal position={{ position: 'absolute', top: `calc(${boundingRect.top}px)`, left: boundingRect.left }}>
+                <MyPortal styles={{ position: 'absolute', top: `calc(${boundingRect.top}px)`, left: boundingRect.left }}>
                     <div style={{
                         width: `${boundingRect.width}px`,
                         height: `${thickness}px`,
@@ -37,7 +54,7 @@ const MyOutline = ({ boundingRect, color, thickness }: myOutlineProps) => {
                 </MyPortal>
 
                 {/* bottom */}
-                <MyPortal position={{ position: 'absolute', top: `calc(${boundingRect.bottom - thickness}px)`, left: boundingRect.left }}>
+                <MyPortal styles={{ position: 'absolute', top: `calc(${boundingRect.bottom - thickness}px)`, left: boundingRect.left }}>
                     <div style={{
                         width: `${boundingRect.width}px`,
                         height: `${thickness}px`,
@@ -46,7 +63,7 @@ const MyOutline = ({ boundingRect, color, thickness }: myOutlineProps) => {
                 </MyPortal>
 
                 {/* left */}
-                <MyPortal position={{ position: 'absolute', top: `calc(${boundingRect.top}px)`, left: boundingRect.left }}>
+                <MyPortal styles={{ position: 'absolute', top: `calc(${boundingRect.top}px)`, left: boundingRect.left }}>
                     <div style={{
                         height: `${boundingRect.height}px`,
                         width: `${thickness}px`,
@@ -55,7 +72,7 @@ const MyOutline = ({ boundingRect, color, thickness }: myOutlineProps) => {
                 </MyPortal>
 
                 {/* right */}
-                <MyPortal position={{ position: 'absolute', top: `calc(${boundingRect.top}px)`, left: boundingRect.right - thickness }}>
+                <MyPortal styles={{ position: 'absolute', top: `calc(${boundingRect.top}px)`, left: boundingRect.right - thickness }}>
                     <div style={{
                         height: `${boundingRect.height}px`,
                         width: `${thickness}px`,

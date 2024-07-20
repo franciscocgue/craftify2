@@ -1,17 +1,42 @@
-import { CSSProperties, ReactElement } from 'react';
+import { CSSProperties, ReactElement, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
+import useDesignerStore from '../stores/designer';
+
+// type boundingRectType = {
+//   top: number,
+//   bottom: number,
+//   left: number,
+//   right: number,
+//   width: number,
+//   height: number,
+// }
 
 type MyPortalProps = {
-  children: ReactElement,
-  position: CSSProperties
+  children?: ReactElement,
+  // boundingRect: boundingRectType,
+  styles: CSSProperties
 }
 
-const MyPortal = ({ children, position }: MyPortalProps) => {
+const MyPortal = ({ children, styles }: MyPortalProps) => {
+
+  const [isVisible, setIsVisible] = useState(true);
+  const isCanvasScrolling = useDesignerStore((state) => state.isCanvasScrolling);
+
+  useEffect(() => {
+    let lateRender = setTimeout(() => setIsVisible(true), 100)
+    if (isCanvasScrolling) {
+      clearTimeout(lateRender)
+      setIsVisible(false);
+    }
+  }, [isCanvasScrolling])
+
+  // console.log('LOOOG', position)
+
   // Create a portal
   return ReactDOM.createPortal(
-    <div style={position}>
+    <>{isVisible && <div style={{ ...styles }}>
       {children}
-    </div>,
+    </div>}</>,
     document.getElementById('my-root-tooltip')
   );
 };

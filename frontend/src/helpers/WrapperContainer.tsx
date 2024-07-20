@@ -12,40 +12,8 @@ import { IconType } from "react-icons";
 import MyPortal from "./MyPortal";
 import { toast } from "react-toastify";
 import MyOutline from "./MyOutline";
+import { marginAsPx } from "./utils";
 
-
-/**
- * Convert a CSS length to px. 
- * 
- * Use Case: for the margin overlay, if margin is provided as %,
- * the actual px based on the parent size is computed (otherwise
- * overlay size will be based on % and component size)
- * 
- * Used for overlay margins and re-resizable.
- *
- * @param {string} margin - margin CSS length (20px, 10%, etc.).
- * @param {CSSStyleDeclaration} parentStyles - Parent styles (output of window.getComputedStyle(ref.current.resizable?.parentElement)).
- * @returns {string} Margin as px.
- */
-const marginAsPx = (margin: string, parentStyles: CSSStyleDeclaration) => {
-
-    const regexPx = /^\d+px$/;
-    if (regexPx.test(margin)) return margin // px format
-
-    if (!margin || !parentStyles || !parentStyles?.width) return '0px' // wronf inputs, no margin then
-
-    const regexPercentage = /^\d+%$/;
-    const percentageFormat = regexPercentage.test(margin);
-
-    if (percentageFormat && margin !== '0%') {
-        let length = parseFloat(margin.replace('%', ''));
-        let parentLength = parseFloat(parentStyles.width.replace('px', ''));
-        return Math.floor(length / 100 * parentLength) + 'px'
-    } else {
-        // @TODO: support other CSS length units for margin apart from % and px
-        return '0px'
-    }
-}
 
 interface IconBoxProps {
     icon: IconType;
@@ -142,7 +110,8 @@ const WrapperContainer = (props: WrapperContainerProps) => {
     const draggable = useDesignerStore((state) => state.draggable);
     const setHoveredId = useDesignerStore((state) => state.setHoveredId);
     const removeComponent = useDesignerStore((state) => state.removeComponent);
-    const toggleSelectedId = useDesignerStore((state) => state.toggleSelectedId);
+    // const toggleSelectedId = useDesignerStore((state) => state.toggleSelectedId);
+    const setSelectedId = useDesignerStore((state) => state.setSelectedId);
     const components = useDesignerStore((state) => state.components);
     const colorMode = useDesignerStore((state) => state.colorMode);
 
@@ -221,7 +190,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
             }}
             onClick={(e) => {
                 e.stopPropagation();
-                toggleSelectedId(props.componentId);
+                setSelectedId(props.componentId);
             }}
         >
 
@@ -237,7 +206,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                 && !getChildrenNodes(draggable?.componentId, components).includes(props.componentId)
                 && <DroppableContainer componentId={props.componentId} parentType={props.parentType} />}
 
-            <MyPortal position={{ position: 'absolute', top: ref.current?.getBoundingClientRect().top, left: ref.current?.getBoundingClientRect().left + ref.current?.getBoundingClientRect().width }}>
+            <MyPortal styles={{ position: 'absolute', top: ref.current?.getBoundingClientRect().top, left: ref.current?.getBoundingClientRect().left + ref.current?.getBoundingClientRect().width }}>
                 <>
                     {isHovered && !draggable && <DraggableHandle componentId={props.componentId} />}
                     {isHovered && !draggable && <div style={actionBtnStyle(2, 2)}>
@@ -282,9 +251,9 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                 && !draggable
                 && props.otherProperties?.marginTop
                 && !['0px', '0%'].includes(props.otherProperties?.marginTop)
-                && <MyPortal position={{
+                && <MyPortal styles={{
                     position: 'absolute',
-                    top: `calc(${ref.current?.getBoundingClientRect().top}px - ${marginAsPx(String(props.otherProperties?.marginTop), window.getComputedStyle(ref.current?.parentElement))})`,
+                    top: ref.current?.getBoundingClientRect().top - marginAsPx(String(props.otherProperties?.marginTop), window.getComputedStyle(ref.current?.parentElement)),
                     left: ref.current?.getBoundingClientRect().left,
                     width: ref.current?.getBoundingClientRect().width,
                     height: marginAsPx(String(props.otherProperties?.marginTop), window.getComputedStyle(ref.current?.parentElement)),
@@ -297,10 +266,10 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                 && !draggable
                 && props.otherProperties?.marginLeft
                 && !['0px', '0%'].includes(props.otherProperties?.marginLeft)
-                && <MyPortal position={{
+                && <MyPortal styles={{
                     position: 'absolute',
                     top: ref.current?.getBoundingClientRect().top,
-                    left: `calc(${ref.current?.getBoundingClientRect().left}px - ${marginAsPx(String(props.otherProperties?.marginLeft), window.getComputedStyle(ref.current?.parentElement))})`,
+                    left: ref.current?.getBoundingClientRect().left - marginAsPx(String(props.otherProperties?.marginLeft), window.getComputedStyle(ref.current?.parentElement)),
                     width: marginAsPx(String(props.otherProperties?.marginLeft), window.getComputedStyle(ref.current?.parentElement)),
                     height: ref.current?.getBoundingClientRect().height,
                     backgroundColor: colorMode === 'dark' ? '#1d8348' : '#abebc6',
@@ -312,9 +281,9 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                 && !draggable
                 && props.otherProperties?.marginBottom
                 && !['0px', '0%'].includes(props.otherProperties?.marginBottom)
-                && <MyPortal position={{
+                && <MyPortal styles={{
                     position: 'absolute',
-                    top: `${ref.current?.getBoundingClientRect().bottom}px`,
+                    top: ref.current?.getBoundingClientRect().bottom,
                     left: ref.current?.getBoundingClientRect().left,
                     width: ref.current?.getBoundingClientRect().width,
                     height: marginAsPx(String(props.otherProperties?.marginBottom), window.getComputedStyle(ref.current?.parentElement)),
@@ -327,16 +296,17 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                 && !draggable
                 && props.otherProperties?.marginRight
                 && !['0px', '0%'].includes(props.otherProperties?.marginRight)
-                && <MyPortal position={{
+                && <MyPortal styles={{
                     position: 'absolute',
                     top: ref.current?.getBoundingClientRect().top,
-                    left: `${ref.current?.getBoundingClientRect().right}px`,
+                    left: ref.current?.getBoundingClientRect().right,
                     width: marginAsPx(String(props.otherProperties?.marginRight), window.getComputedStyle(ref.current?.parentElement)),
                     height: ref.current?.getBoundingClientRect().height,
                     backgroundColor: colorMode === 'dark' ? '#1d8348' : '#abebc6',
                     opacity: colorMode === 'dark' ? '0.4' : '0.8',
                 }}>
-                </MyPortal>}            {isHovered && !draggable && <MyPortal position={{ position: 'absolute', top: `calc(${ref.current?.getBoundingClientRect().top}px - 30px)`, left: ref.current?.getBoundingClientRect().left }}>
+                </MyPortal>}
+            {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: `calc(${ref.current?.getBoundingClientRect().top}px - 30px)`, left: ref.current?.getBoundingClientRect().left }}>
                 {TooltipComp(props.componentName, props.componentType, colorMode)}
             </MyPortal>}
         </div >

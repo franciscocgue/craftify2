@@ -37,7 +37,7 @@ function DroppableCanvas(props: DroppableCanvasProps) {
         }
     });
 
-    const canvasElem = document.getElementById('my-canvas');
+    const canvasElem = document.getElementById('my-canvas-wrapper');
 
     return (
         <>

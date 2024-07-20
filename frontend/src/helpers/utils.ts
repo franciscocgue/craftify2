@@ -25,7 +25,41 @@ const getChildrenNodes = (node: string, components: ComponentCollection) => {
     return components[node].children.reduce(_reduce, [])
 }
 
+/**
+ * Convert a CSS length to px. 
+ * 
+ * Use Case: for the margin overlay, if margin is provided as %,
+ * the actual px based on the parent size is computed (otherwise
+ * overlay size will be based on % and component size)
+ * 
+ * Used for overlay margins and re-resizable.
+ *
+ * @param {string} margin - margin CSS length (20px, 10%, etc.).
+ * @param {CSSStyleDeclaration} parentStyles - Parent styles (output of window.getComputedStyle(ref.current.resizable?.parentElement)).
+ * @returns {numer} Margin as px.
+ */
+const marginAsPx = (margin: string, parentStyles: CSSStyleDeclaration) => {
+
+    const regexPx = /^\d+px$/;
+    if (regexPx.test(margin)) return parseInt(margin) // px format
+
+    if (!margin || !parentStyles || !parentStyles?.width) return 0 // wrong inputs, no margin then
+
+    const regexPercentage = /^\d+%$/;
+    const percentageFormat = regexPercentage.test(margin);
+
+    if (percentageFormat && margin !== '0%') {
+        let length = parseFloat(margin.replace('%', ''));
+        let parentLength = parseFloat(parentStyles.width.replace('px', ''));
+        return Math.floor(length / 100 * parentLength)
+    } else {
+        // @TODO: support other CSS length units for margin apart from % and px
+        return 0
+    }
+}
+
 
 export {
-    getChildrenNodes
+    getChildrenNodes,
+    marginAsPx
 }
