@@ -131,6 +131,12 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                     setRerender(prev => !prev)
                     setTimeout(() => setRerender(prev => !prev), 100)
                 }
+                // if an ancestor properties changed, update re-render component
+                if (!isEqual(state.lastUpdatedCompChildren, prevState.lastUpdatedCompChildren) && state.lastUpdatedCompChildren.includes(props.componentId)) {
+                    console.log('comp render: ancestor props changed: ' + props.componentId.slice(0, 5))
+                    // setRerender(prev => !prev)
+                    setTimeout(() => setRerender(prev => !prev), 100)
+                }
             });
 
         return unsub;

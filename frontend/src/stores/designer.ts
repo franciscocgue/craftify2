@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { compProperties, compTypes } from '../config/components';
 import { draggableData } from '../vite-env';
+import { getChildrenNodes } from '../helpers/utils';
 
 const initialComponents = {
   'canvas': {
@@ -66,6 +67,8 @@ type designerStore = {
   components: any,
   properties: any,
   componentNames: any,
+  // componentIds of component whose properties were updated last
+  lastUpdatedCompChildren: string[],
   toggleColorMode: () => void,
   setActiveMenu: (menu: 'designer' | 'variables' | 'data' | 'styles') => void,
   setIsResizing: (isResizing: true | false) => void,
@@ -116,6 +119,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   components: initialComponents,
   properties: { canvas: compProperties['canvas'] },
   componentNames: {},
+  lastUpdatedCompChildren: [],
   toggleColorMode: () => set(state => ({ colorMode: state.colorMode === 'dark' ? 'light' : 'dark' })),
   setActiveMenu: (menu => set({ activeMenu: menu })),
   setIsResizing: (isResizing: true | false) => set({ isResizing: isResizing }),
@@ -289,24 +293,19 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
 
   }),
   updateProperty: (compId, key, value) => set((state) => {
-    // console.log('UPDATING PROPERTIES')
-    // const props = { ...state.properties };
-    // console.log(props)
-    // console.log('before')
-    // console.log(props[compId][key])
-    // props[compId][key] = value;
-    // console.log('after')
-    // console.log(props[compId][key])
-    // console.log('all')
-    // console.log(props)
-    // console.log('FINISHED UPDATING PROPERTIES')
 
     const props = { ...state.properties };
     const updatedComp = { ...props[compId] };
     updatedComp[key] = value;
     props[compId] = updatedComp;
 
-    return { properties: props }
+    const components = {...state.components}
+
+    // children of updated component;
+    // used for specific-target re-rendering based on subscriber
+    const lastUpdatedCompChildren = getChildrenNodes(compId, components)
+
+    return { properties: props, lastUpdatedCompChildren }
   })
 })));
 

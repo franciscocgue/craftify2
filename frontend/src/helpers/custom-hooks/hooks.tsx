@@ -22,7 +22,7 @@ const useWrapper = (componentId, componentType, componentName, parentType) => {
     const [renderer, setRerender] = useState(false);
     const otherProperties = useDesignerStore((state) => state.properties[componentId]);
 
-    // substcribe to external changes to re-render
+    // subscribe to external changes to re-render
     useEffect(() => {
         const unsub = useDesignerStore.subscribe(
             // callback
@@ -37,6 +37,12 @@ const useWrapper = (componentId, componentType, componentName, parentType) => {
                 if (!isEqual(state.properties[componentId], prevState.properties[componentId])) {
                     console.log('comp render: props changed for comp: ' + componentId.slice(0, 5))
                     setRerender(prev => !prev)
+                    setTimeout(() => setRerender(prev => !prev), 100)
+                }
+                // if an ancestor properties changed, update re-render component
+                if (!isEqual(state.lastUpdatedCompChildren, prevState.lastUpdatedCompChildren) && state.lastUpdatedCompChildren.includes(componentId)) {
+                    console.log('comp render: ancestor props changed: ' + componentId.slice(0, 5))
+                    // setRerender(prev => !prev)
                     setTimeout(() => setRerender(prev => !prev), 100)
                 }
             });
