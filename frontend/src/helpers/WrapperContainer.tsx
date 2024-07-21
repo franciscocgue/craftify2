@@ -121,22 +121,28 @@ const WrapperContainer = (props: WrapperContainerProps) => {
             (state, prevState) => {
                 // on canvas scroll, if THIS component is selected, 
                 // re-render so portal re-positioned.
-                if (state.selectedId === props.componentId && state.isCanvasScrolling !== prevState.isCanvasScrolling) {
+                if (state.selectedId === props.componentId && state.isCanvasScrolling !== prevState?.isCanvasScrolling) {
                     // just stoppped scrolling
                     setRerender(prev => !prev)
                 }
                 // if THIS component's properties changed, re-render it
-                if (!isEqual(state.properties[props.componentId], prevState.properties[props.componentId])) {
+                if (!isEqual(state.properties[props.componentId], prevState?.properties[props.componentId])) {
                     console.log('comp render: props changed for comp: ' + props.componentId.slice(0, 5))
                     setRerender(prev => !prev)
                     setTimeout(() => setRerender(prev => !prev), 100)
                 }
                 // if an ancestor properties changed, update re-render component
-                if (!isEqual(state.lastUpdatedCompChildren, prevState.lastUpdatedCompChildren) && state.lastUpdatedCompChildren.includes(props.componentId)) {
+                if (!isEqual(state.lastUpdatedCompChildren, prevState?.lastUpdatedCompChildren) && state.lastUpdatedCompChildren.includes(props.componentId)) {
                     console.log('comp render: ancestor props changed: ' + props.componentId.slice(0, 5))
                     // setRerender(prev => !prev)
                     setTimeout(() => setRerender(prev => !prev), 100)
                 }
+                // component just created, re-render (to show outline on newly created component)
+                if (state.selectedId !== prevState?.selectedId && state.selectedId === props.componentId) {
+                    setIsSelected(true);
+                }
+            }, {
+                fireImmediately: true // necessary to automatically select when comp first created
             });
 
         return unsub;
@@ -154,6 +160,10 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                     setIsSelected(true)
                 } else if (prevSelectedId === props.componentId && selectedId !== props.componentId) {
                     setIsSelected(false)
+                }
+                if (selectedId !== prevSelectedId) {
+                    // cleanup lingering hover from compTree
+                    setHoveredId(null)
                 }
             });
 
@@ -187,7 +197,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
             ref={ref}
             style={{
                 // highlights
-                outline: draggable ? '1px dotted grey' : undefined,
+                outline: draggable ? '1px solid grey' : undefined, // dotted
                 outlineOffset: draggable ? '-1px' : undefined,
                 // size
                 width: otherProperties?.width || '100%',

@@ -123,12 +123,22 @@ const WrapperComponent = (props: WrapperComponentProps) => {
             (state) => state.selectedId,
             // callback
             (selectedId, prevSelectedId) => {
-                if (prevSelectedId !== props.componentId && selectedId === props.componentId) {
+                 // component just created, re-render (to show outline on newly created component)
+                if (selectedId === props.componentId) {
+                    // on first render, prev and current seem to be the same...
+                    setIsSelected(true)
+                } else if (prevSelectedId !== props.componentId && selectedId === props.componentId) {
                     setIsSelected(true)
                 } else if (prevSelectedId === props.componentId && selectedId !== props.componentId) {
                     setIsSelected(false)
                 }
-            });
+                if (selectedId !== prevSelectedId) {
+                    // cleanup lingering hover from compTree
+                    setHoveredId(null)
+                }
+            }, {
+            fireImmediately: true // necessary to automatically select when comp first created
+        });
 
         return unsub
     }, [])
@@ -177,7 +187,7 @@ const WrapperComponent = (props: WrapperComponentProps) => {
                 backgroundColor: draggable?.componentId === props.componentId ? 'grey' : undefined,
                 opacity: draggable?.componentId === props.componentId ? '0.6' : undefined,
                 // // highlights
-                outline: draggable ? '1px dotted grey' : undefined,
+                outline: draggable ? '1px solid grey' : undefined, // dotted
                 outlineOffset: draggable ? '-1px' : undefined,
                 cursor: 'pointer',
                 position: 'absolute',
@@ -203,7 +213,7 @@ const WrapperComponent = (props: WrapperComponentProps) => {
             {/* outlines */}
             {!isSelected && !draggable && (isHovered || isHoveredRemote) && <MyOutline boundingRect={props.componentRef.current?.getBoundingClientRect()} color='orange' thickness={3} />}
             {isSelected && <MyOutline boundingRect={props.componentRef.current?.getBoundingClientRect()} color='green' thickness={3} />}
-            
+
             {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: props.componentRef.current?.getBoundingClientRect().top, left: props.componentRef.current?.getBoundingClientRect().left + props.componentRef.current?.getBoundingClientRect().width }}>
                 <>
                     <DraggableHandle top={6} componentId={props.componentId} />

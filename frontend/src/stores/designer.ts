@@ -242,7 +242,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
       // add to parent
       parent.children.push(compId);
 
-      return { components: comps, componentNames: compsNames, properties: props }
+      return { components: comps, componentNames: compsNames, properties: props, selectedId: compId }
 
     } else {
       // dragged over another component (not container)
