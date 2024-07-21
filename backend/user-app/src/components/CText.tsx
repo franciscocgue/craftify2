@@ -6,7 +6,7 @@ const CText = ({ ...otherProperties }) => {
             ...otherProperties,
         }}
     >
-        Lorem ipsum dolor sit amet
+        {otherProperties.__text}
     </p>
 };
 

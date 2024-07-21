@@ -6,7 +6,7 @@ const CButton = ({ ...otherProperties }) => {
             ...otherProperties
         }}
     >
-        Button
+        {otherProperties.__text}
     </button>
 }
 

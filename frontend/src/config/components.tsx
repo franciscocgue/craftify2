@@ -131,11 +131,13 @@ const compProperties: ComponentProperties = {
         borderRightStyle: 'none',
         borderRightWidth: undefined,
         borderRightColor: undefined,
+        // custom properties
+        __text: 'Button'
     },
     'text': {
         // wrapperStyles
         width: '100%',
-        height: '26px',
+        height: 'auto',
         minHeight: '26px',
         marginTop: '0px',
         marginBottom: '0px',
@@ -158,6 +160,9 @@ const compProperties: ComponentProperties = {
         borderRightStyle: 'none',
         borderRightWidth: undefined,
         borderRightColor: undefined,
+        overflow: 'auto',
+        // custom properties
+        __text: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
     },
     'header': {
         // wrapperStyles
@@ -185,6 +190,8 @@ const compProperties: ComponentProperties = {
         borderRightStyle: 'none',
         borderRightWidth: undefined,
         borderRightColor: undefined,
+        // custom properties
+        __text: 'Header'
     },
     'checkbox': {
         // wrapperStyles

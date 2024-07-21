@@ -55,6 +55,8 @@ export type Properties = {
     borderRightStyle?: string,
     borderRightWidth?: string,
     borderRightColor?: string,
+    // custom
+    __text?: string,
 }
 
 

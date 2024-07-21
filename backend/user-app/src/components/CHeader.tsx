@@ -6,7 +6,7 @@ const CHeader = ({ ...otherProperties }) => {
             ...otherProperties,
         }}
     >
-        Some Header
+        {otherProperties.__text}
     </h2>
 }
 

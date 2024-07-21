@@ -26,7 +26,7 @@ const CText = ({ componentId, componentType, componentName, parentType }) => {
                 position: 'relative',
             }}
         >
-            Lorem ipsum dolor sit amet
+            {otherProperties.__text}
             {/* exclude below from the built version */}
             {wrapperComponent}
             {/* end exclude block */}

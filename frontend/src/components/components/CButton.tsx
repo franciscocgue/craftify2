@@ -26,7 +26,7 @@ const CButton = ({ componentId, componentType, componentName, parentType }) => {
                 position: 'relative',
             }}
         >
-            Button
+            {otherProperties.__text}
             {/* exclude below from the built version */}
             {wrapperComponent}
             {/* end exclude block */}

@@ -26,7 +26,7 @@ const CHeader = ({ componentId, componentType, componentName, parentType }) => {
                 position: 'relative',
             }}
         >
-            Some Header
+            {otherProperties.__text}
             {/* exclude below from the built version */}
             {wrapperComponent}
             {/* end exclude block */}
