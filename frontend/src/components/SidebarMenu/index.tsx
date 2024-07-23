@@ -9,8 +9,8 @@ const SidebarMenu = () => {
 
     console.log('C - SidebarMenu')
 
-    const activeMenu = useDesignerStore((state) => state.activeMenu);
-    const setActiveMenu = useDesignerStore((state) => state.setActiveMenu);
+    const page = useDesignerStore((state) => state.page);
+    const setPage = useDesignerStore((state) => state.setPage);
     const colorMode = useDesignerStore((state) => state.colorMode);
     // const { colorMode } = useColorMode();
 
@@ -24,77 +24,77 @@ const SidebarMenu = () => {
             }}
         >
             <IconButton
-                onClick={() => setActiveMenu('designer')}
+                onClick={() => setPage('designer')}
                 icon={<MdDraw size={'23px'} />}
                 baseStylesOverwrite={{
                     color: colorMode === 'dark' ? 'white' : '#222',
                     width: '100%',
                     borderRadius: 0,
-                    backgroundColor: activeMenu === 'designer' ?
+                    backgroundColor: page === 'designer' ?
                         // active
                         colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'
                         // not active
                         : 'transparent',
                 }}
                 // if active, hover has no effect
-                hoverStylesOverwrite={activeMenu === 'designer' ? {backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'} : {
+                hoverStylesOverwrite={page === 'designer' ? {backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'} : {
                     backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
                 }}
                 title="Designer"
             />
             <IconButton
-                onClick={() => setActiveMenu('variables')}
+                onClick={() => setPage('variables')}
                 icon={<LuFunctionSquare size={'23px'} />}
                 baseStylesOverwrite={{
                     color: colorMode === 'dark' ? 'white' : '#222',
                     width: '100%',
                     borderRadius: 0,
-                    backgroundColor: activeMenu === 'variables' ?
+                    backgroundColor: page === 'variables' ?
                         // active
                         colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'
                         // not active
                         : 'transparent',
                 }}
                 // if active, hover has no effect
-                hoverStylesOverwrite={activeMenu === 'variables' ? {backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'} : {
+                hoverStylesOverwrite={page === 'variables' ? {backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'} : {
                     backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
                 }}
                 title="Variables"
             />
             <IconButton
-                onClick={() => setActiveMenu('data')}
+                onClick={() => setPage('data')}
                 icon={<BiSolidData size={'23px'} />}
                 baseStylesOverwrite={{
                     color: colorMode === 'dark' ? 'white' : '#222',
                     width: '100%',
                     borderRadius: 0,
-                    backgroundColor: activeMenu === 'data' ?
+                    backgroundColor: page === 'data' ?
                         // active
                         colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'
                         // not active
                         : 'transparent',
                 }}
                 // if active, hover has no effect
-                hoverStylesOverwrite={activeMenu === 'data' ? {backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'} : {
+                hoverStylesOverwrite={page === 'data' ? {backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'} : {
                     backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
                 }}
                 title="Data"
             />
             <IconButton
-                onClick={() => setActiveMenu('styles')}
+                onClick={() => setPage('styles')}
                 icon={<IoMdColorPalette size={'23px'} />}
                 baseStylesOverwrite={{
                     color: colorMode === 'dark' ? 'white' : '#222',
                     width: '100%',
                     borderRadius: 0,
-                    backgroundColor: activeMenu === 'styles' ?
+                    backgroundColor: page === 'styles' ?
                         // active
                         colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'
                         // not active
                         : 'transparent',
                 }}
                 // if active, hover has no effect
-                hoverStylesOverwrite={activeMenu === 'styles' ? {backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'} : {
+                hoverStylesOverwrite={page === 'styles' ? {backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'} : {
                     backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
                 }}
                 title="Styles"

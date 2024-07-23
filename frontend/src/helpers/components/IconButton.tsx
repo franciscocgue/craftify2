@@ -27,9 +27,11 @@ type IconButtonProps = {
     baseStylesOverwrite?: CSSProperties,
     hoverStylesOverwrite?: CSSProperties,
     title?: string,
+    before?: string,
+    after?: string
 }
 
-const IconButton = ({ icon, onClick, baseStylesOverwrite, hoverStylesOverwrite, title }: IconButtonProps) => {
+const IconButton = ({ icon, onClick, baseStylesOverwrite, hoverStylesOverwrite, title, before, after }: IconButtonProps) => {
     const [style, eventHandlers] = useHover({ ...baseStyle, ...baseStylesOverwrite }, { ...hoverStyle, ...hoverStylesOverwrite });
 
     return <button
@@ -38,7 +40,7 @@ const IconButton = ({ icon, onClick, baseStylesOverwrite, hoverStylesOverwrite, 
         onClick={onClick}
         title={title}
     >
-        {icon}
+        {before && <span style={{marginRight: '5px'}}>{before}</span>}{icon}{after && <span style={{marginLeft: '5px'}}>{after}</span>}
     </button>
 }
 

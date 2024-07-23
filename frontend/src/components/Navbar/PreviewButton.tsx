@@ -6,7 +6,7 @@ import QRCode from "react-qr-code";
 import { FaPlay } from "react-icons/fa6";
 import IconButton from "../../helpers/components/IconButton";
 
-const handleButtonClick = async (components, properties, setLoading) => {
+const handleButtonClick = async (components, properties, variables, setLoading) => {
 
     setLoading(true);
 
@@ -16,7 +16,7 @@ const handleButtonClick = async (components, properties, setLoading) => {
         // let time = d.getTime();
         const response = await axios.post('http://localhost:3000/start-new-server', {
             port: 4000,
-            data: { components, properties }
+            data: { components, properties, variables }
         });
         var win = window.open('http://localhost:4000/', '_blank');
         win.focus();
@@ -36,17 +36,24 @@ const PreviewButton = () => {
 
     const components = useDesignerStore((state) => state.components);
     const properties = useDesignerStore((state) => state.properties);
+    const variables = useDesignerStore((state) => state.variables);
 
     return (
         <>
 
             <IconButton
                 icon={<FaPlay />}
-                onClick={() => handleButtonClick(components, properties, setLoading)}
+                onClick={() => handleButtonClick(components, properties, variables, setLoading)}
                 baseStylesOverwrite={{
-                    color: 'white'
+                    color: 'white',
+                    width: '80px',
+                    backgroundColor: 'rgba(0,128,0,1)',
                 }}
-                title="Preview"
+                hoverStylesOverwrite={{
+                    backgroundColor: 'rgba(0,85,0,1)',
+                }}
+                // title="Preview"
+                after="Preview"
             >
             </IconButton>
             {/* <button onClick={() => handleButtonClick(components, setLoading)}

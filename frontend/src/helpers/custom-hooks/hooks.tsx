@@ -2,6 +2,7 @@ import { CSSProperties, useEffect, useRef, useState } from "react"
 import WrapperComponent from "../WrapperComponent";
 import useDesignerStore from "../../stores/designer";
 import { isEqual } from "lodash";
+import { parseProperties } from "../utils";
 
 const useHover = (baseStyle: CSSProperties, hoverStyle: CSSProperties): [combinedStyle: CSSProperties, eventHandlers: { onMouseEnter: () => void, onMouseLeave: () => void }] => {
     const [isHovered, setIsHovered] = useState(false);
@@ -21,6 +22,7 @@ const useWrapper = (componentId, componentType, componentName, parentType) => {
     const ref = useRef(null);
     const [renderer, setRerender] = useState(false);
     const otherProperties = useDesignerStore((state) => state.properties[componentId]);
+    const parsedProperties = parseProperties(otherProperties);
 
     // subscribe to external changes to re-render
     useEffect(() => {
@@ -56,10 +58,10 @@ const useWrapper = (componentId, componentType, componentName, parentType) => {
         componentRef={ref}
         componentType={componentType}
         parentType={parentType}
-        otherProperties={otherProperties}
+        otherProperties={parsedProperties}
     />
 
-    return [ref, renderer, otherProperties, wrapperComponent]
+    return [ref, renderer, parsedProperties, wrapperComponent]
 
 }
 

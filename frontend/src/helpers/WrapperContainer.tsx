@@ -5,7 +5,7 @@ import DroppableContainer from "./DroppableContainer";
 import { compTypes } from "../config/components";
 import MarginOverlay from "./MarginOverlay";
 import { RiDeleteBin2Fill } from "react-icons/ri";
-import { getChildrenNodes } from "./utils";
+import { getChildrenNodes, parseProperties } from "./utils";
 import { debounce, isEqual } from "lodash";
 import { IconType } from "react-icons";
 import MyPortal from "./MyPortal";
@@ -112,6 +112,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
     const components = useDesignerStore((state) => state.components);
     const colorMode = useDesignerStore((state) => state.colorMode);
     const otherProperties = useDesignerStore((state) => state.properties[props.componentId]);
+    const parsedProperties = parseProperties(otherProperties);
     const [_, setRerender] = useState(false);
 
     // substcribe to external changes to re-render
@@ -200,20 +201,20 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                 outline: draggable ? '1px solid grey' : undefined, // dotted
                 outlineOffset: draggable ? '-1px' : undefined,
                 // size
-                width: otherProperties?.width || '100%',
-                height: otherProperties?.height || 'auto',
-                minHeight: otherProperties?.minHeight || 'auto',
+                width: parsedProperties?.width || '100%',
+                height: parsedProperties?.height || 'auto',
+                minHeight: parsedProperties?.minHeight || 'auto',
                 // margins
-                marginTop: otherProperties?.marginTop,
-                marginRight: otherProperties?.marginRight,
-                marginBottom: otherProperties?.marginBottom,
-                marginLeft: otherProperties?.marginLeft,
+                marginTop: parsedProperties?.marginTop,
+                marginRight: parsedProperties?.marginRight,
+                marginBottom: parsedProperties?.marginBottom,
+                marginLeft: parsedProperties?.marginLeft,
                 // other
                 // overflow: 'hidden',
                 position: 'relative',
                 overflow: 'hidden',
 
-                ...otherProperties
+                ...parsedProperties
             }}
             onMouseOver={(e) => {
                 e.stopPropagation();
@@ -275,10 +276,10 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                 && !draggable
                 && <MarginOverlay
                     componentRef={ref}
-                    marginTop={otherProperties?.marginTop}
-                    marginLeft={otherProperties?.marginLeft}
-                    marginRight={otherProperties?.marginRight}
-                    marginBottom={otherProperties?.marginBottom}
+                    marginTop={parsedProperties?.marginTop}
+                    marginLeft={parsedProperties?.marginLeft}
+                    marginRight={parsedProperties?.marginRight}
+                    marginBottom={parsedProperties?.marginBottom}
                 />}
             {/* </Tooltip> */}
             {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: `calc(${ref.current?.getBoundingClientRect().top}px - 30px)`, left: ref.current?.getBoundingClientRect().left }}>

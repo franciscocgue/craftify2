@@ -1,7 +1,6 @@
 import React from 'react';
 import components from './components.json';
 import properties from './properties.json';
-import CButton from './components/CButton';
 import { renderNode } from './helpers/ui-builder';
 
 const App = () => {

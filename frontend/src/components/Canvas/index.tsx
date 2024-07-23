@@ -62,7 +62,7 @@ const Canvas = () => {
         <div
             style={{
                 flex: 1,
-                // flex (and maxHeight if given below) causes issue and comps do not respect height and shrink to minHeight
+                // flex (and maxHeight if given below) causes issue and comps do not respect height and shrink to minHeight; solved with a wrapper
                 display: 'flex',
                 border: '1px solid grey',
                 flexDirection: 'column',

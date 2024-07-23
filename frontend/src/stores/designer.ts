@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { compProperties, compTypes } from '../config/components';
-import { draggableData } from '../vite-env';
+import { draggableData, Variables } from '../vite-env';
 import { getChildrenNodes } from '../helpers/utils';
 
 const initialComponents = {
@@ -56,8 +56,8 @@ const initialComponents = {
 // types
 
 type designerStore = {
+  page: 'designer' | 'variables' | 'data' | 'styles',
   colorMode: 'light' | 'dark',
-  activeMenu: 'designer' | 'variables' | 'data' | 'styles',
   draggingId: string | null,
   draggable: draggableData,
   isResizing: true | false,
@@ -66,11 +66,12 @@ type designerStore = {
   isCanvasScrolling: boolean,
   components: any,
   properties: any,
+  variables: Variables,
   componentNames: any,
   // componentIds of component whose properties were updated last
   lastUpdatedCompChildren: string[],
+  setPage: (page: 'designer' | 'variables' | 'data' | 'styles') => void,
   toggleColorMode: () => void,
-  setActiveMenu: (menu: 'designer' | 'variables' | 'data' | 'styles') => void,
   setIsResizing: (isResizing: true | false) => void,
   setIsCanvasScrolling: (isCanvasScrolling: true | false) => void,
   setDraggingId: (draggingId: string | null) => void,
@@ -108,8 +109,8 @@ type designerStore = {
 }
 
 const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => ({
+  page: 'designer',
   colorMode: 'dark',
-  activeMenu: 'designer',
   draggingId: null,
   draggable: null,
   isResizing: false,
@@ -118,10 +119,27 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   isCanvasScrolling: false,
   components: initialComponents,
   properties: { canvas: compProperties['canvas'] },
+  variables: {
+    name: {
+      type: 'text',
+      initialValue: 'James',
+      value: 'James'
+    },
+    age: {
+      type: 'number',
+      initialValue: 30,
+      value: 30
+    },
+    hasGlasses: {
+      type: 'boolean',
+      initialValue: true,
+      value: true
+    }
+  },
   componentNames: {},
   lastUpdatedCompChildren: [],
+  setPage: page => set({ page }),
   toggleColorMode: () => set(state => ({ colorMode: state.colorMode === 'dark' ? 'light' : 'dark' })),
-  setActiveMenu: (menu => set({ activeMenu: menu })),
   setIsResizing: (isResizing: true | false) => set({ isResizing: isResizing }),
   setIsCanvasScrolling: (isCanvasScrolling: true | false) => set({ isCanvasScrolling: isCanvasScrolling }),
   setDraggingId: (draggingId) => set({ draggingId: draggingId }),
@@ -299,14 +317,14 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
     updatedComp[key] = value;
     props[compId] = updatedComp;
 
-    const components = {...state.components}
+    const components = { ...state.components }
 
     // children of updated component;
     // used for specific-target re-rendering based on subscriber
     const lastUpdatedCompChildren = getChildrenNodes(compId, components)
 
     return { properties: props, lastUpdatedCompChildren }
-  })
+  }),
 })));
 
 export default useDesignerStore;

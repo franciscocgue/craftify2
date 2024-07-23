@@ -90,3 +90,13 @@ export type PropertyType = {
     group?: typeof propertyGroups[number], // to group in properties palette
     hoverInfo?: ReactNode | string
 }
+
+type Variable<T> = {
+    type: 'text' | 'number' | 'boolean';
+    initialValue: T;
+    value: T;
+};
+
+export type Variables = {
+    [key: string]: Variable<any>;
+};
