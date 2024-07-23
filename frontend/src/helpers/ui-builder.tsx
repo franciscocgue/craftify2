@@ -5,6 +5,7 @@ import DroppableCanvas from "./DroppableCanvas";
 import CHeader from "../components/components/CHeader";
 import CText from "../components/components/CText";
 import CCheckbox from "../components/components/CCheckbox";
+import CImage from "../components/components/CImage";
 
 {/* <ContainerWrapper id="subcontainer" componentType="container-row" parentType='container-column' w={'100%'} h={'max-content'} p={1} border="none">
 <Flex direction={'row'} wrap={'wrap'} alignItems={'center'} gap={2} h={'100%'} w={'100%'}>
@@ -116,6 +117,15 @@ const uiMapper2 = {
     ),
     'checkbox': (components: ComponentCollection, id: string) => (
         <CCheckbox
+            key={id}
+            componentId={id}
+            componentName={components[id].name}
+            componentType={components[id].type}
+            parentType={components[components[id].parent as string]?.type}
+        />
+    ),
+    'image': (components: ComponentCollection, id: string) => (
+        <CImage
             key={id}
             componentId={id}
             componentName={components[id].name}

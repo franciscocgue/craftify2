@@ -108,6 +108,8 @@ const Canvas = () => {
                         paddingLeft: properties.paddingLeft || undefined,
                         paddingRight: properties.paddingRight || undefined,
                         backgroundColor: properties.backgroundColor || undefined,
+                        backgroundImage: properties.backgroundImage || undefined,
+                        backgroundSize: properties.backgroundSize || undefined,
                     }}
                 >
                     {comps}

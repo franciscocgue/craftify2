@@ -5,6 +5,7 @@ import CContainerColumn from '../components/CContainerColumn';
 import CText from '../components/CText';
 import CHeader from '../components/CHeader';
 import CCheckbox from '../components/CCheckbox';
+import CImage from '../components/CImage';
 
 const uiMapper2 = {
     'canvas': (components: any, id: string, properties) => (
@@ -33,6 +34,9 @@ const uiMapper2 = {
     ),
     'checkbox': (components: any, id: string, properties) => (
         <CCheckbox key={id} {...properties[id]} />
+    ),
+    'image': (components: any, id: string, properties) => (
+        <CImage key={id} {...properties[id]} />
     ),
 }
 
