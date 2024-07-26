@@ -1,7 +1,7 @@
 import { useDraggable } from "@dnd-kit/core";
 import { useEffect } from "react";
 // import { ReactNode } from "react";
-import { MdDragIndicator } from "react-icons/md";
+import { RiDragMove2Fill } from "react-icons/ri";
 import useDesignerStore from "../stores/designer";
 
 type DraggableHandleProps = {
@@ -14,7 +14,7 @@ const length = 18; // px of handler
 
 function DraggableHandle(props: DraggableHandleProps) {
 
-    console.log('C - DraggableHanle ' + props.componentId.slice(0, 5))
+    console.log('C - DraggableHandle ' + props.componentId.slice(0, 5))
 
     // const { colorMode } = useColorMode();
     const colorMode = useDesignerStore((state) => state.colorMode);
@@ -38,10 +38,10 @@ function DraggableHandle(props: DraggableHandleProps) {
     return (
         <div ref={setNodeRef}
             style={{
-                position: 'absolute',
-                top: props.top || 2,
-                right: 28,
-                zIndex: 2,
+                // position: 'absolute',
+                // top: props.top || 2,
+                // right: 25,
+                // zIndex: 2,
                 // width: `${length}px`,
                 // height: `${length}px`,
                 width: 'auto',
@@ -50,15 +50,15 @@ function DraggableHandle(props: DraggableHandleProps) {
                 // overflow: 'hidden'
             }}
             {...listeners} {...attributes}>
-            <div style={{
+            {/* <div style={{
                 display: 'flex',
-                padding: '2px',
-                alignContent: 'center',
+                // padding: '2px',
+                // alignContent: 'center',
                 backgroundColor: '#555',
                 borderRadius: '100%',
-            }}>
-                <MdDragIndicator size={length} color='white' />
-            </div>
+            }}> */}
+                <RiDragMove2Fill size={length} color={colorMode === 'dark' ? 'black' : 'white'} title="Move" />
+            {/* </div> */}
         </div>
     );
 }

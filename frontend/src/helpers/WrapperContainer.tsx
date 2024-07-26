@@ -11,6 +11,7 @@ import { IconType } from "react-icons";
 import MyPortal from "./MyPortal";
 import { toast } from "react-toastify";
 import MyOutline from "./MyOutline";
+import { GrDuplicate } from "react-icons/gr";
 
 
 interface IconBoxProps {
@@ -24,24 +25,52 @@ const IconBox: React.FC<IconBoxProps> = ({ icon: Icon }) => {
     );
 };
 
-const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorMode: 'dark' | 'light') => (<div
-    style={{
-        display: 'flex',
-        gap: '7px',
-        backgroundColor: colorMode === 'dark' ? 'white' : 'black',
-        color: colorMode === 'dark' ? 'black' : 'white',
-        border: colorMode === 'dark' ? '1px solid grey' : '1px solid white',
-        outline: colorMode === 'dark' ? '1px solid white' : undefined,
-        fontSize: 'small',
-        padding: '5px',
-        borderRadius: '3px',
-        alignItems: 'center',
-        height: '30px',
-        userSelect: 'none',
-    }}>
-    <IconBox icon={compTypes[componentType].icon} />
-    {name || componentType}
-</div>)
+const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorMode: 'dark' | 'light', componentId: string, removeComponent: (compId: string) => void) => {
+
+    const notify = {
+        deleted: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-right' }),
+    }
+
+    return (<div
+        style={{
+            display: 'flex',
+            gap: '7px',
+            backgroundColor: colorMode === 'dark' ? 'white' : 'black',
+            color: colorMode === 'dark' ? 'black' : 'white',
+            border: colorMode === 'dark' ? '1px solid grey' : '1px solid white',
+            outline: colorMode === 'dark' ? '1px solid white' : undefined,
+            fontSize: 'small',
+            padding: '5px',
+            borderRadius: '3px',
+            // alignItems: 'center',
+            height: '30px',
+            userSelect: 'none',
+        }}>
+        <DraggableHandle top={6} componentId={componentId} />
+        <GrDuplicate
+            color="white"
+            size={'19px'}
+            title="Duplicate"
+            style={{ cursor: 'pointer', color: colorMode === 'dark' ? 'black' : 'white' }}
+            onClick={() => {
+                removeComponent(componentId);
+                notify.deleted(`${name} deleted`)
+            }}
+        />
+        <RiDeleteBin2Fill
+            color="white"
+            size={'19px'}
+            title="Delete"
+            style={{ cursor: 'pointer', color: colorMode === 'dark' ? 'black' : 'white', marginRight: '15px' }}
+            onClick={() => {
+                removeComponent(componentId);
+                notify.deleted(`${name} deleted`)
+            }}
+        />
+        {name || componentType}
+        <IconBox icon={compTypes[componentType].icon} />
+    </div>)
+}
 
 const useDebouncedMouseEnter = (setStatus: (selectedId: string | null) => void) => {
     // Use a ref to track the debounced update
@@ -188,9 +217,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
         return unsub
     }, [isHovered])
 
-    const notify = {
-        deleted: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-right' }),
-    }
+
 
 
     return <>
@@ -238,7 +265,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
             {!isSelected && !draggable && (isHovered || isHoveredRemote) && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='orange' thickness={3} />}
             {isSelected && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='green' thickness={3} />}
 
-            {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: ref.current?.getBoundingClientRect().top, left: ref.current?.getBoundingClientRect().left + ref.current?.getBoundingClientRect().width }}>
+            {/* {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: ref.current?.getBoundingClientRect().top, left: ref.current?.getBoundingClientRect().left + ref.current?.getBoundingClientRect().width }}>
                 <>
                     <DraggableHandle componentId={props.componentId} />
                     <div style={actionBtnStyle(2, 2)}>
@@ -249,7 +276,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                             }} />
                     </div>
                 </>
-            </MyPortal>}
+            </MyPortal>} */}
 
             {draggable
                 && draggable.componentId !== props.componentId
@@ -283,7 +310,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                 />}
             {/* </Tooltip> */}
             {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: `calc(${ref.current?.getBoundingClientRect().top}px - 30px)`, left: ref.current?.getBoundingClientRect().left }}>
-                {TooltipComp(props.componentName, props.componentType, colorMode)}
+                {TooltipComp(props.componentName, props.componentType, colorMode, props.componentId, removeComponent)}
             </MyPortal>}
         </div >
     </>

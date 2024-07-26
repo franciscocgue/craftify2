@@ -5,6 +5,7 @@ import DroppableComponent from "./DroppableComponent";
 import { compTypes } from "../config/components";
 import MarginOverlay from "./MarginOverlay";
 import { RiDeleteBin2Fill } from "react-icons/ri";
+import { GrDuplicate } from "react-icons/gr";
 import { getChildrenNodes } from "./utils";
 import { Properties } from "../vite-env";
 import { debounce } from "lodash";
@@ -20,29 +21,57 @@ interface IconBoxProps {
 const IconBox: React.FC<IconBoxProps> = ({ icon: Icon }) => {
     return (
         <div >
-            <Icon size="20px" />
+            <Icon size="19px" />
         </div>
     );
 };
 
-const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorMode: 'dark' | 'light') => (<div
-    style={{
-        display: 'flex',
-        gap: '7px',
-        backgroundColor: colorMode === 'dark' ? 'white' : 'black',
-        color: colorMode === 'dark' ? 'black' : 'white',
-        border: colorMode === 'dark' ? '1px solid grey' : '1px solid white',
-        outline: colorMode === 'dark' ? '1px solid white' : undefined,
-        fontSize: 'small',
-        padding: '5px',
-        borderRadius: '3px',
-        alignItems: 'center',
-        height: '30px',
-        userSelect: 'none',
-    }}>
-    <IconBox icon={compTypes[componentType].icon} />
-    {name || componentType}
-</div>)
+const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorMode: 'dark' | 'light', componentId: string, removeComponent: (compId: string) => void) => {
+
+    const notify = {
+        deleted: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-right' }),
+    }
+
+    return (<div
+        style={{
+            display: 'flex',
+            gap: '7px',
+            backgroundColor: colorMode === 'dark' ? 'white' : 'black',
+            color: colorMode === 'dark' ? 'black' : 'white',
+            border: colorMode === 'dark' ? '1px solid grey' : '1px solid white',
+            outline: colorMode === 'dark' ? '1px solid white' : undefined,
+            fontSize: 'small',
+            padding: '5px',
+            borderRadius: '3px',
+            // alignItems: 'center',
+            height: '30px',
+            userSelect: 'none',
+        }}>
+        <DraggableHandle top={6} componentId={componentId} />
+        <GrDuplicate
+            color="white"
+            size={'19px'}
+            title="Duplicate"
+            style={{ cursor: 'pointer', color: colorMode === 'dark' ? 'black' : 'white' }}
+            onClick={() => {
+                removeComponent(componentId);
+                notify.deleted(`${name} deleted`)
+            }}
+        />
+        <RiDeleteBin2Fill
+            color="white"
+            size={'19px'}
+            title="Delete"
+            style={{ cursor: 'pointer', color: colorMode === 'dark' ? 'black' : 'white', marginRight: '15px' }}
+            onClick={() => {
+                removeComponent(componentId);
+                notify.deleted(`${name} deleted`)
+            }}
+        />
+        {name || componentType}
+        <IconBox icon={compTypes[componentType].icon} />
+    </div>)
+}
 
 const useDebouncedMouseEnter = (setStatus: (selectedId: string | null) => void) => {
     // Use a ref to track the debounced update
@@ -110,8 +139,8 @@ const WrapperComponent = (props: WrapperComponentProps) => {
     const [isSelected, setIsSelected] = useState(false);
     const draggable = useDesignerStore((state) => state.draggable);
     const setHoveredId = useDesignerStore((state) => state.setHoveredId);
-    const removeComponent = useDesignerStore((state) => state.removeComponent);
     const toggleSelectedId = useDesignerStore((state) => state.toggleSelectedId);
+    const removeComponent = useDesignerStore((state) => state.removeComponent);
     const components = useDesignerStore((state) => state.components);
     const colorMode = useDesignerStore((state) => state.colorMode);
 
@@ -123,7 +152,7 @@ const WrapperComponent = (props: WrapperComponentProps) => {
             (state) => state.selectedId,
             // callback
             (selectedId, prevSelectedId) => {
-                 // component just created, re-render (to show outline on newly created component)
+                // component just created, re-render (to show outline on newly created component)
                 if (selectedId === props.componentId) {
                     // on first render, prev and current seem to be the same...
                     setIsSelected(true)
@@ -160,9 +189,7 @@ const WrapperComponent = (props: WrapperComponentProps) => {
         return unsub
     }, [isHovered])
 
-    const notify = {
-        deleted: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-right' }),
-    }
+
 
 
     return <>
@@ -214,8 +241,15 @@ const WrapperComponent = (props: WrapperComponentProps) => {
             {!isSelected && !draggable && (isHovered || isHoveredRemote) && <MyOutline boundingRect={props.componentRef.current?.getBoundingClientRect()} color='orange' thickness={3} />}
             {isSelected && <MyOutline boundingRect={props.componentRef.current?.getBoundingClientRect()} color='green' thickness={3} />}
 
-            {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: props.componentRef.current?.getBoundingClientRect().top, left: props.componentRef.current?.getBoundingClientRect().left + props.componentRef.current?.getBoundingClientRect().width }}>
+            {/* {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: props.componentRef.current?.getBoundingClientRect().top, left: props.componentRef.current?.getBoundingClientRect().left + props.componentRef.current?.getBoundingClientRect().width }}>
                 <>
+                    <div style={actionBtnStyle(50, 6)}>
+                        <RiDeleteBin2Fill color="white" size={'19px'}
+                            onClick={() => {
+                                removeComponent(props.componentId);
+                                notify.deleted(`${props.componentName} deleted`)
+                            }} />
+                    </div>
                     <DraggableHandle top={6} componentId={props.componentId} />
                     <div style={actionBtnStyle(2, 6)}>
                         <RiDeleteBin2Fill color="white" size={'19px'}
@@ -225,7 +259,7 @@ const WrapperComponent = (props: WrapperComponentProps) => {
                             }} />
                     </div>
                 </>
-            </MyPortal>}
+            </MyPortal>} */}
 
             {draggable
                 && draggable.componentId !== props.componentId
@@ -244,7 +278,7 @@ const WrapperComponent = (props: WrapperComponentProps) => {
                 />}
             {/* </Tooltip> */}
             {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: `calc(${props.componentRef.current?.getBoundingClientRect().top}px - 30px)`, left: props.componentRef.current?.getBoundingClientRect().left }}>
-                {TooltipComp(props.componentName, props.componentType, colorMode)}
+                {TooltipComp(props.componentName, props.componentType, colorMode, props.componentId, removeComponent)}
             </MyPortal>}
         </div >
     </>
