@@ -105,6 +105,7 @@ type designerStore = {
    *
    */
   removeComponent: (compId: string) => void,
+  duplicateComponent: (compId: string) => void,
   updateProperty: (compId: string, propertyKey: string, propertyValue: any) => void,
 }
 
@@ -308,6 +309,33 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
       }, {});
 
     return { components: newComponents }
+
+  }),
+  duplicateComponent: (compId) => set((state) => {
+    // code taken from addComponent and adapted
+    // compType, addedOverCompId, location
+    const comps = { ...state.components };
+    const props = { ...state.properties };
+    const compsNames = { ...state.componentNames };
+
+    compsNames[comps[compId].type].current += 1;
+
+    const newCompId = crypto.randomUUID();
+
+    props[newCompId] = {...props[compId]};
+
+    let parent = comps[comps[compId].parent];
+    // add component
+    comps[newCompId] = {
+      ...comps[compId],
+      name: `${compTypes[comps[compId].type as keyof typeof compTypes].name} ${compsNames[comps[compId].type].current}`
+    }
+    // add to parent
+    let insertAt = parent.children.indexOf(compId) + 1;
+    parent.children.splice(insertAt, 0, newCompId);
+
+    return { components: comps, componentNames: compsNames, properties: props }
+
 
   }),
   updateProperty: (compId, key, value) => set((state) => {

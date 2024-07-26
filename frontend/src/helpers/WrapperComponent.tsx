@@ -26,7 +26,7 @@ const IconBox: React.FC<IconBoxProps> = ({ icon: Icon }) => {
     );
 };
 
-const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorMode: 'dark' | 'light', componentId: string, removeComponent: (compId: string) => void) => {
+const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorMode: 'dark' | 'light', componentId: string, removeComponent: (compId: string) => void, duplicateComponent: (compId: string) => void) => {
 
     const notify = {
         deleted: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-right' }),
@@ -54,8 +54,8 @@ const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorM
             title="Duplicate"
             style={{ cursor: 'pointer', color: colorMode === 'dark' ? 'black' : 'white' }}
             onClick={() => {
-                removeComponent(componentId);
-                notify.deleted(`${name} deleted`)
+                duplicateComponent(componentId);
+                // notify.deleted(`${name} deleted`)
             }}
         />
         <RiDeleteBin2Fill
@@ -141,6 +141,7 @@ const WrapperComponent = (props: WrapperComponentProps) => {
     const setHoveredId = useDesignerStore((state) => state.setHoveredId);
     const toggleSelectedId = useDesignerStore((state) => state.toggleSelectedId);
     const removeComponent = useDesignerStore((state) => state.removeComponent);
+    const duplicateComponent = useDesignerStore((state) => state.duplicateComponent);
     const components = useDesignerStore((state) => state.components);
     const colorMode = useDesignerStore((state) => state.colorMode);
 
@@ -278,7 +279,7 @@ const WrapperComponent = (props: WrapperComponentProps) => {
                 />}
             {/* </Tooltip> */}
             {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: `calc(${props.componentRef.current?.getBoundingClientRect().top}px - 30px)`, left: props.componentRef.current?.getBoundingClientRect().left }}>
-                {TooltipComp(props.componentName, props.componentType, colorMode, props.componentId, removeComponent)}
+                {TooltipComp(props.componentName, props.componentType, colorMode, props.componentId, removeComponent, duplicateComponent)}
             </MyPortal>}
         </div >
     </>

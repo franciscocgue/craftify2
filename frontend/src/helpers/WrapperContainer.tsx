@@ -47,7 +47,9 @@ const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorM
             userSelect: 'none',
         }}>
         <DraggableHandle top={6} componentId={componentId} />
-        <GrDuplicate
+        {/* wrapper container cannot be duplicated */}
+        {/* In the future just copy all (nested) components inside */}
+        {/* <GrDuplicate
             color="white"
             size={'19px'}
             title="Duplicate"
@@ -56,7 +58,7 @@ const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorM
                 removeComponent(componentId);
                 notify.deleted(`${name} deleted`)
             }}
-        />
+        /> */}
         <RiDeleteBin2Fill
             color="white"
             size={'19px'}
