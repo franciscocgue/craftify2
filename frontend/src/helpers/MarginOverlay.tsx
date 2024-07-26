@@ -8,7 +8,7 @@ interface MarginOverlayProps {
     marginLeft?: string,
     marginRight?: string,
     marginBottom?: string,
-    componentRef: React.MutableRefObject<null>,
+    componentRef: React.MutableRefObject<HTMLDivElement | null>,
 }
 const MarginOverlay = (props: MarginOverlayProps) => {
     console.log('C - MarginOverlay')

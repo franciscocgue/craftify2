@@ -1,4 +1,4 @@
-import { CSSProperties, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useDesignerStore from "../stores/designer";
 import DraggableHandle from "./DraggableHandle";
 import DroppableContainer from "./DroppableContainer";
@@ -11,7 +11,6 @@ import { IconType } from "react-icons";
 import MyPortal from "./MyPortal";
 import { toast } from "react-toastify";
 import MyOutline from "./MyOutline";
-import { GrDuplicate } from "react-icons/gr";
 
 
 interface IconBoxProps {
@@ -74,9 +73,15 @@ const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorM
     </div>)
 }
 
+// Type for the debounced function (avoid ts error on cancel method)
+type DebouncedFunction = {
+    (id: string): void;
+    cancel: () => void;
+};
+
 const useDebouncedMouseEnter = (setStatus: (selectedId: string | null) => void) => {
     // Use a ref to track the debounced update
-    const debouncedUpdateRef = useRef(null);
+    const debouncedUpdateRef = useRef<DebouncedFunction | null>(null);
 
     // Debounce function to ensure a final update after inactivity
     const debouncedUpdate = useCallback(debounce((id) => {
@@ -105,20 +110,6 @@ const useDebouncedMouseEnter = (setStatus: (selectedId: string | null) => void) 
     return { handleMouseEnter, handleMouseLeave };
 };
 
-const actionBtnStyle = (right: number, top: number): CSSProperties => ({
-    display: 'flex',
-    padding: '2px',
-    alignContent: 'center',
-    backgroundColor: '#555',
-    borderRadius: '100%',
-    position: 'absolute',
-    // opacity: '0.5',
-    top: top,
-    right: right,
-    zIndex: 2,
-    cursor: 'pointer'
-})
-
 interface WrapperContainerProps {
     componentId: string,
     componentType: keyof typeof compTypes,
@@ -132,7 +123,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
 
     console.log('C - WrapperContainer ' + props.componentId.slice(0, 5))
 
-    const ref = useRef(null);
+    const ref = useRef<HTMLDivElement  | null>(null);
     const [isHovered, setIsHovered] = useState(false);
     const [isHoveredRemote, setIsHoveredRemote] = useState(false);
     const [isSelected, setIsSelected] = useState(false);
@@ -149,6 +140,8 @@ const WrapperContainer = (props: WrapperContainerProps) => {
     // substcribe to external changes to re-render
     useEffect(() => {
         const unsub = useDesignerStore.subscribe(
+            // selector
+            (state) => state,
             // callback
             (state, prevState) => {
                 // on canvas scroll, if THIS component is selected, 
@@ -174,8 +167,8 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                     setIsSelected(true);
                 }
             }, {
-                fireImmediately: true // necessary to automatically select when comp first created
-            });
+            fireImmediately: true // necessary to automatically select when comp first created
+        });
 
         return unsub;
     }, [])
@@ -220,8 +213,6 @@ const WrapperContainer = (props: WrapperContainerProps) => {
     }, [isHovered])
 
 
-
-
     return <>
         <div
             ref={ref}
@@ -264,8 +255,8 @@ const WrapperContainer = (props: WrapperContainerProps) => {
             {props.children}
 
             {/* outlines */}
-            {!isSelected && !draggable && (isHovered || isHoveredRemote) && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='orange' thickness={3} />}
-            {isSelected && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='green' thickness={3} />}
+            {!isSelected && !draggable && (isHovered || isHoveredRemote) && ref.current  && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='orange' thickness={3} />}
+            {isSelected && ref.current && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='green' thickness={3} />}
 
             {/* {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: ref.current?.getBoundingClientRect().top, left: ref.current?.getBoundingClientRect().left + ref.current?.getBoundingClientRect().width }}>
                 <>

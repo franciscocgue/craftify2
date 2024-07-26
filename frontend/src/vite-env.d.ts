@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 import { compTypes } from "./config/components";
+import type * as CSS from 'csstype';
 
 export type draggableData = {
     type: 'canvas-draggable' | 'palette-draggable',
@@ -23,36 +24,36 @@ export type Properties = {
     canvasWidthPx?: number,
     canvasHeightPx?: number,
     // wrapper styles
-    width?: string | number,
-    height?: number | string,
-    minHeight?: number | string,
-    marginTop?: number | string,
-    marginBottom?: number | string,
-    marginLeft?: number | string,
-    marginRight?: number | string,
+    width?: string,
+    height?: string,
+    minHeight?: string,
+    marginTop?: string,
+    marginBottom?: string,
+    marginLeft?: string,
+    marginRight?: string,
     // component styles
-    paddingTop?: number | string,
-    paddingBottom?: number | string,
-    paddingLeft?: number | string,
-    paddingRight?: number | string,
+    paddingTop?: string,
+    paddingBottom?: string,
+    paddingLeft?: string,
+    paddingRight?: string,
     display?: string,  // not editable (at least in canvas)
     flexDirection?: 'column' | 'row',  // not editable (at least in canvas)
-    gap?: number | string,
+    gap?: string,
     flexWrap?: 'nowrap' | 'wrap',
     alignItems?: 'center',
     color?: string,
     backgroundColor?: string,
     outline?: string,
-    borderTopStyle?: string,
+    borderTopStyle?: CSS.DataType.LineStyle,
     borderTopWidth?: string,
     borderTopColor?: string,
-    borderBottomStyle?: string,
+    borderBottomStyle?: CSS.DataType.LineStyle,
     borderBottomWidth?: string,
     borderBottomColor?: string,
-    borderLeftStyle?: string,
+    borderLeftStyle?: CSS.DataType.LineStyle,
     borderLeftWidth?: string,
     borderLeftColor?: string,
-    borderRightStyle?: string,
+    borderRightStyle?: CSS.DataType.LineStyle,
     borderRightWidth?: string,
     borderRightColor?: string,
     // custom

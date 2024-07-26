@@ -1,4 +1,4 @@
-import { CSSProperties, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useDesignerStore from "../stores/designer";
 import DraggableHandle from "./DraggableHandle";
 import DroppableComponent from "./DroppableComponent";
@@ -73,9 +73,15 @@ const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorM
     </div>)
 }
 
+// Type for the debounced function (avoid ts error on cancel method)
+type DebouncedFunction = {
+    (id: string): void;
+    cancel: () => void;
+};
+
 const useDebouncedMouseEnter = (setStatus: (selectedId: string | null) => void) => {
     // Use a ref to track the debounced update
-    const debouncedUpdateRef = useRef(null);
+    const debouncedUpdateRef = useRef<DebouncedFunction | null>(null);
 
     // Debounce function to ensure a final update after inactivity
     const debouncedUpdate = useCallback(debounce((id) => {
@@ -104,27 +110,13 @@ const useDebouncedMouseEnter = (setStatus: (selectedId: string | null) => void) 
     return { handleMouseEnter, handleMouseLeave };
 };
 
-const actionBtnStyle = (right: number, top: number): CSSProperties => ({
-    display: 'flex',
-    padding: '2px',
-    alignContent: 'center',
-    backgroundColor: '#555',
-    borderRadius: '100%',
-    position: 'absolute',
-    // opacity: '0.5',
-    top: top,
-    right: right,
-    zIndex: 2,
-    cursor: 'pointer'
-})
-
 interface WrapperComponentProps {
     componentId: string,
     componentType: keyof typeof compTypes,
     componentName: string,
     parentType: 'column' | 'row',
     otherProperties?: Properties,
-    componentRef: React.MutableRefObject<null>,
+    componentRef: React.MutableRefObject<HTMLDivElement  | null>,
     // children?: React.ReactNode,
 }
 
@@ -239,8 +231,8 @@ const WrapperComponent = (props: WrapperComponentProps) => {
             {/* {props.children} */}
 
             {/* outlines */}
-            {!isSelected && !draggable && (isHovered || isHoveredRemote) && <MyOutline boundingRect={props.componentRef.current?.getBoundingClientRect()} color='orange' thickness={3} />}
-            {isSelected && <MyOutline boundingRect={props.componentRef.current?.getBoundingClientRect()} color='green' thickness={3} />}
+            {!isSelected && !draggable && (isHovered || isHoveredRemote) && props.componentRef.current && <MyOutline boundingRect={props.componentRef.current?.getBoundingClientRect()} color='orange' thickness={3} />}
+            {isSelected && props.componentRef.current && <MyOutline boundingRect={props.componentRef.current?.getBoundingClientRect()} color='green' thickness={3} />}
 
             {/* {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: props.componentRef.current?.getBoundingClientRect().top, left: props.componentRef.current?.getBoundingClientRect().left + props.componentRef.current?.getBoundingClientRect().width }}>
                 <>
