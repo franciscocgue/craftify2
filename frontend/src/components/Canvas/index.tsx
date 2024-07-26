@@ -104,6 +104,7 @@ const Canvas = () => {
                         minHeight: '100%',
                         margin: '0 auto',
                         gap: properties.gap || undefined,
+                        flexWrap: properties.flexWrap || undefined,
                         paddingTop: properties.paddingTop || undefined,
                         paddingBottom: properties.paddingBottom || undefined,
                         paddingLeft: properties.paddingLeft || undefined,

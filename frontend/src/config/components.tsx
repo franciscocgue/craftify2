@@ -92,6 +92,7 @@ const compProperties: ComponentProperties = {
         // minHeight: '760',
         display: 'flex', // not editable
         flexDirection: 'column', // not editable
+        flexWrap: 'wrap',
         gap: '5px',
         paddingTop: '8px',
         paddingBottom: '8px',
