@@ -7,6 +7,7 @@ import CHeader from '../components/CHeader';
 import CCheckbox from '../components/CCheckbox';
 import CImage from '../components/CImage';
 import CLink from '../components/CLink';
+import CIconButton from '../components/CIconButton';
 
 const uiMapper2 = {
     'canvas': (components: any, id: string, properties) => (
@@ -41,6 +42,9 @@ const uiMapper2 = {
     ),
     'link': (components: any, id: string, properties) => (
         <CLink key={id} {...properties[id]} />
+    ),
+    'icon-button': (components: any, id: string, properties) => (
+        <CIconButton key={id} {...properties[id]} />
     ),
 }
 

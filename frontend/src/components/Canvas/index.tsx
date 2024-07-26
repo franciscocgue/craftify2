@@ -1,6 +1,7 @@
 import useDesignerStore from "../../stores/designer";
 import { renderNode } from "../../helpers/ui-builder";
 import { useEffect, useMemo, useRef, useState } from "react";
+import FaIcon from "../../helpers/MyIcon";
 
 const screenSizes = {
     'Galaxy S10': [360, 760],

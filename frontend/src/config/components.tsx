@@ -5,6 +5,7 @@ import { FaHeading } from "react-icons/fa6";
 import { IoMdCheckboxOutline } from "react-icons/io";
 import { IoImageOutline } from "react-icons/io5";
 import { IoMdLink } from "react-icons/io";
+import { CgPlayButtonR } from "react-icons/cg";
 import { Properties } from "../vite-env";
 
 const compTypes = {
@@ -39,6 +40,10 @@ const compTypes = {
     'link': {
         icon: IoMdLink,
         name: 'Link',
+    },
+    'icon-button': {
+        icon: CgPlayButtonR,
+        name: 'Icon Button',
     },
 } as const;
 
@@ -115,6 +120,7 @@ const compProperties: ComponentProperties = {
         gap: '5px',
         flexWrap: 'nowrap',
         alignItems: 'center',
+        justifyContent: 'flex-start',
         backgroundColor: undefined,
         overflow: 'visible',
     },
@@ -127,7 +133,6 @@ const compProperties: ComponentProperties = {
         marginBottom: '0px',
         marginLeft: '0px',
         marginRight: '0px',
-        // padding removed; see comment in button component
         // p: undefined,
         color: 'black',
         backgroundColor: 'rgba(0,0,0,0.2)',
@@ -156,7 +161,6 @@ const compProperties: ComponentProperties = {
         marginBottom: '0px',
         marginLeft: '0px',
         marginRight: '0px',
-        // padding removed; see comment in button component
         // p: undefined,
         color: 'black',
         backgroundColor: undefined,
@@ -186,7 +190,6 @@ const compProperties: ComponentProperties = {
         marginBottom: '0px',
         marginLeft: '0px',
         marginRight: '0px',
-        // padding removed; see comment in button component
         // p: undefined,
         color: 'black',
         backgroundColor: undefined,
@@ -215,7 +218,6 @@ const compProperties: ComponentProperties = {
         marginBottom: '0px',
         marginLeft: '0px',
         marginRight: '0px',
-        // padding removed; see comment in button component
         // p: undefined,
         color: 'black',
         backgroundColor: undefined,
@@ -242,7 +244,6 @@ const compProperties: ComponentProperties = {
         marginBottom: '0px',
         marginLeft: '0px',
         marginRight: '0px',
-        // padding removed; see comment in button component
         // p: undefined,
         // color: 'black',
         // backgroundColor: 'rgba(0,0,0,0.2)',
@@ -272,7 +273,6 @@ const compProperties: ComponentProperties = {
         marginBottom: '0px',
         marginLeft: '0px',
         marginRight: '0px',
-        // padding removed; see comment in button component
         // p: undefined,
         color: 'blue',
         backgroundColor: undefined,
@@ -294,6 +294,40 @@ const compProperties: ComponentProperties = {
         __text: 'Google',
         __href: 'https://www.google.com/',
         __target: '_blank',
+    },
+    'icon-button': {
+        // wrapperStyles
+        width: '35px',
+        height: '35px',
+        // minHeight: '40px',
+        marginTop: '0px',
+        marginBottom: '0px',
+        marginLeft: '0px',
+        marginRight: '0px',
+        // paddingTop: '30px',
+        // paddingBottom: '0px',
+        // paddingLeft: '30px',
+        // paddingRight: '0px',
+        // p: undefined,
+        // color: 'black',
+        backgroundColor: 'white',
+        outline: 'none',
+        borderTopStyle: 'none',
+        borderTopWidth: undefined,
+        borderTopColor: undefined,
+        borderBottomStyle: 'none',
+        borderBottomWidth: undefined,
+        borderBottomColor: undefined,
+        borderLeftStyle: 'none',
+        borderLeftWidth: undefined,
+        borderLeftColor: undefined,
+        borderRightStyle: 'none',
+        borderRightWidth: undefined,
+        borderRightColor: undefined,
+        // custom properties
+        __iconName: 'MdHelp',
+        __iconSize: '25',
+        __iconColor: 'black',
     },
 }
 
