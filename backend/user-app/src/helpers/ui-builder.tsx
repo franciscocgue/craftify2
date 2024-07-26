@@ -6,6 +6,7 @@ import CText from '../components/CText';
 import CHeader from '../components/CHeader';
 import CCheckbox from '../components/CCheckbox';
 import CImage from '../components/CImage';
+import CLink from '../components/CLink';
 
 const uiMapper2 = {
     'canvas': (components: any, id: string, properties) => (
@@ -37,6 +38,9 @@ const uiMapper2 = {
     ),
     'image': (components: any, id: string, properties) => (
         <CImage key={id} {...properties[id]} />
+    ),
+    'link': (components: any, id: string, properties) => (
+        <CLink key={id} {...properties[id]} />
     ),
 }
 

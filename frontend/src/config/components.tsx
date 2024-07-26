@@ -4,6 +4,7 @@ import { BiText } from "react-icons/bi";
 import { FaHeading } from "react-icons/fa6";
 import { IoMdCheckboxOutline } from "react-icons/io";
 import { IoImageOutline } from "react-icons/io5";
+import { IoMdLink } from "react-icons/io";
 import { Properties } from "../vite-env";
 
 const compTypes = {
@@ -34,6 +35,10 @@ const compTypes = {
     'image': {
         icon: IoImageOutline,
         name: 'Image',
+    },
+    'link': {
+        icon: IoMdLink,
+        name: 'Link',
     },
 } as const;
 
@@ -257,6 +262,38 @@ const compProperties: ComponentProperties = {
         // custom properties
         __src: 'https://picsum.photos/id/237/200/300',
         __alt: 'image',
+    },
+    'link': {
+        // wrapperStyles
+        width: 'fit-content',
+        height: 'auto',
+        minHeight: '26px',
+        marginTop: '0px',
+        marginBottom: '0px',
+        marginLeft: '0px',
+        marginRight: '0px',
+        // padding removed; see comment in button component
+        // p: undefined,
+        color: 'blue',
+        backgroundColor: undefined,
+        outline: 'none',
+        borderTopStyle: 'none',
+        borderTopWidth: undefined,
+        borderTopColor: undefined,
+        borderBottomStyle: 'none',
+        borderBottomWidth: undefined,
+        borderBottomColor: undefined,
+        borderLeftStyle: 'none',
+        borderLeftWidth: undefined,
+        borderLeftColor: undefined,
+        borderRightStyle: 'none',
+        borderRightWidth: undefined,
+        borderRightColor: undefined,
+        // overflow: 'auto',
+        // custom properties
+        __text: 'Google',
+        __href: 'https://www.google.com/',
+        __target: '_blank',
     },
 }
 

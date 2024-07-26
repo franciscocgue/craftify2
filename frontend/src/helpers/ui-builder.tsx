@@ -6,6 +6,7 @@ import CHeader from "../components/components/CHeader";
 import CText from "../components/components/CText";
 import CCheckbox from "../components/components/CCheckbox";
 import CImage from "../components/components/CImage";
+import CLink from "../components/components/CLink";
 
 {/* <ContainerWrapper id="subcontainer" componentType="container-row" parentType='container-column' w={'100%'} h={'max-content'} p={1} border="none">
 <Flex direction={'row'} wrap={'wrap'} alignItems={'center'} gap={2} h={'100%'} w={'100%'}>
@@ -126,6 +127,15 @@ const uiMapper2 = {
     ),
     'image': (components: ComponentCollection, id: string) => (
         <CImage
+            key={id}
+            componentId={id}
+            componentName={components[id].name}
+            componentType={components[id].type}
+            parentType={components[components[id].parent as string]?.type}
+        />
+    ),
+    'link': (components: ComponentCollection, id: string) => (
+        <CLink
             key={id}
             componentId={id}
             componentName={components[id].name}

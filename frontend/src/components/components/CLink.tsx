@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useWrapper } from "../../helpers/custom-hooks/hooks";
 
-const CImage = ({ componentId, componentType, componentName, parentType }) => {
+const CLink = ({ componentId, componentType, componentName, parentType }) => {
 
     // exclude below from the built version
     console.log('comp render: ' + componentId.slice(0, 5))
@@ -16,26 +16,24 @@ const CImage = ({ componentId, componentType, componentName, parentType }) => {
     }, [isRefReady]);
     // end exclude block
 
-    return <div style={{
-        position: 'relative',
-        // display: 'inline-block',
-    }}>
-        <img
+    return <>
+        <a
             // exclude below from the built version
             ref={ref}
+            // href={otherProperties.__href} // disabled in design mode
+            target={otherProperties.__target}
             // end exclude block
             style={{
                 ...otherProperties,
-                display: 'block' // needed so that height matches div wrapper
+                position: 'relative',
             }}
-            src={otherProperties.__src}
-            alt={otherProperties.__alt}
         >
+            {otherProperties.__text}
             {/* exclude below from the built version */}
+            {wrapperComponent}
             {/* end exclude block */}
-        </img>
-        {wrapperComponent}
-    </div>
+        </a>
+    </>
 }
 
-export default CImage;
+export default CLink;
