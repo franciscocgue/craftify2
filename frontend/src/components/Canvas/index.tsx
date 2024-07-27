@@ -1,14 +1,7 @@
 import useDesignerStore from "../../stores/designer";
 import { renderNode } from "../../helpers/ui-builder";
-import { useEffect, useMemo, useRef, useState } from "react";
-import FaIcon from "../../helpers/MyIcon";
+import { useEffect, useMemo, useRef } from "react";
 
-const screenSizes = {
-    'Galaxy S10': [360, 760],
-    'Laptop': [1280, 800]
-}
-
-const device = "Galaxy S10";
 
 const Canvas = () => {
 

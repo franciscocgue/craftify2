@@ -37,7 +37,7 @@ const MyPortal = ({ children, styles }: MyPortalProps) => {
     <>{isVisible && <div style={{ ...styles }}>
       {children}
     </div>}</>,
-    document.getElementById('my-root-tooltip')
+    document.getElementById('my-root-tooltip') as HTMLElement
   );
 };
 

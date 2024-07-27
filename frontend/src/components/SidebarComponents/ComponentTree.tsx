@@ -1,13 +1,13 @@
 import { Provider } from 'rc-motion';
 import Tree from 'rc-tree';
-import React, { useCallback, useRef, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { getComponentsAsTree } from '../../helpers/tree-builder';
 import useDesignerStore from '../../stores/designer';
 import useResizeObserver from "use-resize-observer";
 import { IoMdArrowDropdown, IoMdArrowDropright } from "react-icons/io";
 import './ComponentTree.less';
-import { debounce } from 'lodash';
 import { treeAsHtml } from '../../helpers/tree-builder';
+import { useDebouncedMouseEnter } from '../../helpers/utils';
 
 
 const STYLE = `
@@ -27,41 +27,11 @@ const motion = {
   motionName: 'node-motion',
   motionAppear: false,
   onAppearStart: () => ({ height: 0 }),
-  onAppearActive: node => ({ height: node.scrollHeight }),
-  onLeaveStart: node => ({ height: node.offsetHeight }),
+  onAppearActive: (node:any) => ({ height: node.scrollHeight }),
+  onLeaveStart: (node:any) => ({ height: node.offsetHeight }),
   onLeaveActive: () => ({ height: 0 }),
 };
 
-const useDebouncedMouseEnter = (setStatus: (selectedId: string | null) => void) => {
-  // Use a ref to track the debounced update
-  const debouncedUpdateRef = useRef(null);
-
-  // Debounce function to ensure a final update after inactivity
-  const debouncedUpdate = useCallback(debounce((id) => {
-    setStatus(id);
-  }, 300), [setStatus]);
-
-  const handleMouseEnter = useCallback((id: string) => {
-    // Clear any existing debounce
-    if (debouncedUpdateRef.current) {
-      debouncedUpdateRef.current.cancel();
-    }
-
-    // Perform debounced update
-    debouncedUpdateRef.current = debouncedUpdate;
-    debouncedUpdate(id);
-  }, [debouncedUpdate]);
-
-  const handleMouseLeave = useCallback(() => {
-    // Clear the debounced update on mouse leave
-    if (debouncedUpdateRef.current) {
-      debouncedUpdateRef.current.cancel();
-    }
-    setStatus(null); // Optionally clear status on leave
-  }, [setStatus]);
-
-  return { handleMouseEnter, handleMouseLeave };
-};
 
 const ComponentTree = () => {
   const treeRef = React.useRef();
@@ -130,7 +100,7 @@ const ComponentTree = () => {
                 style={{ userSelect: 'none' }}
                 defaultExpandedKeys={defaultExpandedKeys}
                 motion={motion}
-                height={height - 50}
+                height={(height || 0) - 50}
                 itemHeight={28}
                 onMouseEnter={(info) => {
                   // setLocalHoveredId(true);

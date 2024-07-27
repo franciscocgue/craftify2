@@ -13,24 +13,27 @@ const SidebarComponents = () => {
     const compsInPalette = useMemo(
         () => (
             <div
-            style={{
-                display: 'flex',
-                width: '100%',
-                padding: '8px',
-                borderTop:'1px solid grey',
-                borderBottom:'1px solid grey',
-                maxHeight:'100%',
-                overflowY:'auto',
-                gap:1,
-                justifyContent:'flex-start',
-                alignContent:'start',
-                flexWrap:'wrap',
-                flexGrow:1,
-            }}
+                style={{
+                    display: 'flex',
+                    width: '100%',
+                    padding: '8px',
+                    borderTop: '1px solid grey',
+                    borderBottom: '1px solid grey',
+                    maxHeight: '100%',
+                    overflowY: 'auto',
+                    gap: 1,
+                    justifyContent: 'flex-start',
+                    alignContent: 'start',
+                    flexWrap: 'wrap',
+                    flexGrow: 1,
+                }}
             >
-                {Object.keys(compTypes).map(c => <DraggableCompPalette componentType={c} key={c} id={c}>
-                    <Component type={c} name={compTypes[c as keyof typeof compTypes].name} icon={compTypes[c as keyof typeof compTypes].icon} style={{ cursor: 'pointer' }} />
-                </DraggableCompPalette>)}
+                {Object.keys(compTypes).map(c => {
+                    const k = c as keyof typeof compTypes;
+                    return <DraggableCompPalette componentType={k} key={k} id={k}>
+                        <Component type={k} name={compTypes[k].name} icon={compTypes[k].icon} style={{ cursor: 'pointer' }} />
+                    </DraggableCompPalette>
+                })}
             </div>
         ),
         [compTypes]
@@ -53,12 +56,12 @@ const SidebarComponents = () => {
             }}
             handleComponent={{
                 top: <div
-                className={styles['resize-handle']}
+                    className={styles['resize-handle']}
                     style={{
                         height: '100%',
                         width: '100%',
                     }}
-                    // h={'100%'} w={'100%'} _hover={{ 'backgroundColor': 'darkgrey' }}
+                // h={'100%'} w={'100%'} _hover={{ 'backgroundColor': 'darkgrey' }}
                 ></div>
             }}
             maxWidth={'100%'}

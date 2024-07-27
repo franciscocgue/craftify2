@@ -11,7 +11,7 @@ import './index.css'
 // root.render(heading);
 
 
-ReactDOM.createRoot(document.getElementById('app')).render(
+ReactDOM.createRoot(document.getElementById('app') as HTMLElement).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,

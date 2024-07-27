@@ -109,7 +109,7 @@ function DroppableContainer(props: DroppableContainerProps) {
     });
     const { isOver: isOverTop, setNodeRef: setNodeRefTop } = useDroppable({
         id: `droppable_top_${props.componentId}`,
-        disabled: props.parentType !== 'column' && props.parentType !== 'canvas',
+        disabled: props.parentType !== 'column',
         data: {
             componentId: props.componentId,
             location: 'before'
@@ -117,7 +117,7 @@ function DroppableContainer(props: DroppableContainerProps) {
     });
     const { isOver: isOverBottom, setNodeRef: setNodeRefBottom } = useDroppable({
         id: `droppable_bottom_${props.componentId}`,
-        disabled: props.parentType !== 'column' && props.parentType !== 'canvas',
+        disabled: props.parentType !== 'column',
         data: {
             componentId: props.componentId,
             location: 'after'
@@ -146,11 +146,11 @@ function DroppableContainer(props: DroppableContainerProps) {
             {<div ref={setNodeRefInner} style={styleInner} />}
             {<div style={styleInnerHighlight(isOverInner)} />}
             {/* top */}
-            {(props.parentType === 'column' || props.parentType === 'canvas') && <div ref={setNodeRefTop} style={styleTop} />}
-            {(props.parentType === 'column' || props.parentType === 'canvas') && <div style={styleTopHighlight(isOverTop)} />}
+            {props.parentType === 'column' && <div ref={setNodeRefTop} style={styleTop} />}
+            {props.parentType === 'column' && <div style={styleTopHighlight(isOverTop)} />}
             {/* bottom */}
-            {(props.parentType === 'column' || props.parentType === 'canvas') && <div ref={setNodeRefBottom} style={styleBottom} />}
-            {(props.parentType === 'column' || props.parentType === 'canvas') && <div style={styleBottomHighlight(isOverBottom)} />}
+            {props.parentType === 'column' && <div ref={setNodeRefBottom} style={styleBottom} />}
+            {props.parentType === 'column' && <div style={styleBottomHighlight(isOverBottom)} />}
             {/* left */}
             {props.parentType === 'row' && <div ref={setNodeRefLeft} style={styleLeft} />}
             {props.parentType === 'row' && <div style={styleLeftHighlight(isOverLeft)} />}

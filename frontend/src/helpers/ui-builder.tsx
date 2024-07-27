@@ -82,7 +82,7 @@ const uiMapper2 = {
             componentId={id}
             componentName={components[id].name}
             componentType={components[id].type}
-            parentType={components[components[id].parent as string]?.type}
+            parentType={components[components[id].parent as string]?.type as 'column' | 'row'}
         // otherProperties={properties[id]}
         >
             {/* <CContainerColumn componentId={id}> */}
@@ -155,7 +155,7 @@ const uiMapper2 = {
     ),
 }
 
-const renderNode = (components: ComponentCollection, id: string) => {
+const renderNode = (components: ComponentCollection, id: string): JSX.Element => {
     return uiMapper2[components[id].type as keyof typeof uiMapper2](components, id)
 }
 

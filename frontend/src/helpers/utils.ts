@@ -1,5 +1,7 @@
+import { useCallback, useRef } from "react"
 import useDesignerStore from "../stores/designer"
-import { ComponentCollection, Properties, Variables } from "../vite-env"
+import { ComponentCollection, Properties } from "../vite-env"
+import { debounce } from "lodash"
 
 /**
  * Get children component IDs of a given component node.
@@ -15,7 +17,7 @@ const getChildrenNodes = (node: string, components: ComponentCollection) => {
         return []
     }
 
-    function _reduce(acc: string[], child: string) {
+    function _reduce(acc: string[], child: string): string[] {
         acc.push(child)
         if (!components[child].children) {
             return acc
@@ -91,8 +93,47 @@ const parseProperties = (properties: Properties) => {
 }
 
 
+// Type for the debounced function (avoid ts error on cancel method)
+type DebouncedFunction = {
+    (id: string): void;
+    cancel: () => void;
+};
+
+const useDebouncedMouseEnter = (setStatus: (selectedId: string | null) => void) => {
+    // Use a ref to track the debounced update
+    const debouncedUpdateRef = useRef<DebouncedFunction | null>(null);
+
+    // Debounce function to ensure a final update after inactivity
+    const debouncedUpdate = useCallback(debounce((id) => {
+        setStatus(id);
+    }, 300), [setStatus]);
+
+    const handleMouseEnter = useCallback((id: string) => {
+        // Clear any existing debounce
+        if (debouncedUpdateRef.current) {
+            debouncedUpdateRef.current.cancel();
+        }
+
+        // Perform debounced update
+        debouncedUpdateRef.current = debouncedUpdate;
+        debouncedUpdate(id);
+    }, [debouncedUpdate]);
+
+    const handleMouseLeave = useCallback(() => {
+        // Clear the debounced update on mouse leave
+        if (debouncedUpdateRef.current) {
+            debouncedUpdateRef.current.cancel();
+        }
+        setStatus(null); // Optionally clear status on leave
+    }, [setStatus]);
+
+    return { handleMouseEnter, handleMouseLeave };
+};
+
+
 export {
     getChildrenNodes,
     marginAsPx,
     parseProperties,
+    useDebouncedMouseEnter,
 }

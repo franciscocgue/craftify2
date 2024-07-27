@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import useDesignerStore from "../stores/designer";
 import MyPortal from "./MyPortal";
 import { marginAsPx } from "./utils";
@@ -19,6 +18,8 @@ const MarginOverlay = (props: MarginOverlayProps) => {
     return <>
         {/* top */}
         {props.marginTop
+            // avoid ts warning
+            && props.componentRef.current?.parentElement
             && parseInt(props.marginTop) !== 0
             // note: 72px ~ top navbar (toolbar) height
             && 72 <= (props.componentRef.current?.getBoundingClientRect().top - marginAsPx(String(props.marginTop), window.getComputedStyle(props.componentRef.current?.parentElement)))
@@ -35,6 +36,8 @@ const MarginOverlay = (props: MarginOverlayProps) => {
             </MyPortal>}
         {/* left */}
         {props.marginLeft
+            // avoid ts warning
+            && props.componentRef.current?.parentElement
             && parseInt(props.marginLeft) !== 0
             // note: 72px ~ top navbar (toolbar) height
             && 72 <= props.componentRef.current?.getBoundingClientRect().top
@@ -51,6 +54,8 @@ const MarginOverlay = (props: MarginOverlayProps) => {
             </MyPortal>}
         {/* bottom */}
         {props.marginBottom
+            // avoid ts warning
+            && props.componentRef.current?.parentElement
             && parseInt(props.marginBottom) !== 0
             // note: 72px ~ top navbar (toolbar) height
             && 72 <= props.componentRef.current?.getBoundingClientRect().bottom
@@ -67,6 +72,8 @@ const MarginOverlay = (props: MarginOverlayProps) => {
             </MyPortal>}
         {/* right */}
         {props.marginRight
+            // avoid ts warning
+            && props.componentRef.current?.parentElement
             && parseInt(props.marginRight) !== 0
             // note: 72px ~ top navbar (toolbar) height
             && 72 <= props.componentRef.current?.getBoundingClientRect().top

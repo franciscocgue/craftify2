@@ -5,8 +5,9 @@ import { useState } from "react";
 import QRCode from "react-qr-code";
 import { FaPlay } from "react-icons/fa6";
 import IconButton from "../../helpers/components/IconButton";
+import { ComponentCollection, Properties, Variables } from "../../vite-env";
 
-const handleButtonClick = async (components, properties, variables, setLoading) => {
+const handleButtonClick = async (components: ComponentCollection, properties: Properties, variables: Variables, setLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
 
     setLoading(true);
 

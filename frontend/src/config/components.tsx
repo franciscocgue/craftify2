@@ -82,7 +82,7 @@ const compTypes = {
 // }
 
 type ComponentProperties = {
-    [K in keyof typeof compTypes]: Properties;
+    [K in keyof typeof compTypes | 'canvas']: Properties;
 };
 
 const compProperties: ComponentProperties = {

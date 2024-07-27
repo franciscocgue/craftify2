@@ -3,6 +3,7 @@ import WrapperComponent from "../WrapperComponent";
 import useDesignerStore from "../../stores/designer";
 import { isEqual } from "lodash";
 import { parseProperties } from "../utils";
+import { compTypes } from "../../config/components";
 
 const useHover = (baseStyle: CSSProperties, hoverStyle: CSSProperties): [combinedStyle: CSSProperties, eventHandlers: { onMouseEnter: () => void, onMouseLeave: () => void }] => {
     const [isHovered, setIsHovered] = useState(false);
@@ -17,7 +18,7 @@ const useHover = (baseStyle: CSSProperties, hoverStyle: CSSProperties): [combine
     return [combinedStyle, eventHandlers];
 }
 
-const useWrapper = (componentId, componentType, componentName, parentType) => {
+const useWrapper = (componentId: string, componentType: keyof typeof compTypes, componentName: string, parentType: 'row' | 'column') => {
 
     const ref = useRef(null);
     const [renderer, setRerender] = useState(false);

@@ -1,4 +1,3 @@
-import { IconType } from 'react-icons';
 import { useHover } from '../custom-hooks/hooks';
 import { CSSProperties, ReactElement } from 'react';
 

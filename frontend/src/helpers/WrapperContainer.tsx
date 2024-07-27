@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useDesignerStore from "../stores/designer";
 import DraggableHandle from "./DraggableHandle";
 import DroppableContainer from "./DroppableContainer";
@@ -6,11 +6,12 @@ import { compTypes } from "../config/components";
 import MarginOverlay from "./MarginOverlay";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import { getChildrenNodes, parseProperties } from "./utils";
-import { debounce, isEqual } from "lodash";
+import { isEqual } from "lodash";
 import { IconType } from "react-icons";
 import MyPortal from "./MyPortal";
 import { toast } from "react-toastify";
 import MyOutline from "./MyOutline";
+import { useDebouncedMouseEnter } from "./utils";
 
 
 interface IconBoxProps {
@@ -73,43 +74,6 @@ const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorM
     </div>)
 }
 
-// Type for the debounced function (avoid ts error on cancel method)
-type DebouncedFunction = {
-    (id: string): void;
-    cancel: () => void;
-};
-
-const useDebouncedMouseEnter = (setStatus: (selectedId: string | null) => void) => {
-    // Use a ref to track the debounced update
-    const debouncedUpdateRef = useRef<DebouncedFunction | null>(null);
-
-    // Debounce function to ensure a final update after inactivity
-    const debouncedUpdate = useCallback(debounce((id) => {
-        setStatus(id);
-    }, 300), [setStatus]);
-
-    const handleMouseEnter = useCallback((id: string) => {
-        // Clear any existing debounce
-        if (debouncedUpdateRef.current) {
-            debouncedUpdateRef.current.cancel();
-        }
-
-        // Perform debounced update
-        debouncedUpdateRef.current = debouncedUpdate;
-        debouncedUpdate(id);
-    }, [debouncedUpdate]);
-
-    const handleMouseLeave = useCallback(() => {
-        // Clear the debounced update on mouse leave
-        if (debouncedUpdateRef.current) {
-            debouncedUpdateRef.current.cancel();
-        }
-        setStatus(null); // Optionally clear status on leave
-    }, [setStatus]);
-
-    return { handleMouseEnter, handleMouseLeave };
-};
-
 interface WrapperContainerProps {
     componentId: string,
     componentType: keyof typeof compTypes,
@@ -163,7 +127,8 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                     setTimeout(() => setRerender(prev => !prev), 100)
                 }
                 // component just created, re-render (to show outline on newly created component)
-                if (state.selectedId !== prevState?.selectedId && state.selectedId === props.componentId) {
+                // if (state.selectedId !== prevState?.selectedId && state.selectedId === props.componentId) {
+                if (state.selectedId === props.componentId) {
                     setIsSelected(true);
                 }
             }, {

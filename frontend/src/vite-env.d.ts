@@ -26,6 +26,7 @@ export type Properties = {
     // wrapper styles
     width?: string,
     height?: string,
+    minWidth?: string,
     minHeight?: string,
     marginTop?: string,
     marginBottom?: string,
@@ -40,9 +41,13 @@ export type Properties = {
     flexDirection?: 'column' | 'row',  // not editable (at least in canvas)
     gap?: string,
     flexWrap?: 'nowrap' | 'wrap',
-    alignItems?: 'center',
+    alignItems?: string,
+    justifyContent?: string,
+    overflow?: string,
     color?: string,
     backgroundColor?: string,
+    backgroundImage?: string,
+    backgroundSize?: string,
     outline?: string,
     borderTopStyle?: CSS.DataType.LineStyle,
     borderTopWidth?: string,
@@ -58,23 +63,24 @@ export type Properties = {
     borderRightColor?: string,
     // custom
     __text?: string,
+    __src?: string,
+    __alt?: string,
+    __href?: string,
+    __target?: string,
+    __iconName?: string,
+    __iconSize?: string,
+    __iconColor?: string,
 }
 
 
 export interface ComponentLeaf {
-    id: string;
-    name: string;
-    type: keyof typeof compTypes,
-    children?: string[];
-    readOnly: true | false,
-}
-export interface ComponentLeaf1 {
     key: string;
     title: string;
-    type: keyof typeof compTypes,
-    children?: string[];
+    type: keyof typeof compTypes | 'canvas',
+    children: ComponentLeaf[];
     readOnly: true | false,
 }
+
 
 export type PropertyType = {
     displayName?: string,

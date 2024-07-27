@@ -1,5 +1,5 @@
 import { TreeNode } from "rc-tree";
-import { ComponentCollection, ComponentLeaf1 } from "../vite-env";
+import { ComponentCollection, ComponentLeaf } from "../vite-env";
 import { compTypes } from "../config/components";
 import { CgScreen } from "react-icons/cg";
 import { FiPlusCircle } from "react-icons/fi";
@@ -14,31 +14,27 @@ import { toast } from "react-toastify";
 // convert components (flat list) into
 // nested format required by the (rc-)tree
 
-const componentsAsTree = (data: ComponentCollection, id: string, parent: ComponentLeaf1[]) => {
+const componentsAsTree = (data: ComponentCollection, id: string, parent: ComponentLeaf[]) => {
+    const newNode: ComponentLeaf = {
+        key: id,
+        title: data[id].name,
+        type: data[id].type,
+        children: [],
+        readOnly: false,
+    };
+    parent.push(newNode);
     if (data[id].children.length) {
         // has children
-        parent.push({
-            key: id,
-            title: data[id].name,
-            type: data[id].type,
-            children: [],
-            readOnly: false,
-        })
-        // const children = parent.children;
-        data[id].children.forEach((child: string) => componentsAsTree(data, child, parent[(parent.length - 1) as keyof typeof parent]?.children))
-    } else {
-        parent.push({
-            key: id,
-            title: data[id].name,
-            type: data[id].type,
-            children: [],
-            readOnly: false,
-        })
+        const children = newNode.children;
+        if (children) {
+            // const children = parent.children;
+            data[id].children.forEach((child: string) => componentsAsTree(data, child, children))
+        }
     }
 }
 
 const getComponentsAsTree = (components: ComponentCollection) => {
-    const tree: ComponentLeaf1[] = [];
+    const tree: ComponentLeaf[] = [];
     componentsAsTree(components, 'canvas', tree);
     return tree;
 }
@@ -49,8 +45,25 @@ const getIcon = (compTypeName: string) => {
     return IconComponent ? <IconComponent /> : null;
 };
 
+// type nodeType = {
+//     node: {
+//         title: string,
+//         key: string,
+//         type: keyof typeof compTypes | 'canvas'
+//     }
+// }
+
+interface NodeType {
+    type: keyof typeof compTypes | 'canvas'
+    key: string,
+    title: string,
+    children: NodeType[]
+}
+interface NodeTitleProps {
+    node: NodeType
+}
 // rc-tree component tree title
-const NodeTitle = memo(({ ...props }) => {
+const NodeTitle = memo(({ node }: NodeTitleProps) => {
     console.log('C - rc-tree Title')
     // const { colorMode } = useColorMode();
     const colorMode = useDesignerStore((state) => state.colorMode);
@@ -77,10 +90,10 @@ const NodeTitle = memo(({ ...props }) => {
     const [value, setValue] = useState('')
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setValue(event.target.value);
-        setListOfCompTypes(Object.keys(compTypes).filter(ct => ct.indexOf(event.target.value) !== -1));
+        setListOfCompTypes((Object.keys(compTypes) as (keyof typeof compTypes)[]).filter(ct => ct.indexOf(event.target.value) !== -1));
     }
 
-    const [listOfCompTypes, setListOfCompTypes] = useState(Object.keys(compTypes))
+    const [listOfCompTypes, setListOfCompTypes] = useState<(keyof typeof compTypes)[]>(Object.keys(compTypes) as (keyof typeof compTypes)[])
 
     return <Popover
         isOpen={isPopoverOpen}
@@ -158,7 +171,7 @@ const NodeTitle = memo(({ ...props }) => {
                             }}
                             key={c}
                             onClick={() => {
-                                addComponent(c, props.node.key, 'auto');
+                                addComponent(c, node.key, 'auto');
                                 setIsPopoverOpen(false);
                                 notify.created(`${compTypes[c as keyof typeof compTypes].name} created`);
                                 // toast({
@@ -180,40 +193,33 @@ const NodeTitle = memo(({ ...props }) => {
         <span
             style={{ display: 'flex', alignItems: 'center' }}
             className="rc-tree-title"
-            title={compTypes[props.node.type as keyof typeof compTypes]?.name || 'Canvas'}
+            title={compTypes[node.type as keyof typeof compTypes]?.name || 'Canvas'}
         >
             <span style={{ cursor: 'pointer' }} onClick={() => {
                 setIsPopoverOpen(false);
-                toggleSelectedId(props.node.key);
+                toggleSelectedId(node.key);
             }}>
-                {props.node.title}
+                {node.title}
             </span>
 
-            {props.node.type !== 'canvas' && <RiDeleteBin2Line className="my-delete-icon" title="Delete" size={14} onClick={() => {
-                removeComponent(props.node.key);
-                notify.deleted(`${props.node.title} deleted`)
+            {node.type !== 'canvas' && <RiDeleteBin2Line className="my-delete-icon" title="Delete" size={14} onClick={() => {
+                removeComponent(node.key);
+                notify.deleted(`${node.title} deleted`)
             }} />}
             <FiPlusCircle className="my-add-icon" title="New" size={14} onClick={() => {
                 setIsPopoverOpen(!isPopoverOpen);
                 setValue('');
-                setListOfCompTypes(Object.keys(compTypes));
+                setListOfCompTypes(Object.keys(compTypes) as (keyof typeof compTypes)[]);
             }} />
 
         </span>
     </Popover>
 })
 
-interface NodeType {
-    type: string,
-    key: string,
-    title: string,
-    children: NodeType[]
-}
-
 // create nested tree structure for
 // TreeNodes in rc-tree (component tree)
 
-const treeAsHtml = (node: NodeType, selectedId) => {
+const treeAsHtml = (node: NodeType, selectedId: string | null) => {
     if (!node.children) return null;
     return (
         <TreeNode

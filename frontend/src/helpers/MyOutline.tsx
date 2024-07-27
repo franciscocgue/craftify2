@@ -18,18 +18,9 @@ type myOutlineProps = {
 
 const MyOutline = ({ boundingRect, color, thickness }: myOutlineProps) => {
 
-    // note: refResizable.current?.resizable.getBoundingClientRect()
-
     console.log('C - MyOutline ')
 
-    // const setActivePortals = useDesignerStore((state) => state.setActivePortals);
     const [isVisible, setIsVisible] = useState(true);
-
-    // useEffect(() => {
-    //     console.log('debb - first time')
-    //     // add to list of active portals
-    //     // setActivePortals('compId', true)
-    // }, [])
 
     // hide outline if over the limits
     // note: 72px ~ top navbar (toolbar) height

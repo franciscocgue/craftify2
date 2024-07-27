@@ -1,7 +1,12 @@
 import { useState } from "react";
 import useDesignerStore from "../../stores/designer";
 
-const MyInput = ({componentId, name, val}) => {
+type MyInputProps = {
+    componentId: string,
+    name: string,
+    val: string
+};
+const MyInput = ({ componentId, name, val }: MyInputProps) => {
 
     const updateProperty = useDesignerStore((state) => state.updateProperty);
 

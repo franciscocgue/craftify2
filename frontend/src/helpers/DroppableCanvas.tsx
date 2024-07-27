@@ -22,7 +22,7 @@ const styleInnerHighlight: (isOverInner: boolean) => CSSProperties = (isOverInne
 
 type DroppableCanvasProps = {
     componentId: string,
-    canvasRef: React.MutableRefObject<null>
+    // canvasRef: React.MutableRefObject<null>
 }
 
 function DroppableCanvas(props: DroppableCanvasProps) {
