@@ -16,8 +16,11 @@ const CImage = ({ componentId, componentType, componentName, parentType }) => {
     }, [isRefReady]);
     // end exclude block
 
+    // wrapper not needed in built version
     return <div style={{
         position: 'relative',
+        width: otherProperties.width,
+        height: otherProperties.height,
         // display: 'inline-block',
     }}>
         <img
@@ -26,12 +29,13 @@ const CImage = ({ componentId, componentType, componentName, parentType }) => {
             // end exclude block
             style={{
                 ...otherProperties,
-                display: 'block' // needed so that height matches div wrapper
+                display: 'block', // needed so that height matches div wrapper
+                width: '100%',
+                height: '100%',
             }}
             src={otherProperties.__src}
             alt={otherProperties.__alt}
         >
-            {/* exclude below from the built version */}
             {/* end exclude block */}
         </img>
         {wrapperComponent}
