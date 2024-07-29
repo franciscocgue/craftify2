@@ -1,12 +1,14 @@
 import React from 'react';
+import { parseProperties } from '../helpers/utils';
 
 const CButton = ({ ...otherProperties }) => {
+    const parsedProperties = parseProperties(otherProperties);
     return <button
         style={{
-            ...otherProperties
+            ...parsedProperties
         }}
     >
-        {otherProperties.__text}
+        {parsedProperties.__text}
     </button>
 }
 

@@ -1,16 +1,17 @@
 import React from "react";
+import { parseProperties } from "../helpers/utils";
 
 const CLink = ({...otherProperties }) => {
-
+    const parsedProperties = parseProperties(otherProperties);
     return <>
         <a
-            href={otherProperties.__href}
-            target={otherProperties.__target}
+            href={parsedProperties.__href}
+            target={parsedProperties.__target}
             style={{
-                ...otherProperties,
+                ...parsedProperties,
             }}
         >
-            {otherProperties.__text}
+            {parsedProperties.__text}
         </a>
     </>
 }

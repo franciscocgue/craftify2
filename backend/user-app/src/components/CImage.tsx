@@ -1,13 +1,14 @@
 import React from 'react';
+import { parseProperties } from '../helpers/utils';
 
 const CImage = ({ ...otherProperties }) => {
-
+    const parsedProperties = parseProperties(otherProperties);
     return <img
         style={{
-            ...otherProperties,
+            ...parsedProperties,
         }}
-        src={otherProperties.__src}
-        alt={otherProperties.__alt}
+        src={parsedProperties.__src}
+        alt={parsedProperties.__alt}
     >
         {/* exclude below from the built version */}
         {/* end exclude block */}

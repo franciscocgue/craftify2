@@ -1,9 +1,11 @@
 import React from 'react';
+import { parseProperties } from '../helpers/utils';
 
 const CCheckbox = ({ ...otherProperties }) => {
+    const parsedProperties = parseProperties(otherProperties);
     return <div
         style={{
-            ...otherProperties,
+            ...parsedProperties,
         }}>
         <label style={{ fontSize: 'small' }}>
             <input type="checkbox" style={{ marginRight: '5px' }} />

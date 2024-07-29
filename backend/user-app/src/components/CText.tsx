@@ -1,12 +1,14 @@
 import React from 'react';
+import { parseProperties } from '../helpers/utils';
 
 const CText = ({ ...otherProperties }) => {
+    const parsedProperties = parseProperties(otherProperties);
     return <p
         style={{
-            ...otherProperties,
+            ...parsedProperties,
         }}
     >
-        {otherProperties.__text}
+        {parsedProperties.__text}
     </p>
 };
 

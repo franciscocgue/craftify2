@@ -1,12 +1,14 @@
 import React from 'react';
+import { parseProperties } from '../helpers/utils';
 
 const CHeader = ({ ...otherProperties }) => {
+    const parsedProperties = parseProperties(otherProperties);
     return <h2
         style={{
-            ...otherProperties,
+            ...parsedProperties,
         }}
     >
-        {otherProperties.__text}
+        {parsedProperties.__text}
     </h2>
 }
 
