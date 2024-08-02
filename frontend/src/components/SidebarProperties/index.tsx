@@ -84,8 +84,8 @@ const SidebarProperties = memo(() => {
 
         </div>
 
-        {selectedId && activeSection === 'styles' && <>{Object.keys(properties[selectedId]).map(p => (
-            <MyInput componentId={selectedId} name={p} val={properties[selectedId][p]} key={selectedId + p} />
+        {selectedId && activeSection === 'styles' && <>{Object.keys(properties[selectedId].values).map(p => (
+            <MyInput componentId={selectedId} name={p} val={properties[selectedId].values[p]} key={selectedId + p} />
         ))}
         </>}
     </div>

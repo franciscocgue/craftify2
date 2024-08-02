@@ -86,8 +86,8 @@ const Navbar = () => {
           title="Desktop"
           style={{ cursor: 'pointer' }}
           onClick={() => {
-            updateProperty('canvas', 'canvasWidthPx', '1366');
-            updateProperty('canvas', 'canvasHeightPx', '768');
+            updateProperty('canvas', {'canvasWidthPx': '1366'}, {});
+            updateProperty('canvas', {'canvasHeightPx': '768'}, {});
             // for simplicity: to clean-up hover/selected effects
             setSelectedId(null);
           }}
@@ -97,8 +97,8 @@ const Navbar = () => {
           title="Mobile Device"
           style={{ cursor: 'pointer' }}
           onClick={() => {
-            updateProperty('canvas', 'canvasWidthPx', '360');
-            updateProperty('canvas', 'canvasHeightPx', '760');
+            updateProperty('canvas', {'canvasWidthPx': '360'}, {});
+            updateProperty('canvas', {'canvasHeightPx': '760'}, {});
             // for simplicity: to clean-up hover/selected effects
             setSelectedId(null);
           }}
@@ -108,8 +108,8 @@ const Navbar = () => {
           title="Mobile Device - Landscape"
           style={{ cursor: 'pointer' }}
           onClick={() => {
-            updateProperty('canvas', 'canvasWidthPx', '760');
-            updateProperty('canvas', 'canvasHeightPx', '360');
+            updateProperty('canvas', {'canvasWidthPx': '760'}, {});
+            updateProperty('canvas', {'canvasHeightPx': '360'}, {});
             // for simplicity: to clean-up hover/selected effects
             setSelectedId(null);
           }}

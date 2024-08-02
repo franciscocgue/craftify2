@@ -9,7 +9,7 @@ interface propsT {
 const CContainerColumn = ({ componentId, children }: propsT) => {
 
     // console.log('ttt', otherProperties.gap)
-    const otherProperties = useDesignerStore((state) => state.properties[componentId]);
+    const otherProperties = useDesignerStore((state) => state.properties[componentId].values);
 
     return <div
         style={{

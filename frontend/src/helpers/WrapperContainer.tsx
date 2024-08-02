@@ -97,7 +97,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
     const toggleSelectedId = useDesignerStore((state) => state.toggleSelectedId);
     const components = useDesignerStore((state) => state.components);
     const colorMode = useDesignerStore((state) => state.colorMode);
-    const otherProperties = useDesignerStore((state) => state.properties[props.componentId]);
+    const otherProperties = useDesignerStore((state) => state.properties[props.componentId].values);
     const parsedProperties = parseProperties(otherProperties);
     const [_, setRerender] = useState(false);
 

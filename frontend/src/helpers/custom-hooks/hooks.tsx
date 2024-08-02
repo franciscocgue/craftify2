@@ -22,7 +22,7 @@ const useWrapper = (componentId: string, componentType: keyof typeof compTypes, 
 
     const ref = useRef(null);
     const [renderer, setRerender] = useState(false);
-    const otherProperties = useDesignerStore((state) => state.properties[componentId]);
+    const otherProperties = useDesignerStore((state) => state.properties[componentId].values);
     const parsedProperties = parseProperties(otherProperties);
 
     // subscribe to external changes to re-render

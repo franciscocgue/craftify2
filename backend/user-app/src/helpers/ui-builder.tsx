@@ -14,37 +14,37 @@ const uiMapper2 = {
         <div
             id="my-canvas"
             style={{
-                ...properties[id]
+                ...properties[id].values
             }}
         >
             {components[id].children.map((id: string) => renderNode(components, id, properties))}
         </div>
     ),
     'column': (components: any, id: string, properties) => (
-        <CContainerColumn key={id} {...properties[id]}>
+        <CContainerColumn key={id} {...properties[id].values}>
             {components[id].children.map((id: string) => renderNode(components, id, properties))}
         </CContainerColumn>
     ),
     'button': (components: any, id: string, properties) => (
-        <CButton key={id} {...properties[id]} />
+        <CButton key={id} {...properties[id].values} />
     ),
     'text': (components: any, id: string, properties) => (
-        <CText key={id} {...properties[id]} />
+        <CText key={id} {...properties[id].values} />
     ),
     'header': (components: any, id: string, properties) => (
-        <CHeader key={id} {...properties[id]} />
+        <CHeader key={id} {...properties[id].values} />
     ),
     'checkbox': (components: any, id: string, properties) => (
-        <CCheckbox key={id} {...properties[id]} />
+        <CCheckbox key={id} {...properties[id].values} />
     ),
     'image': (components: any, id: string, properties) => (
-        <CImage key={id} {...properties[id]} />
+        <CImage key={id} {...properties[id].values} />
     ),
     'link': (components: any, id: string, properties) => (
-        <CLink key={id} {...properties[id]} />
+        <CLink key={id} {...properties[id].values} />
     ),
     'icon-button': (components: any, id: string, properties) => (
-        <CIconButton key={id} {...properties[id]} />
+        <CIconButton key={id} {...properties[id].values} />
     ),
 }
 

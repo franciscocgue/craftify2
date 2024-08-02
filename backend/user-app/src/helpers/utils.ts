@@ -14,7 +14,7 @@ import variables from './../variables.json';
 const parseProperties = (properties) => {
     // const variables = useDesignerStore((state) => state.variables);
     const parsedProperties = { ...properties };
-    console.log('debug', parsedProperties)
+    // console.log('debug', parsedProperties)
     Object.keys(properties).forEach(p => {
         if (properties[p]) {
             parsedProperties[p as keyof typeof properties] = properties[p].replace(/{{([^}]*)}}/g, (match, p1) => {

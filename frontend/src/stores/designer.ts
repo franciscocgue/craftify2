@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { compProperties, compTypes } from '../config/components';
-import { draggableData, Variables } from '../vite-env';
+import { draggableData, Properties, Variables } from '../vite-env';
 import { getChildrenNodes } from '../helpers/utils';
 
 const initialComponents = {
@@ -106,7 +106,10 @@ type designerStore = {
    */
   removeComponent: (compId: string) => void,
   duplicateComponent: (compId: string) => void,
-  updateProperty: (compId: string, propertyKey: string, propertyValue: any) => void,
+  updateProperty: (
+    compId: string,
+    properties: Properties,
+    interfaceProps: { [k: string]: string | number | boolean | null | undefined }) => void,
 }
 
 const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => ({
@@ -344,12 +347,14 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
 
 
   }),
-  updateProperty: (compId, key, value) => set((state) => {
+  updateProperty: (compId, properties, interfaceProps) => set((state) => {
 
     const props = { ...state.properties };
-    const updatedComp = { ...props[compId] };
-    updatedComp[key] = value;
-    props[compId] = updatedComp;
+
+    props[compId] = {
+      values: { ...props[compId].values, ...properties },
+      interfaceProps: { ...props[compId].interfaceProps, ...interfaceProps }
+    };
 
     const components = { ...state.components }
 

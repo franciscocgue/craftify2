@@ -9,7 +9,7 @@ const Canvas = () => {
 
 
     const components = useDesignerStore((state) => state.components);
-    const properties = useDesignerStore((state) => state.properties['canvas']);
+    const properties = useDesignerStore((state) => state.properties['canvas'].values);
     const setIsCanvasScrolling = useDesignerStore((state) => state.setIsCanvasScrolling);
 
     const comps = useMemo(
