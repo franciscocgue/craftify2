@@ -1,0 +1,66 @@
+.wrapper {
+    padding: 0 10px;
+}
+
+.property {
+    display: flex;
+    align-items: center;
+    margin: 6px 0;
+    height: 30px;
+}
+
+.property .name {
+    font-size: small;
+    display: inline-block;
+    margin-right: 7px;
+    min-width: 85px;
+}
+
+.property .input {
+    width: 100px;
+    height: 100%;
+}
+
+.property .input.number {
+    padding-left: 5px;
+}
+
+.property .unit {
+    margin-left: 5px;
+    font-size: small;
+}
+
+.side-header {
+    border-bottom: 1px solid grey;
+    /* border-top: 1px solid grey; */
+    /* color: black; */
+    font-size: small;
+    /* text-align: center; */
+    margin-top: 10px;
+    margin-bottom: 5px;
+    /* font-weight: bold; */
+    font-style: italic;
+    padding: 3px 0 3px 5px;
+}
+
+.property .unit-block {
+    margin-left: 5px;
+    gap: 5px;
+    display: flex;
+}
+
+.property .unit-block button {
+    background: none;
+	color: grey;
+	border: 1px solid grey;
+    border-radius: 5px;
+	padding: 3px 4px;
+    font-size: small;
+	cursor: pointer;
+	outline: inherit;
+}
+
+.property .unit-block button.active {
+    color: inherit;
+    background-color: rgba(168, 168, 168, 0.548);
+}

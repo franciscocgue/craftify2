@@ -72,7 +72,7 @@ type designerStore = {
   lastUpdatedCompChildren: string[],
   setPage: (page: 'designer' | 'variables' | 'data' | 'styles') => void,
   toggleColorMode: () => void,
-  setIsResizing: (isResizing: true | false) => void,
+  renameComponent: (compId: string, newName: string) => void,
   setIsCanvasScrolling: (isCanvasScrolling: true | false) => void,
   setDraggingId: (draggingId: string | null) => void,
   setDraggable: (draggable: draggableData) => void,
@@ -141,7 +141,13 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   lastUpdatedCompChildren: [],
   setPage: page => set({ page }),
   toggleColorMode: () => set(state => ({ colorMode: state.colorMode === 'dark' ? 'light' : 'dark' })),
-  setIsResizing: (isResizing: true | false) => set({ isResizing: isResizing }),
+  renameComponent: (compId: string, newName: string) => set(state => {
+    const components = { ...state.components };
+    components[compId].name = newName;
+    return {
+      components
+    }
+  }),
   setIsCanvasScrolling: (isCanvasScrolling: true | false) => set({ isCanvasScrolling: isCanvasScrolling }),
   setDraggingId: (draggingId) => set({ draggingId: draggingId }),
   setDraggable: (draggable) => set({ draggable: draggable }),
@@ -322,7 +328,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
 
     const newCompId = crypto.randomUUID();
 
-    props[newCompId] = {...props[compId]};
+    props[newCompId] = { ...props[compId] };
 
     let parent = comps[comps[compId].parent];
     // add component
