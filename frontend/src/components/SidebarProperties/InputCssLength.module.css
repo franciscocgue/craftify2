@@ -1,0 +1,24 @@
+.tooltip {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.tooltip .header {
+    border-bottom: 1px solid grey;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.tooltip .sub-header {
+    font-weight: bold;
+}
+
+.tooltip .sub-header a {
+    text-decoration: none;
+    color: rgb(70, 70, 255);
+}
+
+.tooltip .main {
+    padding-left: 10px;
+}

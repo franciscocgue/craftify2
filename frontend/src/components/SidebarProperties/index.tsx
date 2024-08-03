@@ -3,6 +3,7 @@ import useDesignerStore from "../../stores/designer";
 import MyInput from "./MyInput";
 import Border from "./Border";
 import Margin from "./Margin";
+import Width from "./Width";
 
 const SidebarProperties = memo(() => {
 
@@ -79,6 +80,7 @@ const SidebarProperties = memo(() => {
             <input placeholder="Search" />
             <button>Collapse</button>
             <button>Expand</button>
+            <Width />
             <Border />
             <Margin />
 
