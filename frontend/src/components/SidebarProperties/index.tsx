@@ -4,6 +4,8 @@ import MyInput from "./MyInput";
 import Border from "./Border";
 import Margin from "./Margin";
 import Width from "./Width";
+import Height from "./Height";
+import Padding from "./Padding";
 
 const SidebarProperties = memo(() => {
 
@@ -34,7 +36,7 @@ const SidebarProperties = memo(() => {
         }
     }, [selectedId])
 
-    return <div style={{ width: '300px', border: '1px solid grey', overflowY: 'auto' }}>
+    return <div style={{ width: '300px', borderTop: '1px solid grey', overflowY: 'auto' }}>
         {!selectedId && <p>Select a component</p>}
         {selectedId && <>
             <p>
@@ -80,8 +82,10 @@ const SidebarProperties = memo(() => {
                 <button>Collapse</button>
                 <button>Expand</button>
                 <Width key={'width-' + selectedId} />
+                <Height key={'height-' + selectedId} />
                 <Border key={'border-' + selectedId} />
                 <Margin key={'margin-' + selectedId} />
+                <Padding key={'padding-' + selectedId} />
             </div>
 
         </>

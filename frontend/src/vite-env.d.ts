@@ -25,9 +25,10 @@ export type Properties = {
     canvasHeightPx?: number,
     // wrapper styles
     width?: string,
-    minWidth?: string,
     maxWidth?: string,
+    minWidth?: string,
     height?: string,
+    maxHeight?: string,
     minHeight?: string,
     marginTop?: string,
     marginBottom?: string,
