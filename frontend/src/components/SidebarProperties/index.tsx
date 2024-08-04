@@ -29,7 +29,7 @@ const SidebarProperties = memo(() => {
     }
 
     useEffect(() => {
-        if (selectedId) {
+        if (selectedId && compMetadata) {
             setCompName(compMetadata.name);
         }
     }, [selectedId])
@@ -49,7 +49,7 @@ const SidebarProperties = memo(() => {
             </p>
         </>}
 
-        {selectedId && <div style={{
+        {selectedId && <><div style={{
             display: 'flex',
             justifyContent: 'space-around'
         }}>
@@ -73,18 +73,21 @@ const SidebarProperties = memo(() => {
             }}
                 onClick={() => setActiveSection('logic')}
             >Logic</div>
-        </div>}
-
-        <div style={{ padding: '0 10px' }}>
-
-            <input placeholder="Search" />
-            <button>Collapse</button>
-            <button>Expand</button>
-            <Width />
-            <Border />
-            <Margin />
-
         </div>
+
+            <div style={{ padding: '0 10px' }}>
+                <input placeholder="Search" />
+                <button>Collapse</button>
+                <button>Expand</button>
+                <Width key={'width-' + selectedId} />
+                <Border key={'border-' + selectedId} />
+                <Margin key={'margin-' + selectedId} />
+            </div>
+
+        </>
+        }
+
+
 
         {selectedId && activeSection === 'styles' && <>{Object.keys(properties[selectedId].values).map(p => (
             <MyInput componentId={selectedId} name={p} val={properties[selectedId].values[p]} key={selectedId + p} />

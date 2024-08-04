@@ -317,6 +317,9 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
         return obj;
       }, {});
 
+    if (compId === state.selectedId) {
+      return { components: newComponents, selectedId: null }
+    }
     return { components: newComponents }
 
   }),

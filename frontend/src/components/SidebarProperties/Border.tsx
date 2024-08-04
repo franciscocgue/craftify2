@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PropertyGroupHeader from "../../helpers/components/PropertyGroupHeader";
 import generalStyles from './Property.module.css';
 import styles from './Border.module.css';
@@ -126,7 +126,7 @@ const Border = () => {
                 { value: 'medium', display: 'Medium' },
                 { value: 'thick', display: 'Thick' },
             ]} />
-            <InputSelect key={'bs-' + String(forceRender)} propertyDisplayName={<RxBorderStyle color="grey" title="Style" size={25} />} propertyKey={['borderTopStyle', 'borderRightStyle', 'borderLeftStyle', 'borderBottomStyle']} options={[
+            <InputSelect key={'bs-' + String(forceRender)} propertyDisplayName={<RxBorderStyle color="grey" title="Style" size={25} />} propertyKey={['borderBottomStyle']} options={[
                 { value: 'none', display: 'None' },
                 { value: 'solid', display: 'Solid' },
                 { value: 'dotted', display: 'Dotted' },
