@@ -5,15 +5,19 @@ import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
 import { isValidCssLength } from '../../helpers/utils';
 import { MdHelpCenter } from 'react-icons/md';
-import MyPortal from '../../helpers/MyPortal';
 
 
 type InputCssLengthProps = {
     propertyDisplayName: string | ReactElement,
     propertyKey: string,
+    tooltipContent?: (
+        ref: React.MutableRefObject<HTMLDivElement>,
+        colorMode: 'dark' | 'light',
+        styles: CSSModuleClasses
+    ) => ReactElement
 }
 
-const InputCssLength = ({ propertyDisplayName, propertyKey }: InputCssLengthProps) => {
+const InputCssLength = ({ propertyDisplayName, propertyKey, tooltipContent }: InputCssLengthProps) => {
 
     const colorMode = useDesignerStore(state => state.colorMode);
     const selectedId = useDesignerStore(state => state.selectedId);
@@ -75,7 +79,7 @@ const InputCssLength = ({ propertyDisplayName, propertyKey }: InputCssLengthProp
     };
 
     return (
-        <div className={generalStyles['property']}>
+        <div className={`${generalStyles['property']}  ${!tooltipContent ? generalStyles['no-help'] : ''}`}>
             <span className={generalStyles['name']}>{propertyDisplayName}</span>
             <input title={val} className={`${generalStyles['input']} ${generalStyles['text']} ${isWrongInput ? generalStyles['wrong'] : ''}`} type="text" onChange={handleChange} value={val} />
             <div
@@ -87,50 +91,8 @@ const InputCssLength = ({ propertyDisplayName, propertyKey }: InputCssLengthProp
                     position: 'relative'
                 }}
             >
-                <MdHelpCenter size={22} style={{ marginLeft: '5px' }} />
-                {tooltipVisible && ref?.current && <MyPortal styles={{
-                    position: 'absolute',
-                    width: '400px',
-                    height: '240px', // trial and error; hard-coded to use below and not using other ref
-                    backgroundColor: colorMode === 'dark' ? 'white' : 'black',
-                    color: colorMode === 'dark' ? 'black' : 'white',
-                    borderRadius: '5px',
-                    padding: '10px 5px',
-                    fontSize: 'small',
-                    border: colorMode === 'dark' ? '1px solid grey' : '1px solid white',
-                    top: ref.current.getBoundingClientRect().bottom + ref.current.getBoundingClientRect().top + window.scrollY > window.innerHeight
-                        ? ref.current.getBoundingClientRect().top - 240 + window.scrollY + ref.current.getBoundingClientRect().height + 10
-                        : ref.current.getBoundingClientRect().bottom + window.scrollY - ref.current.getBoundingClientRect().height - 10,
-                    left: ref.current.getBoundingClientRect().left - 400,
-                }}>
-                    <div className={styles['tooltip']}>
-                        <div>
-                            <p className={styles['header']}>Info</p>
-                            <div className={styles['main']}>
-                                <p className={styles['sub-header']}>Units</p>
-                                <p style={{ marginLeft: '20px', marginBottom: '10px' }}>px, %</p>
-                                <p className={styles['sub-header']}><a href='https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Functions#math_functions' target='_blank'>Operations</a></p>
-                                <p style={{ marginLeft: '20px', marginBottom: '10px' }}>calc(), max(), min()</p>
-                                <p className={styles['sub-header']}>Dynamic variables</p>
-                                <p style={{ marginLeft: '20px', marginBottom: '10px' }}>{`{{myVariable}}`}</p>
-                            </div>
-                        </div>
-                        <div>
-                            <p className={styles['header']}>Examples</p>
-                            <div className={styles['main']}>
-                                <p>100%</p>
-                                <p>50px</p>
-                                <p>auto</p>
-                                <p>{`{{myVariable}}px`}</p>
-                                <p>calc(50% + 20px)</p>
-                                <p>min(50%, 20px)</p>
-                                <p>max(50%, 20px, 10%)</p>
-                                <p>calc(50px * 2 + min(10%, 20px))</p>
-                                <p>calc(50px + {`{{myVariable}}%`})</p>
-                            </div>
-                        </div>
-                    </div>
-                </MyPortal>}
+                {tooltipContent && <MdHelpCenter size={22} style={{ marginLeft: '5px' }} />}
+                {tooltipVisible && tooltipContent &&  ref?.current && tooltipContent(ref as React.MutableRefObject<HTMLDivElement>, colorMode, styles)}
             </div>
         </div>
     )
