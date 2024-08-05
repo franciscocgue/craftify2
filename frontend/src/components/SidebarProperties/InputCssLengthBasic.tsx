@@ -82,7 +82,7 @@ const InputCssLengthBasic = ({ propertyDisplayName, propertyKey, tooltipContent 
         <div className={`${generalStyles['property']}  ${!tooltipContent ? generalStyles['no-help'] : ''}`}>
             <span className={generalStyles['name']}>{propertyDisplayName}</span>
             <input title={val} className={`${generalStyles['input']} ${generalStyles['text']} ${isWrongInput ? generalStyles['wrong'] : ''}`} type="text" onChange={handleChange} value={val} />
-            <div
+            {tooltipContent && <div
                 ref={ref}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
@@ -91,9 +91,9 @@ const InputCssLengthBasic = ({ propertyDisplayName, propertyKey, tooltipContent 
                     position: 'relative'
                 }}
             >
-                {tooltipContent && <MdHelpCenter size={22} style={{ marginLeft: '5px' }} />}
-                {tooltipVisible && tooltipContent && ref?.current && tooltipContent(ref as React.MutableRefObject<HTMLDivElement>, colorMode, styles)}
-            </div>
+                <MdHelpCenter size={22} style={{ marginLeft: '5px' }} />
+                {tooltipVisible && ref?.current && tooltipContent(ref as React.MutableRefObject<HTMLDivElement>, colorMode, styles)}
+            </div>}
         </div>
     )
 }

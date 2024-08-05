@@ -4,6 +4,7 @@ import styles from './Property.module.css';
 import InputCssLength from "./InputCssLength";
 import { RxHeight } from "react-icons/rx";
 import MyPortal from "../../helpers/MyPortal";
+import { isValidCssLength } from "../../helpers/utils";
 
 const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 'dark' | 'light', styles: CSSModuleClasses) => <MyPortal styles={{
     position: 'absolute',
@@ -70,10 +71,22 @@ const Height = () => {
                 />
                 Advanced
             </label>
-            <InputCssLength propertyDisplayName={<RxHeight color="grey" size={25} title="Height" />} propertyKey="height" tooltipContent={tooltipContent} />
+            <InputCssLength
+                propertyDisplayName={<RxHeight color="grey" size={25} title="Height" />}
+                propertyKey="height"
+                tooltipContent={tooltipContent}
+                isValidCssLength={isValidCssLength} />
             {isAdv && <>
-                <InputCssLength propertyDisplayName="Min" propertyKey="minHeight" tooltipContent={tooltipContent} />
-                <InputCssLength propertyDisplayName="Max" propertyKey="maxHeight" tooltipContent={tooltipContent} />
+                <InputCssLength
+                    propertyDisplayName="Min"
+                    propertyKey="minHeight"
+                    tooltipContent={tooltipContent}
+                    isValidCssLength={isValidCssLength} />
+                <InputCssLength
+                    propertyDisplayName="Max"
+                    propertyKey="maxHeight"
+                    tooltipContent={tooltipContent}
+                    isValidCssLength={isValidCssLength} />
             </>}
 
         </div>}

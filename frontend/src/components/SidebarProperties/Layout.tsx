@@ -3,6 +3,7 @@ import PropertyGroupHeader from "../../helpers/components/PropertyGroupHeader";
 import styles from './Property.module.css';
 import InputCssLength from "./InputCssLength";
 import MyPortal from "../../helpers/MyPortal";
+import InputSelect from "./InputSelect";
 import { isValidCssLengthBasicNoAuto } from "../../helpers/utils";
 
 const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 'dark' | 'light', styles: CSSModuleClasses) => <MyPortal styles={{
@@ -41,57 +42,50 @@ const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 
     </div>
 </MyPortal>
 
-const Padding = () => {
+// flexDirection?: 'column' | 'row',  // not editable (at least in canvas)
+// gap?: string,
+// flexWrap?: 'nowrap' | 'wrap',
+// alignItems?: string,
+// justifyContent?: string,
+
+const Layout = () => {
 
     const [isCollapsed, setIsCollapsed] = useState(true);
 
     return <div>
-        <PropertyGroupHeader info={"Component's padding styling"} isCollapsed={isCollapsed} title="Padding" setIsCollapsed={setIsCollapsed} />
+        <PropertyGroupHeader info={"Component's layout styling"} isCollapsed={isCollapsed} title="Layout" setIsCollapsed={setIsCollapsed} />
         {!isCollapsed && <div className={styles.wrapper}>
             <>
-                <InputCssLength propertyDisplayName={
-                    <div
-                        key={'padding-top'}
-                        title="Top"
-                        style={{ width: '26px', height: '17px', border: '1px solid grey', borderTop: '5px solid grey' }}
-                    ></div>}
-                    propertyKey="paddingTop"
+                <InputSelect propertyDisplayName={'Direction'} propertyKey={['flexDirection']} options={[
+                    { value: 'row', display: 'Row' },
+                    { value: 'column', display: 'Column' },
+                ]} />
+                <InputCssLength propertyDisplayName={'Gap'}
+                    propertyKey="gap"
                     tooltipContent={tooltipContent}
                     isValidCssLength={isValidCssLengthBasicNoAuto}
                 />
-                <InputCssLength propertyDisplayName={
-                    <div
-                        key={'padding-right'}
-                        title="Right"
-                        style={{ width: '26px', height: '17px', border: '1px solid grey', borderRight: '5px solid grey' }}
-                    ></div>}
-                    propertyKey="paddingRight"
-                    tooltipContent={tooltipContent}
-                    isValidCssLength={isValidCssLengthBasicNoAuto}
-                />
-                <InputCssLength propertyDisplayName={
-                    <div
-                        key={'padding-bottom'}
-                        title="Bottom"
-                        style={{ width: '26px', height: '17px', border: '1px solid grey', borderBottom: '5px solid grey' }}
-                    ></div>}
-                    propertyKey="paddingBottom"
-                    tooltipContent={tooltipContent}
-                    isValidCssLength={isValidCssLengthBasicNoAuto}
-                />
-                <InputCssLength propertyDisplayName={
-                    <div
-                        key={'padding-left'}
-                        title="Left"
-                        style={{ width: '26px', height: '17px', border: '1px solid grey', borderLeft: '5px solid grey' }}
-                    ></div>}
-                    propertyKey="paddingLeft"
-                    tooltipContent={tooltipContent}
-                    isValidCssLength={isValidCssLengthBasicNoAuto}
-                />
+                <InputSelect propertyDisplayName={'Wrap'} propertyKey={['flexWrap']} options={[
+                    { value: 'wrap', display: 'Wrap' },
+                    { value: 'nowrap', display: 'No Wrap' },
+                ]} />
+                <InputSelect propertyDisplayName={'Alignment'} propertyKey={['alignItems']} options={[
+                    { value: 'stretch', display: 'Stretch' },
+                    { value: 'center', display: 'Center' },
+                    { value: 'flex-start', display: 'Start' },
+                    { value: 'flex-end', display: 'End' },
+                ]} />
+                <InputSelect propertyDisplayName={'Distribution'} propertyKey={['justifyContent']} options={[
+                    { value: 'center', display: 'Center' },
+                    { value: 'flex-start', display: 'Start' },
+                    { value: 'flex-end', display: 'End' },
+                    { value: 'space-between', display: 'Space between' },
+                    { value: 'space-around', display: 'Space around' },
+                    { value: 'space-evenly', display: 'Space evenly' },
+                ]} />
             </>
         </div>}
     </div>
 }
 
-export default Padding;
+export default Layout;

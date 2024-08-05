@@ -207,6 +207,21 @@ function isValidCssLengthBasic(value: string): boolean {
     return cssLengthPattern.test(value);
 }
 
+// validity examples: 100%, 50px, auto
+function isValidCssLengthBasicNoAuto(value: string): boolean {
+    // Regular expressions for the individual components
+    const number = '\\d+(\\.\\d+)?';
+    const unit = '(px|%)';
+    const length = `(${number}${unit})`;
+    const variable = '\\{\\{[a-zA-Z_$][a-zA-Z0-9_$]*\\}\\}'; // matches {{variableName}}
+    const variableLength = `(${variable}${unit})`;
+
+    // Full regular expression combining lengths, variable lengths, and functions
+    const cssLengthPattern = new RegExp(`^\\s*(${length}|${variableLength})\\s*$`);
+
+    return cssLengthPattern.test(value);
+}
+
 function isValidPositiveNumber(value: string | number | null | undefined): boolean {
     // use with numeric input
 
@@ -259,6 +274,7 @@ export {
     extractNumberAndUnit,
     isValidCssLength,
     isValidCssLengthBasic,
+    isValidCssLengthBasicNoAuto,
     isValidPositiveNumber,
     isValidHexColor,
 }

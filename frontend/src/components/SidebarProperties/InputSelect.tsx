@@ -39,7 +39,7 @@ const InputSelect = ({ propertyDisplayName, propertyKey, options }: InputSelectP
             updateProperty(selectedId as string, props, {});
         }
     }
-    const debounceFn = useCallback(debounce(handleDebounceFn, 1000), []);
+    const debounceFn = useCallback(debounce(handleDebounceFn, 100), []);
     const handleChange = (event: React.FormEvent<HTMLSelectElement>) => {
         const newValue = event.target.value;
         // console.log('newValue', event.target)

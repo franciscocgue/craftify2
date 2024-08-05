@@ -3,21 +3,21 @@ import generalStyles from './Property.module.css';
 import styles from './InputCssLength.module.css';
 import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
-import { isValidCssLength } from '../../helpers/utils';
 import { MdHelpCenter } from 'react-icons/md';
 
 
 type InputCssLengthProps = {
     propertyDisplayName: string | ReactElement,
     propertyKey: string,
+    isValidCssLength(value: string): boolean,
     tooltipContent?: (
         ref: React.MutableRefObject<HTMLDivElement>,
         colorMode: 'dark' | 'light',
         styles: CSSModuleClasses
-    ) => ReactElement
+    ) => ReactElement,
 }
 
-const InputCssLength = ({ propertyDisplayName, propertyKey, tooltipContent }: InputCssLengthProps) => {
+const InputCssLength = ({ propertyDisplayName, propertyKey, tooltipContent, isValidCssLength }: InputCssLengthProps) => {
 
     const colorMode = useDesignerStore(state => state.colorMode);
     const selectedId = useDesignerStore(state => state.selectedId);
@@ -82,7 +82,7 @@ const InputCssLength = ({ propertyDisplayName, propertyKey, tooltipContent }: In
         <div className={`${generalStyles['property']}  ${!tooltipContent ? generalStyles['no-help'] : ''}`}>
             <span className={generalStyles['name']}>{propertyDisplayName}</span>
             <input title={val} className={`${generalStyles['input']} ${generalStyles['text']} ${isWrongInput ? generalStyles['wrong'] : ''}`} type="text" onChange={handleChange} value={val} />
-            <div
+            {tooltipContent && <div
                 ref={ref}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
@@ -91,9 +91,9 @@ const InputCssLength = ({ propertyDisplayName, propertyKey, tooltipContent }: In
                     position: 'relative'
                 }}
             >
-                {tooltipContent && <MdHelpCenter size={22} style={{ marginLeft: '5px' }} />}
-                {tooltipVisible && tooltipContent &&  ref?.current && tooltipContent(ref as React.MutableRefObject<HTMLDivElement>, colorMode, styles)}
-            </div>
+                <MdHelpCenter size={22} style={{ marginLeft: '5px' }} />
+                {tooltipVisible && ref?.current && tooltipContent(ref as React.MutableRefObject<HTMLDivElement>, colorMode, styles)}
+            </div>}
         </div>
     )
 }

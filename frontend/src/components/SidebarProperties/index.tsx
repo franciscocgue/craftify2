@@ -6,6 +6,7 @@ import Margin from "./Margin";
 import Width from "./Width";
 import Height from "./Height";
 import Padding from "./Padding";
+import Layout from "./Layout";
 
 const SidebarProperties = memo(() => {
 
@@ -81,6 +82,7 @@ const SidebarProperties = memo(() => {
                 <input placeholder="Search" />
                 <button>Collapse</button>
                 <button>Expand</button>
+                <Layout key={'layout-' + selectedId} />
                 <Width key={'width-' + selectedId} />
                 <Height key={'height-' + selectedId} />
                 <Border key={'border-' + selectedId} />
