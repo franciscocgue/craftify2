@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropertyGroupHeader from "../../helpers/components/PropertyGroupHeader";
 import styles from './Property.module.css';
-import InputCssLength from "./InputCssLength";
+import InputText from "./InputText";
 import MyPortal from "../../helpers/MyPortal";
 import { isValidCssLengthBasic } from "../../helpers/utils";
 
@@ -50,7 +50,7 @@ const Margin = () => {
         <PropertyGroupHeader info={"Component's margin styling"} isCollapsed={isCollapsed} title="Margin" setIsCollapsed={setIsCollapsed} />
         {!isCollapsed && <div className={styles.wrapper}>
             <>
-                <InputCssLength propertyDisplayName={
+                <InputText propertyDisplayName={
                     <div
                         key={'margin-top'}
                         title="Top"
@@ -58,9 +58,9 @@ const Margin = () => {
                     ></div>}
                     propertyKey="marginTop"
                     tooltipContent={tooltipContent}
-                    isValidCssLength={isValidCssLengthBasic}
+                    isValidInput={isValidCssLengthBasic}
                 />
-                <InputCssLength propertyDisplayName={
+                <InputText propertyDisplayName={
                     <div
                         key={'margin-right'}
                         title="Right"
@@ -68,9 +68,9 @@ const Margin = () => {
                     ></div>}
                     propertyKey="marginRight"
                     tooltipContent={tooltipContent}
-                    isValidCssLength={isValidCssLengthBasic}
+                    isValidInput={isValidCssLengthBasic}
                 />
-                <InputCssLength propertyDisplayName={
+                <InputText propertyDisplayName={
                     <div
                         key={'margin-bottom'}
                         title="Bottom"
@@ -78,9 +78,9 @@ const Margin = () => {
                     ></div>}
                     propertyKey="marginBottom"
                     tooltipContent={tooltipContent}
-                    isValidCssLength={isValidCssLengthBasic}
+                    isValidInput={isValidCssLengthBasic}
                 />
-                <InputCssLength propertyDisplayName={
+                <InputText propertyDisplayName={
                     <div
                         key={'margin-left'}
                         title="Left"
@@ -88,7 +88,7 @@ const Margin = () => {
                     ></div>}
                     propertyKey="marginLeft"
                     tooltipContent={tooltipContent}
-                    isValidCssLength={isValidCssLengthBasic}
+                    isValidInput={isValidCssLengthBasic}
                 />
             </>
         </div>}

@@ -7,6 +7,7 @@ import Width from "./Width";
 import Height from "./Height";
 import Padding from "./Padding";
 import Layout from "./Layout";
+import Background from "./Background";
 
 const SidebarProperties = memo(() => {
 
@@ -85,6 +86,7 @@ const SidebarProperties = memo(() => {
                 <Layout key={'layout-' + selectedId} />
                 <Width key={'width-' + selectedId} />
                 <Height key={'height-' + selectedId} />
+                <Background key={'background-' + selectedId} />
                 <Border key={'border-' + selectedId} />
                 <Margin key={'margin-' + selectedId} />
                 <Padding key={'padding-' + selectedId} />

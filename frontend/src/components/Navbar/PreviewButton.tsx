@@ -101,7 +101,7 @@ const PreviewButton = () => {
                     padding: '9px',
                 }}>
                     <p style={{ color: 'black', }}>Launch on mobile (WIP 😄)</p>
-                    <QRCode value="http://192.168.0.21:4000/" size={80} />
+                    <QRCode value="http://192.168.0.38:4000/" size={80} />
                 </div>
             </div>}
         </>

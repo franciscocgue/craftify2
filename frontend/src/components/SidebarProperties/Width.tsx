@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropertyGroupHeader from "../../helpers/components/PropertyGroupHeader";
 import styles from './Property.module.css';
-import InputCssLength from "./InputCssLength";
+import InputText from "./InputText";
 import { RxWidth } from "react-icons/rx";
 import MyPortal from "../../helpers/MyPortal";
 import { isValidCssLength } from "../../helpers/utils";
@@ -70,24 +70,24 @@ const Width = () => {
                 />
                 Advanced
             </label>
-            <InputCssLength
+            <InputText
                 propertyDisplayName={<RxWidth color="grey" size={25} title="Width" />}
                 propertyKey="width"
                 tooltipContent={tooltipContent}
-                isValidCssLength={isValidCssLength}
+                isValidInput={isValidCssLength}
             />
             {isAdv && <>
-                <InputCssLength
+                <InputText
                     propertyDisplayName="Min"
                     propertyKey="minWidth"
                     tooltipContent={tooltipContent}
-                    isValidCssLength={isValidCssLength}
+                    isValidInput={isValidCssLength}
                 />
-                <InputCssLength
+                <InputText
                     propertyDisplayName="Max"
                     propertyKey="maxWidth"
                     tooltipContent={tooltipContent}
-                    isValidCssLength={isValidCssLength}
+                    isValidInput={isValidCssLength}
                 />
             </>}
 

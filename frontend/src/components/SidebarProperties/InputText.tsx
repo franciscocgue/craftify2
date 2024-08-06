@@ -1,15 +1,15 @@
 import { ReactElement, useCallback, useRef, useState } from 'react';
 import generalStyles from './Property.module.css';
-import styles from './InputCssLength.module.css';
+import styles from './InputText.module.css';
 import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
 import { MdHelpCenter } from 'react-icons/md';
 
 
-type InputCssLengthProps = {
+type InputTextProps = {
     propertyDisplayName: string | ReactElement,
     propertyKey: string,
-    isValidCssLength(value: string): boolean,
+    isValidInput(value: string): boolean,
     tooltipContent?: (
         ref: React.MutableRefObject<HTMLDivElement>,
         colorMode: 'dark' | 'light',
@@ -17,7 +17,7 @@ type InputCssLengthProps = {
     ) => ReactElement,
 }
 
-const InputCssLength = ({ propertyDisplayName, propertyKey, tooltipContent, isValidCssLength }: InputCssLengthProps) => {
+const InputText = ({ propertyDisplayName, propertyKey, tooltipContent, isValidInput }: InputTextProps) => {
 
     const colorMode = useDesignerStore(state => state.colorMode);
     const selectedId = useDesignerStore(state => state.selectedId);
@@ -37,7 +37,7 @@ const InputCssLength = ({ propertyDisplayName, propertyKey, tooltipContent, isVa
             updateProperty(selectedId as string, { [propertyKey]: undefined }, {});
             setIsWrongInput(false);
         }
-        else if (isValidCssLength(value)) {
+        else if (isValidInput(value)) {
             updateProperty(selectedId as string, { [propertyKey]: value }, {});
             setIsWrongInput(false);
         } else {
@@ -98,4 +98,4 @@ const InputCssLength = ({ propertyDisplayName, propertyKey, tooltipContent, isVa
     )
 }
 
-export default InputCssLength;
+export default InputText;

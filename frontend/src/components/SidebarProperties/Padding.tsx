@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropertyGroupHeader from "../../helpers/components/PropertyGroupHeader";
 import styles from './Property.module.css';
-import InputCssLength from "./InputCssLength";
+import InputText from "./InputText";
 import MyPortal from "../../helpers/MyPortal";
 import { isValidCssLengthBasicNoAuto } from "../../helpers/utils";
 
@@ -49,7 +49,7 @@ const Padding = () => {
         <PropertyGroupHeader info={"Component's padding styling"} isCollapsed={isCollapsed} title="Padding" setIsCollapsed={setIsCollapsed} />
         {!isCollapsed && <div className={styles.wrapper}>
             <>
-                <InputCssLength propertyDisplayName={
+                <InputText propertyDisplayName={
                     <div
                         key={'padding-top'}
                         title="Top"
@@ -57,9 +57,9 @@ const Padding = () => {
                     ></div>}
                     propertyKey="paddingTop"
                     tooltipContent={tooltipContent}
-                    isValidCssLength={isValidCssLengthBasicNoAuto}
+                    isValidInput={isValidCssLengthBasicNoAuto}
                 />
-                <InputCssLength propertyDisplayName={
+                <InputText propertyDisplayName={
                     <div
                         key={'padding-right'}
                         title="Right"
@@ -67,9 +67,9 @@ const Padding = () => {
                     ></div>}
                     propertyKey="paddingRight"
                     tooltipContent={tooltipContent}
-                    isValidCssLength={isValidCssLengthBasicNoAuto}
+                    isValidInput={isValidCssLengthBasicNoAuto}
                 />
-                <InputCssLength propertyDisplayName={
+                <InputText propertyDisplayName={
                     <div
                         key={'padding-bottom'}
                         title="Bottom"
@@ -77,9 +77,9 @@ const Padding = () => {
                     ></div>}
                     propertyKey="paddingBottom"
                     tooltipContent={tooltipContent}
-                    isValidCssLength={isValidCssLengthBasicNoAuto}
+                    isValidInput={isValidCssLengthBasicNoAuto}
                 />
-                <InputCssLength propertyDisplayName={
+                <InputText propertyDisplayName={
                     <div
                         key={'padding-left'}
                         title="Left"
@@ -87,7 +87,7 @@ const Padding = () => {
                     ></div>}
                     propertyKey="paddingLeft"
                     tooltipContent={tooltipContent}
-                    isValidCssLength={isValidCssLengthBasicNoAuto}
+                    isValidInput={isValidCssLengthBasicNoAuto}
                 />
             </>
         </div>}

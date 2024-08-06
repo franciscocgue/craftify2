@@ -1,13 +1,13 @@
 import { ReactElement, useCallback, useRef, useState } from 'react';
 import generalStyles from './Property.module.css';
-import styles from './InputCssLength.module.css';
+import styles from './InputText.module.css';
 import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
 import { isValidCssLengthBasic } from '../../helpers/utils';
 import { MdHelpCenter } from 'react-icons/md';
 
 
-type InputCssLengthBasicProps = {
+type InputTextBasicProps = {
     propertyDisplayName: string | ReactElement,
     propertyKey: string,
     tooltipContent?: (
@@ -17,7 +17,7 @@ type InputCssLengthBasicProps = {
     ) => ReactElement
 }
 
-const InputCssLengthBasic = ({ propertyDisplayName, propertyKey, tooltipContent }: InputCssLengthBasicProps) => {
+const InputTextBasic = ({ propertyDisplayName, propertyKey, tooltipContent }: InputTextBasicProps) => {
 
     const colorMode = useDesignerStore(state => state.colorMode);
     const selectedId = useDesignerStore(state => state.selectedId);
@@ -98,4 +98,4 @@ const InputCssLengthBasic = ({ propertyDisplayName, propertyKey, tooltipContent 
     )
 }
 
-export default InputCssLengthBasic;
+export default InputTextBasic;

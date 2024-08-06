@@ -106,7 +106,7 @@ const compProperties: ComponentProperties = {
             paddingLeft: '8px',
             paddingRight: '8px',
             backgroundColor: 'white',
-            backgroundImage: undefined,
+            backgroundImage: 'none',
             backgroundSize: undefined,
         }
     },
