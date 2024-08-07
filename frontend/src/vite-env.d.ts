@@ -47,6 +47,8 @@ export type Properties = {
     justifyContent?: string,
     overflow?: string,
     color?: string,
+    fontStyle?: string,
+    fontWeight?: string,
     backgroundColor?: string,
     backgroundImage?: string,
     backgroundRepeat?: string,
