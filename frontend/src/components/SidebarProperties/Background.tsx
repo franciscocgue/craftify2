@@ -4,12 +4,13 @@ import styles from './Property.module.css';
 import InputText from "./InputText";
 import MyPortal from "../../helpers/MyPortal";
 import InputSelect from "./InputSelect";
-import { isValidCssLengthBasicNoAuto } from "../../helpers/utils";
+import { MdBorderColor } from "react-icons/md";
+import InputColor from "./InputColor";
 
 const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 'dark' | 'light', styles: CSSModuleClasses) => <MyPortal styles={{
     position: 'absolute',
     width: '420px',
-    height: '100px', // trial and error; hard-coded to use below and not using other ref
+    height: '135px', // trial and error; hard-coded to use below and not using other ref
     backgroundColor: colorMode === 'dark' ? 'white' : 'black',
     color: colorMode === 'dark' ? 'black' : 'white',
     borderRadius: '5px',
@@ -17,7 +18,7 @@ const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 
     fontSize: 'small',
     border: colorMode === 'dark' ? '1px solid grey' : '1px solid white',
     top: ref.current.getBoundingClientRect().bottom + ref.current.getBoundingClientRect().top + window.scrollY > window.innerHeight
-        ? ref.current.getBoundingClientRect().top - 100 + window.scrollY + ref.current.getBoundingClientRect().height + 10
+        ? ref.current.getBoundingClientRect().top - 135 + window.scrollY + ref.current.getBoundingClientRect().height + 10
         : ref.current.getBoundingClientRect().bottom + window.scrollY - ref.current.getBoundingClientRect().height - 10,
     left: ref.current.getBoundingClientRect().left - 420,
 }}>
@@ -27,12 +28,14 @@ const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 
             <div className={styles['main']}>
                 <p className={styles['sub-header']}>Operations</p>
                 <p style={{ marginLeft: '20px', marginBottom: '0px' }}>url(), linear-gradient()</p>
+                <p className={styles['sub-header']}>Note</p>
+                <p style={{ marginLeft: '20px', marginBottom: '0px' }}>Image overlaps color</p>
             </div>
         </div>
         <div>
             <p className={styles['header']}>Examples</p>
             <div className={styles['main']}>
-                <p>linear-gradient(blue, white)</p>
+                <p>linear-gradient(white, blue)</p>
                 <p>url(https://picsum.photos/id/114/200/300)</p>
             </div>
         </div>
@@ -48,32 +51,40 @@ const Background = () => {
         <PropertyGroupHeader info={"Component's background styling"} isCollapsed={isCollapsed} title="Background" setIsCollapsed={setIsCollapsed} />
         {!isCollapsed && <div className={styles.wrapper}>
             <>
-                <InputSelect propertyDisplayName={'Image'} propertyKey={['backgroundImage']} options={[
-                    { value: 'row', display: 'Row' },
-                    { value: 'column', display: 'Column' },
-                ]} />
+                <InputColor propertyDisplayName={<MdBorderColor color="grey" title="Color" size={25} />} propertyKey={['backgroundColor']} />
+                <hr style={{ marginTop: '10px', borderTop: '1px dashed grey', borderBottom: 'none' }}></hr>
                 <InputText propertyDisplayName={'Image'}
-                    propertyKey="gap"
+                    propertyKey="backgroundImage"
                     tooltipContent={tooltipContent}
-                    isValidInput={isValidCssLengthBasicNoAuto}
+                    isValidInput={() => true}//{isValidCssLengthBasicNoAuto}
                 />
-                <InputSelect propertyDisplayName={'Wrap'} propertyKey={['flexWrap']} options={[
-                    { value: 'wrap', display: 'Wrap' },
-                    { value: 'nowrap', display: 'No Wrap' },
-                ]} />
-                <InputSelect propertyDisplayName={'Alignment'} propertyKey={['alignItems']} options={[
-                    { value: 'stretch', display: 'Stretch' },
+                <InputSelect propertyDisplayName={'Image position'} propertyKey={['backgroundPosition']} options={[
                     { value: 'center', display: 'Center' },
-                    { value: 'flex-start', display: 'Start' },
-                    { value: 'flex-end', display: 'End' },
+                    { value: 'top', display: 'Top' },
+                    { value: 'right', display: 'Right' },
+                    { value: 'bottom', display: 'Bottom' },
+                    { value: 'left', display: 'Left' },
                 ]} />
-                <InputSelect propertyDisplayName={'Distribution'} propertyKey={['justifyContent']} options={[
-                    { value: 'center', display: 'Center' },
-                    { value: 'flex-start', display: 'Start' },
-                    { value: 'flex-end', display: 'End' },
-                    { value: 'space-between', display: 'Space between' },
-                    { value: 'space-around', display: 'Space around' },
-                    { value: 'space-evenly', display: 'Space evenly' },
+                <InputSelect propertyDisplayName={'Image size'} propertyKey={['backgroundSize']} options={[
+                    { value: 'contain', display: 'Contain' },
+                    { value: 'cover', display: 'Cover' },
+                    { value: 'auto', display: 'Auto' },
+                ]} />
+                <InputSelect propertyDisplayName={'Image repeat'} propertyKey={['backgroundRepeat']} options={[
+                    { value: 'repeat', display: 'Repeat' },
+                    { value: 'repeat-x', display: 'Repeat horizontally' },
+                    { value: 'repeat-y', display: 'Repeat vertically' },
+                    { value: 'space', display: 'Repeat (no clipping)' },
+                    { value: 'no-repeat', display: 'No repeat' },
+                ]} />
+                {/* <InputText propertyDisplayName={'Color'}
+                    propertyKey="backgroundColor"
+                    // tooltipContent={tooltipContent}
+                    isValidInput={() => true}//{isValidCssLengthBasicNoAuto}
+                /> */}
+                <InputSelect propertyDisplayName={'Image flow'} propertyKey={['backgroundAttachment']} options={[
+                    { value: 'scroll', display: 'Scroll' },
+                    { value: 'fixed', display: 'Fixed' },
                 ]} />
             </>
         </div>}

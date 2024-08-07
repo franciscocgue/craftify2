@@ -107,7 +107,10 @@ const compProperties: ComponentProperties = {
             paddingRight: '8px',
             backgroundColor: 'white',
             backgroundImage: 'none',
-            backgroundSize: undefined,
+            backgroundSize: 'auto',
+            backgroundRepeat: 'repeat',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'scroll',
         }
     },
     'column': {

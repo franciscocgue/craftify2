@@ -105,6 +105,9 @@ const Canvas = () => {
                         backgroundColor: properties.backgroundColor || undefined,
                         backgroundImage: properties.backgroundImage || undefined,
                         backgroundSize: properties.backgroundSize || undefined,
+                        backgroundAttachment: properties.backgroundAttachment || undefined,
+                        backgroundRepeat: properties.backgroundRepeat || undefined,
+                        backgroundPosition: properties.backgroundPosition || undefined,
                     }}
                 >
                     {comps}

@@ -14,6 +14,7 @@ const uiMapper2 = {
         <div
             id="my-canvas"
             style={{
+                minHeight: '100vh',
                 ...properties[id].values
             }}
         >
