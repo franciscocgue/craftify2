@@ -108,7 +108,7 @@ const Border = () => {
                     { value: 'dashed', display: 'Dashed' },
                 ]} />
             </>} */}
-            <InputText propertyDisplayName={<BiBorderRadius  color="grey" title="Rounded corners" size={25} />}
+            <InputText propertyDisplayName={<BiBorderRadius  color="grey" title="Corners" size={25} />}
                 propertyKey="borderRadius"
                 tooltipContent={tooltipContent}
                 isValidInput={isValidCssLengthBasicNoAuto}
