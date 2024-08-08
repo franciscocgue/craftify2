@@ -147,14 +147,16 @@ const WrapperComponent = (props: WrapperComponentProps) => {
 
 
 
-
+    
     return <>
         <div
             // ref={ref}
             style={{
                 // size
-                width: `${props.componentRef.current?.getBoundingClientRect().width}px`,
-                height: `${props.componentRef.current?.getBoundingClientRect().height}px`,
+                // width: `${props.componentRef.current?.getBoundingClientRect().width}px`,
+                // height: `${props.componentRef.current?.getBoundingClientRect().height}px`,
+                width: '100%',
+                height: '100%',
                 // position
                 top: 0,
                 left: 0,
