@@ -56,6 +56,7 @@ export type Properties = {
     backgroundPosition?: string,
     backgroundAttachment?: string,
     outline?: string,
+    borderRadius?: string,
     borderTopStyle?: CSS.DataType.LineStyle,
     borderTopWidth?: string,
     borderTopColor?: string,
