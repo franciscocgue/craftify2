@@ -1,4 +1,4 @@
-import { ReactElement, useCallback, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
 import generalStyles from './Property.module.css';
 import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
@@ -22,6 +22,13 @@ const InputSelect = ({ propertyDisplayName, propertyKey, options }: InputSelectP
     const propValue = useDesignerStore.getState().properties[selectedId as string]?.values[propertyKey[0]];
 
     const [val, setVal] = useState(propValue);
+
+    // update shown value on component changed
+    useEffect(() => {
+        if (selectedId) {
+            setVal(useDesignerStore.getState().properties[selectedId as string]?.values[propertyKey[0]])
+        }
+    }, [selectedId])
 
     const handleDebounceFn = (selectedId: string, value: string) => {
         if (value === '') {

@@ -1,4 +1,4 @@
-import { ReactElement, useCallback, useRef, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
 import generalStyles from './Property.module.css';
 import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
@@ -22,6 +22,13 @@ const InputColor = ({ propertyDisplayName, propertyKey }: InputColorProps) => {
     const [val, setVal] = useState(propValue ? propValue : undefined);
     const [isPickerVisible, setIsPickerVisible] = useState(false);
     const [isWrongInput, setIsWrongInput] = useState(false);
+
+    // update shown value on component changed
+    useEffect(() => {
+        if (selectedId) {
+            setVal(useDesignerStore.getState().properties[selectedId as string]?.values[propertyKey[0]])
+        }
+    }, [selectedId])
 
     const handleDebounceFn = (selectedId: string, value: string) => {
         console.log('valuee', value)
@@ -96,7 +103,7 @@ const InputColor = ({ propertyDisplayName, propertyKey }: InputColorProps) => {
                         style={{
                             fontSize: 'small',
                             padding: '2px 3px',
-                            color:  isWrongInput ? 'black' : 'grey',
+                            color: isWrongInput ? 'black' : 'grey',
                             width: '70px',
                             backgroundColor: isWrongInput ? 'rgb(255, 92, 92)' : 'transparent',
                             outline: 'none',

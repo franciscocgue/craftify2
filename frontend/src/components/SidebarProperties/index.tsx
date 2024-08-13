@@ -84,20 +84,18 @@ const SidebarProperties = memo(() => {
                 <input placeholder="Search" />
                 <button>Collapse</button>
                 <button>Expand</button>
-                <Layout key={'layout-' + selectedId} />
-                <Width key={'width-' + selectedId} />
-                <Height key={'height-' + selectedId} />
-                <Background key={'background-' + selectedId} />
-                <Border key={'border-' + selectedId} />
-                <Margin key={'margin-' + selectedId} />
-                <Padding key={'padding-' + selectedId} />
-                <Text key={'text-' + selectedId} />
+                <Layout />
+                <Width />
+                <Height />
+                <Background />
+                <Border />
+                <Margin />
+                <Padding />
+                <Text />
             </div>
 
         </>
         }
-
-
 
         {selectedId && activeSection === 'styles' && <>{Object.keys(properties[selectedId].values).map(p => (
             <MyInput componentId={selectedId} name={p} val={properties[selectedId].values[p]} key={selectedId + p} />

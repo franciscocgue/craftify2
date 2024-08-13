@@ -1,4 +1,4 @@
-import { ReactElement, useCallback, useRef, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 import generalStyles from './Property.module.css';
 import styles from './InputText.module.css';
 import useDesignerStore from '../../stores/designer';
@@ -31,6 +31,13 @@ const InputText = ({ propertyDisplayName, propertyKey, tooltipContent, isValidIn
     const [isWrongInput, setIsWrongInput] = useState(false);
     const [tooltipVisible, setTooltipVisible] = useState(false);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+
+    // update shown value on component changed
+    useEffect(() => {
+        if (selectedId) {
+            setVal(useDesignerStore.getState().properties[selectedId as string]?.values[propertyKey])
+        }
+    }, [selectedId])
 
     const handleDebounceFn = (selectedId: string, value: string) => {
         if (value === '') {
