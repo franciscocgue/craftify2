@@ -30,7 +30,7 @@ const InputText = ({ propertyDisplayName, propertyKey, tooltipContent, isValidIn
     const [val, setVal] = useState(propValue);
     const [isWrongInput, setIsWrongInput] = useState(false);
     const [tooltipVisible, setTooltipVisible] = useState(false);
-    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+    const [timeoutId, setTimeoutId] = useState<number | null>(null);
 
     // update shown value on component changed
     useEffect(() => {
