@@ -98,6 +98,8 @@ const Canvas = () => {
                         margin: '0 auto',
                         gap: properties.gap || undefined,
                         flexWrap: properties.flexWrap || undefined,
+                        alignItems: properties.alignItems || undefined,
+                        justifyContent: properties.justifyContent || undefined,
                         paddingTop: properties.paddingTop || undefined,
                         paddingBottom: properties.paddingBottom || undefined,
                         paddingLeft: properties.paddingLeft || undefined,

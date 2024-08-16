@@ -38,6 +38,7 @@ const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 
             <div className={styles['main']}>
                 <p>linear-gradient(white, blue)</p>
                 <p>url(https://picsum.photos/id/114/200/300)</p>
+                <p>none</p>
             </div>
         </div>
     </div>
