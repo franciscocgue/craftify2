@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropertyGroupHeader from "../../helpers/components/PropertyGroupHeader";
 import styles from './Property.module.css';
 import InputText from "./InputText";
 import MyPortal from "../../helpers/MyPortal";
 import InputSelect from "./InputSelect";
 import { isValidCssLengthBasicNoAuto } from "../../helpers/utils";
+import useDesignerStore from "../../stores/designer";
 
 const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 'dark' | 'light', styles: CSSModuleClasses) => <MyPortal styles={{
     position: 'absolute',
@@ -51,6 +52,14 @@ const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 
 const Layout = () => {
 
     const [isCollapsed, setIsCollapsed] = useState(true);
+
+    const expandAllProperties = useDesignerStore(state => state.expandAllProperties);
+
+    useEffect(() => {
+        if (expandAllProperties !== null) {
+            setIsCollapsed(!expandAllProperties)
+        }
+    }, [expandAllProperties])
 
     return <div>
         <PropertyGroupHeader info={"Component's layout styling"} isCollapsed={isCollapsed} title="Layout" setIsCollapsed={setIsCollapsed} />

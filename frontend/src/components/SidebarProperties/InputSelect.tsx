@@ -59,7 +59,7 @@ const InputSelect = ({ propertyDisplayName, propertyKey, options }: InputSelectP
         <div className={`${generalStyles['property']} ${generalStyles['no-help']}`}>
             <span className={generalStyles['name']}>{propertyDisplayName}</span>
             <select title={val} className={`${generalStyles['input']} ${generalStyles['select']}`} onChange={handleChange} value={val}>
-                {options.map(opt => <option value={opt.value}>{opt.display}</option>)}
+                {options.map(opt => <option key={opt.value} value={opt.value}>{opt.display}</option>)}
             </select>
         </div>
     )

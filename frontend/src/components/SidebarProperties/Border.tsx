@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropertyGroupHeader from "../../helpers/components/PropertyGroupHeader";
 import generalStyles from './Property.module.css';
 import styles from './Border.module.css';
@@ -52,6 +52,7 @@ const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 
 const Border = () => {
 
     const selectedId = useDesignerStore(state => state.selectedId);
+    const expandAllProperties = useDesignerStore(state => state.expandAllProperties);
     const updateProperty = useDesignerStore(state => state.updateProperty);
     // Getting non-reactive fresh state
     const borderTopColor = useDesignerStore.getState().properties[selectedId as string]?.values['borderTopColor'];
@@ -82,6 +83,13 @@ const Border = () => {
     // };
 
 
+    useEffect(() => {
+        if (expandAllProperties !== null) {
+            setIsCollapsed(!expandAllProperties)
+        }
+    }, [expandAllProperties])
+
+
     return <div>
         <PropertyGroupHeader info={"Component's border styling"} isCollapsed={isCollapsed} title="Border" setIsCollapsed={setIsCollapsed} />
         {!isCollapsed && <div className={generalStyles.wrapper}>
@@ -108,13 +116,13 @@ const Border = () => {
                     { value: 'dashed', display: 'Dashed' },
                 ]} />
             </>} */}
-            <InputText propertyDisplayName={<BiBorderRadius  color="grey" title="Corners" size={25} />}
+            <InputText propertyDisplayName={<BiBorderRadius color="grey" title="Corners" size={25} />}
                 propertyKey="borderRadius"
                 tooltipContent={tooltipContent}
                 isValidInput={isValidCssLengthBasicNoAuto}
             />
             <hr style={{ marginTop: '10px', borderTop: '1px dashed grey', borderBottom: 'none' }}></hr>
-            <p className={generalStyles['side-header']}>
+            <div className={generalStyles['side-header']}>
                 <div
                     key={'border-top'}
                     title="Top"
@@ -124,7 +132,7 @@ const Border = () => {
                     <MdContentCopy size={17} />
                     <span style={{ marginLeft: '5px' }}>all sides</span>
                 </button>
-            </p>
+            </div>
             <InputColor propertyDisplayName={<MdBorderColor color="grey" title="Color" size={25} />} propertyKey={['borderTopColor']} />
             <InputSelect propertyDisplayName={<BsBorderWidth color="grey" title="Width" size={25} />} propertyKey={['borderTopWidth']} options={[
                 { value: 'thin', display: 'Thin' },
@@ -138,13 +146,13 @@ const Border = () => {
                 { value: 'dashed', display: 'Dashed' },
             ]} />
             <hr style={{ marginTop: '10px', borderTop: '1px dashed grey', borderBottom: 'none' }}></hr>
-            <p className={generalStyles['side-header']}>
+            <div className={generalStyles['side-header']}>
                 <div
                     key={'border-right'}
                     title="Right"
                     style={{ width: '26px', height: '17px', border: '1px solid grey', borderRight: '5px solid grey' }}
                 ></div>
-            </p>
+            </div>
             <InputColor key={'rc-' + String(forceRender)} propertyDisplayName={<MdBorderColor color="grey" title="Color" size={25} />} propertyKey={['borderRightColor']} />
             <InputSelect key={'rw-' + String(forceRender)} propertyDisplayName={<BsBorderWidth color="grey" title="Width" size={25} />} propertyKey={['borderRightWidth']} options={[
                 { value: 'thin', display: 'Thin' },
@@ -158,13 +166,13 @@ const Border = () => {
                 { value: 'dashed', display: 'Dashed' },
             ]} />
             <hr style={{ marginTop: '10px', borderTop: '1px dashed grey', borderBottom: 'none' }}></hr>
-            <p className={generalStyles['side-header']}>
+            <div className={generalStyles['side-header']}>
                 <div
                     key={'border-bottom'}
                     title="Bottom"
                     style={{ width: '26px', height: '17px', border: '1px solid grey', borderBottom: '5px solid grey' }}
                 ></div>
-            </p>
+            </div>
             <InputColor key={'bc-' + String(forceRender)} propertyDisplayName={<MdBorderColor color="grey" title="Color" size={25} />} propertyKey={['borderBottomColor']} />
             <InputSelect key={'bw-' + String(forceRender)} propertyDisplayName={<BsBorderWidth color="grey" title="Width" size={25} />} propertyKey={['borderBottomWidth']} options={[
                 { value: 'thin', display: 'Thin' },
@@ -178,13 +186,13 @@ const Border = () => {
                 { value: 'dashed', display: 'Dashed' },
             ]} />
             <hr style={{ marginTop: '10px', borderTop: '1px dashed grey', borderBottom: 'none' }}></hr>
-            <p className={generalStyles['side-header']}>
+            <div className={generalStyles['side-header']}>
                 <div
                     key={'border-left'}
                     title="Left"
                     style={{ width: '26px', height: '17px', border: '1px solid grey', borderLeft: '5px solid grey' }}
                 ></div>
-            </p>
+            </div>
             <InputColor key={'lc-' + String(forceRender)} propertyDisplayName={<MdBorderColor color="grey" title="Color" size={25} />} propertyKey={['borderLeftColor']} />
             <InputSelect key={'lw-' + String(forceRender)} propertyDisplayName={<BsBorderWidth color="grey" title="Width" size={25} />} propertyKey={['borderLeftWidth']} options={[
                 { value: 'thin', display: 'Thin' },

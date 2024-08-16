@@ -8,6 +8,15 @@ import { IoMdLink } from "react-icons/io";
 import { CgPlayButtonR } from "react-icons/cg";
 import { Properties } from "../vite-env";
 
+import Layout from "../components/SidebarProperties/Layout";
+import Width from "../components/SidebarProperties/Width";
+import Height from "../components/SidebarProperties/Height";
+import Margin from "../components/SidebarProperties/Margin";
+import Border from "../components/SidebarProperties/Border";
+import Padding from "../components/SidebarProperties/Padding";
+import Background from "../components/SidebarProperties/Background";
+import Text from "../components/SidebarProperties/Text";
+
 const compTypes = {
     'row': {
         icon: CiGrid2V,
@@ -81,6 +90,19 @@ const compTypes = {
 //     }
 // }
 
+const compPropertiesEditors = {
+    'row': [],
+    'canvas': [<Layout key={'layout'}/>, <Padding key={'padding'}/>, <Background key={'background'}/>],
+    'column': [<Layout key={'layout'}/>, <Width key={'width'}/>, <Height key={'height'}/>, <Margin key={'margin'}/>, <Border key={'border'}/>, <Padding key={'padding'}/>, <Background key={'background'}/>],
+    'button': [<Width key={'width'}/>, <Height key={'height'}/>, <Margin key={'margin'}/>, <Border key={'border'}/>, <Background key={'background'}/>, <Text key={'text'}/>],
+    'text': [<Width key={'width'}/>, <Height key={'height'}/>, <Margin key={'margin'}/>, <Border key={'border'}/>, <Background key={'background'}/>, <Text key={'text'}/>],
+    'header': [<Width key={'width'}/>, <Height key={'height'}/>, <Margin key={'margin'}/>, <Border key={'border'}/>, <Background key={'background'}/>, <Text key={'text'}/>],
+    'checkbox': [],
+    'image': [<Width key={'width'}/>, <Height key={'height'}/>, <Margin key={'margin'}/>, <Border key={'border'}/>],
+    'link': [<Width key={'width'}/>, <Height key={'height'}/>, <Margin key={'marhin'}/>, <Border key={'border'}/>, <Background key={'background'}/>, <Text key={'text'}/>],
+    'icon-button': [<Width key={'width'}/>, <Height key={'height'}/>, <Margin key={'margin'}/>, <Border key={'border'}/>, <Background key={'background'}/>],
+}
+
 
 type ComponentProperties = {
     [K in keyof typeof compTypes | 'canvas']?: {
@@ -139,7 +161,20 @@ const compProperties: ComponentProperties = {
             alignItems: 'center',
             justifyContent: 'flex-start',
             backgroundColor: undefined,
-            overflow: 'visible',
+            overflow: 'auto',
+            borderRadius: '0px',
+            borderTopStyle: 'none',
+            borderTopWidth: 'thin',
+            borderTopColor: '#4a4a4a',
+            borderBottomStyle: 'none',
+            borderBottomWidth: 'thin',
+            borderBottomColor: '#4a4a4a',
+            borderLeftStyle: 'none',
+            borderLeftWidth: 'thin',
+            borderLeftColor: '#4a4a4a',
+            borderRightStyle: 'none',
+            borderRightWidth: 'thin',
+            borderRightColor: '#4a4a4a',
         }
     },
     'button': {
@@ -403,4 +438,5 @@ const compProperties: ComponentProperties = {
 export {
     compTypes,
     compProperties,
+    compPropertiesEditors,
 }

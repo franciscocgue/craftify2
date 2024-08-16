@@ -68,6 +68,7 @@ type designerStore = {
   properties: any,
   variables: Variables,
   componentNames: any,
+  expandAllProperties: boolean | null,
   // componentIds of component whose properties were updated last
   lastUpdatedCompChildren: string[],
   setPage: (page: 'designer' | 'variables' | 'data' | 'styles') => void,
@@ -110,11 +111,12 @@ type designerStore = {
     compId: string,
     properties: Properties,
     interfaceProps: { [k: string]: string | number | boolean | null | undefined }) => void,
+  setExpandAllProperties: (isExpand: boolean | null) => void,
 }
 
 const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => ({
   page: 'designer',
-  colorMode: 'dark',
+  colorMode: 'light',
   draggingId: null,
   draggable: null,
   isResizing: false,
@@ -141,6 +143,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
     }
   },
   componentNames: {},
+  expandAllProperties: false,
   lastUpdatedCompChildren: [],
   setPage: page => set({ page }),
   toggleColorMode: () => set(state => ({ colorMode: state.colorMode === 'dark' ? 'light' : 'dark' })),
@@ -367,6 +370,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
 
     return { properties: props, lastUpdatedCompChildren }
   }),
+  setExpandAllProperties: (isExpand) => set({ expandAllProperties: isExpand }),
 })));
 
 export default useDesignerStore;

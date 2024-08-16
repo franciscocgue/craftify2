@@ -105,7 +105,7 @@ const InputColor = ({ propertyDisplayName, propertyKey }: InputColorProps) => {
                             padding: '2px 3px',
                             color: isWrongInput ? 'black' : 'grey',
                             width: '70px',
-                            backgroundColor: isWrongInput ? 'rgb(255, 92, 92)' : 'transparent',
+                            backgroundColor: isWrongInput ? 'rgb(255, 92, 92)' : 'white',
                             outline: 'none',
                             border: '1px solid grey',
                             borderRadius: '4px'

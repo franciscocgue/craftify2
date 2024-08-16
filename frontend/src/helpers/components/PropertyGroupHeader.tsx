@@ -1,3 +1,4 @@
+import useDesignerStore from '../../stores/designer';
 import styles from './PropertyGroupHeader.module.css';
 
 type PropertyGroupHeaderProps = {
@@ -8,9 +9,16 @@ type PropertyGroupHeaderProps = {
 }
 
 const PropertyGroupHeader = ({ title, info, isCollapsed, setIsCollapsed }: PropertyGroupHeaderProps) => {
+
+    const setExpandAllProperties = useDesignerStore(state => state.setExpandAllProperties);
+    const handleHeaderClick = () => {
+        setExpandAllProperties(null);
+        setIsCollapsed(prev => !prev);
+    };
+
     return <div className={styles.wrapper}>
         {isCollapsed ? <button onClick={() => setIsCollapsed(prev => !prev)}>⏵</button> : <button>⏷</button>}
-        <p onClick={() => setIsCollapsed(prev => !prev)} title={info}>{title}</p>
+        <p onClick={handleHeaderClick} title={info}>{title}</p>
     </div>
 }
 

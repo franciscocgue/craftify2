@@ -32,8 +32,8 @@ const styleTopHighlight: (isOverTop: boolean) => CSSProperties = (isOverTop) => 
     backgroundColor: isOverTop ? 'green' : undefined,
     position: 'absolute',
     width: '100%',
-    height: '6px',
-    top: '-2px',
+    height: '4px',
+    top: '-0px',
     right: 0,
     zIndex: 1,
 });
@@ -50,8 +50,8 @@ const styleBottomHighlight: (isOverBottom: boolean) => CSSProperties = (isOverBo
     backgroundColor: isOverBottom ? 'green' : undefined,
     position: 'absolute',
     width: '100%',
-    height: '6px',
-    bottom: '-2px',
+    height: '4px',
+    bottom: '-0px',
     right: 0,
     zIndex: 1,
 });
@@ -66,9 +66,9 @@ const styleLeft: CSSProperties = {
 const styleLeftHighlight: (isOverLeft: boolean) => CSSProperties = (isOverLeft) => ({
     backgroundColor: isOverLeft ? 'green' : undefined,
     position: 'absolute',
-    width: '6px',
+    width: '4px',
     height: '100%',
-    left: '-2px',
+    left: '-0px',
     top: 0,
     zIndex: 1,
 });
@@ -84,9 +84,9 @@ const styleRight: CSSProperties = {
 const styleRightHighlight: (isOverRight: boolean) => CSSProperties = (isOverRight) => ({
     backgroundColor: isOverRight ? 'green' : undefined,
     position: 'absolute',
-    width: '6px',
+    width: '4px',
     height: '100%',
-    right: '-2px',
+    right: '-0px',
     top: 0,
     zIndex: 1,
 });
@@ -109,7 +109,7 @@ function DroppableContainer(props: DroppableContainerProps) {
     });
     const { isOver: isOverTop, setNodeRef: setNodeRefTop } = useDroppable({
         id: `droppable_top_${props.componentId}`,
-        disabled: props.parentType !== 'column',
+        disabled: props.parentType !== 'column' && props.parentType !== 'canvas',
         data: {
             componentId: props.componentId,
             location: 'before'
@@ -117,7 +117,7 @@ function DroppableContainer(props: DroppableContainerProps) {
     });
     const { isOver: isOverBottom, setNodeRef: setNodeRefBottom } = useDroppable({
         id: `droppable_bottom_${props.componentId}`,
-        disabled: props.parentType !== 'column',
+        disabled: props.parentType !== 'column' && props.parentType !== 'canvas',
         data: {
             componentId: props.componentId,
             location: 'after'
@@ -140,17 +140,19 @@ function DroppableContainer(props: DroppableContainerProps) {
         }
     });
 
+    console.log('parentType = ', props.parentType)
+
     return (
         <>
             {/* inside */}
             {<div ref={setNodeRefInner} style={styleInner} />}
             {<div style={styleInnerHighlight(isOverInner)} />}
             {/* top */}
-            {props.parentType === 'column' && <div ref={setNodeRefTop} style={styleTop} />}
-            {props.parentType === 'column' && <div style={styleTopHighlight(isOverTop)} />}
+            {(props.parentType === 'column' || props.parentType === 'canvas') && <div ref={setNodeRefTop} style={styleTop} />}
+            {(props.parentType === 'column' || props.parentType === 'canvas') && <div style={styleTopHighlight(isOverTop)} />}
             {/* bottom */}
-            {props.parentType === 'column' && <div ref={setNodeRefBottom} style={styleBottom} />}
-            {props.parentType === 'column' && <div style={styleBottomHighlight(isOverBottom)} />}
+            {(props.parentType === 'column' || props.parentType === 'canvas') && <div ref={setNodeRefBottom} style={styleBottom} />}
+            {(props.parentType === 'column' || props.parentType === 'canvas') && <div style={styleBottomHighlight(isOverBottom)} />}
             {/* left */}
             {props.parentType === 'row' && <div ref={setNodeRefLeft} style={styleLeft} />}
             {props.parentType === 'row' && <div style={styleLeftHighlight(isOverLeft)} />}
