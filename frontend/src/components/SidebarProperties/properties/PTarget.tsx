@@ -1,5 +1,4 @@
 import InputSelect from "../InputSelect";
-import InputSelectAdvanced from "../InputSelectAdvanced";
 import styles from '../Property.module.css';
 
 const options = [
