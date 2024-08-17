@@ -31,26 +31,22 @@ const InputColor = ({ propertyDisplayName, propertyKey }: InputColorProps) => {
     }, [selectedId])
 
     const handleDebounceFn = (selectedId: string, value: string) => {
-        console.log('valuee', value)
         if (value === '') {
             const props = propertyKey.reduce((acc, key) => {
                 acc[key] = undefined;
                 return acc;
             }, {});
-            console.log('valuee', 'emptyy')
             updateProperty(selectedId as string, props, {});
             setIsWrongInput(false);
         }
-        else if (isValidHexColor(value)) {
+        else if (isValidHexColor(value) || CSS.supports('color', value)) {
             const props = propertyKey.reduce((acc, key) => {
                 acc[key] = value;
                 return acc;
             }, {});
-            console.log('valuee', 'vaaliid')
             updateProperty(selectedId as string, props, {});
             setIsWrongInput(false);
         } else {
-            console.log('valuee', 'wrrooong')
             setIsWrongInput(true);
         }
     }

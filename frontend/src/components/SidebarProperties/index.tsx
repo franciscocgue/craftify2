@@ -13,6 +13,7 @@ import { compTypes } from "../../config/components";
 import { IconType } from "react-icons";
 import { CgScreen } from "react-icons/cg";
 import SectionStyles from "./SectionStyles";
+import SectionProperties from "./SectionProperties";
 
 
 interface IconBoxProps {
@@ -157,6 +158,7 @@ const SidebarProperties = memo(() => {
             </div>
 
             {activeSection === 'styles' && <SectionStyles />}
+            {activeSection === 'properties' && <SectionProperties />}
 
         </>
         }

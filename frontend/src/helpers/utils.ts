@@ -222,34 +222,35 @@ function isValidCssLengthBasicNoAuto(value: string): boolean {
     return cssLengthPattern.test(value);
 }
 
-function isValidPositiveNumber(value: string | number | null | undefined): boolean {
-    // use with numeric input
+function isValidPositiveNumber(str: string) {
+    // // Check if the string is not empty and is a valid number (or {{variable}})
+    // if ((typeof str === 'string' && str.trim() === '') || (typeof str === 'number' && isNaN(str))) {
+    //     return false;
+    // }
 
-    // not empty string
-    if (value === '') {
-        return false;
-    }
+    // // Convert the string to a number and check if it is an integer
+    // const num = Number(str);
+    // return Number.isInteger(num) && num > 0;
 
-    // not null nor undefined
-    if (value === null || value === undefined) {
-        return false;
-    }
+    str = String(str);
 
-    // convert to number if it is a string
-    const numberValue = typeof value === 'string' ? Number(value) : value;
+    // Regular expressions for the individual components
+    const number = '(\\d+(\\.\\d+)?)';
+    const variable = '(\\{\\{[a-zA-Z_$][a-zA-Z0-9_$]*\\}\\})'; // matches {{variableName}}
 
-    // conversion result is a valid number
-    if (isNaN(numberValue)) {
-        return false;
-    }
+    // Full regular expression combining number and variable
+    const cssLengthPattern = new RegExp(`^\\s*(${number}|${variable})\\s*$`);
 
-    // non-negative
-    if (numberValue < 0) {
-        return false;
-    }
-
-    return true;
+    return cssLengthPattern.test(str);
 }
+
+// Examples
+// console.log(isWholeNumber("123"));    // true
+// console.log(isWholeNumber("0"));      // false
+// console.log(isWholeNumber("-456"));   // false (negative whole number)
+// console.log(isWholeNumber("123.45")); // false (not a whole number)
+// console.log(isWholeNumber("abc"));    // false (not a number)
+// console.log(isWholeNumber(" 789 "));  // true (whitespace is trimmed)
 
 function isValidHexColor(hex: string): boolean {
     // Regular expression to match valid hex color formats

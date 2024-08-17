@@ -17,6 +17,11 @@ import Padding from "../components/SidebarProperties/Padding";
 import Background from "../components/SidebarProperties/Background";
 import Text from "../components/SidebarProperties/Text";
 
+import PText from "../components/SidebarProperties/properties/PText";
+import PIconSize from "../components/SidebarProperties/properties/PIconSize";
+import PIconName from "../components/SidebarProperties/properties/PIconName";
+import PIconColor from "../components/SidebarProperties/properties/PIconColor";
+
 const compTypes = {
     'row': {
         icon: CiGrid2V,
@@ -91,16 +96,46 @@ const compTypes = {
 // }
 
 const compPropertiesEditors = {
-    'row': [],
-    'canvas': [<Layout key={'layout'} />, <Padding key={'padding'} />, <Background key={'background'} />],
-    'column': [<Layout key={'layout'} />, <Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Border key={'border'} />, <Padding key={'padding'} />, <Background key={'background'} />],
-    'button': [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
-    'text': [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
-    'header': [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
-    'checkbox': [],
-    'image': [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Border key={'border'} />],
-    'link': [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'marhin'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
-    'icon-button': [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Border key={'border'} />, <Background key={'background'} />],
+    'row': {
+        styles: [null],
+        properties: [null],
+    },
+    'canvas': {
+        styles: [<Layout key={'layout'} />, <Padding key={'padding'} />, <Background key={'background'} />],
+        properties: [null],
+    },
+    'column': {
+        styles: [<Layout key={'layout'} />, <Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Border key={'border'} />, <Padding key={'padding'} />, <Background key={'background'} />],
+        properties: [null],
+    },
+    'button': {
+        styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
+        properties: [<PText />],
+    },
+    'text': {
+        styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
+        properties: [<PText />],
+    },
+    'header': {
+        styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
+        properties: [<PText />],
+    },
+    'checkbox': {
+        styles: [null],
+        properties: [null],
+    },
+    'image': {
+        styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Border key={'border'} />],
+        properties: [null],
+    },
+    'link': {
+        styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'marhin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
+        properties: [<PText />],
+    },
+    'icon-button': {
+        styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />],
+        properties: [<PIconSize />, <PIconName />, <PIconColor />],
+    },
 }
 
 
@@ -209,6 +244,10 @@ const compProperties: ComponentProperties = {
             backgroundAttachment: 'scroll',
             // backgroundColor: 'rgba(0,0,0,0.2)',
             outline: 'none',
+            paddingTop: '0px',
+            paddingBottom: '0px',
+            paddingLeft: '0px',
+            paddingRight: '0px',
             borderRadius: '0px',
             borderTopStyle: 'none',
             borderTopWidth: 'thin',
@@ -250,6 +289,10 @@ const compProperties: ComponentProperties = {
             backgroundPosition: 'center',
             backgroundAttachment: 'scroll',
             outline: 'none',
+            paddingTop: '0px',
+            paddingBottom: '0px',
+            paddingLeft: '0px',
+            paddingRight: '0px',
             borderRadius: '0px',
             borderTopStyle: 'none',
             borderTopWidth: 'thin',
@@ -292,6 +335,10 @@ const compProperties: ComponentProperties = {
             backgroundPosition: 'center',
             backgroundAttachment: 'scroll',
             outline: 'none',
+            paddingTop: '0px',
+            paddingBottom: '0px',
+            paddingLeft: '0px',
+            paddingRight: '0px',
             borderRadius: '0px',
             borderTopStyle: 'none',
             borderTopWidth: 'thin',
@@ -400,6 +447,10 @@ const compProperties: ComponentProperties = {
             backgroundPosition: 'center',
             backgroundAttachment: 'scroll',
             outline: 'none',
+            paddingTop: '0px',
+            paddingBottom: '0px',
+            paddingLeft: '0px',
+            paddingRight: '0px',
             borderRadius: '0px',
             borderTopStyle: 'none',
             borderTopWidth: 'thin',
@@ -423,12 +474,12 @@ const compProperties: ComponentProperties = {
     'icon-button': {
         interfaceProps: {},
         values: {// wrapperStyles
-            width: '35px',
+            width: 'auto',
             maxWidth: undefined,
             minWidth: 'auto',
-            height: '35px',
+            height: 'auto',
             maxHeight: undefined,
-            minHeight: '35px',
+            minHeight: 'auto',
             marginTop: '0px',
             marginBottom: '0px',
             marginLeft: '0px',
@@ -446,6 +497,10 @@ const compProperties: ComponentProperties = {
             backgroundPosition: 'center',
             backgroundAttachment: 'scroll',
             outline: 'none',
+            paddingTop: '0px',
+            paddingBottom: '0px',
+            paddingLeft: '0px',
+            paddingRight: '0px',
             borderRadius: '0px',
             borderTopStyle: 'none',
             borderTopWidth: 'thin',

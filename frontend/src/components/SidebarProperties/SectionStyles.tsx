@@ -41,7 +41,7 @@ const SectionStyles = () => {
             </button>
         </div>
 
-        {compPropertiesEditors[compMetadata.type as keyof typeof compPropertiesEditors]}
+        {compPropertiesEditors[compMetadata.type as keyof typeof compPropertiesEditors].styles}
 
         {/* <Layout />
     <Width />
