@@ -71,6 +71,12 @@ const Text = () => {
                     { value: 'normal', display: 'Normal' },
                     { value: 'italic', display: 'Italic' },
                 ]} />
+                <InputSelect propertyDisplayName={'Align'} propertyKey={['textAlign']} options={[
+                    { value: 'start', display: 'Start' },
+                    { value: 'end', display: 'End' },
+                    { value: 'center', display: 'Center' },
+                    { value: 'justify', display: 'Justify' },
+                ]} />
             </>
         </div>}
     </div>

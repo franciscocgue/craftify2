@@ -21,6 +21,8 @@ import PText from "../components/SidebarProperties/properties/PText";
 import PIconSize from "../components/SidebarProperties/properties/PIconSize";
 import PIconName from "../components/SidebarProperties/properties/PIconName";
 import PIconColor from "../components/SidebarProperties/properties/PIconColor";
+import PSrc from "../components/SidebarProperties/properties/PSrc";
+import PAlt from "../components/SidebarProperties/properties/PAlt";
 
 const compTypes = {
     'row': {
@@ -126,7 +128,7 @@ const compPropertiesEditors = {
     },
     'image': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Border key={'border'} />],
-        properties: [null],
+        properties: [<PSrc key={'PSrc'} />, <PAlt key={'PAlt'} />],
     },
     'link': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'marhin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
@@ -236,6 +238,7 @@ const compProperties: ComponentProperties = {
             color: 'black',
             fontStyle: 'normal',
             fontWeight: 'normal',
+            textAlign: 'center',
             backgroundColor: '#cccccc',
             backgroundImage: 'none',
             backgroundSize: 'auto',
@@ -282,6 +285,7 @@ const compProperties: ComponentProperties = {
             color: 'black',
             fontStyle: 'normal',
             fontWeight: 'normal',
+            textAlign: 'start',
             backgroundColor: 'white',
             backgroundImage: 'none',
             backgroundSize: 'auto',
@@ -328,6 +332,7 @@ const compProperties: ComponentProperties = {
             color: 'black',
             fontStyle: 'normal',
             fontWeight: 'bold',
+            textAlign: 'center',
             backgroundColor: 'white',
             backgroundImage: 'none',
             backgroundSize: 'auto',
@@ -426,7 +431,7 @@ const compProperties: ComponentProperties = {
     'link': {
         interfaceProps: {},
         values: {// wrapperStyles
-            width: 'fit-content',
+            width: 'auto',
             maxWidth: undefined,
             minWidth: 'auto',
             height: 'auto',
@@ -440,6 +445,7 @@ const compProperties: ComponentProperties = {
             color: 'blue',
             fontStyle: 'normal',
             fontWeight: 'bold',
+            textAlign: 'center',
             backgroundColor: 'white',
             backgroundImage: 'none',
             backgroundSize: 'auto',

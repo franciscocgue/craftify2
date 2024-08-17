@@ -49,6 +49,7 @@ export type Properties = {
     color?: string,
     fontStyle?: string,
     fontWeight?: string,
+    textAlign?: string,
     backgroundColor?: string,
     backgroundImage?: string,
     backgroundRepeat?: string,
