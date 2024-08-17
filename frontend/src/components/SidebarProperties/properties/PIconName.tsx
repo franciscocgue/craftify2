@@ -1,10 +1,6 @@
-import InputSelect from "../InputSelect";
 import InputSelectAdvanced from "../InputSelectAdvanced";
-import InputText from "../InputText";
 import styles from '../Property.module.css';
-import Select from 'react-select';
 import * as MdIcons from 'react-icons/md';
-import MyIcon from "../../../helpers/MyIcon";
 
 // const options = [
 //     { value: 'chocolate', label: 'Chocolate' },

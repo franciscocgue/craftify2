@@ -23,6 +23,8 @@ import PIconName from "../components/SidebarProperties/properties/PIconName";
 import PIconColor from "../components/SidebarProperties/properties/PIconColor";
 import PSrc from "../components/SidebarProperties/properties/PSrc";
 import PAlt from "../components/SidebarProperties/properties/PAlt";
+import PHref from "../components/SidebarProperties/properties/PHref";
+import PTarget from "../components/SidebarProperties/properties/PTarget";
 
 const compTypes = {
     'row': {
@@ -132,7 +134,7 @@ const compPropertiesEditors = {
     },
     'link': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'marhin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
-        properties: [<PText key={'PText'} />],
+        properties: [<PText key={'PText'} />, <PHref key={'PHref'} />, <PTarget key={'PTarget'} />],
     },
     'icon-button': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />],
@@ -472,8 +474,8 @@ const compProperties: ComponentProperties = {
             borderRightColor: '#4a4a4a',
             // overflow: 'auto',
             // custom properties
-            __text: 'Google',
-            __href: 'https://www.google.com/',
+            __text: 'Learn web development',
+            __href: 'https://developer.mozilla.org/en-US/docs/Learn',
             __target: '_blank',
         }
     },
