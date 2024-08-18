@@ -13,6 +13,66 @@ const initialComponents = {
   },
 }
 
+type keyValuePair = {
+  [key: string]: string
+};
+
+const compDuplicator = (comps, props, compsNames, compId: string, mapper: keyValuePair = {}, level: number = 0) => {
+  if (!Object.keys(mapper).includes(comps[compId].parent)) {
+    if (level === 0) {
+      // same parent
+      mapper[comps[compId].parent] = comps[compId].parent;
+    } else {
+      // new nested parent
+      mapper[comps[compId].parent] = crypto.randomUUID();
+    }
+  }
+  if (!Object.keys(mapper).includes(compId)) {
+    mapper[compId] = crypto.randomUUID();
+  }
+
+  for (let childId of comps[compId].children) {
+    mapper[childId] = crypto.randomUUID();
+  }
+
+
+  // add component
+  comps[mapper[compId]] = {
+    type: comps[compId].type,
+    parent: mapper[comps[compId].parent],
+    children: comps[compId].children.map(child => mapper[child]),
+    name: `${compTypes[comps[compId].type as keyof typeof compTypes].name} ${compsNames[comps[compId].type].current + 1}`,
+    // name: `${comps[compId].name} ${level + 1}`,
+  }
+
+  // add properties
+  props[mapper[compId]] = props[compId]
+
+  // update names
+  compsNames[comps[mapper[compId]].type].current += 1;
+
+  // add to parent
+  if (level === 0) {
+    let insertAt = comps[comps[compId].parent].children.indexOf(compId) + 1;
+    comps[comps[compId].parent].children.splice(insertAt, 0, mapper[compId]);
+  }
+
+  level += 1;
+
+  // add children
+  for (let childId of comps[compId].children) {
+    compDuplicator(comps, props, compsNames, childId, mapper, level);
+  }
+
+
+
+  // if children not empty, map each one to new uuid and call function again
+
+  // duplicate component with new uuid (children, parent, main)
+
+  // if children empty, duplicate (new uuid parent and main)
+}
+
 // const componentsTest = {
 //   'canvas': {
 //     type: 'canvas',
@@ -329,27 +389,35 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   duplicateComponent: (compId) => set((state) => {
     // code taken from addComponent and adapted
     // compType, addedOverCompId, location
+
     const comps = { ...state.components };
     const props = { ...state.properties };
     const compsNames = { ...state.componentNames };
 
-    compsNames[comps[compId].type].current += 1;
+    compDuplicator(comps, props, compsNames, compId, {}, 0);
 
-    const newCompId = crypto.randomUUID();
 
-    props[newCompId] = { ...props[compId] };
+    // compsNames[comps[compId].type].current += 1;
 
-    let parent = comps[comps[compId].parent];
-    // add component
-    comps[newCompId] = {
-      ...comps[compId],
-      name: `${compTypes[comps[compId].type as keyof typeof compTypes].name} ${compsNames[comps[compId].type].current}`
+    // const newCompId = crypto.randomUUID();
+
+    // props[newCompId] = { ...props[compId] };
+
+    // let parent = comps[comps[compId].parent];
+    // // add component
+    // comps[newCompId] = {
+    //   ...comps[compId],
+    //   name: `${compTypes[comps[compId].type as keyof typeof compTypes].name} ${compsNames[comps[compId].type].current}`
+    // }
+    // // add to parent
+    // let insertAt = parent.children.indexOf(compId) + 1;
+    // parent.children.splice(insertAt, 0, newCompId);
+
+    return {
+      components: comps,
+      properties: props
+      // componentNames: compsNames, 
     }
-    // add to parent
-    let insertAt = parent.children.indexOf(compId) + 1;
-    parent.children.splice(insertAt, 0, newCompId);
-
-    return { components: comps, componentNames: compsNames, properties: props }
 
 
   }),

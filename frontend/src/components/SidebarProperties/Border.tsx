@@ -128,9 +128,9 @@ const Border = () => {
                     title="Top"
                     style={{ width: '26px', height: '17px', border: '1px solid grey', borderTop: '5px solid grey' }}
                 ></div>
-                <button className={styles['icon-button']} onClick={onCopyTopToAllSides}>
+                <button style={{flex: '1', textAlign: 'center', display: 'flex', alignContent: 'center', justifyContent: 'center' }} className={styles['icon-button']} onClick={onCopyTopToAllSides}>
                     <MdContentCopy size={17} />
-                    <span style={{ marginLeft: '5px' }}>all sides</span>
+                    <span style={{ marginLeft: '10px'}}>Apply to all sides</span>
                 </button>
             </div>
             <InputColor propertyDisplayName={<MdBorderColor color="grey" title="Color" size={25} />} propertyKey={['borderTopColor']} />

@@ -12,6 +12,7 @@ import MyPortal from "./MyPortal";
 import { toast } from "react-toastify";
 import MyOutline from "./MyOutline";
 import { useDebouncedMouseEnter } from "./utils";
+import { GrDuplicate } from "react-icons/gr";
 
 
 interface IconBoxProps {
@@ -25,7 +26,7 @@ const IconBox: React.FC<IconBoxProps> = ({ icon: Icon }) => {
     );
 };
 
-const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorMode: 'dark' | 'light', componentId: string, removeComponent: (compId: string) => void) => {
+const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorMode: 'dark' | 'light', componentId: string, removeComponent: (compId: string) => void, duplicateComponent: (compId: string) => void) => {
 
     const notify = {
         deleted: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-right' }),
@@ -49,16 +50,16 @@ const TooltipComp = (name: string, componentType: keyof typeof compTypes, colorM
         <DraggableHandle top={6} componentId={componentId} />
         {/* wrapper container cannot be duplicated */}
         {/* In the future just copy all (nested) components inside */}
-        {/* <GrDuplicate
+        <GrDuplicate
             color="white"
             size={'19px'}
             title="Duplicate"
             style={{ cursor: 'pointer', color: colorMode === 'dark' ? 'black' : 'white' }}
             onClick={() => {
-                removeComponent(componentId);
-                notify.deleted(`${name} deleted`)
+                duplicateComponent(componentId);
+                // notify.deleted(`${name} deleted`)
             }}
-        /> */}
+        />
         <RiDeleteBin2Fill
             color="white"
             size={'19px'}
@@ -94,6 +95,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
     const draggable = useDesignerStore((state) => state.draggable);
     const setHoveredId = useDesignerStore((state) => state.setHoveredId);
     const removeComponent = useDesignerStore((state) => state.removeComponent);
+    const duplicateComponent = useDesignerStore((state) => state.duplicateComponent);
     const toggleSelectedId = useDesignerStore((state) => state.toggleSelectedId);
     const components = useDesignerStore((state) => state.components);
     const colorMode = useDesignerStore((state) => state.colorMode);
@@ -268,7 +270,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                 />}
             {/* </Tooltip> */}
             {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: `calc(${ref.current?.getBoundingClientRect().top}px - 30px)`, left: ref.current?.getBoundingClientRect().left }}>
-                {TooltipComp(props.componentName, props.componentType, colorMode, props.componentId, removeComponent)}
+                {TooltipComp(props.componentName, props.componentType, colorMode, props.componentId, removeComponent, duplicateComponent)}
             </MyPortal>}
         </div >
     </>

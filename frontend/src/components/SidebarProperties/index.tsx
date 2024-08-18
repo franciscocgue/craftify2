@@ -144,7 +144,7 @@ const SidebarProperties = memo(() => {
                     userSelect: 'none'
                 }}
                     onClick={() => setActiveSection('properties')}
-                >Props</div>
+                >Settings</div>
                 <div style={{
                     color: activeSection === 'logic' ? `${colorMode === 'light' ? 'black' : 'white'}` : 'grey',
                     borderBottom: activeSection === 'logic' ? `4px solid ${colorMode === 'light' ? 'black' : 'white'}` : '2px solid rgb(190,190,190)',

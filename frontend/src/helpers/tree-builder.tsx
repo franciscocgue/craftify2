@@ -78,6 +78,7 @@ const NodeTitle = memo(({ node }: NodeTitleProps) => {
     const removeComponent = useDesignerStore((state) => state.removeComponent);
     const addComponent = useDesignerStore((state) => state.addComponent);
     const toggleSelectedId = useDesignerStore((state) => state.toggleSelectedId);
+    const duplicateComponent = useDesignerStore((state) => state.duplicateComponent);
 
     // const toast = useToast()
     const notify = {
@@ -116,6 +117,7 @@ const NodeTitle = memo(({ node }: NodeTitleProps) => {
                 <div
                     style={{
                         display: 'flex',
+                        flexDirection: 'column',
                         opacity: 1,
                         flexWrap: 'wrap',
                         gap: '5px',
@@ -138,54 +140,81 @@ const NodeTitle = memo(({ node }: NodeTitleProps) => {
                         type='search'
                         marginBottom={'1rem'}
                     /> */}
-                    <input placeholder="Search..."
-                        name="component-search"
-                        type="search"
-                        value={value}
-                        onChange={handleChange}
-                        style={{
-                            padding: '6px 10px',
-                            // outline: 'none',
-                            marginBottom: '1rem',
-                            backgroundColor: 'transparent',
-                            border: `1px solid ${colorMode === 'dark' ? 'white' : 'black'}`,
-                            color: colorMode === 'dark' ? 'white' : 'black',
-                            fontSize: 'small',
-                            borderRadius: '3px',
-                            width: '100%',
-                            opacity: 1
-                        }}
-                    />
-                    {listOfCompTypes.map(c => (
-                        <div
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between'
+                    }}>
+                        <input placeholder="Search..."
+                            name="component-search"
+                            type="search"
+                            value={value}
+                            onChange={handleChange}
                             style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                cursor: 'pointer',
-                                fontSize: 'small',
-                                backgroundColor: colorMode === 'dark' ? 'rgba(0, 0, 0, 0.24)' : 'rgba(255, 255, 255, 0.80)',
+                                padding: '6px 10px',
+                                // outline: 'none',
+                                marginBottom: '1rem',
+                                backgroundColor: 'transparent',
+                                border: `1px solid ${colorMode === 'dark' ? 'white' : 'black'}`,
                                 color: colorMode === 'dark' ? 'white' : 'black',
-                                border: '1px solid grey',
-                                borderRadius: '5px',
-                                padding: '4px 7px'
+                                fontSize: 'small',
+                                borderRadius: '3px',
+                                width: '60%',
+                                opacity: 1
                             }}
-                            key={c}
-                            onClick={() => {
-                                addComponent(c, node.key, 'auto');
-                                setIsPopoverOpen(false);
-                                notify.created(`${compTypes[c as keyof typeof compTypes].name} created`);
-                                // toast({
-                                //     title: `${compTypes[c as keyof typeof compTypes].name} created`,
-                                //     status: 'success',
-                                //     duration: 1500,
-                                //     // isClosable: true,
-                                // });
-                            }}
-                        >
-                            <MdOutlineAdd size={'15px'} />
-                            <p>{compTypes[c as keyof typeof compTypes].name}</p>
-                        </div>
-                    ))}
+                        />
+                        {node.key !== 'canvas' && <button style={{
+                            height: '30px',
+                            width: '25%',
+                        }} onClick={() => duplicateComponent(node.key)}>Duplicate</button>}
+                    </div>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            // opacity: 1,
+                            flexWrap: 'wrap',
+                            gap: '5px',
+                            rowGap: '5px',
+                            // justifyContent: 'space-between',
+                            // backgroundColor: colorMode === 'light' ? 'white' : '#2D3748',
+                            // border: '1px solid lightgray',
+                            // padding: '1rem',
+                            // borderRadius: '5px',
+                            // width: '400px',
+                            // boxShadow: "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
+                        }}
+                    >
+                        {listOfCompTypes.map(c => (
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    cursor: 'pointer',
+                                    fontSize: 'small',
+                                    backgroundColor: colorMode === 'dark' ? 'rgba(0, 0, 0, 0.24)' : 'rgba(255, 255, 255, 0.80)',
+                                    color: colorMode === 'dark' ? 'white' : 'black',
+                                    border: '1px solid grey',
+                                    borderRadius: '5px',
+                                    padding: '4px 7px'
+                                }}
+                                key={c}
+                                onClick={() => {
+                                    addComponent(c, node.key, 'auto');
+                                    setIsPopoverOpen(false);
+                                    notify.created(`${compTypes[c as keyof typeof compTypes].name} created`);
+                                    // toast({
+                                    //     title: `${compTypes[c as keyof typeof compTypes].name} created`,
+                                    //     status: 'success',
+                                    //     duration: 1500,
+                                    //     // isClosable: true,
+                                    // });
+                                }}
+                            >
+                                <MdOutlineAdd size={'15px'} />
+                                <p>{compTypes[c as keyof typeof compTypes].name}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </ArrowContainer>
         )}
