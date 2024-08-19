@@ -166,7 +166,7 @@ function isValidCssLength(value: string): boolean {
     const maxFunction = `max\\(\\s*${functionArgument}(\\s*,\\s*${functionArgument})*\\s*\\)`;
 
     // Full regular expression combining lengths, variable lengths, and functions
-    const cssLengthPattern = new RegExp(`^\\s*(${length}|${variableLength}|auto|${calcFunction}|${minFunction}|${maxFunction})\\s*$`);
+    const cssLengthPattern = new RegExp(`^\\s*(${length}|${variableLength}|auto|none|${calcFunction}|${minFunction}|${maxFunction})\\s*$`);
 
     return cssLengthPattern.test(value);
 }

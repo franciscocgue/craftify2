@@ -40,6 +40,7 @@ const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 
                 <p>100%</p>
                 <p>50px</p>
                 <p>auto</p>
+                <p>none</p>
                 <p>{`{{myVariable}}px`}</p>
                 <p>calc(50% + 20px)</p>
                 <p>min(50%, 20px)</p>

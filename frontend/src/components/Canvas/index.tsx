@@ -60,7 +60,7 @@ const Canvas = () => {
                 display: 'flex',
                 border: '1px solid grey',
                 flexDirection: 'column',
-                alignContent: 'center',
+                // alignContent: 'center',
                 justifyContent: 'center',
                 overflowY: 'auto',
                 overflowX: 'auto',
@@ -75,7 +75,7 @@ const Canvas = () => {
                     // frozen (not editable)
                     border: '1px solid grey',
                     overflowY: 'auto',
-                    overflowX: 'hidden',
+                    overflowX: 'auto',
                     minWidth: `${properties.canvasWidthPx}px`,
                     margin: '0 auto',
                     minHeight: `min(calc(100%), ${properties.canvasHeightPx}px)`,
