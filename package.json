@@ -19,6 +19,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@xyflow/react": "^12.2.0",
     "axios": "^1.7.2",
     "cors": "^2.8.5",
     "express": "^4.19.2",

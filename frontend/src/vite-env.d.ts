@@ -18,6 +18,13 @@ export interface ComponentCollection {
     [key: string]: Component;
 }
 
+export interface UiComponentProps {
+    componentId: string, 
+    componentType: Component['type'], 
+    componentName: string, 
+    parentType: 'row' | 'column', //Component['type']
+}
+
 // otherProperties in resizable wrappers
 export type Properties = {
     // canvas props
@@ -49,7 +56,7 @@ export type Properties = {
     color?: string,
     fontStyle?: string,
     fontWeight?: string,
-    textAlign?: string,
+    textAlign?: TextAlign, // solved ts issue
     backgroundColor?: string,
     backgroundImage?: string,
     backgroundRepeat?: string,

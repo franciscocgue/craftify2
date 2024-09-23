@@ -4,6 +4,17 @@ import { compProperties, compTypes } from '../config/components';
 import { draggableData, Properties, Variables } from '../vite-env';
 import { getChildrenNodes } from '../helpers/utils';
 
+import components_ from '../../../backend/user-app/src/components.json';
+import properties_ from '../../../backend/user-app/src/properties.json';
+
+const initialNodes = [
+  // { id: '1', type: 'customNode', position: { x: 0, y: 0 }, data: { label: '1' } },
+  // { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
+  { id: '3', type: 'trigger', position: { x: 0, y: 200 }, data: { label: '3' }, style: { width: 100, height: 30 } },
+  // { id: '4', type: 'openUrl', position: { x: 0, y: 300 }, data: { label: '3' }, style: { width: 100, height: 30 } },
+];
+const initialEdges = [{ id: 'e1-2', source: '1', target: '2', type: 'smoothstep' }];
+
 const initialComponents = {
   'canvas': {
     type: 'canvas',
@@ -131,6 +142,8 @@ type designerStore = {
   expandAllProperties: boolean | null,
   // componentIds of component whose properties were updated last
   lastUpdatedCompChildren: string[],
+  logicNodes: any, //EdgeType[],
+  logicEdges: any, // NodeType[],
   setPage: (page: 'designer' | 'variables' | 'data' | 'styles') => void,
   toggleColorMode: () => void,
   renameComponent: (compId: string, newName: string) => void,
@@ -183,8 +196,10 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   selectedId: null,
   hoveredId: null,
   isCanvasScrolling: false,
-  components: initialComponents,
-  properties: { canvas: compProperties['canvas'] },
+  // components: initialComponents,
+  // properties: { canvas: compProperties['canvas'] },
+  components: components_,
+  properties: properties_,
   variables: {
     name: {
       type: 'text',
@@ -205,6 +220,8 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   componentNames: {},
   expandAllProperties: false,
   lastUpdatedCompChildren: [],
+  logicNodes: {}, //EdgeType[],
+  logicEdges: {}, // NodeType[],
   setPage: page => set({ page }),
   toggleColorMode: () => set(state => ({ colorMode: state.colorMode === 'dark' ? 'light' : 'dark' })),
   renameComponent: (compId: string, newName: string) => set(state => {

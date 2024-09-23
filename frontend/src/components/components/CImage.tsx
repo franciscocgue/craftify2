@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useWrapper } from "../../helpers/custom-hooks/hooks";
+import { UiComponentProps } from "../../vite-env";
 
-const CImage = ({ componentId, componentType, componentName, parentType }) => {
+const CImage = ({ componentId, componentType, componentName, parentType } : UiComponentProps) => {
 
     // exclude below from the built version
     console.log('comp render: ' + componentId.slice(0, 5))
     const [isRefReady, setIsRefReady] = useState(false);
-    const [ref, renderer, otherProperties, wrapperComponent] = useWrapper(componentId, componentType, componentName, parentType);
+    const [ref, _, otherProperties, wrapperComponent] = useWrapper(componentId, componentType, componentName, parentType);
 
     // render twice so ref is not null
     useEffect(() => {

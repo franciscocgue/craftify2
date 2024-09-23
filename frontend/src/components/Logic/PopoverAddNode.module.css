@@ -1,0 +1,29 @@
+.popover-wrapper {
+    background-color: white;
+    padding: 10px;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    box-shadow: rgba(50, 50, 93, 0.8) 0px 2px 5px -1px, rgba(0, 0, 0, 0.8) 0px 1px 3px -1px;
+}
+
+.popover-header {
+    
+}
+
+.popover-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.popover-action {
+    background: none;
+	color: inherit;
+	border: 1px solid grey;
+    border-radius: 5px;
+	padding: 4px 7px;
+	font-size: small;
+	cursor: pointer;
+	outline: inherit;
+}

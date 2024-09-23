@@ -14,6 +14,8 @@ import { IconType } from "react-icons";
 import { CgScreen } from "react-icons/cg";
 import SectionStyles from "./SectionStyles";
 import SectionProperties from "./SectionProperties";
+import Logic from "../Logic";
+import MyModal from "../../helpers/MyModal";
 
 
 interface IconBoxProps {
@@ -41,6 +43,8 @@ const SidebarProperties = memo(() => {
     // if (properties[selectedId]) {
     //     console.log(properties[selectedId])
     // }
+
+    const changeToStyles = () => setActiveSection('styles');
 
     const [compName, setCompName] = useState(compMetadata ? compMetadata.name : 'no component');
     const [activeSection, setActiveSection] = useState<'styles' | 'logic' | 'properties'>('styles');
@@ -159,6 +163,22 @@ const SidebarProperties = memo(() => {
 
             {activeSection === 'styles' && <SectionStyles />}
             {activeSection === 'properties' && <SectionProperties />}
+            {/* {activeSection === 'logic' && <SectionLogic />} */}
+            {activeSection === 'logic' && <MyModal styles={{
+                    position: 'fixed',
+                    width: 'calc(100vw - 50px)',
+                    height: 'calc(100vh - 72px)', // trial and error; hard-coded to use below and not using other ref
+                    // backgroundColor: colorMode === 'dark' ? 'white' : 'black',
+                    // backgroundColor: 'black',
+                    // color: colorMode === 'dark' ? 'black' : 'white',
+                    // color: 'white',
+                    borderRadius: '5px',
+                    padding: '10px 5px',
+                    fontSize: 'small',
+                    // border: colorMode === 'dark' ? '1px solid grey' : '1px solid white',
+                    top: '0px',
+                    left: '0px'
+            }} children={<Logic changeToStyles={changeToStyles} />} />}
 
         </>
         }

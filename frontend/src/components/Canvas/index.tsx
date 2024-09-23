@@ -22,7 +22,11 @@ const Canvas = () => {
         [components]
     );
 
-    const scrollContainerRef = useRef(null);
+    interface ScrollContainerElement extends HTMLDivElement {
+        scrollTimeout?: number;
+    }
+    const scrollContainerRef = useRef<ScrollContainerElement | null>(null);
+
 
     useEffect(() => {
         // alternatively we could re-render while scrolling, 
@@ -31,25 +35,27 @@ const Canvas = () => {
             setIsCanvasScrolling(true)
             console.log('debb - SCROLLING START')
             // reset the scrolling state after a delay
-            clearTimeout(scrollContainerRef.current.scrollTimeout);
-            scrollContainerRef.current.scrollTimeout = setTimeout(() => {
-                setIsCanvasScrolling(false)
-                console.log('debb - SCROLLING END')
-            }, 150); // 150ms delay
-        };
+            clearTimeout(scrollContainerRef.current?.scrollTimeout);
+            if (scrollContainerRef.current) {
+                scrollContainerRef.current.scrollTimeout = setTimeout(() => {
+                    setIsCanvasScrolling(false)
+                    console.log('debb - SCROLLING END')
+                }, 150); // 150ms delay
+                }
+            };
 
-        const container = scrollContainerRef.current;
-        if (container) {
-            container.addEventListener('scroll', handleScroll);
-        }
-
-        // Cleanup event listener on component unmount
-        return () => {
+            const container = scrollContainerRef.current;
             if (container) {
-                container.removeEventListener('scroll', handleScroll);
+                container.addEventListener('scroll', handleScroll);
             }
-        };
-    }, []);
+
+            // Cleanup event listener on component unmount
+            return () => {
+                if (container) {
+                    container.removeEventListener('scroll', handleScroll);
+                }
+            };
+        }, []);
 
     return (
         // div to center canvas

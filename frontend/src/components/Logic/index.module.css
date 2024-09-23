@@ -1,0 +1,17 @@
+.wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    z-index: 1000;
+    background-color: rgba(0,0,0,0.5); 
+    z-index: 10; 
+}
+
+.functions {
+    width: 200px;
+}
+
+.function {
+    border: 1px solid rgb(102, 102, 102);
+}

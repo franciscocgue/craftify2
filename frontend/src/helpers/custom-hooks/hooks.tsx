@@ -4,6 +4,7 @@ import useDesignerStore from "../../stores/designer";
 import { isEqual } from "lodash";
 import { parseProperties } from "../utils";
 import { compTypes } from "../../config/components";
+import { Properties } from "../../vite-env";
 
 const useHover = (baseStyle: CSSProperties, hoverStyle: CSSProperties): [combinedStyle: CSSProperties, eventHandlers: { onMouseEnter: () => void, onMouseLeave: () => void }] => {
     const [isHovered, setIsHovered] = useState(false);
@@ -18,9 +19,14 @@ const useHover = (baseStyle: CSSProperties, hoverStyle: CSSProperties): [combine
     return [combinedStyle, eventHandlers];
 }
 
-const useWrapper = (componentId: string, componentType: keyof typeof compTypes, componentName: string, parentType: 'row' | 'column') => {
+const useWrapper = (componentId: string, componentType: keyof typeof compTypes, componentName: string, parentType: 'row' | 'column'): [
+    React.RefObject<HTMLDivElement & HTMLButtonElement>,
+    boolean,
+    Properties,
+    JSX.Element
+  ] => {
 
-    const ref = useRef(null);
+    const ref = useRef<HTMLDivElement & HTMLButtonElement>(null);
     const [renderer, setRerender] = useState(false);
     const otherProperties = useDesignerStore((state) => state.properties[componentId].values);
     const parsedProperties = parseProperties(otherProperties);
