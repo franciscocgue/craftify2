@@ -1,12 +1,10 @@
 import { useCallback, useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { FaCirclePlus } from 'react-icons/fa6';
-import { MdDeleteForever } from 'react-icons/md';
-import { IoRemoveCircle } from 'react-icons/io5';
 import { Popover } from 'react-tiny-popover';
 
 import styles from './CustomNode.module.css';
-import useDesignerStore from '../../stores/designer';
+// import useDesignerStore from '../../stores/designer';
 
 const handleStyle = { left: 10, backgroundColor: 'red' };
 
@@ -16,7 +14,7 @@ function CustomNode({ data, isConnectable, id }) {
     console.log(evt.target.value);
   }, []);
 
-  const colorMode = useDesignerStore((state) => state.colorMode);
+  // const colorMode = useDesignerStore((state) => state.colorMode);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   const handleClick = (event) => {
@@ -56,7 +54,7 @@ function CustomNode({ data, isConnectable, id }) {
           padding={10} // adjust padding here!
           reposition={true} // prevents automatic readjustment of content position that keeps your popover content within its parent's bounds
           onClickOutside={() => setIsPopoverOpen(false)} // handle click events outside of the popover/target here!
-          content={({ position, nudgedLeft, nudgedTop }) => ( // you can also provide a render function that injects some useful stuff!
+          content={() => ( // you can also provide a render function that injects some useful stuff!
             <div className={styles['popover-wrapper']}>
               <div className={styles['popover-header']}>
                 Navigation

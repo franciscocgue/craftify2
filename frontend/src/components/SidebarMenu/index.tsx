@@ -3,7 +3,7 @@ import { IoMdColorPalette } from "react-icons/io";
 import { LuFunctionSquare } from "react-icons/lu";
 import { MdDraw } from "react-icons/md";
 import useDesignerStore from "../../stores/designer";
-import IconButton from "../../helpers/components/IconButton";
+import IconButton from "../common/IconButton";
 
 const SidebarMenu = () => {
 

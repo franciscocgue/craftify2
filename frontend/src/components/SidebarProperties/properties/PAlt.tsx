@@ -1,4 +1,4 @@
-import MyPortal from "../../../helpers/MyPortal";
+import MyPortal from "../../helpers/MyPortal";
 import InputText from "../InputText";
 import styles from '../Property.module.css';
 

@@ -23,7 +23,7 @@ const PopoverAddNode = ({ nodeId }: PopoverAddNodeProps) => {
         padding={10} // adjust padding here!
         reposition={true} // prevents automatic readjustment of content position that keeps your popover content within its parent's bounds
         onClickOutside={() => setIsOpen(false)} // handle click events outside of the popover/target here!
-        content={({ position, nudgedLeft, nudgedTop }) => ( // you can also provide a render function that injects some useful stuff!
+        content={() => ( // you can also provide a render function that injects some useful stuff!
             <div className={styles['popover-wrapper']}>
                 <div className={styles['popover-header']}>
                     Navigation

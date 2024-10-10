@@ -1,4 +1,4 @@
-import DraggableCompPalette from "../../helpers/DraggableCompPalette";
+import DraggableCompPalette from "../helpers/DraggableCompPalette";
 import Component from "./Component";
 import { compTypes } from '../../config/components';
 import { Resizable } from "re-resizable";

@@ -4,8 +4,10 @@ import axios from "axios";
 import { useState } from "react";
 import QRCode from "react-qr-code";
 import { FaPlay } from "react-icons/fa6";
-import IconButton from "../../helpers/components/IconButton";
-import { ComponentCollection, Properties, Variables } from "../../vite-env";
+import IconButton from "../common/IconButton";
+import { Variables } from "../../types/variables";
+import { Properties } from "../../types/designer.types";
+import { ComponentCollection } from "../../types/designer.types";
 
 const handleButtonClick = async (components: ComponentCollection, properties: Properties, variables: Variables, setLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
 
@@ -15,12 +17,12 @@ const handleButtonClick = async (components: ComponentCollection, properties: Pr
         console.log(components)
         // const d = new Date();
         // let time = d.getTime();
-        const response = await axios.post('http://localhost:3000/start-new-server', {
+        await axios.post('http://localhost:3000/start-new-server', {
             port: 4000,
             data: { components, properties, variables }
         });
         var win = window.open('http://localhost:4000/', '_blank');
-        win.focus();
+        if (win !== null) { win.focus(); }
         // alert(response.data);
     } catch (error) {
         console.error('There was an error starting the new server:', error);

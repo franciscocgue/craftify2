@@ -1,41 +1,65 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { compProperties, compTypes } from '../config/components';
-import { draggableData, Properties, Variables } from '../vite-env';
-import { getChildrenNodes } from '../helpers/utils';
+import { Variables } from "../types/variables";
+import { ComponentCollectionProperties, Properties } from "../types/designer.types";
+import { ComponentCollection } from "../types/designer.types";
+import { CompNames } from "../types/designer.types";
+import { draggableData } from "../types/designer.types";
+import { getChildrenNodes } from "../utils";
 
 import components_ from '../../../backend/user-app/src/components.json';
 import properties_ from '../../../backend/user-app/src/properties.json';
 
-const initialNodes = [
-  // { id: '1', type: 'customNode', position: { x: 0, y: 0 }, data: { label: '1' } },
-  // { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
-  { id: '3', type: 'trigger', position: { x: 0, y: 200 }, data: { label: '3' }, style: { width: 100, height: 30 } },
-  // { id: '4', type: 'openUrl', position: { x: 0, y: 300 }, data: { label: '3' }, style: { width: 100, height: 30 } },
-];
-const initialEdges = [{ id: 'e1-2', source: '1', target: '2', type: 'smoothstep' }];
+// const initialNodes = [
+//   // { id: '1', type: 'customNode', position: { x: 0, y: 0 }, data: { label: '1' } },
+//   // { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
+//   { id: '3', type: 'trigger', position: { x: 0, y: 200 }, data: { label: '3' }, style: { width: 100, height: 30 } },
+//   // { id: '4', type: 'openUrl', position: { x: 0, y: 300 }, data: { label: '3' }, style: { width: 100, height: 30 } },
+// ];
+// const initialEdges = [{ id: 'e1-2', source: '1', target: '2', type: 'smoothstep' }];
 
-const initialComponents = {
-  'canvas': {
-    type: 'canvas',
-    parent: null,
-    children: [],
-    name: 'Canvas'
-  },
-}
+// const initialComponents = {
+//   'canvas': {
+//     type: 'canvas',
+//     parent: null,
+//     children: [],
+//     name: 'Canvas'
+//   },
+// }
 
-type keyValuePair = {
-  [key: string]: string
-};
 
-const compDuplicator = (comps, props, compsNames, compId: string, mapper: keyValuePair = {}, level: number = 0) => {
-  if (!Object.keys(mapper).includes(comps[compId].parent)) {
+/**
+ * Duplicates component and corresponding proeprties
+ *
+ * @param {ComponentCollection} comps - components
+ * @param {ComponentCollectionProperties} props - properties
+ * @param {} compsNames - component names
+ * @param {string} compId - component ID
+ * @param {Record<string, string>} mapper - mapper originalId:newId
+ * @param {number} level - nested level
+ *
+ * @example
+ * // Returns 5
+ * addNumbers(2, 3);
+ *
+ * @example
+ * // Returns 10
+ * addNumbers(7, 3);
+ */
+const compDuplicator = (comps:ComponentCollection, props:ComponentCollectionProperties, compsNames: CompNames, compId: string, mapper: Record<string, string> = {}, level: number = 0) => {
+  const parentId = comps[compId]?.parent;
+  if (!parentId) {
+    // if this happens, wrong compId --> unexisting component
+    return
+  }
+  if (!Object.keys(mapper).includes(parentId)) {
     if (level === 0) {
       // same parent
-      mapper[comps[compId].parent] = comps[compId].parent;
+      mapper[parentId] = parentId;
     } else {
       // new nested parent
-      mapper[comps[compId].parent] = crypto.randomUUID();
+      mapper[parentId] = crypto.randomUUID();
     }
   }
   if (!Object.keys(mapper).includes(compId)) {
@@ -50,22 +74,22 @@ const compDuplicator = (comps, props, compsNames, compId: string, mapper: keyVal
   // add component
   comps[mapper[compId]] = {
     type: comps[compId].type,
-    parent: mapper[comps[compId].parent],
+    parent: mapper[parentId],
     children: comps[compId].children.map(child => mapper[child]),
     name: `${compTypes[comps[compId].type as keyof typeof compTypes].name} ${compsNames[comps[compId].type].current + 1}`,
     // name: `${comps[compId].name} ${level + 1}`,
   }
 
   // add properties
-  props[mapper[compId]] = props[compId]
+  props[mapper[compId] as keyof Properties] = props[compId as keyof Properties]
 
   // update names
   compsNames[comps[mapper[compId]].type].current += 1;
 
   // add to parent
   if (level === 0) {
-    let insertAt = comps[comps[compId].parent].children.indexOf(compId) + 1;
-    comps[comps[compId].parent].children.splice(insertAt, 0, mapper[compId]);
+    let insertAt = comps[parentId].children.indexOf(compId) + 1;
+    comps[parentId].children.splice(insertAt, 0, mapper[compId]);
   }
 
   level += 1;
@@ -376,7 +400,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   removeComponent: (compId) => set((state) => {
     const comps = { ...state.components };
 
-    const getChildrenRecursive = (compId: string, childrenIds: string[], comps) => {
+    const getChildrenRecursive = (compId: string, childrenIds: string[], comps:ComponentCollection) => {
       for (let c of comps[compId].children) {
         childrenIds.push(c);
         getChildrenRecursive(c, childrenIds, comps)
@@ -390,9 +414,9 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
     // remove objects, and children
     const newComponents = Object.keys(comps)
       .filter(c => !compsToDelete.includes(c))
-      .reduce((obj, compId) => {
+      .reduce((obj:ComponentCollection, compId) => {
         let comp = comps[compId];
-        comp.children = comp.children.filter(cc => !compsToDelete.includes(cc));
+        comp.children = comp.children.filter((cc:string) => !compsToDelete.includes(cc));
         obj[compId] = comp;
         return obj;
       }, {});

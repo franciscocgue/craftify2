@@ -8,13 +8,13 @@ import { compTypes } from "../config/components";
 import useDesignerStore from "../stores/designer";
 import { ReactNode } from "react";
 import { LuMove } from "react-icons/lu";
-import { draggableData } from "../vite-env";
+import { draggableData } from "../types/designer.types";
 // import { renderNode } from "../helpers/ui-builder";
 import Canvas from "../components/Canvas";
 import style from './Designer.module.css';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { myPointerWithin } from "../helpers/dnd-kit/collisions";
+import { myPointerWithin } from '../utils';
 
 const Designer = () => {
 
@@ -40,7 +40,9 @@ const Designer = () => {
       moveComponent(draggable?.componentId, event.over.data.current?.componentId, event.over.data.current?.location)
     } else if (draggable?.type === 'palette-draggable' && event.over) {
       // add new component
-      addComponent(draggable?.componentType, event.over.data.current?.componentId, event.over.data.current?.location)
+      if (draggable?.componentType) {
+        addComponent(draggable?.componentType, event.over.data.current?.componentId, event.over.data.current?.location)
+      } // else error, missing componentType
     }
     setDraggable(null);
     document.body.style.cursor = 'auto'

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import PropertyGroupHeader from "../../helpers/components/PropertyGroupHeader";
+import PropertyGroupHeader from "../common/PropertyGroupHeader";
 import generalStyles from './Property.module.css';
 import styles from './Border.module.css';
 import InputSelect from "./InputSelect";
@@ -8,9 +8,9 @@ import { BsBorderWidth } from "react-icons/bs";
 import InputColor from "./InputColor";
 import { MdBorderColor, MdContentCopy } from "react-icons/md";
 import useDesignerStore from "../../stores/designer";
-import MyPortal from "../../helpers/MyPortal";
+import MyPortal from "../helpers/MyPortal";
 import InputText from "./InputText";
-import { isValidCssLengthBasicNoAuto } from "../../helpers/utils";
+import { isValidCssLengthBasicNoAuto } from "../../utils";
 import { BiBorderRadius } from "react-icons/bi";
 
 const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 'dark' | 'light', styles: CSSModuleClasses) => <MyPortal styles={{

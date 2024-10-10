@@ -15,7 +15,7 @@ import { CgScreen } from "react-icons/cg";
 import SectionStyles from "./SectionStyles";
 import SectionProperties from "./SectionProperties";
 import Logic from "../Logic";
-import MyModal from "../../helpers/MyModal";
+import MyModal from "../helpers/MyModal";
 
 
 interface IconBoxProps {

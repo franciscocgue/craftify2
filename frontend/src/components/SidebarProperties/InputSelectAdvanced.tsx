@@ -2,8 +2,8 @@ import { ReactElement, useCallback, useEffect, useState } from 'react';
 import generalStyles from './Property.module.css';
 import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
-import Select, { GetOptionLabel } from 'react-select'
-import MyIcon from '../../helpers/MyIcon';
+import Select from 'react-select'
+import MyIcon from '../common/MyIcon';
 
 type Option = {
     value: string;
@@ -25,7 +25,7 @@ const InputSelectAdvanced = ({ propertyDisplayName, propertyKey, options }: Inpu
 
     const [val, setVal] = useState({
         value: propValue,
-        label:  <div style={{ display: 'flex', alignItems: 'center', gap: '3px', flexWrap: 'nowrap' }}><span style={{ minWidth: '20px' }}><MyIcon nameIcon={propValue} propsIcon={{ size: 20, color: 'black' }} /></span> {propValue.slice(2)}</div>,
+        label: <div style={{ display: 'flex', alignItems: 'center', gap: '3px', flexWrap: 'nowrap' }}><span style={{ minWidth: '20px' }}><MyIcon nameIcon={propValue} propsIcon={{ size: 20, color: 'black' }} /></span> {propValue.slice(2)}</div>,
     });
     const [inputValue, setInputValue] = useState('');
 
@@ -42,14 +42,14 @@ const InputSelectAdvanced = ({ propertyDisplayName, propertyKey, options }: Inpu
 
     const handleDebounceFn = (selectedId: string, value: string) => {
         if (value === '') {
-            const props = propertyKey.reduce((acc, key) => {
+            const props = propertyKey.reduce((acc: { [key: string]: undefined }, key) => {
                 acc[key] = undefined;
                 return acc;
             }, {});
             updateProperty(selectedId as string, props, {});
         }
         else {
-            const props = propertyKey.reduce((acc, key) => {
+            const props = propertyKey.reduce((acc: { [key: string]: string }, key) => {
                 acc[key] = value;
                 return acc;
             }, {});
@@ -78,7 +78,7 @@ const InputSelectAdvanced = ({ propertyDisplayName, propertyKey, options }: Inpu
             // return `No results for "${inputValue}"`;
             return `No results found`;
         }
-      };
+    };
 
     return (
         <div className={`${generalStyles['property']} ${generalStyles['no-help']}`}>

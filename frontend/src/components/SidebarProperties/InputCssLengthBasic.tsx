@@ -3,7 +3,7 @@ import generalStyles from './Property.module.css';
 import styles from './InputText.module.css';
 import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
-import { isValidCssLengthBasic } from '../../helpers/utils';
+import { isValidCssLengthBasic } from "../../utils";
 import { MdHelpCenter } from 'react-icons/md';
 
 
@@ -30,7 +30,7 @@ const InputTextBasic = ({ propertyDisplayName, propertyKey, tooltipContent }: In
     const [val, setVal] = useState(propValue);
     const [isWrongInput, setIsWrongInput] = useState(false);
     const [tooltipVisible, setTooltipVisible] = useState(false);
-    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+    const [timeoutId, setTimeoutId] = useState<number | null>(null);
 
     const handleDebounceFn = (selectedId: string, value: string) => {
         if (value === '') {

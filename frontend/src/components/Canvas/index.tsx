@@ -1,5 +1,5 @@
 import useDesignerStore from "../../stores/designer";
-import { renderNode } from "../../helpers/ui-builder";
+import { renderNode } from "../../utils";
 import { useEffect, useMemo, useRef } from "react";
 
 
@@ -41,21 +41,21 @@ const Canvas = () => {
                     setIsCanvasScrolling(false)
                     console.log('debb - SCROLLING END')
                 }, 150); // 150ms delay
-                }
-            };
-
-            const container = scrollContainerRef.current;
-            if (container) {
-                container.addEventListener('scroll', handleScroll);
             }
+        };
 
-            // Cleanup event listener on component unmount
-            return () => {
-                if (container) {
-                    container.removeEventListener('scroll', handleScroll);
-                }
-            };
-        }, []);
+        const container = scrollContainerRef.current;
+        if (container) {
+            container.addEventListener('scroll', handleScroll, { capture: true });
+        }
+
+        // Cleanup event listener on component unmount
+        return () => {
+            if (container) {
+                container.removeEventListener('scroll', handleScroll, { capture: true });
+            }
+        };
+    }, []);
 
     return (
         // div to center canvas
@@ -82,10 +82,12 @@ const Canvas = () => {
                     border: '1px solid grey',
                     overflowY: 'auto',
                     overflowX: 'auto',
-                    minWidth: `${properties.canvasWidthPx}px`,
+                    // minWidth: `${properties.canvasWidthPx}px`,
+                    minWidth: window.innerWidth - 605 > properties.canvasWidthPx ? `${properties.canvasWidthPx}px` : `calc(100vw - 605px)`,
                     margin: '0 auto',
                     minHeight: `min(calc(100%), ${properties.canvasHeightPx}px)`,
-                    maxWidth: `${properties.canvasWidthPx}px`,
+                    // maxWidth: `${properties.canvasWidthPx}px`,
+                    maxWidth:  window.innerWidth - 605 > properties.canvasWidthPx ? `${properties.canvasWidthPx}px` : `calc(100vw - 605px)`,
                     // maxHeight causes issue and comps do not respect height and shrink to minHeight
                     maxHeight: `${properties.canvasHeightPx}px`,
                 }}>

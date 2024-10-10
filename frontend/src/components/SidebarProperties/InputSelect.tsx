@@ -32,14 +32,14 @@ const InputSelect = ({ propertyDisplayName, propertyKey, options }: InputSelectP
 
     const handleDebounceFn = (selectedId: string, value: string) => {
         if (value === '') {
-            const props = propertyKey.reduce((acc, key) => {
+            const props = propertyKey.reduce((acc: Record<string, undefined>, key) => {
                 acc[key] = undefined;
                 return acc;
             }, {});
             updateProperty(selectedId as string, props, {});
         }
         else {
-            const props = propertyKey.reduce((acc, key) => {
+            const props = propertyKey.reduce((acc: Record<string, string>, key) => {
                 acc[key] = value;
                 return acc;
             }, {});

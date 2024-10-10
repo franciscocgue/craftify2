@@ -1,13 +1,14 @@
 import { Provider } from 'rc-motion';
 import Tree from 'rc-tree';
 import React, { useMemo } from 'react';
-import { getComponentsAsTree } from '../../helpers/tree-builder';
+import { getComponentsAsTree } from '../../utils';
 import useDesignerStore from '../../stores/designer';
 import useResizeObserver from "use-resize-observer";
 import { IoMdArrowDropdown, IoMdArrowDropright } from "react-icons/io";
 import './ComponentTree.less';
-import { treeAsHtml } from '../../helpers/tree-builder';
-import { useDebouncedMouseEnter } from '../../helpers/utils';
+import { treeAsHtml } from '../../utils';
+import { useDebouncedMouseEnter } from "../../hooks";
+import { DataNode } from 'rc-tree/lib/interface';
 
 
 const STYLE = `
@@ -27,14 +28,14 @@ const motion = {
   motionName: 'node-motion',
   motionAppear: false,
   onAppearStart: () => ({ height: 0 }),
-  onAppearActive: (node:any) => ({ height: node.scrollHeight }),
-  onLeaveStart: (node:any) => ({ height: node.offsetHeight }),
+  onAppearActive: (node: any) => ({ height: node.scrollHeight }),
+  onLeaveStart: (node: any) => ({ height: node.offsetHeight }),
   onLeaveActive: () => ({ height: 0 }),
 };
 
 
 const ComponentTree = () => {
-  const treeRef = React.useRef();
+  const treeRef = React.useRef<Tree<DataNode>>(null);
   // const [enableMotion, setEnableMotion] = React.useState(true);
 
   const { ref, width, height } = useResizeObserver();
@@ -66,11 +67,11 @@ const ComponentTree = () => {
   //   // )
   // );
 
-  
+
   // const [localHoveredId, setLocalHoveredId] = useState(false);
 
   const { handleMouseEnter, handleMouseLeave } = useDebouncedMouseEnter(setHoveredId)
-  
+
   console.log('Tree rc-tree')
 
   // console.log([localHoveredId ? '' : hoveredId, selectedId])
@@ -131,7 +132,7 @@ const ComponentTree = () => {
                 // if hovering tree comp, do not highlight (there was a reason ...)
                 // if clicked (selected) --> highlight; clicking again unselects
                 // hoveredId is true if comp hovered in canvas --> highlight after debounce time
-                selectedKeys={[hoveredId]}
+                selectedKeys={hoveredId ? [hoveredId] : []}
                 switcherIcon={(props) => {
                   return <>{props.isLeaf ? null : props.expanded ? <IoMdArrowDropdown /> : <IoMdArrowDropright />}</>
                 }}

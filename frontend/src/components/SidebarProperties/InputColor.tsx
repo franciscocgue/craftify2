@@ -4,7 +4,7 @@ import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
 import { HexColorPicker } from "react-colorful";
 import './InputColor.css';
-import { isValidHexColor } from '../../helpers/utils';
+import { isValidHexColor } from "../../utils";
 
 
 type InputColorProps = {
@@ -32,7 +32,7 @@ const InputColor = ({ propertyDisplayName, propertyKey }: InputColorProps) => {
 
     const handleDebounceFn = (selectedId: string, value: string) => {
         if (value === '') {
-            const props = propertyKey.reduce((acc, key) => {
+            const props = propertyKey.reduce((acc: Record<string, undefined>, key) => {
                 acc[key] = undefined;
                 return acc;
             }, {});
@@ -40,7 +40,7 @@ const InputColor = ({ propertyDisplayName, propertyKey }: InputColorProps) => {
             setIsWrongInput(false);
         }
         else if (isValidHexColor(value) || CSS.supports('color', value)) {
-            const props = propertyKey.reduce((acc, key) => {
+            const props = propertyKey.reduce((acc: Record<string, string>, key) => {
                 acc[key] = value;
                 return acc;
             }, {});

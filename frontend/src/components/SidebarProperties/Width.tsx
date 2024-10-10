@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import PropertyGroupHeader from "../../helpers/components/PropertyGroupHeader";
+import PropertyGroupHeader from "../common/PropertyGroupHeader";
 import styles from './Property.module.css';
 import InputText from "./InputText";
 import { RxWidth } from "react-icons/rx";
-import MyPortal from "../../helpers/MyPortal";
-import { isValidCssLength } from "../../helpers/utils";
+import MyPortal from "../helpers/MyPortal";
+import { isValidCssLength } from "../../utils";
 import useDesignerStore from "../../stores/designer";
 
 const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 'dark' | 'light', styles: CSSModuleClasses) => <MyPortal styles={{

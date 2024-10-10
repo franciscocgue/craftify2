@@ -6,7 +6,7 @@ import { IoMdCheckboxOutline } from "react-icons/io";
 import { IoImageOutline } from "react-icons/io5";
 import { IoMdLink } from "react-icons/io";
 import { CgPlayButtonR } from "react-icons/cg";
-import { Properties } from "../vite-env";
+import { Properties } from "../types/designer.types";
 
 import Layout from "../components/SidebarProperties/Layout";
 import Width from "../components/SidebarProperties/Width";
@@ -155,8 +155,8 @@ const compProperties: ComponentProperties = {
     'canvas': {
         interfaceProps: {},
         values: {
-            canvasWidthPx: 360,
-            canvasHeightPx: 760,
+            canvasWidthPx: '360',
+            canvasHeightPx: '760',
             // minHeight: '760',
             display: 'flex', // not editable
             flexDirection: 'column', // not editable
@@ -207,7 +207,7 @@ const compProperties: ComponentProperties = {
             backgroundRepeat: 'repeat',
             backgroundPosition: 'center',
             backgroundAttachment: 'scroll',
-            overflow: 'scroll',
+            overflow: 'auto',
             borderRadius: '0px',
             borderTopStyle: 'none',
             borderTopWidth: 'thin',

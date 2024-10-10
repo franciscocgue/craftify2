@@ -1,7 +1,7 @@
-import MyPortal from "../../../helpers/MyPortal";
+import MyPortal from "../../helpers/MyPortal";
 import InputText from "../InputText";
 import styles from '../Property.module.css';
-import { isValidPositiveNumber } from "../../../helpers/utils";
+import { isValidPositiveNumber } from "../../../utils";
 
 const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 'dark' | 'light', styles: CSSModuleClasses) => <MyPortal styles={{
     position: 'absolute',

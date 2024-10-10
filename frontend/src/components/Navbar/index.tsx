@@ -1,7 +1,7 @@
 import { MdDarkMode } from "react-icons/md";
 import { MdSunny } from "react-icons/md";
 import useDesignerStore from "../../stores/designer";
-import IconButton from "../../helpers/components/IconButton";
+import IconButton from "../common/IconButton";
 import PreviewButton from "./PreviewButton";
 import { MdOutlineDesktopWindows } from "react-icons/md";
 import { MdPhoneAndroid } from "react-icons/md";

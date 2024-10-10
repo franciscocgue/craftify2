@@ -18,8 +18,8 @@ import useDesignerStore from '../../stores/designer';
 import CustomNode from './CustomNode';
 import { FaWindowClose } from "react-icons/fa";
 import Trigger from './nodes/Trigger';
-import { size } from 'lodash';
-import Width from '../SidebarProperties/Width';
+// import { size } from 'lodash';
+// import Width from '../SidebarProperties/Width';
 import OpenUrl from './nodes/OpenUrl';
 
 // import { DndContext, DragEndEvent, DragOverlay } from '@dnd-kit/core';
@@ -69,7 +69,7 @@ const Logic = ({ changeToStyles }) => {
 
     const colorMode = useDesignerStore((state) => state.colorMode);
 
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+    const [nodes, _, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
     const onConnect = useCallback(
