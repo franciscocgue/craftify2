@@ -13,14 +13,12 @@ export type draggableData = {
 export type CompNames = Record<keyof typeof compTypes, { current: number; }>;
 
 export interface Component {
-    type: keyof typeof compTypes;
+    type: keyof typeof compTypes | 'canvas';
     parent: string | null;
     children: string[];
     name: string;
 }
-export interface ComponentCollection {
-    [key: string]: Component;
-}
+export type ComponentCollection = Record<string, Component>
 
 // React UI Components Props (Button, Text, Link, etc.)
 export interface UiComponentProps {
