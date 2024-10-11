@@ -14,7 +14,7 @@ import CanvasComponentTooltip from "./CanvasComponentTooltip";
 
 interface WrapperContainerProps {
     componentId: string,
-    componentType: keyof typeof compTypes,
+    componentType: keyof typeof compTypes | 'canvas',
     componentName: string,
     parentType: 'column' | 'row',
     // otherProperties?: Properties,
@@ -41,7 +41,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
     const toggleSelectedId = useDesignerStore((state) => state.toggleSelectedId);
     const components = useDesignerStore((state) => state.components);
     const colorMode = useDesignerStore((state) => state.colorMode);
-    const otherProperties = useDesignerStore((state) => state.properties[props.componentId].values);
+    const otherProperties = useDesignerStore((state) => state.properties[props.componentId]);
     const parsedProperties = parseProperties(otherProperties);
     const [_, setRerender] = useState(false);
 

@@ -4,6 +4,7 @@ import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
 import Select from 'react-select'
 import MyIcon from '../common/MyIcon';
+import { Properties } from '../../types/designer.types';
 
 type Option = {
     value: string;
@@ -21,11 +22,11 @@ const InputSelectAdvanced = ({ propertyDisplayName, propertyKey, options }: Inpu
     const selectedId = useDesignerStore(state => state.selectedId);
     const updateProperty = useDesignerStore(state => state.updateProperty);
     // Getting non-reactive fresh state
-    const propValue = useDesignerStore.getState().properties[selectedId as string]?.values[propertyKey[0]];
+    const propValue = useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0] as keyof Properties];
 
     const [val, setVal] = useState({
         value: propValue,
-        label: <div style={{ display: 'flex', alignItems: 'center', gap: '3px', flexWrap: 'nowrap' }}><span style={{ minWidth: '20px' }}><MyIcon nameIcon={propValue} propsIcon={{ size: 20, color: 'black' }} /></span> {propValue.slice(2)}</div>,
+        label: <div style={{ display: 'flex', alignItems: 'center', gap: '3px', flexWrap: 'nowrap' }}><span style={{ minWidth: '20px' }}><MyIcon nameIcon={propValue ??  '__'} propsIcon={{ size: 20, color: 'black' }} /></span> {propValue?.slice(2)}</div>,
     });
     const [inputValue, setInputValue] = useState('');
 
@@ -33,9 +34,9 @@ const InputSelectAdvanced = ({ propertyDisplayName, propertyKey, options }: Inpu
     useEffect(() => {
         if (selectedId) {
             setVal({
-                value: useDesignerStore.getState().properties[selectedId as string]?.values[propertyKey[0]],
-                label: <div style={{ display: 'flex', alignItems: 'center', gap: '3px', flexWrap: 'nowrap' }}><span style={{ minWidth: '20px' }}><MyIcon nameIcon={useDesignerStore.getState().properties[selectedId as string]?.values[propertyKey[0]]} propsIcon={{ size: 20, color: 'black' }} /></span> {useDesignerStore.getState().properties[selectedId as string]?.values[propertyKey[0]].slice(2)}</div>,
-                // label: useDesignerStore.getState().properties[selectedId as string]?.values[propertyKey[0]],
+                value: useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0] as keyof Properties],
+                label: <div style={{ display: 'flex', alignItems: 'center', gap: '3px', flexWrap: 'nowrap' }}><span style={{ minWidth: '20px' }}><MyIcon nameIcon={useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0] as keyof Properties] ?? '__'} propsIcon={{ size: 20, color: 'black' }} /></span> {useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0] as keyof Properties]?.slice(2)}</div>,
+                // label: useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0]],
             })
         }
     }, [selectedId])
@@ -46,14 +47,14 @@ const InputSelectAdvanced = ({ propertyDisplayName, propertyKey, options }: Inpu
                 acc[key] = undefined;
                 return acc;
             }, {});
-            updateProperty(selectedId as string, props, {});
+            updateProperty(selectedId as string, props);
         }
         else {
             const props = propertyKey.reduce((acc: { [key: string]: string }, key) => {
                 acc[key] = value;
                 return acc;
             }, {});
-            updateProperty(selectedId as string, props, {});
+            updateProperty(selectedId as string, props);
         }
     }
     const debounceFn = useCallback(debounce(handleDebounceFn, 100), []);

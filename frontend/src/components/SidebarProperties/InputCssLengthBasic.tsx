@@ -5,6 +5,7 @@ import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
 import { isValidCssLengthBasic } from "../../utils";
 import { MdHelpCenter } from 'react-icons/md';
+import { Properties } from '../../types/designer.types';
 
 
 type InputTextBasicProps = {
@@ -23,7 +24,7 @@ const InputTextBasic = ({ propertyDisplayName, propertyKey, tooltipContent }: In
     const selectedId = useDesignerStore(state => state.selectedId);
     const updateProperty = useDesignerStore(state => state.updateProperty);
     // Getting non-reactive fresh state
-    const propValue = useDesignerStore.getState().properties[selectedId as string]?.values[propertyKey];
+    const propValue = useDesignerStore.getState().properties[selectedId as string]?.[propertyKey as keyof Properties];
 
     const ref = useRef<HTMLDivElement | null>(null);
 
@@ -34,11 +35,11 @@ const InputTextBasic = ({ propertyDisplayName, propertyKey, tooltipContent }: In
 
     const handleDebounceFn = (selectedId: string, value: string) => {
         if (value === '') {
-            updateProperty(selectedId as string, { [propertyKey]: undefined }, {});
+            updateProperty(selectedId as string, { [propertyKey]: undefined });
             setIsWrongInput(false);
         }
         else if (isValidCssLengthBasic(value)) {
-            updateProperty(selectedId as string, { [propertyKey]: value }, {});
+            updateProperty(selectedId as string, { [propertyKey]: value });
             setIsWrongInput(false);
         } else {
             setIsWrongInput(true);

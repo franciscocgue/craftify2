@@ -55,24 +55,24 @@ const Border = () => {
     const expandAllProperties = useDesignerStore(state => state.expandAllProperties);
     const updateProperty = useDesignerStore(state => state.updateProperty);
     // // Getting non-reactive fresh state
-    // const borderTopColor = useDesignerStore.getState().properties[selectedId as string]?.values['borderTopColor'];
-    // const borderTopWidth = useDesignerStore.getState().properties[selectedId as string]?.values['borderTopWidth'];
-    // const borderTopStyle = useDesignerStore.getState().properties[selectedId as string]?.values['borderTopStyle'];
+    // const borderTopColor = useDesignerStore.getState().properties[selectedId as string]?.['borderTopColor'];
+    // const borderTopWidth = useDesignerStore.getState().properties[selectedId as string]?.['borderTopWidth'];
+    // const borderTopStyle = useDesignerStore.getState().properties[selectedId as string]?.['borderTopStyle'];
 
     const [forceRender, setForceRender] = useState(false);
 
     const onCopyTopToAllSides = () => {
         updateProperty(selectedId as string, {
-            borderRightColor: useDesignerStore.getState().properties[selectedId as string]?.values['borderTopColor'],
-            borderRightWidth: useDesignerStore.getState().properties[selectedId as string]?.values['borderTopWidth'],
-            borderRightStyle: useDesignerStore.getState().properties[selectedId as string]?.values['borderTopStyle'],
-            borderBottomColor: useDesignerStore.getState().properties[selectedId as string]?.values['borderTopColor'],
-            borderBottomWidth: useDesignerStore.getState().properties[selectedId as string]?.values['borderTopWidth'],
-            borderBottomStyle: useDesignerStore.getState().properties[selectedId as string]?.values['borderTopStyle'],
-            borderLeftColor: useDesignerStore.getState().properties[selectedId as string]?.values['borderTopColor'],
-            borderLeftWidth: useDesignerStore.getState().properties[selectedId as string]?.values['borderTopWidth'],
-            borderLeftStyle: useDesignerStore.getState().properties[selectedId as string]?.values['borderTopStyle'],
-        }, {});
+            borderRightColor: useDesignerStore.getState().properties[selectedId as string]?.['borderTopColor'],
+            borderRightWidth: useDesignerStore.getState().properties[selectedId as string]?.['borderTopWidth'],
+            borderRightStyle: useDesignerStore.getState().properties[selectedId as string]?.['borderTopStyle'],
+            borderBottomColor: useDesignerStore.getState().properties[selectedId as string]?.['borderTopColor'],
+            borderBottomWidth: useDesignerStore.getState().properties[selectedId as string]?.['borderTopWidth'],
+            borderBottomStyle: useDesignerStore.getState().properties[selectedId as string]?.['borderTopStyle'],
+            borderLeftColor: useDesignerStore.getState().properties[selectedId as string]?.['borderTopColor'],
+            borderLeftWidth: useDesignerStore.getState().properties[selectedId as string]?.['borderTopWidth'],
+            borderLeftStyle: useDesignerStore.getState().properties[selectedId as string]?.['borderTopStyle'],
+        });
         setForceRender(prev => !prev);
     }
 

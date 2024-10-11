@@ -16,7 +16,7 @@ import WrapperComponent from "../components/helpers/WrapperComponent";
  */
 const useWrapper = (
     componentId: string,
-    componentType: keyof typeof compTypes,
+    componentType: keyof typeof compTypes | 'canvas',
     componentName: string,
     parentType: 'row' | 'column'
 ): [
@@ -28,7 +28,7 @@ const useWrapper = (
 
     const ref = useRef(null);
     const [renderer, setRerender] = useState(false);
-    const otherProperties = useDesignerStore((state) => state.properties[componentId].values);
+    const otherProperties = useDesignerStore((state) => state.properties[componentId]);
     const parsedProperties = parseProperties(otherProperties);
 
     // subscribe to external changes to re-render

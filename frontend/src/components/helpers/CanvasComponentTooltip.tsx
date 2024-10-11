@@ -20,7 +20,7 @@ const IconBox: React.FC<IconBoxProps> = ({ icon: Icon }) => {
  * Creates a tooltip for canvas components with component info (name, type) 
  * and with duplicate, delete, move functionality.
  */
-const CanvasComponentTooltip = (name: string, componentType: keyof typeof compTypes, colorMode: 'dark' | 'light', componentId: string, removeComponent: (compId: string) => void, duplicateComponent: (compId: string) => void) => {
+const CanvasComponentTooltip = (name: string, componentType: keyof typeof compTypes | 'canvas', colorMode: 'dark' | 'light', componentId: string, removeComponent: (compId: string) => void, duplicateComponent: (compId: string) => void) => {
 
     const notify = {
         deleted: (msg: string) => toast(msg, { type: 'info', autoClose: 1500, position: 'bottom-right' }),
@@ -63,7 +63,7 @@ const CanvasComponentTooltip = (name: string, componentType: keyof typeof compTy
             }}
         />
         {name || componentType}
-        <IconBox icon={compTypes[componentType].icon} />
+        <IconBox icon={compTypes[componentType !== 'canvas' ? componentType : 'column'].icon} />
     </div>)
 }
 

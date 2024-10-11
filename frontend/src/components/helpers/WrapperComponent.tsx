@@ -13,7 +13,7 @@ import CanvasComponentTooltip from "./CanvasComponentTooltip";
 
 interface WrapperComponentProps {
     componentId: string,
-    componentType: keyof typeof compTypes,
+    componentType: keyof typeof compTypes | 'canvas',
     componentName: string,
     parentType: 'column' | 'row',
     otherProperties?: Properties,

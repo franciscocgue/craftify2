@@ -5,6 +5,7 @@ import { debounce } from 'lodash';
 import { HexColorPicker } from "react-colorful";
 import './InputColor.css';
 import { isValidHexColor } from "../../utils";
+import { Properties } from '../../types/designer.types';
 
 
 type InputColorProps = {
@@ -17,7 +18,7 @@ const InputColor = ({ propertyDisplayName, propertyKey }: InputColorProps) => {
     const selectedId = useDesignerStore(state => state.selectedId);
     const updateProperty = useDesignerStore(state => state.updateProperty);
     // Getting non-reactive fresh state
-    const propValue = useDesignerStore.getState().properties[selectedId as string]?.values[propertyKey[0]];
+    const propValue = useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0] as keyof Properties];
 
     const [val, setVal] = useState(propValue ? propValue : undefined);
     const [isPickerVisible, setIsPickerVisible] = useState(false);
@@ -26,7 +27,7 @@ const InputColor = ({ propertyDisplayName, propertyKey }: InputColorProps) => {
     // update shown value on component changed
     useEffect(() => {
         if (selectedId) {
-            setVal(useDesignerStore.getState().properties[selectedId as string]?.values[propertyKey[0]])
+            setVal(useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0] as keyof Properties])
         }
     }, [selectedId])
 
@@ -36,7 +37,7 @@ const InputColor = ({ propertyDisplayName, propertyKey }: InputColorProps) => {
                 acc[key] = undefined;
                 return acc;
             }, {});
-            updateProperty(selectedId as string, props, {});
+            updateProperty(selectedId as string, props);
             setIsWrongInput(false);
         }
         else if (isValidHexColor(value) || CSS.supports('color', value)) {
@@ -44,7 +45,7 @@ const InputColor = ({ propertyDisplayName, propertyKey }: InputColorProps) => {
                 acc[key] = value;
                 return acc;
             }, {});
-            updateProperty(selectedId as string, props, {});
+            updateProperty(selectedId as string, props);
             setIsWrongInput(false);
         } else {
             setIsWrongInput(true);

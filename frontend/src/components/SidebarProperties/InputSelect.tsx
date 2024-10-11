@@ -2,6 +2,7 @@ import { ReactElement, useCallback, useEffect, useState } from 'react';
 import generalStyles from './Property.module.css';
 import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
+import { Properties } from '../../types/designer.types';
 
 type Option = {
     value: string;
@@ -19,14 +20,14 @@ const InputSelect = ({ propertyDisplayName, propertyKey, options }: InputSelectP
     const selectedId = useDesignerStore(state => state.selectedId);
     const updateProperty = useDesignerStore(state => state.updateProperty);
     // Getting non-reactive fresh state
-    const propValue = useDesignerStore.getState().properties[selectedId as string]?.values[propertyKey[0]];
+    const propValue = useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0] as keyof Properties];
 
     const [val, setVal] = useState(propValue);
 
     // update shown value on component changed
     useEffect(() => {
         if (selectedId) {
-            setVal(useDesignerStore.getState().properties[selectedId as string]?.values[propertyKey[0]])
+            setVal(useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0] as keyof Properties])
         }
     }, [selectedId])
 
@@ -36,14 +37,14 @@ const InputSelect = ({ propertyDisplayName, propertyKey, options }: InputSelectP
                 acc[key] = undefined;
                 return acc;
             }, {});
-            updateProperty(selectedId as string, props, {});
+            updateProperty(selectedId as string, props);
         }
         else {
             const props = propertyKey.reduce((acc: Record<string, string>, key) => {
                 acc[key] = value;
                 return acc;
             }, {});
-            updateProperty(selectedId as string, props, {});
+            updateProperty(selectedId as string, props);
         }
     }
     const debounceFn = useCallback(debounce(handleDebounceFn, 100), []);

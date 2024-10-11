@@ -4,6 +4,7 @@ import styles from './InputText.module.css';
 import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
 import { MdHelpCenter } from 'react-icons/md';
+import { Properties } from '../../types/designer.types';
 
 
 type InputTextProps = {
@@ -23,7 +24,7 @@ const InputText = ({ propertyDisplayName, propertyKey, tooltipContent, isValidIn
     const selectedId = useDesignerStore(state => state.selectedId);
     const updateProperty = useDesignerStore(state => state.updateProperty);
     // Getting non-reactive fresh state
-    const propValue = useDesignerStore.getState().properties[selectedId as string]?.values[propertyKey];
+    const propValue = useDesignerStore.getState().properties[selectedId as string]?.[propertyKey as keyof Properties];
 
     const ref = useRef<HTMLDivElement | null>(null);
 
@@ -35,17 +36,17 @@ const InputText = ({ propertyDisplayName, propertyKey, tooltipContent, isValidIn
     // update shown value on component changed
     useEffect(() => {
         if (selectedId) {
-            setVal(useDesignerStore.getState().properties[selectedId as string]?.values[propertyKey])
+            setVal(useDesignerStore.getState().properties[selectedId as string]?.[propertyKey as keyof Properties])
         }
     }, [selectedId])
 
     const handleDebounceFn = (selectedId: string, value: string) => {
         if (value === '') {
-            updateProperty(selectedId as string, { [propertyKey]: undefined }, {});
+            updateProperty(selectedId as string, { [propertyKey]: undefined });
             setIsWrongInput(false);
         }
         else if (isValidInput(value)) {
-            updateProperty(selectedId as string, { [propertyKey]: value }, {});
+            updateProperty(selectedId as string, { [propertyKey]: value });
             setIsWrongInput(false);
         } else {
             setIsWrongInput(true);

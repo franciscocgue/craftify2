@@ -9,7 +9,7 @@ const Canvas = () => {
 
 
     const components = useDesignerStore((state) => state.components);
-    const properties = useDesignerStore((state) => state.properties['canvas'].values);
+    const properties = useDesignerStore((state) => state.properties['canvas']);
     const setIsCanvasScrolling = useDesignerStore((state) => state.setIsCanvasScrolling);
 
     const comps = useMemo(
@@ -83,11 +83,11 @@ const Canvas = () => {
                     overflowY: 'auto',
                     overflowX: 'auto',
                     // minWidth: `${properties.canvasWidthPx}px`,
-                    minWidth: window.innerWidth - 605 > properties.canvasWidthPx ? `${properties.canvasWidthPx}px` : `calc(100vw - 605px)`,
+                    minWidth: window.innerWidth - 605 > Number(properties.canvasWidthPx) ? `${properties.canvasWidthPx}px` : `calc(100vw - 605px)`,
                     margin: '0 auto',
                     minHeight: `min(calc(100%), ${properties.canvasHeightPx}px)`,
                     // maxWidth: `${properties.canvasWidthPx}px`,
-                    maxWidth:  window.innerWidth - 605 > properties.canvasWidthPx ? `${properties.canvasWidthPx}px` : `calc(100vw - 605px)`,
+                    maxWidth:  window.innerWidth - 605 > Number(properties.canvasWidthPx) ? `${properties.canvasWidthPx}px` : `calc(100vw - 605px)`,
                     // maxHeight causes issue and comps do not respect height and shrink to minHeight
                     maxHeight: `${properties.canvasHeightPx}px`,
                 }}>

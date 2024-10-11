@@ -11,6 +11,26 @@ import { getChildrenNodes } from "../utils";
 import components_ from '../../../backend/user-app/src/components.json';
 import properties_ from '../../../backend/user-app/src/properties.json';
 
+// initialize component counter for names
+const componentNamesInitial = Object.keys(compTypes).reduce((acc, compType) => {
+  acc[compType as keyof typeof compTypes] = { current: 0 };
+  return acc;
+}, {} as CompNames);
+
+// initialize components
+// const initialComponents: ComponentCollection = {
+//   'canvas': {
+//     type: 'canvas',
+//     parent: null,
+//     children: [],
+//     name: 'Canvas'
+//   },
+// }
+// initialize component properties
+// const initialProperties: ComponentCollectionProperties = { canvas: compProperties['canvas'] };
+const initialComponents: ComponentCollection = components_ as ComponentCollection;
+const initialProperties: ComponentCollectionProperties = properties_ as ComponentCollectionProperties;
+
 // const initialNodes = [
 //   // { id: '1', type: 'customNode', position: { x: 0, y: 0 }, data: { label: '1' } },
 //   // { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
@@ -19,14 +39,6 @@ import properties_ from '../../../backend/user-app/src/properties.json';
 // ];
 // const initialEdges = [{ id: 'e1-2', source: '1', target: '2', type: 'smoothstep' }];
 
-// const initialComponents = {
-//   'canvas': {
-//     type: 'canvas',
-//     parent: null,
-//     children: [],
-//     name: 'Canvas'
-//   },
-// }
 
 
 /**
@@ -47,7 +59,7 @@ import properties_ from '../../../backend/user-app/src/properties.json';
  * // Returns 10
  * addNumbers(7, 3);
  */
-const compDuplicator = (comps:ComponentCollection, props:ComponentCollectionProperties, compsNames: CompNames, compId: string, mapper: Record<string, string> = {}, level: number = 0) => {
+const compDuplicator = (comps: ComponentCollection, props: ComponentCollectionProperties, compsNames: CompNames, compId: string, mapper: Record<string, string> = {}, level: number = 0) => {
   const parentId = comps[compId]?.parent;
   if (!parentId) {
     // if this happens, wrong compId --> unexisting component
@@ -76,15 +88,15 @@ const compDuplicator = (comps:ComponentCollection, props:ComponentCollectionProp
     type: comps[compId].type,
     parent: mapper[parentId],
     children: comps[compId].children.map(child => mapper[child]),
-    name: `${compTypes[comps[compId].type as keyof typeof compTypes].name} ${compsNames[comps[compId].type].current + 1}`,
+    name: `${compTypes[comps[compId].type as keyof typeof compTypes].name} ${compsNames[comps[compId].type as keyof CompNames].current + 1}`,
     // name: `${comps[compId].name} ${level + 1}`,
   }
 
   // add properties
-  props[mapper[compId] as keyof Properties] = props[compId as keyof Properties]
+  props[mapper[compId] as keyof Properties] = props[compId as keyof Properties];
 
   // update names
-  compsNames[comps[mapper[compId]].type].current += 1;
+  compsNames[comps[mapper[compId]].type as keyof CompNames].current += 1;
 
   // add to parent
   if (level === 0) {
@@ -159,10 +171,10 @@ type designerStore = {
   selectedId: string | null,
   hoveredId: string | null,
   isCanvasScrolling: boolean,
-  components: any,
-  properties: any,
+  components: ComponentCollection,
+  properties: ComponentCollectionProperties,
   variables: Variables,
-  componentNames: any,
+  componentNames: CompNames,
   expandAllProperties: boolean | null,
   // componentIds of component whose properties were updated last
   lastUpdatedCompChildren: string[],
@@ -206,8 +218,7 @@ type designerStore = {
   duplicateComponent: (compId: string) => void,
   updateProperty: (
     compId: string,
-    properties: Properties,
-    interfaceProps: { [k: string]: string | number | boolean | null | undefined }) => void,
+    properties: Properties) => void,
   setExpandAllProperties: (isExpand: boolean | null) => void,
 }
 
@@ -220,10 +231,8 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   selectedId: null,
   hoveredId: null,
   isCanvasScrolling: false,
-  // components: initialComponents,
-  // properties: { canvas: compProperties['canvas'] },
-  components: components_,
-  properties: properties_,
+  components: initialComponents,
+  properties: initialProperties,
   variables: {
     name: {
       type: 'text',
@@ -241,7 +250,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
       value: true
     }
   },
-  componentNames: {},
+  componentNames: componentNamesInitial,
   expandAllProperties: false,
   lastUpdatedCompChildren: [],
   logicNodes: {}, //EdgeType[],
@@ -272,12 +281,20 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   }),
   setHoveredId: (hoveredId) => set({ hoveredId: hoveredId }),
   moveComponent: (movedCompId, movedOverCompId, location, positionInContainer = 'last') => set((state) => {
+    const compsBackup = { ...state.components }; // will be returned if errors
     const comps = { ...state.components };
 
     let newParentId: string;
     let newParent;
     let component = comps[movedCompId];
-    let oldParent = comps[component.parent];
+    let oldParent = null;
+    if (component.parent) {
+      oldParent = comps[component.parent];
+    } else {
+      console.error(`Component ID ${movedCompId} does not have a parent. Component not moved.`);
+      return { components: compsBackup };
+    }
+    // oldParent = comps[component.parent as string];
 
     if (location === 'inside') {
       // dragged inside container
@@ -308,7 +325,12 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
     } else {
       // dragged over another component (not container)
 
-      newParentId = comps[movedOverCompId].parent;
+      if (comps[movedOverCompId].parent) {
+        newParentId = comps[movedOverCompId].parent;
+      } else {
+        console.error(`Component ID ${movedCompId} (drop target) does not have a parent. Component not moved.`);
+        return { components: compsBackup };
+      }
 
       const droppedOnSelf = newParentId === movedCompId;
       if (droppedOnSelf) {
@@ -322,7 +344,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
       oldParent.children = oldParent.children.filter((c: string) => c !== movedCompId);
       // add to new parent
       component.parent = newParentId;
-      let insertAt = newParent.children.indexOf(movedOverCompId) + (location === 'after');
+      let insertAt = newParent.children.indexOf(movedOverCompId) + Number(location === 'after');
       newParent.children.splice(insertAt, 0, movedCompId);
 
       return { components: comps }
@@ -331,6 +353,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
 
   }),
   addComponent: (compType, addedOverCompId, location) => set((state) => {
+    const compsBackup = { ...state.components }; // will be returned if errors
     const comps = { ...state.components };
     const props = { ...state.properties };
     const compsNames = { ...state.componentNames };
@@ -341,7 +364,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
         current: 1,
       }
     } else {
-      compsNames[compType].current += 1;
+      compsNames[compType as keyof CompNames].current += 1;
     }
 
     let parentId: string;
@@ -369,7 +392,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
         type: compType,
         parent: parentId,
         children: [],
-        name: `${compTypes[compType as keyof typeof compTypes].name} ${compsNames[compType].current}`
+        name: `${compTypes[compType as keyof typeof compTypes].name} ${compsNames[compType as keyof CompNames].current}`
       }
       // add to parent
       parent.children.push(compId);
@@ -379,17 +402,22 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
     } else {
       // dragged over another component (not container)
 
-      parentId = comps[addedOverCompId].parent;
+      if (comps[addedOverCompId].parent) {
+        parentId = comps[addedOverCompId].parent;
+      } else {
+        console.error(`Component ID ${addedOverCompId} (drop target) does not have a parent. Component not moved.`);
+        return { components: compsBackup };
+      }
       parent = comps[parentId];
       // add component
       comps[compId] = {
         type: compType,
         parent: parentId,
         children: [],
-        name: `${compTypes[compType as keyof typeof compTypes].name} ${compsNames[compType].current}`
+        name: `${compTypes[compType as keyof typeof compTypes].name} ${compsNames[compType as keyof CompNames].current}`
       }
       // add to parent
-      let insertAt = parent.children.indexOf(addedOverCompId) + (location === 'after');
+      let insertAt = parent.children.indexOf(addedOverCompId) + Number(location === 'after');
       parent.children.splice(insertAt, 0, compId);
 
       return { components: comps, componentNames: compsNames, properties: props }
@@ -400,7 +428,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   removeComponent: (compId) => set((state) => {
     const comps = { ...state.components };
 
-    const getChildrenRecursive = (compId: string, childrenIds: string[], comps:ComponentCollection) => {
+    const getChildrenRecursive = (compId: string, childrenIds: string[], comps: ComponentCollection) => {
       for (let c of comps[compId].children) {
         childrenIds.push(c);
         getChildrenRecursive(c, childrenIds, comps)
@@ -414,9 +442,9 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
     // remove objects, and children
     const newComponents = Object.keys(comps)
       .filter(c => !compsToDelete.includes(c))
-      .reduce((obj:ComponentCollection, compId) => {
+      .reduce((obj: ComponentCollection, compId) => {
         let comp = comps[compId];
-        comp.children = comp.children.filter((cc:string) => !compsToDelete.includes(cc));
+        comp.children = comp.children.filter((cc: string) => !compsToDelete.includes(cc));
         obj[compId] = comp;
         return obj;
       }, {});
@@ -462,13 +490,12 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
 
 
   }),
-  updateProperty: (compId, properties, interfaceProps) => set((state) => {
+  updateProperty: (compId, properties) => set((state) => {
 
     const props = { ...state.properties };
 
     props[compId] = {
-      values: { ...props[compId].values, ...properties },
-      interfaceProps: { ...props[compId].interfaceProps, ...interfaceProps }
+      ...props[compId], ...properties
     };
 
     const components = { ...state.components }
