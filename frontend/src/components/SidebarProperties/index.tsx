@@ -166,27 +166,14 @@ const SidebarProperties = memo(() => {
             {/* {activeSection === 'logic' && <SectionLogic />} */}
             {activeSection === 'logic' && <MyModal styles={{
                     position: 'fixed',
-                    width: 'calc(100vw - 50px)',
-                    height: 'calc(100vh - 72px)', // trial and error; hard-coded to use below and not using other ref
-                    // backgroundColor: colorMode === 'dark' ? 'white' : 'black',
-                    // backgroundColor: 'black',
-                    // color: colorMode === 'dark' ? 'black' : 'white',
-                    // color: 'white',
-                    borderRadius: '5px',
-                    padding: '10px 5px',
-                    fontSize: 'small',
-                    // border: colorMode === 'dark' ? '1px solid grey' : '1px solid white',
+                    width: '100vw',
+                    height: '100vh',
                     top: '0px',
                     left: '0px'
             }} children={<Logic changeToStyles={changeToStyles} />} />}
 
         </>
         }
-
-        {/* {selectedId && activeSection === 'styles' && <>{Object.keys(properties[selectedId].values).map(p => (
-            <MyInput componentId={selectedId} name={p} val={properties[selectedId].values[p]} key={selectedId + p} />
-        ))}
-        </>} */}
     </div>
 })
 
