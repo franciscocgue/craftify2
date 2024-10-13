@@ -8,8 +8,8 @@ import { CompNames } from "../types/designer.types";
 import { draggableData } from "../types/designer.types";
 import { getChildrenNodes } from "../utils";
 
-import components_ from '../../../backend/user-app/src/components.json';
-import properties_ from '../../../backend/user-app/src/properties.json';
+// import components_ from '../../../backend/user-app/src/components.json';
+// import properties_ from '../../../backend/user-app/src/properties.json';
 
 // initialize component counter for names
 const componentNamesInitial = Object.keys(compTypes).reduce((acc, compType) => {
@@ -18,18 +18,18 @@ const componentNamesInitial = Object.keys(compTypes).reduce((acc, compType) => {
 }, {} as CompNames);
 
 // initialize components
-// const initialComponents: ComponentCollection = {
-//   'canvas': {
-//     type: 'canvas',
-//     parent: null,
-//     children: [],
-//     name: 'Canvas'
-//   },
-// }
+const initialComponents: ComponentCollection = {
+  'canvas': {
+    type: 'canvas',
+    parent: null,
+    children: [],
+    name: 'Canvas'
+  },
+}
 // initialize component properties
-// const initialProperties: ComponentCollectionProperties = { canvas: compProperties['canvas'] };
-const initialComponents: ComponentCollection = components_ as ComponentCollection;
-const initialProperties: ComponentCollectionProperties = properties_ as ComponentCollectionProperties;
+const initialProperties: ComponentCollectionProperties = { canvas: compProperties['canvas'] };
+// const initialComponents: ComponentCollection = components_ as ComponentCollection;
+// const initialProperties: ComponentCollectionProperties = properties_ as ComponentCollectionProperties;
 
 // const initialNodes = [
 //   // { id: '1', type: 'customNode', position: { x: 0, y: 0 }, data: { label: '1' } },
