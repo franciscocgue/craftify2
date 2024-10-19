@@ -11,17 +11,19 @@ import { ArrowContainer, Popover } from "react-tiny-popover";
 import { MdOutlineAdd } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import { toast } from "react-toastify";
+import { FaProjectDiagram } from "react-icons/fa";
 
 // convert components (flat list) into
 // nested format required by the (rc-)tree
 
-const componentsAsTree = (data: ComponentCollection, id: string, parent: ComponentLeaf[]) => {
+const componentsAsTree = (data: ComponentCollection, id: string, parent: ComponentLeaf[], nodeIdsWithLogic: string[]) => {
     const newNode: ComponentLeaf = {
         key: id,
         title: data[id].name,
         type: data[id].type,
         children: [],
         readOnly: false,
+        hasLogic: nodeIdsWithLogic.includes(id),
     };
     parent.push(newNode);
     if (data[id].children.length) {
@@ -29,14 +31,14 @@ const componentsAsTree = (data: ComponentCollection, id: string, parent: Compone
         const children = newNode.children;
         if (children) {
             // const children = parent.children;
-            data[id].children.forEach((child: string) => componentsAsTree(data, child, children))
+            data[id].children.forEach((child: string) => componentsAsTree(data, child, children, nodeIdsWithLogic))
         }
     }
 }
 
-const getComponentsAsTree = (components: ComponentCollection) => {
+const getComponentsAsTree = (components: ComponentCollection, nodeIdsWithLogic: string[]) => {
     const tree: ComponentLeaf[] = [];
-    componentsAsTree(components, 'canvas', tree);
+    componentsAsTree(components, 'canvas', tree, nodeIdsWithLogic);
     return tree;
 }
 
@@ -58,7 +60,8 @@ interface NodeType {
     type: keyof typeof compTypes | 'canvas'
     key: string,
     title: string,
-    children: NodeType[]
+    children: NodeType[],
+    hasLogic: boolean,
 }
 interface NodeTitleProps {
     node: NodeType
@@ -241,6 +244,12 @@ const NodeTitle = memo(({ node }: NodeTitleProps) => {
                 setValue('');
                 setListOfCompTypes(Object.keys(compTypes) as (keyof typeof compTypes)[]);
             }} />
+            {node.hasLogic
+                && <FaProjectDiagram
+                    style={{ marginLeft: '7px' }}
+                    color={colorMode === 'light' ? 'blue' : 'cyan'}
+                    title="Custom logic"
+                />}
 
         </span>
     </Popover>

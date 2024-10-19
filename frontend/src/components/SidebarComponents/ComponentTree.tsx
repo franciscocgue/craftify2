@@ -42,14 +42,23 @@ const ComponentTree = () => {
 
   const components = useDesignerStore((state) => state.components);
   const selectedId = useDesignerStore((state) => state.selectedId);
+  const logicNodes = useDesignerStore((state) => state.logicNodes);
+
 
   const treeNodes = useMemo(
     // () => renderNode(components, 'canvas'),
     () => {
-      const treeData = getComponentsAsTree(components);
+      // get node Ids with user custom logic
+      const nodeIdsWithLogic = Object.keys(logicNodes).reduce((acc: string[], nodeId: keyof typeof logicNodes) => {
+        if (logicNodes[nodeId].length > 1) {
+          return [...acc, nodeId];
+        };
+        return acc;
+      }, [])
+      const treeData = getComponentsAsTree(components, nodeIdsWithLogic);
       return treeAsHtml(treeData[0], selectedId)
     },
-    [components, selectedId]
+    [components, selectedId, logicNodes]
   );
 
   const setHoveredId = useDesignerStore((state) => state.setHoveredId);

@@ -101,4 +101,5 @@ export interface ComponentLeaf {
     type: keyof typeof compTypes | 'canvas',
     children: ComponentLeaf[];
     readOnly: true | false;
+    hasLogic: boolean;
 }
