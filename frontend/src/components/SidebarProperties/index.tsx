@@ -170,7 +170,7 @@ const SidebarProperties = memo(() => {
                     height: '100vh',
                     top: '0px',
                     left: '0px'
-            }} children={<Logic changeToStyles={changeToStyles} />} />}
+            }} children={<Logic changeToStyles={changeToStyles} selectedComponentId={selectedId ?? ''}  />} />}
 
         </>
         }
