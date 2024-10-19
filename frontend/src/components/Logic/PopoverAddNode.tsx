@@ -1,20 +1,65 @@
-import { FaCirclePlus } from "react-icons/fa6";
 import { Popover } from "react-tiny-popover";
-import styles from './PopoverAddNode.module.css';
-import { useState } from "react";
+import lightStyles from './PopoverAddNodeLight.module.css';
+import darkStyles from './PopoverAddNodeDark.module.css';
+import { ReactElement, useState } from "react";
+import { logicFunctions } from "../../config/logic";
+import useDesignerStore from "../../stores/designer";
+import { FunctionTypes, LogicNode } from "../../types/logic.types";
+
+
+/**
+ * 
+ * @returns new node based on type
+*/
+const newNode = (nodeTpe: FunctionTypes): LogicNode<typeof nodeTpe> => ({
+    id: crypto.randomUUID() as string,
+    type: nodeTpe,
+    position: { x: 150, y: 0 },
+    data: logicFunctions[nodeTpe].defaultData as LogicNode<typeof nodeTpe>['data']
+});
 
 type PopoverAddNodeProps = {
-    nodeId: string,
+    nodeType: string,
+    children: ReactElement,
 }
 
-const PopoverAddNode = ({ nodeId }: PopoverAddNodeProps) => {
+const functions = Object.entries(logicFunctions).reduce((acc: Record<string, FunctionTypes[]>, curr) => {
+
+    const functionKey = curr[0] as FunctionTypes;
+    const functionMetadata = curr[1];
+
+    if (functionMetadata.creatableByUser) {
+        if (functionKey in acc) {
+            acc[functionMetadata.parentType] = [...acc[functionMetadata.parentType], functionKey];
+        } else {
+            acc[functionMetadata.parentType] = [functionKey];
+        }
+    }
+
+    return acc
+}, {})
+
+console.log({ functions })
+
+// const functions = Object.entries(logicFunctions).reduce((acc:Object, curr: keyof typeof logicFunctions) => {
+//     const currFun =  logicFunctions[curr];
+//     return {acc}
+// }, {})
+
+const PopoverAddNode = ({ nodeType, children }: PopoverAddNodeProps) => {
 
     const [isOpen, setIsOpen] = useState(false);
+
+    const colorMode = useDesignerStore((state) => state.colorMode);
+    const styles = colorMode === 'light' ? lightStyles : darkStyles;
+
+    const addNode = useDesignerStore((state) => state.addNode);
+    const selectedComponentId = useDesignerStore((state) => state.selectedId);
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         event.stopPropagation(); // Prevents the event from bubbling up to parent nodes
         setIsOpen(!isOpen);
-        console.log('Handle clicked', nodeId);
+        console.log('Handle clicked', nodeType);
     };
 
     return <Popover
@@ -25,84 +70,36 @@ const PopoverAddNode = ({ nodeId }: PopoverAddNodeProps) => {
         onClickOutside={() => setIsOpen(false)} // handle click events outside of the popover/target here!
         content={() => ( // you can also provide a render function that injects some useful stuff!
             <div className={styles['popover-wrapper']}>
-                <div className={styles['popover-header']}>
-                    Navigation
-                </div>
-                <div className={styles['popover-actions']}>
-                    <button
-                        className={styles['popover-action']}
-                        onClick={() => {
-                            setIsOpen(false);
-                        }}
-                    >
-                        Open URL
-                    </button>
-                    <button
-                        className={styles['popover-action']}
-                        onClick={() => {
-                            setIsOpen(false);
-                        }}
-                    >
-                        Back
-                    </button>
-                    <button
-                        className={styles['popover-action']}
-                        onClick={() => {
-                            setIsOpen(false);
-                        }}
-                    >
-                        Forward
-                    </button>
-                </div>
-                <div className={styles['popover-header']}>
-                    Components
-                </div>
-                <div className={styles['popover-actions']}>
-                    <button
-                        className={styles['popover-action']}
-                        onClick={() => {
-                            setIsOpen(false);
-                        }}
-                    >
-                        Change visibility
-                    </button>
-                    <button
-                        className={styles['popover-action']}
-                        onClick={() => {
-                            setIsOpen(false);
-                        }}
-                    >
-                        Enable / Disable
-                    </button>
-                </div>
-                <div className={styles['popover-header']}>
-                    Data operations
-                </div>
-                <div className={styles['popover-header']}>
-                    Logic Control
-                </div>
+                <p className={styles['popover-header']}>Functions</p>
+                {Object.keys(functions).map(group => <>
+                    <div className={styles['popover-group-name']}>
+                        {group}
+                    </div>
+                    <div className={styles['popover-actions']}>
+                        {functions[group].map(fun => {
+                            return <button
+                                className={styles['popover-action']}
+                                onClick={() => {
+                                    if (selectedComponentId) {
+                                        addNode(selectedComponentId, newNode(fun))
+                                    }
+                                    setIsOpen(false);
+                                }}
+                            >
+                                {logicFunctions[fun as keyof typeof logicFunctions].displayName}
+                            </button>
+                        })}
+                    </div>
+                </>)}
             </div>
         )}
     >
-        {/* <div onClick={() => setIsPopoverOpen(!isPopoverOpen)}>Click me!</div> */}
         <div
-            // style={{
-            //   width: '20px',
-            //   height: '20px',
-            //   position: 'relative',
-            //   left: '-8px',
-            //   backgroundColor: 'blue',
-            //   borderRadius: '50%',
-            //   display: 'flex',
-            //   justifyContent: 'center',
-            //   alignItems: 'center',
-            //   color: 'white',
-            //   fontSize: '12px',
-            // }}
             onClick={handleClick}
+            style={{ display: 'flex', flexDirection: 'row', gap: '5px', alignItems: 'center' }}
         >
-            <FaCirclePlus style={{backgroundColor: 'white'}} color='blue' title='Add new node' />
-            {/* <IoRemoveCircle title='Remove node'/> */}
+            {/* <FaCirclePlus style={{backgroundColor: 'white'}} color='blue' title='Add new node' /> */}
+            {children}
         </div>
     </Popover>
 }

@@ -1,61 +1,43 @@
-import { useCallback, useState } from 'react';
-import { Handle, Position } from '@xyflow/react';
-// import { FaCirclePlus } from 'react-icons/fa6';
-// import { MdDeleteForever } from 'react-icons/md';
-// import { IoRemoveCircle } from 'react-icons/io5';
-// import { Popover } from 'react-tiny-popover';
+import { useState } from 'react';
+import WrapperLogicNode from '../../helpers/WrapperLogicNode';
+import { LogicNodeData } from '../../../types/logic.types';
+import MyTextInput from '../../common/MyTextInput';
 
-// import styles from '../CustomNode.module.css';
-// import useDesignerStore from '../../../stores/designer';
-import PopoverAddNode from '../PopoverAddNode';
+type WrapperLogicNodeProps = {
+  data: LogicNodeData<'open-url'>,
+  selected?: boolean,
+}
 
-// const handleStyle = { left: 10, backgroundColor: 'red' };
+function OpenUrl({ data, selected }: WrapperLogicNodeProps) {
 
+  // const onChange = useCallback((evt) => {
+  //   console.log(evt.target.value);
+  // }, []);
 
-function OpenUrl({ data, isConnectable, id }) {
+  const [openMode, setOpenMode] = useState<'_self' | '_blank'>('_blank')
 
-  const onChange = useCallback((evt) => {
-    console.log(evt.target.value);
-  }, []);
+  const handleChange = () => {
+    setOpenMode(prev => prev === '_self' ? '_blank' : '_self');
+  };
 
-  // const colorMode = useDesignerStore((state) => state.colorMode);
-  // const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-
-  // const handleClick = (event) => {
-  //   event.stopPropagation(); // Prevents the event from bubbling up to parent nodes
-  //   setIsPopoverOpen(!isPopoverOpen);
-  //   console.log('Handle clicked', id);
-  // };
-
-  return (
-    <div className="react-flow__node react-flow__node-default nopan selectable draggable">
-      {/* <div>
-        <label htmlFor="text">URL:</label>
-        <input id="text" name="text" onChange={onChange} className="nodrag" type='url' />
-      </div> */}
-      <input
-        style={{maxWidth: '100%', fontSize: 'smaller', border: 'none', outline: 'none'}}
-        onChange={onChange}
-        className="nodrag"
-        type='url'
-        placeholder='Type the url to open'
-      />
-      <Handle
-        type="target"
-        position={Position.Top}
-        isConnectable={isConnectable}
-      />
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        id="a"
-        isConnectable={isConnectable}
-        style={{ background: 'transparent', border: 'none', cursor: 'pointer', bottom: '5px' }}
-      >
-        <PopoverAddNode nodeId={id} />
-      </Handle>
+  // function html body
+  data.function.htmlBody = () => {
+    return <div>
+      <MyTextInput />
+      <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'start', fontSize: '0.85em', marginTop: '5px' }}>
+        <label style={{ color: 'grey' }}>
+          <input style={{ marginRight: '5px', width: '10px' }} type="radio" checked={openMode === '_blank'} onChange={handleChange} />
+          {'new window'}
+        </label>
+        <label style={{ color: 'grey' }}>
+          <input style={{ marginRight: '5px', width: '10px' }} type="radio" checked={openMode === '_self'} onChange={handleChange} />
+          {'same window'}
+        </label>
+      </div>
     </div>
-  );
+  }
+
+  return WrapperLogicNode({ data, selected })
 }
 
 export default OpenUrl;

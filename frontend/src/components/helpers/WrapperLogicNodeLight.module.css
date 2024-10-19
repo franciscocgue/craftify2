@@ -1,0 +1,17 @@
+.wrapper {
+    border: 1px solid darkgrey;
+    padding: 5px;
+    border-radius: 5px;
+    background: white;
+}
+
+.header {
+    padding: 2px;
+    font-weight: bold;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+.body {
+    padding: 5px 10px 10px 10px;
+}

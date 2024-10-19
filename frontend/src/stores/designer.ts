@@ -7,6 +7,7 @@ import { ComponentCollection } from "../types/designer.types";
 import { CompNames } from "../types/designer.types";
 import { draggableData } from "../types/designer.types";
 import { getChildrenNodes } from "../utils";
+import { FunctionTypes, LogicEdge, LogicNode } from '../types/logic.types';
 
 // import components_ from '../../../backend/user-app/src/components.json';
 // import properties_ from '../../../backend/user-app/src/properties.json';
@@ -178,8 +179,8 @@ type designerStore = {
   expandAllProperties: boolean | null,
   // componentIds of component whose properties were updated last
   lastUpdatedCompChildren: string[],
-  logicNodes: any, //EdgeType[],
-  logicEdges: any, // NodeType[],
+  logicNodes: Record<string, LogicNode<FunctionTypes>[]>,
+  logicEdges: Record<string, LogicEdge[]>,
   setPage: (page: 'designer' | 'variables' | 'data' | 'styles') => void,
   toggleColorMode: () => void,
   renameComponent: (compId: string, newName: string) => void,
@@ -220,6 +221,9 @@ type designerStore = {
     compId: string,
     properties: Properties) => void,
   setExpandAllProperties: (isExpand: boolean | null) => void,
+  updateNodes: <FunctionType extends FunctionTypes>(compId: string, nodes: LogicNode<FunctionType>[]) => void,
+  addNode: <FunctionType extends FunctionTypes>(compId: string, node: LogicNode<FunctionType>) => void,
+  updateEdges: (compId: string, edges: LogicEdge[]) => void,
 }
 
 const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => ({
@@ -253,8 +257,8 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   componentNames: componentNamesInitial,
   expandAllProperties: false,
   lastUpdatedCompChildren: [],
-  logicNodes: {}, //EdgeType[],
-  logicEdges: {}, // NodeType[],
+  logicNodes: {},
+  logicEdges: {},
   setPage: page => set({ page }),
   toggleColorMode: () => set(state => ({ colorMode: state.colorMode === 'dark' ? 'light' : 'dark' })),
   renameComponent: (compId: string, newName: string) => set(state => {
@@ -507,6 +511,27 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
     return { properties: props, lastUpdatedCompChildren }
   }),
   setExpandAllProperties: (isExpand) => set({ expandAllProperties: isExpand }),
+  updateNodes: (compId, nodes) => set((state) => {
+
+    const logicNodes = { ...state.logicNodes };
+    logicNodes[compId] = nodes;
+
+    return { logicNodes }
+  }),
+  addNode: (compId, node) => set((state) => {
+
+    const logicNodes = { ...state.logicNodes };
+    logicNodes[compId] = [...logicNodes[compId], node];
+
+    return { logicNodes }
+  }),
+  updateEdges: (compId, edges) => set((state) => {
+    const logicEdges = { ...state.logicEdges };
+    logicEdges[compId] = edges;
+
+    return { logicEdges }
+  }),
+
 })));
 
 export default useDesignerStore;

@@ -1,13 +1,20 @@
 .popover-wrapper {
     background-color: white;
-    padding: 10px;
+    padding: 10px 20px;
     border: 1px solid lightgray;
     border-radius: 4px;
-    box-shadow: rgba(50, 50, 93, 0.8) 0px 2px 5px -1px, rgba(0, 0, 0, 0.8) 0px 1px 3px -1px;
+    box-shadow: rgba(50, 50, 93, 0.8) 0px 4px 10px -2px, rgba(0, 0, 0, 0.8) 0px 2px 6px -2px;
 }
 
 .popover-header {
-    
+    border-bottom: 2px solid lightgrey;
+    font-size: 1.5em;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.popover-group-name {
+    font-weight: bold;
 }
 
 .popover-actions {
@@ -22,7 +29,7 @@
 	color: inherit;
 	border: 1px solid grey;
     border-radius: 5px;
-	padding: 4px 7px;
+	padding: 6px 9px;
 	font-size: small;
 	cursor: pointer;
 	outline: inherit;
