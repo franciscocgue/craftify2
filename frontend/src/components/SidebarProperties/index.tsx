@@ -63,7 +63,7 @@ const SidebarProperties = memo(() => {
     // console.log('debug - ', compMetadata)
 
     return <div style={{ width: '300px', borderTop: '1px solid grey', overflowY: 'auto' }}>
-        {!selectedId && <p>Select a component</p>}
+        {!selectedId && <p style={{width: '100%', textAlign: 'center', color: 'grey', fontStyle: 'italic', marginTop: '20px'}}>Select a component</p>}
         {selectedId && compMetadata && <>
             <div style={{
                 display: 'flex',
