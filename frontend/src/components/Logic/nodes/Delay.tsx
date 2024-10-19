@@ -11,7 +11,7 @@ const Delay = ({ data, selected }: WrapperLogicNodeProps) => {
 
   data.function.htmlBody = () => {
     return <>
-      <MyTextInput /> ms
+      <MyTextInput /> <span style={{ color: 'grey' }}>ms</span>
     </>
 
   }

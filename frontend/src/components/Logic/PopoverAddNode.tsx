@@ -1,5 +1,6 @@
 import { Popover } from "react-tiny-popover";
-import styles from './PopoverAddNode.module.css';
+import lightStyles from './PopoverAddNodeLight.module.css';
+import darkStyles from './PopoverAddNodeDark.module.css';
 import { ReactElement, useState } from "react";
 import { logicFunctions } from "../../config/logic";
 import useDesignerStore from "../../stores/designer";
@@ -48,6 +49,9 @@ console.log({ functions })
 const PopoverAddNode = ({ nodeType, children }: PopoverAddNodeProps) => {
 
     const [isOpen, setIsOpen] = useState(false);
+
+    const colorMode = useDesignerStore((state) => state.colorMode);
+    const styles = colorMode === 'light' ? lightStyles : darkStyles;
 
     const addNode = useDesignerStore((state) => state.addNode);
     const selectedComponentId = useDesignerStore((state) => state.selectedId);

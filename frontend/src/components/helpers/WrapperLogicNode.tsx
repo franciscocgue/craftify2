@@ -7,6 +7,9 @@ import useDesignerStore from '../../stores/designer';
 import { IoDuplicate } from 'react-icons/io5';
 import PopoverAddNode from '../Logic/PopoverAddNode';
 
+import lightStyles from './WrapperLogicNodeLight.module.css';
+import darkStyles from './WrapperLogicNodeDark.module.css';
+
 type WrapperLogicNodeProps<Type extends FunctionTypes> = {
   data: LogicNodeData<Type>,
   selected?: boolean,
@@ -15,26 +18,17 @@ type WrapperLogicNodeProps<Type extends FunctionTypes> = {
 function WrapperLogicNode<Type extends FunctionTypes>({ data, selected }: WrapperLogicNodeProps<Type>) {
 
   const colorMode = useDesignerStore((state) => state.colorMode);
+  const styles = colorMode === 'light' ? lightStyles : darkStyles;
 
   return (
     <div
       // className="react-flow__node react-flow__node-default nopan selectable draggable"
-      style={{
-        border: "1px solid darkgrey",
-        padding: "5px",
-        borderRadius: "5px",
-        background: "white"
-      }}>
-      <div style={{
-        padding: '2px',
-        fontWeight: 'bold',
-        fontSize: '1.1em',
-        textAlign: 'center',
-      }}
+      className={styles['wrapper']}>
+      <div className={styles['header']}
         title={logicFunctions[data.function.type].description}>
         {logicFunctions[data.function.type].displayName}
       </div>
-      {data.function.htmlBody && <div style={{ padding: '5px 10px 10px 10px' }}>
+      {data.function.htmlBody && <div className={styles['body']}>
         {data.function.htmlBody ? data.function.htmlBody() : undefined}
       </div>}
       <div>
@@ -54,7 +48,7 @@ function WrapperLogicNode<Type extends FunctionTypes>({ data, selected }: Wrappe
           : undefined}
       </div>
       <NodeToolbar isVisible={data.function.type === 'on-click-trigger' || selected} position={Position.Right} align={'center'}>
-        <div style={{ display: 'flex', flexDirection: 'row', gap: '5px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
           <PopoverAddNode nodeType={'open-url'}>
             <FaCirclePlus style={{ cursor: 'pointer' }} size={26} color={`${colorMode === 'light' ? 'blue' : 'white'}`} title='Add new node' />
           </PopoverAddNode>
