@@ -165,6 +165,7 @@ const compDuplicator = (comps: ComponentCollection, props: ComponentCollectionPr
 
 type designerStore = {
   page: 'designer' | 'variables' | 'data' | 'styles',
+  componentEditorMode : 'styles' | 'logic' | 'properties',
   colorMode: 'light' | 'dark',
   draggingId: string | null,
   draggable: draggableData,
@@ -182,6 +183,7 @@ type designerStore = {
   logicNodes: Record<string, LogicNode<FunctionTypes>[]>,
   logicEdges: Record<string, LogicEdge[]>,
   setPage: (page: 'designer' | 'variables' | 'data' | 'styles') => void,
+  setComponentEditorMode: (mode: 'styles' | 'logic' | 'properties') => void,
   toggleColorMode: () => void,
   renameComponent: (compId: string, newName: string) => void,
   setIsCanvasScrolling: (isCanvasScrolling: true | false) => void,
@@ -228,6 +230,7 @@ type designerStore = {
 
 const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => ({
   page: 'designer',
+  componentEditorMode: 'styles',
   colorMode: 'light',
   draggingId: null,
   draggable: null,
@@ -260,6 +263,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   logicNodes: {},
   logicEdges: {},
   setPage: page => set({ page }),
+  setComponentEditorMode: componentEditorMode => set({ componentEditorMode }),
   toggleColorMode: () => set(state => ({ colorMode: state.colorMode === 'dark' ? 'light' : 'dark' })),
   renameComponent: (compId: string, newName: string) => set(state => {
     const components = { ...state.components };

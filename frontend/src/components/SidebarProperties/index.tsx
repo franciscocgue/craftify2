@@ -34,6 +34,8 @@ const SidebarProperties = memo(() => {
     console.log('C - SidebarProperties')
 
     const selectedId = useDesignerStore((state) => state.selectedId);
+    const componentEditorMode = useDesignerStore((state) => state.componentEditorMode);
+    const setComponentEditorMode = useDesignerStore((state) => state.setComponentEditorMode);
     // const properties = useDesignerStore((state) => state.properties);
     const colorMode = useDesignerStore((state) => state.colorMode);
     const compMetadata = useDesignerStore((state) => state.components[selectedId || '_no_comp_'])
@@ -44,10 +46,9 @@ const SidebarProperties = memo(() => {
     //     console.log(properties[selectedId])
     // }
 
-    const changeToStyles = () => setActiveSection('styles');
+    const changeToStyles = () => setComponentEditorMode('styles');
 
     const [compName, setCompName] = useState(compMetadata ? compMetadata.name : 'no component');
-    const [activeSection, setActiveSection] = useState<'styles' | 'logic' | 'properties'>('styles');
 
     const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCompName(event.target.value);
@@ -130,47 +131,46 @@ const SidebarProperties = memo(() => {
                 justifyContent: 'space-around'
             }}>
                 <div style={{
-                    color: activeSection === 'styles' ? `${colorMode === 'light' ? 'black' : 'white'}` : 'grey',
-                    borderBottom: activeSection === 'styles' ? `4px solid ${colorMode === 'light' ? 'black' : 'white'}` : `2px solid rgb(190,190,190)`,
+                    color: componentEditorMode === 'styles' ? `${colorMode === 'light' ? 'black' : 'white'}` : 'grey',
+                    borderBottom: componentEditorMode === 'styles' ? `4px solid ${colorMode === 'light' ? 'black' : 'white'}` : `2px solid rgb(190,190,190)`,
                     flex: 1,
                     textAlign: 'center',
                     cursor: 'pointer',
                     userSelect: 'none'
                 }}
-                    onClick={() => setActiveSection('styles')}
+                    onClick={() => setComponentEditorMode('styles')}
                 >Styles</div>
                 <div style={{
-                    color: activeSection === 'properties' ? `${colorMode === 'light' ? 'black' : 'white'}` : 'grey',
-                    borderBottom: activeSection === 'properties' ? `4px solid ${colorMode === 'light' ? 'black' : 'white'}` : '2px solid rgb(190,190,190)',
+                    color: componentEditorMode === 'properties' ? `${colorMode === 'light' ? 'black' : 'white'}` : 'grey',
+                    borderBottom: componentEditorMode === 'properties' ? `4px solid ${colorMode === 'light' ? 'black' : 'white'}` : '2px solid rgb(190,190,190)',
                     flex: 1,
                     textAlign: 'center',
                     cursor: 'pointer',
                     userSelect: 'none'
                 }}
-                    onClick={() => setActiveSection('properties')}
+                    onClick={() => setComponentEditorMode('properties')}
                 >Settings</div>
                 <div style={{
-                    color: activeSection === 'logic' ? `${colorMode === 'light' ? 'black' : 'white'}` : 'grey',
-                    borderBottom: activeSection === 'logic' ? `4px solid ${colorMode === 'light' ? 'black' : 'white'}` : '2px solid rgb(190,190,190)',
+                    color: componentEditorMode === 'logic' ? `${colorMode === 'light' ? 'black' : 'white'}` : 'grey',
+                    borderBottom: componentEditorMode === 'logic' ? `4px solid ${colorMode === 'light' ? 'black' : 'white'}` : '2px solid rgb(190,190,190)',
                     flex: 1,
                     textAlign: 'center',
                     cursor: 'pointer',
                     userSelect: 'none'
                 }}
-                    onClick={() => setActiveSection('logic')}
+                    onClick={() => setComponentEditorMode('logic')}
                 >Logic</div>
             </div>
 
-            {activeSection === 'styles' && <SectionStyles />}
-            {activeSection === 'properties' && <SectionProperties />}
-            {/* {activeSection === 'logic' && <SectionLogic />} */}
-            {activeSection === 'logic' && <MyModal styles={{
+            {componentEditorMode === 'styles' && <SectionStyles />}
+            {componentEditorMode === 'properties' && <SectionProperties />}
+            {componentEditorMode === 'logic' && <MyModal styles={{
                     position: 'fixed',
                     width: '100vw',
                     height: '100vh',
                     top: '0px',
                     left: '0px'
-            }} children={<Logic changeToStyles={changeToStyles} selectedComponentId={selectedId ?? ''}  />} />}
+            }} children={<Logic handleClickOutside={changeToStyles} selectedComponentId={selectedId ?? ''}  />} />}
 
         </>
         }

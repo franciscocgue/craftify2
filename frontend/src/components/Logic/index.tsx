@@ -36,16 +36,16 @@ const nodeTypes = {
 };
 
 type LogicProps = {
-    changeToStyles: () => void,
+    handleClickOutside: () => void, // action to close logic canvas
     selectedComponentId: string,
 }
 
-const Logic = ({ changeToStyles, selectedComponentId }: LogicProps) => {
+const Logic = ({ handleClickOutside, selectedComponentId }: LogicProps) => {
 
     const handleClick = (event: { target: any; currentTarget: any; }) => {
         // event.stopPropagation();
         if (event.target === event.currentTarget) { // check if the click event's target (the actual element clicked) is the same as the currentTarget (the element that the event handler is attached to)
-            changeToStyles();
+            handleClickOutside();
         }
     }
 
@@ -106,7 +106,7 @@ const Logic = ({ changeToStyles, selectedComponentId }: LogicProps) => {
                 maxZoom={1.5}
                 minZoom={0.75}
             >
-                <Panel position="top-right" ><FaWindowClose color={`${colorMode === 'light' ? 'black' : 'white'}`} size={30} style={{ cursor: 'pointer' }} onClick={changeToStyles} /></Panel>
+                <Panel position="top-right" ><FaWindowClose color={`${colorMode === 'light' ? 'black' : 'white'}`} size={30} style={{ cursor: 'pointer' }} onClick={handleClickOutside} /></Panel>
                 <Background bgColor={colorMode === 'light' ? 'white' : undefined} variant={BackgroundVariant.Dots} gap={12} size={1} />
                 <Controls />
                 <MiniMap />

@@ -82,7 +82,9 @@ const NodeTitle = memo(({ node }: NodeTitleProps) => {
     const removeComponent = useDesignerStore((state) => state.removeComponent);
     const addComponent = useDesignerStore((state) => state.addComponent);
     const toggleSelectedId = useDesignerStore((state) => state.toggleSelectedId);
+    const setSelectedId = useDesignerStore((state) => state.setSelectedId);
     const duplicateComponent = useDesignerStore((state) => state.duplicateComponent);
+    const setComponentEditorMode = useDesignerStore((state) => state.setComponentEditorMode)
 
     // const toast = useToast()
     const notify = {
@@ -244,12 +246,17 @@ const NodeTitle = memo(({ node }: NodeTitleProps) => {
                 setValue('');
                 setListOfCompTypes(Object.keys(compTypes) as (keyof typeof compTypes)[]);
             }} />
-            {node.hasLogic
-                && <FaProjectDiagram
-                    style={{ marginLeft: '7px' }}
-                    color={colorMode === 'light' ? 'blue' : 'cyan'}
-                    title="Custom logic"
-                />}
+            {node.type !== 'canvas' && <FaProjectDiagram
+                style={{ marginLeft: '7px', cursor: 'pointer' }}
+                color={colorMode === 'light' ? (node.hasLogic ? '#00BFFF' : 'grey') : (node.hasLogic ? 'cyan' : 'grey')}
+                title="Custom logic"
+                onClick={() => {
+                    // select component
+                    setSelectedId(node.key);
+                    // open logic
+                    setComponentEditorMode('logic');
+                }}
+            />}
 
         </span>
     </Popover>
