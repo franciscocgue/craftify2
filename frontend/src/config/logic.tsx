@@ -9,7 +9,7 @@ const logicFunctions = {
             function: {
                 type: 'open-url',
                 parameters: {
-                    url: 'https://www.google.com/',
+                    url: 'https://developer.mozilla.org/en-US/docs/Learn',
                     target: '_blank',
                 }
             }

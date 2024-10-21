@@ -26,7 +26,8 @@ const defaultNode = [{
     id: crypto.randomUUID(),
     type: 'on-click-trigger',
     position: { x: 0, y: 0 },
-    data: logicFunctions['on-click-trigger'].defaultData
+    data: logicFunctions['on-click-trigger'].defaultData,
+    deletable: false
 }]
 
 const nodeTypes = {
@@ -105,6 +106,7 @@ const Logic = ({ handleClickOutside, selectedComponentId }: LogicProps) => {
                 fitView
                 maxZoom={1.5}
                 minZoom={0.75}
+                // deleteKeyCode={null}
             >
                 <Panel position="top-right" ><FaWindowClose color={`${colorMode === 'light' ? 'black' : 'white'}`} size={30} style={{ cursor: 'pointer' }} onClick={handleClickOutside} /></Panel>
                 <Background bgColor={colorMode === 'light' ? 'white' : undefined} variant={BackgroundVariant.Dots} gap={12} size={1} />

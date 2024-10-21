@@ -42,5 +42,3 @@ export type LogicEdge = {
   animated: boolean,
   style: CSSProperties,
 }
-
-export type LogicNodeCollection = LogicNode<FunctionTypes>

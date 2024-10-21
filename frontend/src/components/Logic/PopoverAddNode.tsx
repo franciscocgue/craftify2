@@ -19,7 +19,6 @@ const newNode = (nodeTpe: FunctionTypes): LogicNode<typeof nodeTpe> => ({
 });
 
 type PopoverAddNodeProps = {
-    nodeType: string,
     children: ReactElement,
 }
 
@@ -46,7 +45,7 @@ console.log({ functions })
 //     return {acc}
 // }, {})
 
-const PopoverAddNode = ({ nodeType, children }: PopoverAddNodeProps) => {
+const PopoverAddNode = ({ children }: PopoverAddNodeProps) => {
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -59,7 +58,6 @@ const PopoverAddNode = ({ nodeType, children }: PopoverAddNodeProps) => {
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         event.stopPropagation(); // Prevents the event from bubbling up to parent nodes
         setIsOpen(!isOpen);
-        console.log('Handle clicked', nodeType);
     };
 
     return <Popover
@@ -71,13 +69,14 @@ const PopoverAddNode = ({ nodeType, children }: PopoverAddNodeProps) => {
         content={() => ( // you can also provide a render function that injects some useful stuff!
             <div className={styles['popover-wrapper']}>
                 <p className={styles['popover-header']}>Functions</p>
-                {Object.keys(functions).map(group => <>
+                {Object.keys(functions).map(group => <div key={group}>
                     <div className={styles['popover-group-name']}>
                         {group}
                     </div>
                     <div className={styles['popover-actions']}>
                         {functions[group].map(fun => {
                             return <button
+                                key={fun}
                                 className={styles['popover-action']}
                                 onClick={() => {
                                     if (selectedComponentId) {
@@ -90,7 +89,7 @@ const PopoverAddNode = ({ nodeType, children }: PopoverAddNodeProps) => {
                             </button>
                         })}
                     </div>
-                </>)}
+                </div>)}
             </div>
         )}
     >

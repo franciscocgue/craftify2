@@ -7,7 +7,7 @@ import { ComponentCollection } from "../types/designer.types";
 import { CompNames } from "../types/designer.types";
 import { draggableData } from "../types/designer.types";
 import { getChildrenNodes } from "../utils";
-import { FunctionTypes, LogicEdge, LogicNode } from '../types/logic.types';
+import { FunctionTypes, LogicEdge, LogicNode, LogicNodeData } from '../types/logic.types';
 
 // import components_ from '../../../backend/user-app/src/components.json';
 // import properties_ from '../../../backend/user-app/src/properties.json';
@@ -165,7 +165,7 @@ const compDuplicator = (comps: ComponentCollection, props: ComponentCollectionPr
 
 type designerStore = {
   page: 'designer' | 'variables' | 'data' | 'styles',
-  componentEditorMode : 'styles' | 'logic' | 'properties',
+  componentEditorMode: 'styles' | 'logic' | 'properties',
   colorMode: 'light' | 'dark',
   draggingId: string | null,
   draggable: draggableData,
@@ -225,13 +225,22 @@ type designerStore = {
   setExpandAllProperties: (isExpand: boolean | null) => void,
   updateNodes: <FunctionType extends FunctionTypes>(compId: string, nodes: LogicNode<FunctionType>[]) => void,
   addNode: <FunctionType extends FunctionTypes>(compId: string, node: LogicNode<FunctionType>) => void,
+  removeNode: (compId: string, nodeId: string) => void,
   updateEdges: (compId: string, edges: LogicEdge[]) => void,
+  updateLogicParameter: <FunctionType extends FunctionTypes>(
+    compId: string,
+    nodeId: string,
+    parameterKey: keyof LogicNodeData<FunctionType>['function']['parameters'],
+    parameterValue: LogicNodeData<FunctionType>['function']['parameters'][
+      keyof LogicNodeData<FunctionType>['function']['parameters']
+    ],
+  ) => void,
 }
 
 const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => ({
   page: 'designer',
   componentEditorMode: 'styles',
-  colorMode: 'light',
+  colorMode: 'dark',
   draggingId: null,
   draggable: null,
   isResizing: false,
@@ -529,13 +538,37 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
 
     return { logicNodes }
   }),
+  removeNode: (compId, nodeId) => set((state) => {
+
+    const logicNodes = { ...state.logicNodes };
+    logicNodes[compId] = logicNodes[compId].filter(node => node.id !== nodeId);
+
+    return { logicNodes }
+  }),
   updateEdges: (compId, edges) => set((state) => {
     const logicEdges = { ...state.logicEdges };
     logicEdges[compId] = edges;
 
     return { logicEdges }
   }),
+  updateLogicParameter: (compId, nodeId, parameterKey, parameterValue) => set((state) => {
 
+    // all comp logic nodes
+    const allLogicNodes = { ...state.logicNodes };
+    // comp logic nodes
+    const logicNodes = allLogicNodes[compId];
+    // logic node
+    const node = logicNodes.find(n => n.id === nodeId);
+    // function paramaters
+    const parameters = node?.data.function.parameters;
+
+    if (parameters) {
+      parameters[parameterKey as keyof typeof parameters] = parameterValue as keyof (typeof parameters);
+      return { logicNodes: allLogicNodes }
+    }
+
+    return { logicNodes: allLogicNodes };
+  }),
 })));
 
 export default useDesignerStore;
