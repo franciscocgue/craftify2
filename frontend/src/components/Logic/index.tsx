@@ -15,9 +15,7 @@ import styles from './index.module.css';
 import { useCallback, useEffect } from 'react';
 import useDesignerStore from '../../stores/designer';
 import { FaWindowClose } from "react-icons/fa";
-import OpenUrl from './nodes/OpenUrl';
-import OnClickTrigger from './nodes/OnClickTrigger';
-import Delay from './nodes/Delay';
+import * as nodesElements from './nodes';
 import { debounce } from 'lodash';
 import { logicFunctions } from '../../config/logic';
 
@@ -31,9 +29,10 @@ const defaultNode = [{
 }]
 
 const nodeTypes = {
-    'open-url': OpenUrl,
-    'on-click-trigger': OnClickTrigger,
-    'delay': Delay,
+    'open-url': nodesElements['OpenUrl'],
+    'on-click-trigger': nodesElements['OnClickTrigger'],
+    'delay': nodesElements['Delay'],
+    'docu-note': nodesElements['DocuNote'],
 };
 
 type LogicProps = {
@@ -77,6 +76,23 @@ const Logic = ({ handleClickOutside, selectedComponentId }: LogicProps) => {
         [setEdges],
     );
 
+    // only update if position changes;
+    // no update on selected / unselected, eg
+    // const myONodesChange = (changes: NodeChange[]) => {
+    //     const positionChanges = changes.filter((change) => change.type === "position");
+
+    //     if (positionChanges.length) {
+    //         const nodesUpdates = applyNodeChanges(positionChanges, nodes);
+    //         debouncedNodeUpdate(selectedComponentId, nodesUpdates);
+    //     };
+    // }
+
+    // useEffect(() => {
+    //     console.log('nodes changed')
+    //     // debounce, since they change on
+    //     // node Drag, select and move
+    //     debouncedNodeUpdate(selectedComponentId, nodes)
+    // }, [nodes])
     useEffect(() => {
         console.log('nodes changed')
         // debounce, since they change on
@@ -106,7 +122,7 @@ const Logic = ({ handleClickOutside, selectedComponentId }: LogicProps) => {
                 fitView
                 maxZoom={1.5}
                 minZoom={0.75}
-                // deleteKeyCode={null}
+            // deleteKeyCode={null}
             >
                 <Panel position="top-right" ><FaWindowClose color={`${colorMode === 'light' ? 'black' : 'white'}`} size={30} style={{ cursor: 'pointer' }} onClick={handleClickOutside} /></Panel>
                 <Background bgColor={colorMode === 'light' ? 'white' : undefined} variant={BackgroundVariant.Dots} gap={12} size={1} />

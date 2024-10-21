@@ -18,6 +18,10 @@ export type LogicNodeData<FunctionType extends FunctionTypes> = {
     ? {
       ms: number,
     }
+    : FunctionType extends 'docu-note'
+    ? {
+      msg: string,
+    }
     : undefined,
   },
   targetHandle?: boolean,
@@ -32,6 +36,7 @@ export type LogicNode<FunctionType extends FunctionTypes> = {
     y: number,
   },
   data: LogicNodeData<FunctionType>,
+  deletable?: boolean
 }
 
 export type LogicEdge = {

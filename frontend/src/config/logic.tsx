@@ -41,7 +41,23 @@ const logicFunctions = {
                 }
             },
         },
-    }
+    },
+    'docu-note': {
+        parentType: 'Documentation',
+        creatableByUser: true,
+        displayName: 'Comment',
+        description: 'Add a comment to document the flow',
+        defaultData: { // LogicNodeData<'delay'>
+            function: {
+                type: 'docu-note',
+                parameters: {
+                    msg: '',
+                }
+            },
+            targetHandle: false,
+            sourceHandle: false,
+        },
+    },
 }
 
 export {
