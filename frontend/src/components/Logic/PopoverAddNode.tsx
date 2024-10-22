@@ -5,6 +5,7 @@ import { ReactElement, useState } from "react";
 import { logicFunctions } from "../../config/logic";
 import useDesignerStore from "../../stores/designer";
 import { FunctionTypes, LogicNode } from "../../types/logic.types";
+import { cloneDeep } from "lodash";
 
 
 /**
@@ -15,7 +16,7 @@ const newNode = (nodeTpe: FunctionTypes): LogicNode<typeof nodeTpe> => ({
     id: crypto.randomUUID() as string,
     type: nodeTpe,
     position: { x: 150, y: 0 },
-    data: logicFunctions[nodeTpe].defaultData as LogicNode<typeof nodeTpe>['data']
+    data: cloneDeep(logicFunctions[nodeTpe].defaultData as LogicNode<typeof nodeTpe>['data'])
 });
 
 type PopoverAddNodeProps = {
