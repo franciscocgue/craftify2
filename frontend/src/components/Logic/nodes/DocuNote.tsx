@@ -1,6 +1,5 @@
 import { useCallback } from "react";
 import { LogicNodeData } from "../../../types/logic.types"
-import MyTextInput from "../../common/MyTextInput";
 import WrapperLogicNode from "../../helpers/WrapperLogicNode";
 import useDesignerStore from "../../../stores/designer";
 import MyTextAreaInput from "../../common/MyTextAreaInput";
