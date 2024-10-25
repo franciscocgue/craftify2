@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js", 
+    "dev": "nodemon server.js",
     "start": "node server.js",
     "build": "npm run build:frontend && xcopy ..\\frontend\\dist .\\public /e /y",
     "build:frontend": "cd ../frontend && npm run build",
@@ -12,5 +12,9 @@
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.1"
+  }
 }
