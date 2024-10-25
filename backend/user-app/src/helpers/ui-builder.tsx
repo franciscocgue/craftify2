@@ -8,6 +8,9 @@ import CCheckbox from '../components/CCheckbox';
 import CImage from '../components/CImage';
 import CLink from '../components/CLink';
 import CIconButton from '../components/CIconButton';
+import logicNodes from '../logicNodes.json';
+import logicEdges from '../logicEdges.json';
+import { executeFlow, findLogicNodeByType } from './logic-utils';
 
 
 const uiMapper2 = {
@@ -27,9 +30,14 @@ const uiMapper2 = {
             {components[id].children.map((id: string) => renderNode(components, id, properties))}
         </CContainerColumn>
     ),
-    'button': (components: any, id: string, properties) => (
-        <CButton key={id} {...properties[id]} />
-    ),
+    'button': (components: any, id: string, properties) => {
+        const onClickTriggerNode = findLogicNodeByType(logicNodes[id]);
+        let handleClick;
+        if (onClickTriggerNode) {
+            handleClick = () => executeFlow(onClickTriggerNode, logicEdges[id], logicNodes[id])
+        }
+        return <CButton key={id} onClick={handleClick} {...properties[id]} />
+    },
     'text': (components: any, id: string, properties) => (
         <CText key={id} {...properties[id]} />
     ),

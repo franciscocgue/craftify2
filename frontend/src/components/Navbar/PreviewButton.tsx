@@ -8,8 +8,16 @@ import IconButton from "../common/IconButton";
 import { Variables } from "../../types/variables";
 import { Properties } from "../../types/designer.types";
 import { ComponentCollection } from "../../types/designer.types";
+import { FunctionTypes, LogicEdge, LogicNode } from "../../types/logic.types";
 
-const handleButtonClick = async (components: ComponentCollection, properties: Properties, variables: Variables, setLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
+const handleButtonClick = async (
+    components: ComponentCollection,
+    properties: Properties,
+    variables: Variables,
+    logicNodes: Record<string, LogicNode<FunctionTypes>[]>,
+    logicEdges: Record<string, LogicEdge[]>,
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>
+) => {
 
     setLoading(true);
 
@@ -19,7 +27,7 @@ const handleButtonClick = async (components: ComponentCollection, properties: Pr
         // let time = d.getTime();
         await axios.post('http://localhost:3000/start-new-server', {
             port: 4000,
-            data: { components, properties, variables }
+            data: { components, properties, variables, logicNodes, logicEdges }
         });
         var win = window.open('http://localhost:4000/', '_blank');
         if (win !== null) { win.focus(); }
@@ -40,13 +48,15 @@ const PreviewButton = () => {
     const components = useDesignerStore((state) => state.components);
     const properties = useDesignerStore((state) => state.properties);
     const variables = useDesignerStore((state) => state.variables);
+    const logicNodes = useDesignerStore((state) => state.logicNodes);
+    const logicEdges = useDesignerStore((state) => state.logicEdges);
 
     return (
         <>
 
             <IconButton
                 icon={<FaPlay />}
-                onClick={() => handleButtonClick(components, properties, variables, setLoading)}
+                onClick={() => handleButtonClick(components, properties, variables, logicNodes, logicEdges, setLoading)}
                 baseStylesOverwrite={{
                     color: 'white',
                     width: '80px',

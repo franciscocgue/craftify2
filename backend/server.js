@@ -34,6 +34,8 @@ app.post('/start-new-server', async (req, res) => {
   fs.writeFileSync(path.join(__dirname, 'user-app', 'src', 'components.json'), JSON.stringify(data.components))
   fs.writeFileSync(path.join(__dirname, 'user-app', 'src', 'properties.json'), JSON.stringify(data.properties))
   fs.writeFileSync(path.join(__dirname, 'user-app', 'src', 'variables.json'), JSON.stringify(data.variables))
+  fs.writeFileSync(path.join(__dirname, 'user-app', 'src', 'logicNodes.json'), JSON.stringify(data.logicNodes))
+  fs.writeFileSync(path.join(__dirname, 'user-app', 'src', 'logicEdges.json'), JSON.stringify(data.logicEdges))
 
   if (serverRunning) {
     console.log('####### stopping server ...')
