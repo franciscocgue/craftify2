@@ -1,16 +1,24 @@
 {
     "compilerOptions": {
-      "target": "esnext", // Specify ECMAScript target version
-      "module": "esnext", // Specify module code generation
-      "jsx": "react-jsx", // Use the new JSX transform from React 17+
-      "strict": true, // Enable all strict type checking options
-      "esModuleInterop": true, // Enables emit interoperability between CommonJS and ES Modules
-      "skipLibCheck": true, // Skip type checking of declaration files
-      "forceConsistentCasingInFileNames": true, // Disallow inconsistently-cased references to the same file
-      "noEmit": true,
-      "noEmitOnError": true,
+        "target": "esnext", // Specify ECMAScript target version
+        "module": "esnext", // Specify module code generation
+        "strict": true, // Enable all strict type checking options
+        "esModuleInterop": true, // Enables emit interoperability between CommonJS and ES Modules
+        "skipLibCheck": true, // Skip type checking of declaration files
+        "forceConsistentCasingInFileNames": true, // Disallow inconsistently-cased references to the same file
+        /* Bundler mode */
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "noEmitOnError": true,
+        "jsx": "react-jsx"
     },
-    "include": ["src/**/*"], // Include all TypeScript files in the src folder
-    "exclude": ["node_modules"] // Exclude node_modules from type checking
-  }
-  
+    "include": [
+        "src/**/*"
+    ], // Include all TypeScript files in the src folder
+    "exclude": [
+        "node_modules"
+    ] // Exclude node_modules from type checking
+}
