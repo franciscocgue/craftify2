@@ -5,7 +5,7 @@ import { useState } from "react";
 import QRCode from "react-qr-code";
 import { FaPlay } from "react-icons/fa6";
 import IconButton from "../common/IconButton";
-import { Variables } from "../../types/variables";
+import { Variables } from "../../types/variables.types";
 import { Properties } from "../../types/designer.types";
 import { ComponentCollection } from "../../types/designer.types";
 import { FunctionTypes, LogicEdge, LogicNode } from "../../types/logic.types";

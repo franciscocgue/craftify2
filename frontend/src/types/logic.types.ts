@@ -43,7 +43,7 @@ export type LogicEdge = {
   id: string,
   source: string, 
   target: string,
-  type: string // 'default' | 'straight' | 'step' | 'smoothstep',
+  type?: string // 'default' | 'straight' | 'step' | 'smoothstep',
   animated: boolean,
   style: CSSProperties,
 }

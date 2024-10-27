@@ -1,4 +1,3 @@
-import React from 'react';
 import * as LibIcons from "react-icons/md";
 import { IconBaseProps } from "react-icons/lib";
 

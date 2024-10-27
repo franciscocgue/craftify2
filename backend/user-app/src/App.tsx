@@ -1,7 +1,8 @@
-import React from 'react';
-import components from './components.json';
-import properties from './properties.json';
+import propertiesData from './properties.json';
 import { renderNode } from './helpers/ui-builder';
+import { ComponentCollectionProperties } from './types/index.types';
+
+const properties : ComponentCollectionProperties = propertiesData as ComponentCollectionProperties;
 
 const App = () => {
     return (
@@ -10,7 +11,7 @@ const App = () => {
             {/* {Object.keys(components).map(id => <p>{components[id].name}</p>)} */}
             {/* {Object.keys(components).map(id => id === 'canvas' ? <p>{components[id].name}</p> : <CButton {...properties[id]}/>)} */}
 
-            {renderNode(components, 'canvas', properties)}
+            {renderNode('canvas', properties)}
         </div>
     )
 }

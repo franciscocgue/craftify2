@@ -1,5 +1,4 @@
 
-import React from 'react';
 import CButton from "../components/CButton"
 import CContainerColumn from '../components/CContainerColumn';
 import CText from '../components/CText';
@@ -8,58 +7,71 @@ import CCheckbox from '../components/CCheckbox';
 import CImage from '../components/CImage';
 import CLink from '../components/CLink';
 import CIconButton from '../components/CIconButton';
-import logicNodes from '../logicNodes.json';
-import logicEdges from '../logicEdges.json';
+import logicNodesData from '../logicNodes.json';
+import logicEdgesData from '../logicEdges.json';
+import componentsData from '../components.json';
 import { executeFlow, findLogicNodeByType } from './logic-utils';
+import { ComponentCollection, ComponentCollectionProperties, FunctionTypes, LogicEdge, LogicNode } from '../types/index.types';
 
 
-const uiMapper2 = {
-    'canvas': (components: any, id: string, properties) => (
-        <div
-            id="my-canvas"
-            style={{
-                minHeight: '100vh',
-                ...properties[id]
-            }}
-        >
-            {components[id].children.map((id: string) => renderNode(components, id, properties))}
-        </div>
-    ),
-    'column': (components: any, id: string, properties) => (
-        <CContainerColumn key={id} {...properties[id]}>
-            {components[id].children.map((id: string) => renderNode(components, id, properties))}
-        </CContainerColumn>
-    ),
-    'button': (components: any, id: string, properties) => {
-        const onClickTriggerNode = findLogicNodeByType(logicNodes[id]);
-        let handleClick;
-        if (onClickTriggerNode) {
-            handleClick = () => executeFlow(onClickTriggerNode, logicEdges[id], logicNodes[id])
-        }
-        return <CButton key={id} onClick={handleClick} {...properties[id]} />
-    },
-    'text': (components: any, id: string, properties) => (
-        <CText key={id} {...properties[id]} />
-    ),
-    'header': (components: any, id: string, properties) => (
-        <CHeader key={id} {...properties[id]} />
-    ),
-    'checkbox': (components: any, id: string, properties) => (
-        <CCheckbox key={id} {...properties[id]} />
-    ),
-    'image': (components: any, id: string, properties) => (
-        <CImage key={id} {...properties[id]} />
-    ),
-    'link': (components: any, id: string, properties) => (
-        <CLink key={id} {...properties[id]} />
-    ),
-    'icon-button': (components: any, id: string, properties) => (
-        <CIconButton key={id} {...properties[id]} />
-    ),
+const logicNodes: Record<string, LogicNode<FunctionTypes>[]> = logicNodesData as Record<string, LogicNode<FunctionTypes>[]>;
+const logicEdges: Record<string, LogicEdge[]> = logicEdgesData as Record<string, LogicEdge[]>;
+const components: ComponentCollection = componentsData as ComponentCollection;
+
+const getClickLogic = (id: string) => {
+    const onClickTriggerNode = findLogicNodeByType(logicNodes[id]);
+    let handleClick;
+    if (onClickTriggerNode) {
+        handleClick = () => executeFlow(onClickTriggerNode, logicEdges[id], logicNodes[id])
+    }
+    return handleClick;
 }
 
-const renderNode = (components: any, id: string, properties) => {
-    return uiMapper2[components[id].type as keyof typeof uiMapper2](components, id, properties)
+const uiMapper2 = {
+    'canvas': (id: string, properties: ComponentCollectionProperties) => {
+        return (
+            <div
+                id="my-canvas"
+                style={{
+                    minHeight: '100vh',
+                    ...properties[id]
+                }}
+                onClick={getClickLogic(id)}
+            >
+                {components[id].children.map((id: string) => renderNode(id, properties))}
+            </div>
+        )
+    },
+    'column': (id: string, properties: ComponentCollectionProperties) => {
+        return <CContainerColumn key={id} onClick={getClickLogic(id)} {...properties[id]}>
+            {components[id].children.map((id: string) => renderNode(id, properties))}
+        </CContainerColumn>
+    },
+    'button': (id: string, properties: ComponentCollectionProperties) => {
+        return <CButton key={id} onClick={getClickLogic(id)} {...properties[id]} />
+    },
+    'text': (id: string, properties: ComponentCollectionProperties) => {
+        return <CText key={id} onClick={getClickLogic(id)} {...properties[id]} />
+    },
+    'header': (id: string, properties: ComponentCollectionProperties) => {
+        return <CHeader key={id} onClick={getClickLogic(id)} {...properties[id]} />
+    },
+    'checkbox': (id: string, properties: ComponentCollectionProperties) => {
+        return <CCheckbox key={id} onClick={getClickLogic(id)} {...properties[id]} />
+    },
+    'image': (id: string, properties: ComponentCollectionProperties) => {
+        return <CImage key={id} onClick={getClickLogic(id)} {...properties[id]} />
+    },
+    'link': (id: string, properties: ComponentCollectionProperties) => {
+        return <CLink key={id} onClick={getClickLogic(id)} {...properties[id]} />
+    },
+    'icon-button': (id: string, properties: ComponentCollectionProperties) => {
+        return <CIconButton key={id} onClick={getClickLogic(id)} {...properties[id]} />
+    },
+}
+
+const renderNode = (id: string, properties: ComponentCollectionProperties) => {
+    return uiMapper2[components[id].type as keyof typeof uiMapper2](id, properties)
 }
 
 export {

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { compProperties, compTypes } from '../config/components';
-import { Variables } from "../types/variables";
+import { Variables } from "../types/variables.types";
 import { ComponentCollectionProperties, Properties } from "../types/designer.types";
 import { ComponentCollection } from "../types/designer.types";
 import { CompNames } from "../types/designer.types";

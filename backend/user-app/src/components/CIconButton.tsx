@@ -1,19 +1,24 @@
-import React from 'react';
 import MyIcon from '../helpers/MyIcon';
 import { parseProperties } from '../helpers/utils';
 
-const clickConfig = () => alert('Clicked!')
-
-const CIconButton = ({ ...otherProperties }) => {
+type Props = {
+    onClick: (() => Promise<void>) | undefined,
+    [x: string]: any
+}
+const CIconButton = ({ onClick, ...otherProperties }: Props) => {
     const parsedProperties = parseProperties(otherProperties);
     return <>
         <button
             style={{
                 ...parsedProperties,
             }}
-            onClick={clickConfig ? clickConfig : undefined}
+            onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                // prevent triggering parent onClick events
+                event.stopPropagation();
+                if (onClick) onClick();
+            }}
         >
-            <MyIcon nameIcon={parsedProperties.__iconName} propsIcon={{ size: parsedProperties.__iconSize, color: parsedProperties.__iconColor }} />
+            <MyIcon nameIcon={parsedProperties.__iconName ?? 'MdQuestionMark'} propsIcon={{ size: parsedProperties.__iconSize, color: parsedProperties.__iconColor }} />
         </button>
     </>
 }
