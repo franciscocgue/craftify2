@@ -6,8 +6,8 @@ import { CSSProperties, ReactElement } from 'react';
 // INPUTS (from CONFIG FILES)
 
 type compTypes = "row" | "column" | "button" | "text" | "header" | "checkbox" | "image" | "link" | "icon-button";
-export type FunctionTypes = "open-url" | "on-click-trigger" | "delay" | "docu-note"
-export type FunctionTypesWithHandler = "open-url" | "delay"
+export type FunctionTypes = "open-url" | "on-click-trigger" | "delay" | "docu-note" | 'toast'
+export type FunctionTypesWithHandler = "open-url" | "delay" | 'toast'
 
 // COMPONENTS and PROPERTIES
 
@@ -146,6 +146,13 @@ export type LogicNodeData<FunctionType extends FunctionTypes> = {
     : FunctionType extends 'docu-note'
     ? {
       msg: string,
+    }
+    : FunctionType extends 'toast'
+    ? {
+      msg: string,
+      position: 'top-left' | 'top-right' | 'top-center' | 'bottom-left' | 'bottom-right' | 'bottom-center',
+      type: 'info' | 'success' | 'warning' | 'error',
+      autoClose: string, // user input; react-toastify: number | false
     }
     : undefined,
   },

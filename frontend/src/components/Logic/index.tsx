@@ -33,6 +33,7 @@ const nodeTypes = {
     'on-click-trigger': nodesElements['OnClickTrigger'],
     'delay': nodesElements['Delay'],
     'docu-note': nodesElements['DocuNote'],
+    'toast': nodesElements['Toast'],
 };
 
 type LogicProps = {

@@ -68,7 +68,27 @@ const parseProperties = (properties: Properties) => {
     return parsedProperties;
 };
 
+/**
+ * Used to convert autoClose user input into 
+ * react-toastify's format
+ * 
+ * @param autoClose 
+ * @returns 
+ */
+const parseToastAutoClose = (autoClose: string) => {
+    const parsedInt = parseInt(autoClose);
+    if (isNaN(parsedInt)) {
+        // default if error
+        return 2500;
+    };
+    if (parsedInt <= 0) {
+        return false;
+    };
+    return parsedInt;
+}
+
 
 export {
     parseProperties,
+    parseToastAutoClose,
 }

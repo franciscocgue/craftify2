@@ -54,8 +54,25 @@ const logicFunctions = {
                     msg: '',
                 }
             },
-            targetHandle: false,
-            sourceHandle: false,
+            targetHandle: false, // defaults to true if not given
+            sourceHandle: false, // defaults to true if not given
+        },
+    },
+    'toast': {
+        parentType: 'Notification',
+        creatableByUser: true,
+        displayName: 'Toast message',
+        description: 'Display a notification',
+        defaultData: { // LogicNodeData<'delay'>
+            function: {
+                type: 'toast',
+                parameters: {
+                    msg: '',
+                    position: 'bottom-right',
+                    type: 'info',
+                    autoClose: 3000,
+                }
+            },
         },
     },
 }

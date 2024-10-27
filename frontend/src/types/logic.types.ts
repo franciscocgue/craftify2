@@ -22,6 +22,13 @@ export type LogicNodeData<FunctionType extends FunctionTypes> = {
     ? {
       msg: string,
     }
+    : FunctionType extends 'toast'
+    ? {
+      msg: string,
+      position: 'top-left' | 'top-right' | 'top-center' | 'bottom-left' | 'bottom-right' | 'bottom-center',
+      type: 'info' | 'success' | 'warning' | 'error',
+      autoClose: number,
+    }
     : undefined,
   },
   targetHandle?: boolean,

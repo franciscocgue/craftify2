@@ -1,7 +1,10 @@
+import { toast } from "react-toastify";
 import { FunctionTypes, LogicFunctionHandler } from "../types/index.types";
+import { parseToastAutoClose } from "../helpers/utils";
+
 
 // available node logic functions
-const logicFunctionHandlers: Record<FunctionTypes, {handler: Function}> = {
+const logicFunctionHandlers: Record<FunctionTypes, { handler: Function }> = {
     'open-url': {
         handler: async (params: LogicFunctionHandler<'open-url'>) => {
             var win = window.open(params.url, params.target);
@@ -24,6 +27,17 @@ const logicFunctionHandlers: Record<FunctionTypes, {handler: Function}> = {
     },
     'docu-note': {
         handler: async () => {
+            return Promise.resolve();
+        }
+    },
+    'toast': {
+        handler: (params: LogicFunctionHandler<'toast'>) => {
+            const options = {
+                autoClose: parseToastAutoClose(params.autoClose) as number | false,
+                position: params.position,
+                pauseOnHover: true,
+            };
+            toast[params.type](params.msg, options);
             return Promise.resolve();
         }
     },
