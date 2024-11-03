@@ -15,6 +15,10 @@
   "description": "",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.21.1"
+    "express": "^4.21.1",
+    "winston": "^3.16.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
   }
 }
