@@ -31,8 +31,9 @@ dist-ssr
 *.sln
 *.sw?
 
-# user-app confirguration files
+# user-app configuration files
 backend/user-app/src/*.json
+backend/user-app/src/app-data
 # backend/user-app/src/components.json
 # backend/user-app/src/properties.json
 # backend/user-app/src/variables.json

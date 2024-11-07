@@ -1,10 +1,11 @@
-import propertiesData from './properties.json';
+// import propertiesData from './properties.json';
 import { renderNode } from './helpers/ui-builder';
 import { ComponentCollectionProperties } from './types/index.types';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-const properties: ComponentCollectionProperties = propertiesData as ComponentCollectionProperties;
+const properties: ComponentCollectionProperties = __APP_CONFIG_PROPERTIES__ as ComponentCollectionProperties;
+// const properties: ComponentCollectionProperties = propertiesData as ComponentCollectionProperties;
 
 const App = () => {
     return (

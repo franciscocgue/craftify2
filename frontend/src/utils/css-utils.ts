@@ -222,7 +222,7 @@ function isValidHexColor(hex: string): boolean {
 const parseProperties = (properties: Properties) => {
     const variables = useDesignerStore((state) => state.variables);
     const parsedProperties = { ...properties };
-    console.log('debug', parsedProperties);
+    // console.log('debug', parsedProperties);
     Object.keys(properties).forEach(key => {
         const propertyKey = key as keyof Properties;
         const propertyValue = properties[propertyKey];

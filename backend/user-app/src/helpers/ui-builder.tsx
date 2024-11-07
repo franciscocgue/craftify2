@@ -7,16 +7,19 @@ import CCheckbox from '../components/CCheckbox';
 import CImage from '../components/CImage';
 import CLink from '../components/CLink';
 import CIconButton from '../components/CIconButton';
-import logicNodesData from '../logicNodes.json';
-import logicEdgesData from '../logicEdges.json';
-import componentsData from '../components.json';
+// import logicNodesData from '../logicNodes.json';
+// import logicEdgesData from '../logicEdges.json';
+// import componentsData from '../components.json';
 import { executeFlow, findLogicNodeByType } from './logic-utils';
 import { ComponentCollection, ComponentCollectionProperties, FunctionTypes, LogicEdge, LogicNode } from '../types/index.types';
 
 
-const logicNodes: Record<string, LogicNode<FunctionTypes>[]> = logicNodesData as Record<string, LogicNode<FunctionTypes>[]>;
-const logicEdges: Record<string, LogicEdge[]> = logicEdgesData as Record<string, LogicEdge[]>;
-const components: ComponentCollection = componentsData as ComponentCollection;
+// const logicNodes: Record<string, LogicNode<FunctionTypes>[]> = logicNodesData as Record<string, LogicNode<FunctionTypes>[]>;
+// const logicEdges: Record<string, LogicEdge[]> = logicEdgesData as Record<string, LogicEdge[]>;
+// const components: ComponentCollection = componentsData as ComponentCollection;
+const logicNodes: Record<string, LogicNode<FunctionTypes>[]> = __APP_CONFIG_LOGICNODES__ as Record<string, LogicNode<FunctionTypes>[]>;
+const logicEdges: Record<string, LogicEdge[]> = __APP_CONFIG_LOGICEDGES__ as Record<string, LogicEdge[]>;
+const components: ComponentCollection = __APP_CONFIG_COMPONENTS__ as ComponentCollection;
 
 const getClickLogic = (id: string) => {
     const onClickTriggerNode = findLogicNodeByType(logicNodes[id]);

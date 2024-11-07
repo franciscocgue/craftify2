@@ -12,7 +12,9 @@ const util = require('util');
 const execPromise = util.promisify(exec);
 
 // Middleware to parse application/json
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+// @TODO: estimate actual limits
+app.use(bodyParser.json({limit: '50mb'}));
 
 app.get('/', (req, res) => {
   res.send('<h1>TesT</h1>')
@@ -22,6 +24,8 @@ app.use(cors({
   // probably only needed during development
   origin: 'http://localhost:5173' // React app's URL
 }));
+
+
 
 // Spin up a server for the preview
 let serverRunning = false;

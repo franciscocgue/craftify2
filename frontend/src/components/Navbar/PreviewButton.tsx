@@ -25,12 +25,17 @@ const handleButtonClick = async (
         console.log(components)
         // const d = new Date();
         // let time = d.getTime();
-        await axios.post('http://localhost:3000/start-new-server', {
-            port: 4000,
-            data: { components, properties, variables, logicNodes, logicEdges }
+        await axios.post('http://localhost:3001/api/web-service/preview', {
+            // port: 4000,
+            "app-id": "123e3e35-425a-4c33-a813-83dde0d03576",
+            components, 
+            properties, 
+            variables, 
+            logicNodes, 
+            logicEdges
         });
-        var win = window.open('http://localhost:4000/', '_blank');
-        if (win !== null) { win.focus(); }
+        // var win = window.open('http://localhost:4000/', '_blank');
+        // if (win !== null) { win.focus(); }
         // alert(response.data);
     } catch (error) {
         console.error('There was an error starting the new server:', error);

@@ -1,7 +1,8 @@
 import { Properties, Variables } from '../types/index.types';
-import variablesData from './../variables.json';
+// import variablesData from './../variables.json';
 
-const variables: Variables = variablesData as Variables;
+const variables: Variables = __APP_CONFIG_VARIABLES__ as Variables;
+// const variables: Variables = variablesData as Variables;
 
 // /**
 //  * If there are properties linked to variables, 
@@ -47,7 +48,7 @@ const variables: Variables = variablesData as Variables;
 const parseProperties = (properties: Properties) => {
     // const variables = useDesignerStore((state) => state.variables);
     const parsedProperties = { ...properties };
-    console.log('debug', parsedProperties);
+    // console.log('debug', parsedProperties);
     Object.keys(properties).forEach(key => {
         const propertyKey = key as keyof Properties;
         const propertyValue = properties[propertyKey];

@@ -1,9 +1,8 @@
 import express from 'express';
+import { appBuildController } from '../controllers';
 
 const router = express.Router();
 
-router.get('/build', (req, res, next) => {
-    res.send(req.baseUrl + req.url + ' accessed !!')
-})
+router.post('/build', appBuildController);
 
 export default router;
