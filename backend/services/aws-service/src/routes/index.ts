@@ -1,4 +1,4 @@
-import { Express, Router } from 'express';
+import { Router } from 'express';
 import s3Routes from './s3Routes';
 
 const router = Router();

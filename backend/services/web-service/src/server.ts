@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import path from "path";
 const dotenv = require('dotenv');
 import routes from './routes';
@@ -18,9 +18,7 @@ app.use(cors({
 // @TODO: estimate actual limits
 app.use(bodyParser.json({ limit: '10mb' }));
 
-app.use(express.static(path.join(__dirname, '../../../../frontend/dist')));
-
-app.get('/health', (req, res) => {
+app.get('/health', (_, res) => {
     const data = {
         service: 'web-service',
         uptime: process.uptime(),
@@ -30,10 +28,20 @@ app.get('/health', (req, res) => {
     res.status(200).send(data);
 });
 
+app.use(express.static(path.join(__dirname, '../../../../frontend/dist')));
+
+if (process.env.NODE_ENV === 'development') {
+    // preview of user-app (in development only)
+    app.use(express.static(path.join(__dirname, '../../../user-app/dist/development')));
+    app.get('/preview-dev', (req, res) => {
+        res.sendFile(path.join(__dirname, '../../../user-app/dist/development', 'index.html'))
+    })
+}
+
 app.use('/api/web-service', routes);
 
 app.get('*', (req, res) => {
-    res.send(path.join(__dirname, '../../../../frontend/dist', 'index.html'))
+    res.send('<h2>Oops, error!</h2><p>It seems the requested page does not exist.</p>');
 })
 
 app.listen(port, () => {

@@ -36,7 +36,7 @@ export default defineConfig({
         // chunkFileNames: 'assets/js/[name].[hash].js',
         assetFileNames: (assetInfo) => {
           if (assetInfo.name === 'index.css') return 'assets/style.css';
-          return assetInfo.name;
+          return assetInfo.name as string;
         },
       },
     },

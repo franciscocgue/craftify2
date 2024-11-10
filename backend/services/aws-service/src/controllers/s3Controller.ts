@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { presignedUrlService, putObjectService } from '../services/s3Service';
 import { NoSuchBucket } from "@aws-sdk/client-s3";
-import { buildLogger } from '../../../../common-utils/logger';
+import { buildLogger } from '../utils/logger';
 
 const logger = buildLogger('aws-service');
 
