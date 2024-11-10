@@ -28,8 +28,18 @@ export default defineConfig({
     // @TODO: split code / dynamic imports
     // lower threshold to get warning; note: warning interpreted by bullmq worker as error
     chunkSizeWarningLimit: 3000,
-    outDir: `dist/${process.env.USER_APP_ID}`
+    outDir: `dist/${process.env.USER_APP_ID}`,
     // outDir: `dist`
+    rollupOptions: {
+      output: {
+        entryFileNames: 'assets/index.js',
+        // chunkFileNames: 'assets/js/[name].[hash].js',
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === 'index.css') return 'assets/style.css';
+          return assetInfo.name;
+        },
+      },
+    },
   },
   define: {
     // Inject the JSON data directly as a global constant

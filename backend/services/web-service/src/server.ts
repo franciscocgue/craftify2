@@ -16,7 +16,7 @@ app.use(cors({
 }));
 
 // @TODO: estimate actual limits
-app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.json({ limit: '10mb' }));
 
 app.use(express.static(path.join(__dirname, '../../../../frontend/dist')));
 

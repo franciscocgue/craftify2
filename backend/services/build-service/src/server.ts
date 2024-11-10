@@ -1,9 +1,7 @@
 import express, { Express } from "express";
 // import path from "path";
 import routes from './routes';
-import Redis from "ioredis";
 // import { authentication } from "./middlewares";
-import { Queue } from 'bullmq';
 import './queues/worker'; // get workers running
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
@@ -17,10 +15,10 @@ const port = process.env.PORT;
 // app.use(express.json());
 // parse application/json
 // @TODO: estimate actual limits
-app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.json({limit: '10mb'}));
 // app.use(bodyParser.json())
 
-app.get('/health', (req, res) => {
+app.get('/health', (_, res) => {
     const data = {
         service: 'build-service',
         uptime: process.uptime(),

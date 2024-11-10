@@ -1,6 +1,7 @@
 import { Worker } from 'bullmq';
 import { QUEUE_NAMES, redisConnection } from '../config';
 import { buildLogger } from '../../../../common-utils/logger';
+import { httpClient } from '../../../../common-utils/http-client';
 const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
@@ -46,14 +47,83 @@ const worker = new Worker<BuildParamsType>(QUEUE_NAMES.appBuilder, async job => 
     // Await the exec function to ensure it completes
     const { stdout, stderr } = await execPromise(appBuildScript);
 
-    console.log(stdout)
+    // console.log(stdout)
 
     if (stderr) {
         // catched on 'failed' worker event
         throw new Error(stderr);
     }
-    // console.log(`stdout: ${stdout}`);
 
+    // if production, get pre-signed urls for AWS S3
+    // and update in built files
+
+    // @TODO: ENABLE FILTER, ONLY IN PRODUCTION!!
+    // if (process.env.NODE_ENV === 'production') {
+
+    // get pre-signed urls
+    type ObjType = {
+        bucketName: string,
+        key: string,
+    }
+    const { data: presignedUrls } = await httpClient.post<ObjType[], Record<`${string}/index.html` | `${string}/assets/index.js` | `${string}/assets/style.css`, string>>(
+        'http://localhost:3002/api/aws-service/s3/presignedUrl',
+        [
+            {
+                'bucketName': 'craftify-app-previews',
+                'key': `${appId}/assets/style.css`
+            },
+            {
+                'bucketName': 'craftify-app-previews',
+                'key': `${appId}/assets/index.js`
+            },
+            {
+                'bucketName': 'craftify-app-previews',
+                'key': `${appId}/index.html`
+            },
+        ]
+    );
+
+    // replace asset paths in index.html built
+
+    const htmlFilePath = path.join(__dirname, '..', '..', '..', '..', 'user-app', 'dist', appId, 'index.html');
+    let htmlFileContent: string = fs.readFileSync(htmlFilePath, 'utf8');
+    // assumed 2 assets: js and css
+    htmlFileContent = htmlFileContent.replace('/assets/index.js', presignedUrls[`${appId}/assets/index.js`])
+    htmlFileContent = htmlFileContent.replace('/assets/style.css', presignedUrls[`${appId}/assets/style.css`])
+
+    // upload to S3 bucket
+
+    const assetsPath = path.join(__dirname, '..', '..', '..', '..', 'user-app', 'dist', appId, 'assets');
+    const jsContent: string = fs.readFileSync(path.join(assetsPath, 'index.js'), 'utf8');
+    const cssContent: string = fs.readFileSync(path.join(assetsPath, 'style.css'), 'utf8');
+
+    await httpClient.post(
+        'http://localhost:3002/api/aws-service/s3/putObject',
+        {
+            'app-id': '123e3e35-425a-4c33-a813-83dde0d03576',
+            'objects': [
+                {
+                    'bucketName': 'craftify-app-previews',
+                    'key': `${appId}/index.html`,
+                    'body': htmlFileContent
+                },
+                {
+                    'bucketName': 'craftify-app-previews',
+                    'key': `${appId}/assets/index.js`,
+                    'body': jsContent
+                },
+                {
+                    'bucketName': 'craftify-app-previews',
+                    'key': `${appId}/assets/style.css`,
+                    'body': cssContent
+                },
+            ]
+        }
+    )
+
+    console.log(presignedUrls[`${appId}/index.html`]);
+
+    // }
 
     // read dist files and write to aws
 

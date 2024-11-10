@@ -12,7 +12,7 @@ export const appBuildController = async (req: Request, res: Response, next: Next
         if (error instanceof Error) {
             console.error(error.message); // Safely access the message property
         } else {
-            res.status(500).json({ message: '[error] bres.status(500).json({ message: error.msg });uild job could not be added to the queue' });
+            res.status(500).json({ message: '[error] build job could not be added to the queue' });
         }
     }
 }
