@@ -13,6 +13,8 @@
     height: calc(100% - 72px - 1px);
     bottom: 0;
     right: 0;
+    transform: translateY(100%); /* Start off-screen */
+    animation: slide-in 0.3s ease-out forwards; /* Animation applied */
 }
 
 .functions {
@@ -21,4 +23,14 @@
 
 .function {
     border: 1px solid rgb(102, 102, 102);
+}
+
+
+@keyframes slide-in {
+    from {
+        transform: translateY(100%); /* Off-screen */
+    }
+    to {
+        transform: translateY(0); /* Final position */
+    }
 }

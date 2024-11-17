@@ -164,6 +164,7 @@ const compDuplicator = (comps: ComponentCollection, props: ComponentCollectionPr
 // types
 
 type designerStore = {
+  appId: string,
   page: 'designer' | 'variables' | 'data' | 'styles',
   componentEditorMode: 'styles' | 'logic' | 'properties',
   colorMode: 'light' | 'dark',
@@ -238,6 +239,7 @@ type designerStore = {
 }
 
 const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => ({
+  appId: '1aaa9406-6687-485d-8276-203bd82bcfe1',
   page: 'designer',
   componentEditorMode: 'styles',
   colorMode: 'dark',

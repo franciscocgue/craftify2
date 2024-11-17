@@ -14,10 +14,10 @@ import {
 import styles from './index.module.css';
 import { useCallback, useEffect } from 'react';
 import useDesignerStore from '../../stores/designer';
-import { FaWindowClose } from "react-icons/fa";
 import * as nodesElements from './nodes';
 import { debounce } from 'lodash';
 import { logicFunctions } from '../../config/logic';
+import { BsCaretDownFill } from 'react-icons/bs';
 
 
 const defaultNode = [{
@@ -125,7 +125,7 @@ const Logic = ({ handleClickOutside, selectedComponentId }: LogicProps) => {
                 minZoom={0.75}
             // deleteKeyCode={null}
             >
-                <Panel position="top-right" ><FaWindowClose color={`${colorMode === 'light' ? 'black' : 'white'}`} size={30} style={{ cursor: 'pointer' }} onClick={handleClickOutside} /></Panel>
+                <Panel position="top-right" ><BsCaretDownFill color={`${colorMode === 'light' ? 'black' : 'white'}`} size={30} style={{ cursor: 'pointer' }} onClick={handleClickOutside} /></Panel>
                 <Background bgColor={colorMode === 'light' ? 'white' : undefined} variant={BackgroundVariant.Dots} gap={12} size={1} />
                 <Controls />
                 <MiniMap />
