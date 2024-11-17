@@ -23,15 +23,13 @@ type BuildParamsType = {
 
 const worker = new Worker<BuildParamsType>(QUEUE_NAMES.appBuilder, async job => {
 
-    let appId: string;
-    if (process.env.NODE_ENV === 'production') {
-        // in prod, user-app preview served from S3 bucket
-        appId = job.data['app-id'];
-    } else {
-        // in dev, user-app preview is served locally
-        appId = 'development'
-    }
-    const userAppPath = path.join(__dirname, '..', '..', '..', '..', 'user-app', 'src', 'app-data', appId);
+    const devRef = 'development'; // in development, build to dist/development and app-data/development
+    const appId: string = job.data['app-id'];
+    const userAppPath = path.join(
+        __dirname,
+        '..', '..', '..', '..',
+        'user-app', 'src', 'app-data',
+        process.env.NODE_ENV === 'production' ? appId : devRef);
 
     // create any necessary directories
     fs.mkdirSync(userAppPath, { recursive: true });
@@ -43,14 +41,12 @@ const worker = new Worker<BuildParamsType>(QUEUE_NAMES.appBuilder, async job => 
     fs.writeFileSync(path.join(userAppPath, 'logicNodes.json'), JSON.stringify(job.data?.logicNodes ?? {}))
     fs.writeFileSync(path.join(userAppPath, 'logicEdges.json'), JSON.stringify(job.data?.logicEdges ?? {}))
 
-    // run npm script (with output directly being based in project uuid)
+    // run npm script (with output directly being based on project uuid)
 
-
-    // cross-env USER_APP_ID=12345 npm run build --prefix ../../user-app -- --outDir ./dist/12345
 
     // -- --param --> means param is not for npm run but for the actual command (here: vite build)
     // const appBuildScript = `cross-env USER_APP_ID=${appId} npm run build --prefix ../../user-app -- --outDir dist/${appId}`
-    const appBuildScript = `cross-env USER_APP_ID=${appId} npm run build --prefix ../../user-app`
+    const appBuildScript = `cross-env USER_APP_ID=${process.env.NODE_ENV === 'production' ? appId : devRef} npm run build --prefix ../../user-app`
     // Await the exec function to ensure it completes
     const { stdout, stderr } = await execPromise(appBuildScript);
 
@@ -65,6 +61,7 @@ const worker = new Worker<BuildParamsType>(QUEUE_NAMES.appBuilder, async job => 
     // and update in built files
 
     // if in production: upload to S3 bucket and get presigned URLs
+    let previewUrl: string;
     if (process.env.NODE_ENV === 'production') {
 
         // get pre-signed urls
@@ -73,23 +70,24 @@ const worker = new Worker<BuildParamsType>(QUEUE_NAMES.appBuilder, async job => 
             bucketName: string,
             key: string,
         }
-        const { data: presignedUrls } = await httpClient.post<ObjType[], Record<`${string}/index.html` | `${string}/assets/index.js` | `${string}/assets/style.css`, string>>(
-            'http://localhost:3002/api/aws-service/s3/presignedUrl',
-            [
-                {
-                    'bucketName': 'craftify-app-previews',
-                    'key': `${appId}/assets/style.css`
-                },
-                {
-                    'bucketName': 'craftify-app-previews',
-                    'key': `${appId}/assets/index.js`
-                },
-                {
-                    'bucketName': 'craftify-app-previews',
-                    'key': `${appId}/index.html`
-                },
-            ]
-        );
+        const presignedUrls = await httpClient.post<
+            Record<`${string}/index.html` | `${string}/assets/index.js` | `${string}/assets/style.css`, string>, ObjType[]>(
+                'http://localhost:3002/api/aws-service/s3/presignedUrl',
+                [
+                    {
+                        'bucketName': 'craftify-app-previews',
+                        'key': `${appId}/assets/style.css`
+                    },
+                    {
+                        'bucketName': 'craftify-app-previews',
+                        'key': `${appId}/assets/index.js`
+                    },
+                    {
+                        'bucketName': 'craftify-app-previews',
+                        'key': `${appId}/index.html`
+                    },
+                ]
+            );
 
         // replace asset paths in index.html built
 
@@ -105,10 +103,9 @@ const worker = new Worker<BuildParamsType>(QUEUE_NAMES.appBuilder, async job => 
         const jsContent: string = fs.readFileSync(path.join(assetsPath, 'index.js'), 'utf8');
         const cssContent: string = fs.readFileSync(path.join(assetsPath, 'style.css'), 'utf8');
 
-        await httpClient.post(
+        await httpClient.post<{}, { objects: (ObjType & { body: string })[] }>(
             'http://localhost:3002/api/aws-service/s3/putObject',
             {
-                'app-id': '123e3e35-425a-4c33-a813-83dde0d03576',
                 'objects': [
                     {
                         'bucketName': 'craftify-app-previews',
@@ -130,24 +127,47 @@ const worker = new Worker<BuildParamsType>(QUEUE_NAMES.appBuilder, async job => 
         )
 
         // index.html URL
-        console.log(presignedUrls[`${appId}/index.html`]);
+        previewUrl = presignedUrls[`${appId}/index.html`];
     } else {
         // index.html URL
-        console.log('http://localhost:3000/preview-dev');
+        previewUrl = 'http://localhost:3000/preview-dev';
     }
 
-    // read dist files and write to aws
-
-    // get the presigned urls and return to client (on worker job done)
-
-    // web sockets
+    return previewUrl;
 
 }, { connection: redisConnection });
 
-worker.on('completed', job => {
+worker.on('completed', async (job, returnvalue) => {
+    // notify client
+
+    const appId = job.data['app-id'];
+    const previewUrl = returnvalue;
+
+    const data = { url: previewUrl, error: null };
+    try {
+        await httpClient.post<{}, { clientId: string, data: any }>('http://localhost:3000/api/web-service/broadcast', { clientId: appId, data });
+    } catch (error) {
+        logger.error(`Error when notifying client ${appId} on success completion of Job ${job.id}`);
+    }
+
     logger.log(`Job ${job.id} has completed!`);
 });
 
-worker.on('failed', (job, err) => {
+worker.on('failed', async (job, err) => {
+    // notify client
+
+    if (job) {
+        const appId = job.data['app-id'];
+        // @TODO FUTURE: throw more generic friendlier error?
+        const data = { error: err.message, code: 500 };
+
+        try {
+            await httpClient.post<{}, { clientId: string, data: any }>('http://localhost:3000/api/web-service/broadcast', { clientId: appId, data });
+        } catch (error) {
+            logger.error(`Error when notifying client ${appId} on failure of Job ${job.id}`);
+        }
+
+    }
+
     logger.error(`Job ${job?.id} has failed with ${err.message}`);
 });

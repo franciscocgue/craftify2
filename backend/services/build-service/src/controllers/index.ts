@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { myQueue } from "../queues/queue";
 
-export const appBuildController = async (req: Request, res: Response, next: NextFunction) => {
+export const appBuildController = async (req: Request, res: Response) => {
     try {
         const data = req.body;
         // Add job to queue

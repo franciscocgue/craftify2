@@ -3,7 +3,7 @@ import path from "path";
 const dotenv = require('dotenv');
 import routes from './routes';
 import bodyParser from "body-parser";
-const cors = require('cors');
+import cors from 'cors';
 
 dotenv.config();
 
@@ -12,7 +12,7 @@ const port = process.env.PORT;
 
 app.use(cors({
     // probably only needed during development
-    origin: 'http://localhost:5173' // React app's URL
+    origin: 'http://localhost:5173' // React app's URL,
 }));
 
 // @TODO: estimate actual limits

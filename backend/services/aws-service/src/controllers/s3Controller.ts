@@ -12,7 +12,6 @@ type ObjectProps = {
 }
 
 type RequestBody = {
-    "app-id": string,
     objects: [ObjectProps, ...ObjectProps[]]
 }
 

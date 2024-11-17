@@ -22,7 +22,8 @@ const handleButtonClick = async (
 
     try {
         console.log(components)
-        await axios.post('http://localhost:3000/api/web-service/preview', {
+        // @TODO: manage urls in environments
+        await axios.post('http://localhost:3000/api/web-service/build', {
             "app-id": appId,
             components,
             properties,
