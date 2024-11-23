@@ -1,0 +1,28 @@
+#my-error-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+#my-error-page h1 {
+    margin-bottom: 2rem;
+}
+
+#my-error-page p {
+    margin-top: 1rem;
+}
+
+#my-error-page i {
+    color: grey;
+}
+
+#my-error-page p:last-child {
+    margin-top: 4rem;
+}
+
+#my-error-page a {
+    text-decoration: none;
+    color: blue;
+}

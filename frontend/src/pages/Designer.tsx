@@ -15,8 +15,13 @@ import style from './Designer.module.css';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { myPointerWithin } from '../utils';
+// import { useLoaderData } from "react-router-dom";
 
 const Designer = () => {
+
+
+  // const {data} = useLoaderData() as {data: any};
+  // console.log('rrrrrrrr', data);
 
   // const { setDraggingId, draggingId, isResizing, moveComponent, addComponent, components } = useDesignerStore();
   const setDraggable = useDesignerStore((state) => state.setDraggable);

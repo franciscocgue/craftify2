@@ -164,7 +164,7 @@ const compDuplicator = (comps: ComponentCollection, props: ComponentCollectionPr
 // types
 
 type designerStore = {
-  appId: string,
+  appId: string | null,
   page: 'designer' | 'variables' | 'data' | 'styles',
   componentEditorMode: 'styles' | 'logic' | 'properties',
   colorMode: 'light' | 'dark',
@@ -183,6 +183,7 @@ type designerStore = {
   lastUpdatedCompChildren: string[],
   logicNodes: Record<string, LogicNode<FunctionTypes>[]>,
   logicEdges: Record<string, LogicEdge[]>,
+  setAppId: (appId: string | null) => void,
   setPage: (page: 'designer' | 'variables' | 'data' | 'styles') => void,
   setComponentEditorMode: (mode: 'styles' | 'logic' | 'properties') => void,
   toggleColorMode: () => void,
@@ -273,6 +274,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   lastUpdatedCompChildren: [],
   logicNodes: {},
   logicEdges: {},
+  setAppId: appId => set({ appId }), // set to null to unselect project
   setPage: page => set({ page }),
   setComponentEditorMode: componentEditorMode => set({ componentEditorMode }),
   toggleColorMode: () => set(state => ({ colorMode: state.colorMode === 'dark' ? 'light' : 'dark' })),
