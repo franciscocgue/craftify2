@@ -1,5 +1,5 @@
 import express from "express";
-import { builder, clientMessenger, serverEvents } from "../controllers";
+import { builder, clientMessenger, serverEvents, getProjects } from "../controllers";
 
 const router = express.Router();
 
@@ -10,6 +10,9 @@ router.get('/events/:clientId', serverEvents);
 
 // message client
 router.post('/broadcast', clientMessenger)
+
+// get projects
+router.get('/projects', getProjects);
 
 
 

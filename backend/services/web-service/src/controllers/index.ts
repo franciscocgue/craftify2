@@ -15,6 +15,25 @@ const builder = async (req: Request, res: Response) => {
   }
 }
 
+const getProjects = async (req: Request, res: Response) => {
+  try {
+    // call build service
+
+    const body = {
+      "databaseName": "projects",
+      "columns": { "_id": 0, "appId": 1, "name": 1, "editedBy": 1, "editedOn": 1 }
+    };
+
+    const data = await httpClient.post<{ status: 'ok' | 'nok', data: unknown[] }>('http://localhost:3003/api/db-service/list', body);
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({
+      error: 'Error occurred when retrieving the projects',
+      code: 500,
+    });
+  }
+}
+
 
 const serverEvents = (req: Request<{ clientId: string }>, res: Response) => {
   // manage new connection / closing of connnections.
@@ -65,4 +84,5 @@ export {
   builder,
   serverEvents,
   clientMessenger,
+  getProjects,
 };
