@@ -1,9 +1,10 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
+import { buildLogger } from '../utils/logger';
 const uri = process.env.DB_CONNECTION_STRING;
 
-console.log(uri)
-
 let client: MongoClient | null = null;
+
+const logger = buildLogger('db-service');
 
 async function dbConnect() {
 
@@ -25,9 +26,14 @@ async function dbConnect() {
 
         try {
             await client.connect();
-            console.log("Successfully connected to MongoDB!");
+            // console.log("Successfully connected to MongoDB!");
         } catch (error) {
-            console.error("MongoDB connection error:", error);
+            if (error instanceof Error) {
+                logger.error(error.message);
+                // console.error("MongoDB connection error:", error);
+            } else {
+                logger.error(String(error));
+            }
             throw error;
         }
 

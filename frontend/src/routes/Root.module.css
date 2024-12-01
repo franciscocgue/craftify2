@@ -1,3 +1,37 @@
+.theme-dark {
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.theme-dark a:link {
+    color: lightskyblue;
+}
+.theme-dark a:visited {
+    color: lightskyblue;
+}
+/* .theme-dark a:visited { color: #9e7ac0; } */
+.theme-dark a:hover {
+    color: #ffffff;
+}
+/* .theme-dark a:active { color: #ff4040; text-decoration:none; font-weight:normal; } */
+
+.theme-light {
+    color: black;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.theme-light a:link {
+    color: blue;
+}
+.theme-light a:visited {
+    color: blue;
+}
+/* .theme-dark a:visited { color: #9e7ac0; } */
+.theme-light a:hover {
+    color: black;
+}
+/* .theme-dark a:active { color: #ff4040; text-decoration:none; font-weight:normal; } */
+
 .overlay {
     display: flex;
     align-items: center;
@@ -12,20 +46,57 @@
 }
 
 .wrapper {
-    /* display: flex; */
-    /* align-items: center; */
-    /* justify-content: center; */
-    /* height: 100vh; */
+    flex-direction: column;
+    display: flex;
+    height: 100vh;
+    min-height: 100vh;
+    max-height: 100vh;
+    width: 100vw;
+    max-width: 100vw;
 }
 
-.right {
-    float: right;
-    width: 50%;
+.main-navbar {
+    justify-content: space-between;
+    /* padding: 16px; */
+    padding-left: 16px;
+    padding-right: 16px;
+    display: flex;
+    /* height matches other window navbars for smooth transition */
+    height: 72px;
+    align-items: center;
+    gap: 20px;
 }
 
-.left {
-    float: left;
-    width: 50%;
+.main-navbar .logo {
+    width: 100px;
+    /* border-right: 2px solid black; */
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.main-navbar .logo div {
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 500;
+    font-size: 15pt;
+    user-select: none;
+}
+
+.main {
+    padding: 20px;
+}
+
+.title {
+    padding: 5px 10px;
+    border-radius: 3px;
+    background: lightgrey;
+    color: black;
+    margin-bottom: 20px;
+}
+
+.projects {
+    max-height: calc(100vh - 350px);
+    overflow: auto;
 }
 
 .project {
@@ -33,29 +104,48 @@
     flex-direction: row;
     border-bottom: 1px solid lightgray;
     padding: 5px;
+    align-items: center;
+    min-height: 45px;
 }
 
 .loader {
     width: 60px;
 }
 
+.no-projects {
+    font-style: italic;
+    margin-top: 20px;
+    margin-left: 5px;
+    color: grey;
+}
+
+.header {
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+.action {
+    width: 50px;
+}
+
 .project-name {
-    width: 250px;
+    /* margin-left: 25px; */
+    width: 400px;
+    padding-right: 30px;
 }
 
 .project-link {
     text-decoration: none;
-    color: blue;
-}
-
-.project-edited-by {
-    width: 250px;
 }
 
 .project-edited-on {
     width: 250px;
 }
 
-.btn-create {
-    /* width: fit-content; */
+.project-edited-on .date {
+    font-size: 90%;
+}
+
+.project-edited-on .time {
+    font-size: 90%;
 }

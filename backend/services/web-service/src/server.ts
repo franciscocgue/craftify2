@@ -41,7 +41,8 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/api/web-service', routes);
 
 app.get('*', (req, res) => {
-    res.send('<h2>Oops, error!</h2><p>It seems the requested page does not exist.</p>');
+    // res.send('<h2>Oops, error!</h2><p>It seems the requested page does not exist.</p>');
+    res.sendFile(path.join(__dirname, '../../../../frontend/dist/index.html'))
 })
 
 app.listen(port, () => {

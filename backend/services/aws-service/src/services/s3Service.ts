@@ -22,7 +22,7 @@ const putObjectService = async ({ bucketName, key, body }: putObjectServiceProps
         new PutObjectCommand({
             Bucket: bucketName,
             Key: key,
-            Body: body,            
+            Body: body,
         }),
     );
 
@@ -37,20 +37,48 @@ const putObjectService = async ({ bucketName, key, body }: putObjectServiceProps
     // console.log(await Body?.transformToString());
 }
 
+
+type getObjectServiceProps = {
+    bucketName: string,
+    key: string,
+};
+
+const getObjectService = async ({ bucketName, key }: getObjectServiceProps) => {
+
+    const s3Client = new S3Client({});
+
+    // Read the object.
+    const { Body } = await s3Client.send(
+        new GetObjectCommand({
+            Bucket: bucketName,
+            Key: key,
+        }),
+    );
+
+    if (Body) {
+        const bodyString = await Body.transformToString();
+        return bodyString;
+    } else {
+        return null;
+    }
+    // console.log(await Body?.transformToString());
+}
+
 const presignedUrlService = async ({ bucketName, key }: { bucketName: string, key: string }) => {
     const ext = key.split('.').at(-1) || 'no-ext';
     const client = new S3Client({});
     const command = new GetObjectCommand({
         Bucket: bucketName,
-        Key: key,   
-        ResponseContentType: contentTypes[ext as keyof typeof contentTypes],    
+        Key: key,
+        ResponseContentType: contentTypes[ext as keyof typeof contentTypes],
     });
-    const url = await getSignedUrl(client, command, { expiresIn: 60*60 });
+    const url = await getSignedUrl(client, command, { expiresIn: 60 * 60 });
 
     return url;
 }
 
 export {
     putObjectService,
+    getObjectService,
     presignedUrlService,
 }

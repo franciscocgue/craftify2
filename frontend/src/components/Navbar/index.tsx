@@ -9,6 +9,7 @@ import { IoMdPhoneLandscape } from "react-icons/io";
 import { useEffect, useState } from "react";
 import PreviewActions from "./PreviewActions";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const ToggleColorMode = () => {
   const toggleColorMode = useDesignerStore((state) => state.toggleColorMode);
@@ -91,12 +92,14 @@ const Navbar = () => {
         justifyContent: 'start'
       }}>
         {/* <img height={54} src={logo} alt="Logo" /> */}
-        <div style={{
+        <Link to={'/'} style={{
           fontFamily: '"Ubuntu", sans-serif',
           fontWeight: '500',
           fontSize: '15pt',
           userSelect: 'none',
-        }}>Craftify</div>
+          textDecoration: 'none',
+          color: 'inherit',
+        }}>Craftify</Link>
       </div>
       <div style={{
         // flex: 1,

@@ -21,7 +21,7 @@ const hoverStyle = {
 }
 
 type IconButtonProps = {
-    icon: ReactElement, // react-icon normally
+    icon?: ReactElement, // react-icon normally
     onClick: React.MouseEventHandler<HTMLButtonElement>,
     baseStylesOverwrite?: CSSProperties,
     hoverStylesOverwrite?: CSSProperties,
@@ -40,7 +40,7 @@ const IconButton = ({ icon, onClick, baseStylesOverwrite, hoverStylesOverwrite, 
         onClick={onClick}
         title={title}
     >
-        {before && <span style={{ marginRight: '5px' }}>{before}</span>}{icon}{after && <span style={{ marginLeft: '5px' }}>{after}</span>}
+        {before && <span style={{ marginRight: icon ? '5px' : '0px' }}>{before}</span>}{icon}{after && <span style={{ marginLeft: icon ? '5px' : '0px' }}>{after}</span>}
     </button>
 }
 

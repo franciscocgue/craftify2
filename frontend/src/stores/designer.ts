@@ -18,17 +18,6 @@ const componentNamesInitial = Object.keys(compTypes).reduce((acc, compType) => {
   return acc;
 }, {} as CompNames);
 
-// initialize components
-const initialComponents: ComponentCollection = {
-  'canvas': {
-    type: 'canvas',
-    parent: null,
-    children: [],
-    name: 'Canvas'
-  },
-}
-// initialize component properties
-const initialProperties: ComponentCollectionProperties = { canvas: compProperties['canvas'] };
 // const initialComponents: ComponentCollection = components_ as ComponentCollection;
 // const initialProperties: ComponentCollectionProperties = properties_ as ComponentCollectionProperties;
 
@@ -240,7 +229,8 @@ type designerStore = {
 }
 
 const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => ({
-  appId: '1aaa9406-6687-485d-8276-203bd82bcfe1',
+  appId: null,
+  // appId: '1aaa9406-6687-485d-8276-203bd82bcfe1',
   page: 'designer',
   componentEditorMode: 'styles',
   colorMode: 'dark',
@@ -250,25 +240,26 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   selectedId: null,
   hoveredId: null,
   isCanvasScrolling: false,
-  components: initialComponents,
-  properties: initialProperties,
-  variables: {
-    name: {
-      type: 'text',
-      initialValue: 'James',
-      value: 'James'
-    },
-    age: {
-      type: 'number',
-      initialValue: 30,
-      value: 30
-    },
-    hasGlasses: {
-      type: 'boolean',
-      initialValue: true,
-      value: true
-    }
-  },
+  components: {},
+  properties: {},
+  variables: {},
+  // variables: {
+  //   name: {
+  //     type: 'text',
+  //     initialValue: 'James',
+  //     value: 'James'
+  //   },
+  //   age: {
+  //     type: 'number',
+  //     initialValue: 30,
+  //     value: 30
+  //   },
+  //   hasGlasses: {
+  //     type: 'boolean',
+  //     initialValue: true,
+  //     value: true
+  //   }
+  // },
   componentNames: componentNamesInitial,
   expandAllProperties: false,
   lastUpdatedCompChildren: [],

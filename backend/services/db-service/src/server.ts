@@ -1,7 +1,6 @@
 import express, { Express, Request } from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
 import { dbConnect, getClient } from './db';
 import { buildLogger } from './utils/logger';
 const bodyParser = require("body-parser");
@@ -28,20 +27,21 @@ app.get('/health', (_, res) => {
 
 const logger = buildLogger('db-service');
 
-type RequestBody = {
-    databaseName: string,
-    columns: Record<string, 0 | 1>
+type RequestBodyRead = {
+    collectionName: string,
+    columns: Record<string, 0 | 1>,
+    filter?: Record<string, any>,
 }
 
-app.post('/api/db-service/list', async (req: Request<{}, {}, RequestBody>, res) => {
+app.post('/api/db-service/read', async (req: Request<{}, {}, RequestBodyRead>, res) => {
 
     try {
         const client = getClient();
 
-        const databaseName = req.body.databaseName;
+        const collectionName = req.body.collectionName;
 
         const database = await client.db('craftify');
-        const items = database.collection(databaseName);
+        const collection = database.collection(collectionName);
         // const cursor = collections[0].find({});
 
         const options = {
@@ -50,7 +50,8 @@ app.post('/api/db-service/list', async (req: Request<{}, {}, RequestBody>, res) 
             // Include only the `title` and `imdb` fields in the returned document
             projection: req.body.columns,
         };
-        const cursor = await items.find({}, options);
+        const filter = req.body.filter ?? {};
+        const cursor = await collection.find(filter, options);
 
         const result = [];
         for await (const doc of cursor) {
@@ -67,6 +68,103 @@ app.post('/api/db-service/list', async (req: Request<{}, {}, RequestBody>, res) 
         res.status(500).json({
             status: 'nok',
             message: '[error] Could not retrieve data',
+        });
+    }
+});
+
+type RequestBodyCreate = {
+    collectionName: string,
+    documents: [Record<string, any>, ...Record<string, any>[]]
+}
+
+app.post('/api/db-service/create', async (req: Request<{}, {}, RequestBodyCreate>, res) => {
+
+    try {
+        const client = getClient();
+
+        const collectionName = req.body.collectionName;
+
+        const database = await client.db('craftify');
+        const collection = database.collection(collectionName);
+
+        const { insertedIds } = await collection.insertMany(req.body.documents);
+
+        res.status(200).json({
+            status: 'ok',
+            data: insertedIds,
+        });
+    } catch (error) {
+        logger.error(`${error}`);
+        res.status(500).json({
+            status: 'nok',
+            message: '[error] Could not create data',
+        });
+    }
+});
+
+type RequestBodyDelete = {
+    collectionName: string,
+    filter: Record<string, any>,
+}
+
+app.post('/api/db-service/delete', async (req: Request<{}, {}, RequestBodyDelete>, res) => {
+
+    try {
+        const client = getClient();
+
+        const collectionName = req.body.collectionName;
+
+        const database = await client.db('craftify');
+        const collection = database.collection(collectionName);
+
+        await collection.deleteMany(req.body.filter);
+
+        res.status(200).json({
+            status: 'ok',
+            data: null,
+        });
+    } catch (error) {
+        logger.error(`${error}`);
+        res.status(500).json({
+            status: 'nok',
+            message: '[error] Could not delete item(s)',
+        });
+    }
+});
+
+type RequestBodyUpdate = {
+    collectionName: string,
+    filter: Record<string, any>,
+    changes: Record<string, any>,
+}
+
+app.post('/api/db-service/update', async (req: Request<{}, {}, RequestBodyUpdate>, res) => {
+
+    try {
+        const client = getClient();
+
+        const collectionName = req.body.collectionName;
+
+        const database = await client.db('craftify');
+        const collection = database.collection(collectionName);
+
+        const filter = req.body.filter;
+        const options = { upsert: false };
+        const updateDoc = {
+            $set: req.body.changes,
+        };
+
+        await collection.updateMany(filter, updateDoc, options);
+
+        res.status(200).json({
+            status: 'ok',
+            data: null,
+        });
+    } catch (error) {
+        logger.error(`${error}`);
+        res.status(500).json({
+            status: 'nok',
+            message: '[error] Could not update item(s)',
         });
     }
 });

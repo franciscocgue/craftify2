@@ -124,7 +124,47 @@ const worker = new Worker<BuildParamsType>(QUEUE_NAMES.appBuilder, async job => 
                     },
                 ]
             }
-        )
+        );
+
+        // save JSON objects asynchronously
+        httpClient.post<{}, { objects: (ObjType & { body: string })[] }>(
+            'http://localhost:3002/api/aws-service/s3/putObject',
+            {
+                'objects': [
+                    {
+                        'bucketName': 'craftify-app-previews',
+                        'key': `${appId}/build-resources/components.json`,
+                        'body': JSON.stringify(job.data?.components ?? {})
+                    },
+                    {
+                        'bucketName': 'craftify-app-previews',
+                        'key': `${appId}/build-resources/properties.json`,
+                        'body': JSON.stringify(job.data?.properties ?? {})
+                    },
+                    {
+                        'bucketName': 'craftify-app-previews',
+                        'key': `${appId}/build-resources/variables.json`,
+                        'body': JSON.stringify(job.data?.variables ?? {})
+                    },
+                    {
+                        'bucketName': 'craftify-app-previews',
+                        'key': `${appId}/build-resources/logicNodes.json`,
+                        'body': JSON.stringify(job.data?.logicNodes ?? {})
+                    },
+                    {
+                        'bucketName': 'craftify-app-previews',
+                        'key': `${appId}/build-resources/logicEdges.json`,
+                        'body': JSON.stringify(job.data?.logicEdges ?? {})
+                    },
+                ]
+            }
+        );
+        // update modified date of project
+        httpClient.post('http://localhost:3003/api/db-service/update', {
+            collectionName: 'projects',
+            filter: { appId: appId },
+            changes: { editedOn: new Date() },
+        });
 
         // index.html URL
         previewUrl = presignedUrls[`${appId}/index.html`];

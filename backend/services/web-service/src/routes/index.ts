@@ -1,5 +1,9 @@
 import express from "express";
-import { builder, clientMessenger, serverEvents, getProjects } from "../controllers";
+import {
+    builder, clientMessenger, serverEvents,
+    getProjects, addProject, deleteProject,
+    getProjectObject, validateAppId
+} from "../controllers";
 
 const router = express.Router();
 
@@ -11,9 +15,12 @@ router.get('/events/:clientId', serverEvents);
 // message client
 router.post('/broadcast', clientMessenger)
 
-// get projects
+// projects
 router.get('/projects', getProjects);
-
+router.post('/create-project', addProject);
+router.post('/delete-project', deleteProject);
+router.post('/get-project-object', getProjectObject);
+router.post('/validate-appid', validateAppId);
 
 
 export default router;
