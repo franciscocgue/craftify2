@@ -2,12 +2,24 @@ import { Worker } from 'bullmq';
 import { QUEUE_NAMES, redisConnection } from '../config';
 import { buildLogger } from '../utils/logger';
 import { httpClient } from '../utils/http-client';
-const fs = require('fs');
-const path = require('path');
+import * as fs from 'fs';
+import * as path from 'path';
 const { exec } = require('child_process');
 const util = require('util');
 
 const logger = buildLogger('build-service');
+
+// utils for cleanup
+const rmFolder = (dir: string) => {
+    fs.rm(dir, { recursive: true, force: true }, err => {
+        if (err) {
+            logger.error(`Error when deleting '${dir}'`);
+        }
+    });
+};
+const cleanUp = (dirs: string[]) => {
+    dirs.forEach(dir => rmFolder(dir));
+};
 
 // Promisify the exec function
 const execPromise = util.promisify(exec);
@@ -172,6 +184,18 @@ const worker = new Worker<BuildParamsType>(QUEUE_NAMES.appBuilder, async job => 
         // index.html URL
         previewUrl = 'http://localhost:3000/preview-dev';
     }
+
+    // async clean-up
+    const dirs = [
+        // input object files for the build in user-app (app-data)
+        userAppPath,
+    ];
+    if (process.env.NODE_ENV === 'production') {
+        // dist user-app folder; 
+        // in dev we keep local folder for serving purposes
+        dirs.push(path.join(__dirname, '..', '..', '..', '..', 'user-app', 'dist', appId));
+    }
+    cleanUp(dirs);
 
     return previewUrl;
 
