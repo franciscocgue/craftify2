@@ -1,4 +1,4 @@
-import { PutObjectCommand, GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { PutObjectCommand, GetObjectCommand, S3Client, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const contentTypes = {
@@ -77,8 +77,17 @@ const presignedUrlService = async ({ bucketName, key }: { bucketName: string, ke
     return url;
 }
 
+const deleteObjectService = async ({ bucketName, key }: { bucketName: string, key: string }) => {
+
+    const s3Client = new S3Client({});
+    const data = await s3Client.send(new DeleteObjectCommand({ Bucket: bucketName, Key: key }));
+
+    return data;
+};
+
 export {
     putObjectService,
     getObjectService,
+    deleteObjectService,
     presignedUrlService,
 }

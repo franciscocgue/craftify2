@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { presignedUrl, putObject, getObject } from "../controllers/s3Controller";
+import { presignedUrl, putObject, getObject, deleteObject } from "../controllers/s3Controller";
 
 const router = Router();
 
@@ -7,6 +7,8 @@ const router = Router();
 router.post('/putObject', putObject);
 // read bucket object
 router.post('/getObject', getObject);
+// delete bucket object
+router.post('/deleteObject', deleteObject);
 
 // get pre-signed object url
 router.post('/presignedUrl', presignedUrl);

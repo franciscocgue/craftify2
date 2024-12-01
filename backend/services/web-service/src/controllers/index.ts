@@ -101,12 +101,63 @@ const addProject = async (req: Request<{}, {}, { projectName: string }>, res: Re
 
 const deleteProject = async (req: Request<{}, {}, { appId: string }>, res: Response) => {
   try {
+    // DB delete
     const body = {
       "collectionName": "projects",
       "filter": { "appId": req.body.appId }
     };
-
     const data = await httpClient.post<{ status: 'ok' | 'nok', data?: unknown[], message?: string }>('http://localhost:3003/api/db-service/delete', body);
+
+    // delete S3 project objects
+    httpClient.post
+      <string, { bucketName: string, key: string }>
+      ('http://localhost:3002/api/aws-service/s3/deleteObject', {
+        'bucketName': 'craftify-app-previews',
+        'key': `${req.body.appId}/assets/index.js`,
+      });
+    httpClient.post
+      <string, { bucketName: string, key: string }>
+      ('http://localhost:3002/api/aws-service/s3/deleteObject', {
+        'bucketName': 'craftify-app-previews',
+        'key': `${req.body.appId}/assets/style.css`,
+      });
+    httpClient.post
+      <string, { bucketName: string, key: string }>
+      ('http://localhost:3002/api/aws-service/s3/deleteObject', {
+        'bucketName': 'craftify-app-previews',
+        'key': `${req.body.appId}/build-resources/components.json`,
+      });
+    httpClient.post
+      <string, { bucketName: string, key: string }>
+      ('http://localhost:3002/api/aws-service/s3/deleteObject', {
+        'bucketName': 'craftify-app-previews',
+        'key': `${req.body.appId}/build-resources/properties.json`,
+      });
+    httpClient.post
+      <string, { bucketName: string, key: string }>
+      ('http://localhost:3002/api/aws-service/s3/deleteObject', {
+        'bucketName': 'craftify-app-previews',
+        'key': `${req.body.appId}/build-resources/variables.json`,
+      });
+    httpClient.post
+      <string, { bucketName: string, key: string }>
+      ('http://localhost:3002/api/aws-service/s3/deleteObject', {
+        'bucketName': 'craftify-app-previews',
+        'key': `${req.body.appId}/build-resources/logicEdges.json`,
+      });
+    httpClient.post
+      <string, { bucketName: string, key: string }>
+      ('http://localhost:3002/api/aws-service/s3/deleteObject', {
+        'bucketName': 'craftify-app-previews',
+        'key': `${req.body.appId}/build-resources/logicNodes.json`,
+      });
+    httpClient.post
+      <string, { bucketName: string, key: string }>
+      ('http://localhost:3002/api/aws-service/s3/deleteObject', {
+        'bucketName': 'craftify-app-previews',
+        'key': `${req.body.appId}/index.html`,
+      });
+
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({
