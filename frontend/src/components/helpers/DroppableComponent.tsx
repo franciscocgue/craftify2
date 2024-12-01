@@ -10,7 +10,7 @@ const styleTop: CSSProperties = {
 };
 
 const styleTopHighlight: (isOverTop: boolean) => CSSProperties = (isOverTop) => ({
-    backgroundColor: isOverTop ? 'green' : undefined,
+    backgroundColor: isOverTop ? '#8fff00' : undefined,
     position: 'absolute',
     width: '100%',
     height: '4px',
@@ -28,7 +28,7 @@ const styleBottom: CSSProperties = {
 };
 
 const styleBottomHighlight: (isOverBottom: boolean) => CSSProperties = (isOverBottom) => ({
-    backgroundColor: isOverBottom ? 'green' : undefined,
+    backgroundColor: isOverBottom ? '#8fff00' : undefined,
     position: 'absolute',
     width: '100%',
     height: '4px',
@@ -45,7 +45,7 @@ const styleLeft: CSSProperties = {
 };
 
 const styleLeftHighlight: (isOverLeft: boolean) => CSSProperties = (isOverLeft) => ({
-    backgroundColor: isOverLeft ? 'green' : undefined,
+    backgroundColor: isOverLeft ? '#8fff00' : undefined,
     position: 'absolute',
     width: '4px',
     height: '100%',
@@ -63,7 +63,7 @@ const styleRight: CSSProperties = {
 };
 
 const styleRightHighlight: (isOverRight: boolean) => CSSProperties = (isOverRight) => ({
-    backgroundColor: isOverRight ? 'green' : undefined,
+    backgroundColor: isOverRight ? '#8fff00' : undefined,
     position: 'absolute',
     width: '4px',
     height: '100%',

@@ -271,7 +271,7 @@ const treeAsHtml = (node: NodeType, selectedId: string | null) => {
         <TreeNode
             style={{
                 // outline: node.key === selectedId ? '1px solid green' : undefined,
-                boxShadow: node.key === selectedId ? 'inset 2px 2px green, inset -2px -2px green' : undefined,
+                boxShadow: node.key === selectedId ? 'inset 2px 2px #8fff00, inset -2px -2px #8fff00' : undefined,
                 // box-shadow: inset 2px 2px orange, inset -2px -2px orange;
                 background: node.key === selectedId ? 'rgba(0,128,0,0.1)' : undefined,
                 // color: node.key === selectedId ? 'white' : undefined

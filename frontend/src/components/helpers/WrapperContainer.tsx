@@ -165,7 +165,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
 
             {/* outlines */}
             {!isSelected && !draggable && (isHovered || isHoveredRemote) && ref.current  && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='orange' thickness={3} />}
-            {isSelected && ref.current && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='green' thickness={3} />}
+            {isSelected && ref.current && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='#8fff00' thickness={3} />}
 
             {/* {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: ref.current?.getBoundingClientRect().top, left: ref.current?.getBoundingClientRect().left + ref.current?.getBoundingClientRect().width }}>
                 <>
