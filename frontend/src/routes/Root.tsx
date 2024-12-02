@@ -310,7 +310,7 @@ const Root = () => {
                             // marginTop: '20px',
                             // marginBottom: '25px',
                         }}
-                        after="Try out"
+                        after="Skip the signup, have some fun!"
                     >
                     </IconButton>
                 </div>
