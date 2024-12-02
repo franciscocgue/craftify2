@@ -11,6 +11,8 @@ const Canvas = () => {
     const components = useDesignerStore((state) => state.components);
     const properties = useDesignerStore((state) => state.properties['canvas']);
     const setIsCanvasScrolling = useDesignerStore((state) => state.setIsCanvasScrolling);
+    const toggleSelectedId = useDesignerStore((state) => state.toggleSelectedId);
+    const selectedId = useDesignerStore((state) => state.selectedId);
 
     const comps = useMemo(
         () => {
@@ -82,17 +84,19 @@ const Canvas = () => {
                     border: '1px solid grey',
                     overflowY: 'auto',
                     overflowX: 'auto',
+                    outline: selectedId === 'canvas' ? '3px solid #8fff00' : 'none',
                     // minWidth: `${properties.canvasWidthPx}px`,
                     minWidth: window.innerWidth - 605 > Number(properties.canvasWidthPx) ? `${properties.canvasWidthPx}px` : `calc(100vw - 605px)`,
                     margin: '0 auto',
                     minHeight: `min(calc(100%), ${properties.canvasHeightPx}px)`,
                     // maxWidth: `${properties.canvasWidthPx}px`,
-                    maxWidth:  window.innerWidth - 605 > Number(properties.canvasWidthPx) ? `${properties.canvasWidthPx}px` : `calc(100vw - 605px)`,
+                    maxWidth: window.innerWidth - 605 > Number(properties.canvasWidthPx) ? `${properties.canvasWidthPx}px` : `calc(100vw - 605px)`,
                     // maxHeight causes issue and comps do not respect height and shrink to minHeight
                     maxHeight: `${properties.canvasHeightPx}px`,
                 }}>
                 {/* div for scrollable canvas */}
                 <div
+                    onClick={() => { toggleSelectedId('canvas'); }}
                     id="my-canvas"
                     style={{
                         // frozen (not editable)
