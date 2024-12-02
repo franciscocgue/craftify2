@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import PreviewActions from "./PreviewActions";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import logo from './../../assets/logo.svg';
 
 const ToggleColorMode = () => {
   const toggleColorMode = useDesignerStore((state) => state.toggleColorMode);
@@ -99,7 +100,10 @@ const Navbar = () => {
           userSelect: 'none',
           textDecoration: 'none',
           color: 'inherit',
-        }}>Craftify</Link>
+          display: 'flex',
+          alignItems: 'center',
+          gap: '5px',
+        }}><img height={25} src={logo} alt="Logo" /><div>Craftify</div></Link>
       </div>
       <div style={{
         // flex: 1,

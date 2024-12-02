@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BeatLoader from "react-spinners/BeatLoader";
 import styles from './Root.module.css';
 import axios from "axios";
@@ -12,6 +12,7 @@ import { MdDarkMode, MdSunny } from "react-icons/md";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from "react-toastify";
+import logo from '../assets/logo.svg';
 
 // const projects = [
 //     {
@@ -87,6 +88,8 @@ const deleteProject = async (appId: string) => {
 
 const Root = () => {
 
+    const navigate = useNavigate();
+
     const colorMode = useDesignerStore((state) => state.colorMode);
 
     const [isLoading, setIsLoading] = useState(true);
@@ -116,6 +119,10 @@ const Root = () => {
         getData();
         // };
     }, [setProjects, isCreating, isDeleting]);
+
+    const handleTryoutClick = () => {
+        navigate('/try-out');
+    }
 
     return (
         <div className={`${styles['wrapper']} ${styles[colorMode === 'dark' ? 'theme-dark' : 'theme-light']}`}>
@@ -254,7 +261,7 @@ const Root = () => {
             {/* navbar */}
             <div className={styles['main-navbar']}>
                 <div className={styles.logo}>
-                    <div>Craftify</div>
+                    <div><img height={25} src={logo} alt="Logo" /><div style={{marginLeft: '5px'}}>Craftify</div></div>
                 </div>
                 <ToggleColorMode />
             </div>
@@ -282,6 +289,21 @@ const Root = () => {
                             // marginBottom: '25px',
                         }}
                         after="Create project"
+                    >
+                    </IconButton>
+                    <IconButton
+                        onClick={handleTryoutClick}
+                        baseStylesOverwrite={{
+                            color: 'white',
+                            width: 'fit-content',
+                            borderRadius: '10px',
+                            fontSize: '0.95rem',
+                            height: '32px',
+                            padding: '5px 10px',
+                            // marginTop: '20px',
+                            // marginBottom: '25px',
+                        }}
+                        after="Try out"
                     >
                     </IconButton>
                 </div>

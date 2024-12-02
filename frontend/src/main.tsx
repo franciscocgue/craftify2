@@ -27,6 +27,17 @@ const initialComponents: ComponentCollection = {
 // initialize component properties
 const initialProperties: ComponentCollectionProperties = { canvas: compProperties['canvas'] };
 
+const fetchDataTryout = () => {
+  useDesignerStore.setState({ appId: 'try-out' });
+  useDesignerStore.setState({ components: initialComponents });
+  useDesignerStore.setState({ properties: initialProperties });
+  useDesignerStore.setState({ variables: {} });
+  useDesignerStore.setState({ logicEdges: {} });
+  useDesignerStore.setState({ logicNodes: {} });
+
+  return null;
+};
+
 const fetchData = async ({ params }) => {
 
   const appIdInStore = useDesignerStore.getState().appId;
@@ -99,6 +110,12 @@ const router = createBrowserRouter([
     path: ":appId/designer",
     element: <Designer />,
     loader: fetchData,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/try-out",
+    element: <Designer />,
+    loader: fetchDataTryout,
     errorElement: <ErrorPage />,
   },
   {

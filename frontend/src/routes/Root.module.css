@@ -80,6 +80,9 @@
     font-weight: 500;
     font-size: 15pt;
     user-select: none;
+    display: flex;
+    align-items: center;
+    /* gap: '5px'; */
 }
 
 .main {
