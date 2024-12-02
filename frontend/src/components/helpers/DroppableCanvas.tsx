@@ -1,5 +1,6 @@
 import { useDroppable } from "@dnd-kit/core";
 import { CSSProperties } from "react";
+import { DESIGN_PARAMETERS } from "../../config/application";
 
 const styleInner: CSSProperties = {
     position: 'absolute',
@@ -16,7 +17,7 @@ const styleInnerHighlight: (isOverInner: boolean) => CSSProperties = (isOverInne
     height: 'calc(100% - 8px)',
     top: '4px',
     left: '4px',
-    outline: isOverInner ? '4px solid #8fff00' : undefined,
+    outline: isOverInner ? `4px solid ${DESIGN_PARAMETERS.BORDER_COLOR_SELECTED_COMPONENT}` : undefined,
 });
 
 

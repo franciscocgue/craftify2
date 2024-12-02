@@ -12,6 +12,7 @@ import { MdOutlineAdd } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import { toast } from "react-toastify";
 import { FaProjectDiagram } from "react-icons/fa";
+import { DESIGN_PARAMETERS } from "../config/application";
 
 // convert components (flat list) into
 // nested format required by the (rc-)tree
@@ -271,7 +272,7 @@ const treeAsHtml = (node: NodeType, selectedId: string | null) => {
         <TreeNode
             style={{
                 // outline: node.key === selectedId ? '1px solid green' : undefined,
-                boxShadow: node.key === selectedId ? 'inset 2px 2px #8fff00, inset -2px -2px #8fff00' : undefined,
+                boxShadow: node.key === selectedId ? `inset 2px 2px ${DESIGN_PARAMETERS.BORDER_COLOR_SELECTED_COMPONENT}, inset -2px -2px ${DESIGN_PARAMETERS.BORDER_COLOR_SELECTED_COMPONENT}` : undefined,
                 // box-shadow: inset 2px 2px orange, inset -2px -2px orange;
                 background: node.key === selectedId ? 'rgba(0,128,0,0.1)' : undefined,
                 // color: node.key === selectedId ? 'white' : undefined

@@ -1,0 +1,8 @@
+const DESIGN_PARAMETERS = {
+    BORDER_COLOR_SELECTED_COMPONENT: '#8fff00',
+}
+
+
+export {
+    DESIGN_PARAMETERS,
+} 

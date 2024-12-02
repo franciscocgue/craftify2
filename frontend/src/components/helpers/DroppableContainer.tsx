@@ -1,5 +1,6 @@
 import { useDroppable } from "@dnd-kit/core";
 import { CSSProperties } from "react";
+import { DESIGN_PARAMETERS } from "../../config/application";
 
 const styleInner: CSSProperties = {
     position: 'absolute',
@@ -16,7 +17,7 @@ const styleInnerHighlight: (isOverInner: boolean) => CSSProperties = (isOverInne
     height: 'calc(100% - 8px)',
     top: '4px',
     left: '4px',
-    outline: isOverInner ? '4px solid #8fff00' : undefined,
+    outline: isOverInner ? `4px solid ${DESIGN_PARAMETERS.BORDER_COLOR_SELECTED_COMPONENT}` : undefined,
     zIndex: 1,
 });
 
@@ -29,7 +30,7 @@ const styleTop: CSSProperties = {
 };
 
 const styleTopHighlight: (isOverTop: boolean) => CSSProperties = (isOverTop) => ({
-    backgroundColor: isOverTop ? '#8fff00' : undefined,
+    backgroundColor: isOverTop ? DESIGN_PARAMETERS.BORDER_COLOR_SELECTED_COMPONENT : undefined,
     position: 'absolute',
     width: '100%',
     height: '4px',
@@ -47,7 +48,7 @@ const styleBottom: CSSProperties = {
 };
 
 const styleBottomHighlight: (isOverBottom: boolean) => CSSProperties = (isOverBottom) => ({
-    backgroundColor: isOverBottom ? '#8fff00' : undefined,
+    backgroundColor: isOverBottom ? DESIGN_PARAMETERS.BORDER_COLOR_SELECTED_COMPONENT : undefined,
     position: 'absolute',
     width: '100%',
     height: '4px',
@@ -64,7 +65,7 @@ const styleLeft: CSSProperties = {
 };
 
 const styleLeftHighlight: (isOverLeft: boolean) => CSSProperties = (isOverLeft) => ({
-    backgroundColor: isOverLeft ? '#8fff00' : undefined,
+    backgroundColor: isOverLeft ? DESIGN_PARAMETERS.BORDER_COLOR_SELECTED_COMPONENT : undefined,
     position: 'absolute',
     width: '4px',
     height: '100%',
@@ -82,7 +83,7 @@ const styleRight: CSSProperties = {
 };
 
 const styleRightHighlight: (isOverRight: boolean) => CSSProperties = (isOverRight) => ({
-    backgroundColor: isOverRight ? '#8fff00' : undefined,
+    backgroundColor: isOverRight ? DESIGN_PARAMETERS.BORDER_COLOR_SELECTED_COMPONENT : undefined,
     position: 'absolute',
     width: '4px',
     height: '100%',

@@ -10,6 +10,7 @@ import MyPortal from "./MyPortal";
 import MyOutline from "./MyOutline";
 import { useDebouncedMouseEnter } from "../../hooks";
 import CanvasComponentTooltip from "./CanvasComponentTooltip";
+import { DESIGN_PARAMETERS } from "../../config/application";
 
 
 interface WrapperContainerProps {
@@ -165,7 +166,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
 
             {/* outlines */}
             {!isSelected && !draggable && (isHovered || isHoveredRemote) && ref.current  && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='orange' thickness={3} />}
-            {isSelected && ref.current && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='#8fff00' thickness={3} />}
+            {isSelected && ref.current && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color={DESIGN_PARAMETERS.BORDER_COLOR_SELECTED_COMPONENT} thickness={3} />}
 
             {/* {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: ref.current?.getBoundingClientRect().top, left: ref.current?.getBoundingClientRect().left + ref.current?.getBoundingClientRect().width }}>
                 <>

@@ -1,6 +1,7 @@
 import useDesignerStore from "../../stores/designer";
 import { renderNode } from "../../utils";
 import { useEffect, useMemo, useRef } from "react";
+import { DESIGN_PARAMETERS } from "../../config/application";
 
 
 const Canvas = () => {
@@ -84,7 +85,7 @@ const Canvas = () => {
                     border: '1px solid grey',
                     overflowY: 'auto',
                     overflowX: 'auto',
-                    outline: selectedId === 'canvas' ? '3px solid #8fff00' : 'none',
+                    outline: selectedId === 'canvas' ? `3px solid ${DESIGN_PARAMETERS.BORDER_COLOR_SELECTED_COMPONENT}` : 'none',
                     // minWidth: `${properties.canvasWidthPx}px`,
                     minWidth: window.innerWidth - 605 > Number(properties.canvasWidthPx) ? `${properties.canvasWidthPx}px` : `calc(100vw - 605px)`,
                     margin: '0 auto',
