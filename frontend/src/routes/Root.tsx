@@ -42,6 +42,13 @@ import logo from '../assets/logo.svg';
 //     },
 // ]
 
+type Project = {
+    appId: string,
+    name: string,
+    editedOn: Date,
+    createdOn: Date,
+};
+
 const ToggleColorMode = () => {
     const toggleColorMode = useDesignerStore((state) => state.toggleColorMode);
     const colorMode = useDesignerStore((state) => state.colorMode);
@@ -69,11 +76,11 @@ const Spinner = ({ isLoading }: { isLoading: boolean }) => (<BeatLoader
 
 const dateFormatOptions = {
     // weekday: "long",
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: 'numeric',
-    minute: 'numeric'
+    year: "numeric" as const,
+    month: "short" as const,
+    day: "numeric" as const,
+    hour: 'numeric' as const,
+    minute: 'numeric' as const,
 };
 
 const createProject = async (projectName: string) => {
@@ -95,7 +102,7 @@ const Root = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isCreating, setIsCreating] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
-    const [projects, setProjects] = useState([]);
+    const [projects, setProjects] = useState<Project[]>([]);
     const [newProjectName, setNewProjectName] = useState<string | undefined>();
     const [projectNameDelete, setProjectNameDelete] = useState<string>('');
     const [projectAppIdToDelete, setProjectAppIdToDelete] = useState<string>('');
@@ -106,7 +113,7 @@ const Root = () => {
         // if (!isCreating) {
         const getData = async () => {
             const { data } = await axios.get('http://localhost:3000/api/web-service/projects');
-            const parsedProjects = data.data.map(proj => {
+            const parsedProjects = data.data.map((proj: Project) => {
                 const dateEdited = new Date(proj.editedOn);
                 const dateCreated = new Date(proj.createdOn);
                 return { ...proj, editedOn: dateEdited, createdOn: dateCreated };
@@ -275,7 +282,7 @@ const Root = () => {
                     marginBottom: '20px',
                     gap: '10px',
                 }}>
-                    <MyTextInput onChange={(searchString: string | undefined) => { setSearchString(searchString) }} value={searchString} placeholder="Search project" />
+                    <MyTextInput onChange={(searchString: string | undefined) => { setSearchString(searchString || '') }} value={searchString} placeholder="Search project" />
                     <IconButton
                         onClick={() => setIsCreating(true)}
                         baseStylesOverwrite={{
