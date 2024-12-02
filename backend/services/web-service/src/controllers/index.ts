@@ -19,7 +19,9 @@ const getProjects = async (req: Request, res: Response) => {
   try {
     const body = {
       "collectionName": "projects",
-      "columns": { "_id": 1, "appId": 1, "name": 1, "createdOn": 1, "editedOn": 1 }
+      "columns": { "_id": 1, "appId": 1, "name": 1, "createdOn": 1, "editedOn": 1 },
+      // if parameter appId provided, get only the project, else all
+      "filter": req.params.appId ? { appId: req.params.appId } : {}
     };
 
     const data = await httpClient.post<{ status: 'ok' | 'nok', data: unknown[] }>('http://localhost:3003/api/db-service/read', body);

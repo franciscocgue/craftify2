@@ -29,6 +29,7 @@ const initialProperties: ComponentCollectionProperties = { canvas: compPropertie
 
 const fetchDataTryout = () => {
   useDesignerStore.setState({ appId: 'try-out' });
+  useDesignerStore.setState({ appName: 'My First Web App' });
   useDesignerStore.setState({ components: initialComponents });
   useDesignerStore.setState({ properties: initialProperties });
   useDesignerStore.setState({ variables: {} });
@@ -48,6 +49,19 @@ const fetchData = async ({ params }) => {
   if (!data.data.isValid) {
     throw new Error('Invalid Application ID; check the URL')
   }
+
+  // fetch project name
+  const getData = async () => {
+    try {
+      const { data } = await axios.get(`http://localhost:3000/api/web-service/projects/${appId}`);
+      const appName = data.data[0].name;
+      useDesignerStore.setState({ appName });
+    } catch {
+      useDesignerStore.setState({ appName: 'Application-name-not-found' });
+    }
+    return;
+  };
+  getData();
 
   if (appIdInStore === appId) {
     // no need to re-fetch data

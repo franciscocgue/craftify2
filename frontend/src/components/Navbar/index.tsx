@@ -36,6 +36,7 @@ const Navbar = () => {
   console.log('C - Navbar')
 
   const updateProperty = useDesignerStore((state) => state.updateProperty);
+  const appName = useDesignerStore((state) => state.appName);
   const setSelectedId = useDesignerStore((state) => state.setSelectedId);
   const appId = useDesignerStore((state) => state.appId);
   const [previewUrl, setPreviewUrl] = useState<undefined | string>(undefined);
@@ -168,7 +169,7 @@ const Navbar = () => {
         fontFamily: '"Ubuntu", sans-serif',
         fontStyle: 'italic',
       }}>
-        My Awesome Craftify Project
+        {appName}
       </div>
       <div style={{
         // flex: 1,

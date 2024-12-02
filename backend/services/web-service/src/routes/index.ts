@@ -17,6 +17,7 @@ router.post('/broadcast', clientMessenger)
 
 // projects
 router.get('/projects', getProjects);
+router.get('/projects/:appId', getProjects);
 router.post('/create-project', addProject);
 router.post('/delete-project', deleteProject);
 router.post('/get-project-object', getProjectObject);
