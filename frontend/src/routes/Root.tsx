@@ -12,7 +12,8 @@ import { MdDarkMode, MdSunny } from "react-icons/md";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from "react-toastify";
-import logo from '../assets/logo.svg';
+import logoDark from '../assets/logo-dark.svg';
+import logoLight from '../assets/logo-light.svg';
 
 // const projects = [
 //     {
@@ -268,7 +269,7 @@ const Root = () => {
             {/* navbar */}
             <div className={styles['main-navbar']}>
                 <div className={styles.logo}>
-                    <div><img height={25} src={logo} alt="Logo" /><div style={{marginLeft: '5px'}}>Craftify</div></div>
+                    <div><img height={30} src={colorMode === 'light' ? logoLight : logoDark} alt="Logo" /><div style={{marginLeft: '5px'}}>Craftify</div></div>
                 </div>
                 <ToggleColorMode />
             </div>

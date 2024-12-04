@@ -10,7 +10,8 @@ import { useEffect, useState } from "react";
 import PreviewActions from "./PreviewActions";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import logo from './../../assets/logo.svg';
+import logoLight from './../../assets/logo-light.svg';
+import logoDark from './../../assets/logo-dark.svg';
 
 const ToggleColorMode = () => {
   const toggleColorMode = useDesignerStore((state) => state.toggleColorMode);
@@ -34,6 +35,8 @@ const ToggleColorMode = () => {
 const Navbar = () => {
 
   console.log('C - Navbar')
+
+  const colorMode = useDesignerStore((state) => state.colorMode);
 
   const updateProperty = useDesignerStore((state) => state.updateProperty);
   const appName = useDesignerStore((state) => state.appName);
@@ -91,7 +94,8 @@ const Navbar = () => {
         width: '100px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'start'
+        justifyContent: 'start',
+        marginRight: '70px'
       }}>
         {/* <img height={54} src={logo} alt="Logo" /> */}
         <Link to={'/'} style={{
@@ -104,7 +108,7 @@ const Navbar = () => {
           display: 'flex',
           alignItems: 'center',
           gap: '5px',
-        }}><img height={25} src={logo} alt="Logo" /><div>Craftify</div></Link>
+        }}><img height={30} src={colorMode === 'light' ? logoLight : logoDark} alt="Logo" /><div>Craftify</div></Link>
       </div>
       <div style={{
         // flex: 1,
