@@ -269,7 +269,7 @@ const Root = () => {
             {/* navbar */}
             <div className={styles['main-navbar']}>
                 <div className={styles.logo}>
-                    <div><img height={30} src={colorMode === 'light' ? logoLight : logoDark} alt="Logo" /><div style={{marginLeft: '5px'}}>Craftify</div></div>
+                    <div><img height={20} src={colorMode === 'light' ? logoLight : logoDark} alt="Logo" /><div style={{marginLeft: '5px'}}>Craftify</div></div>
                 </div>
                 <ToggleColorMode />
             </div>

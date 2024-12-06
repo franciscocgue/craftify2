@@ -108,7 +108,7 @@ const Navbar = () => {
           display: 'flex',
           alignItems: 'center',
           gap: '5px',
-        }}><img height={30} src={colorMode === 'light' ? logoLight : logoDark} alt="Logo" /><div>Craftify</div></Link>
+        }}><img height={20} src={colorMode === 'light' ? logoLight : logoDark} alt="Logo" /><div>Craftify</div></Link>
       </div>
       <div style={{
         // flex: 1,

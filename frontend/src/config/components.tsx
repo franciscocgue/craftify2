@@ -152,7 +152,7 @@ const compProperties: Record<keyof CompNames | 'canvas', Properties> = {
         // minHeight: '760',
         display: 'flex', // not editable
         flexDirection: 'column', // not editable
-        flexWrap: 'wrap',
+        flexWrap: 'nowrap',
         alignItems: 'start',
         justifyContent: 'flex-start',
         gap: '5px',
