@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import PropertyGroupHeader from "../common/PropertyGroupHeader";
-import styles from './Property.module.css';
+import stylesLight from './PropertyLight.module.css';
+import stylesDark from './PropertyDark.module.css';
 import InputText from "./InputText";
 import { RxWidth } from "react-icons/rx";
 import MyPortal from "../helpers/MyPortal";
@@ -68,10 +69,13 @@ const Width = () => {
         }
     }, [expandAllProperties])
 
+    const colorMode = useDesignerStore(state => state.colorMode);
+    const styles = colorMode === 'light' ? stylesLight : stylesDark;
+
     return <div>
         <PropertyGroupHeader isCollapsed={isCollapsed} title="Width" setIsCollapsed={setIsCollapsed} />
         {!isCollapsed && <div className={styles.wrapper}>
-            <label style={{ fontSize: 'small' }}>
+            <label style={{ fontSize: 'small', cursor: 'pointer', userSelect: 'none' }}>
                 <input
                     type="checkbox"
                     checked={isAdv}

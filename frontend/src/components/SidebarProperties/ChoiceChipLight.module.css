@@ -1,0 +1,28 @@
+.wrapper {
+    padding: 2px 8px;
+    flex-grow: 1;
+    text-align: center;
+    border-radius: 6px;
+    outline: 2px solid #e0e0e0ff;
+    background-color: white;
+    color: #5f5f5fff;
+    user-select: none;
+    cursor: pointer;
+    font-size: small;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.selected {
+    outline: 2px solid #5795daff;
+    /* background-color: rgb(230, 248, 255); */
+    color: rgb(22, 69, 145);
+    /* cursor: auto; */
+}
+
+.wrapper:not(.selected):hover {
+    outline: 2px solid rgb(41, 41, 41);
+    /* background-color: rgb(230, 248, 255); */
+    color: rgb(41, 41, 41);
+}

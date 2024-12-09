@@ -1,5 +1,6 @@
 import { ReactElement, useCallback, useEffect, useState } from 'react';
-import generalStyles from './Property.module.css';
+import generalStylesLight from './PropertyLight.module.css';
+import generalStylesDark from './PropertyDark.module.css';
 import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
 import { Properties } from '../../types/designer.types';
@@ -19,6 +20,8 @@ const InputSelect = ({ propertyDisplayName, propertyKey, options }: InputSelectP
 
     const selectedId = useDesignerStore(state => state.selectedId);
     const updateProperty = useDesignerStore(state => state.updateProperty);
+    const colorMode = useDesignerStore(state => state.colorMode);
+    const generalStyles = colorMode === 'light' ? generalStylesLight : generalStylesDark;
     // Getting non-reactive fresh state
     const propValue = useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0] as keyof Properties];
 

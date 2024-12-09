@@ -1,0 +1,93 @@
+.wrapper {
+    padding: 0 10px;
+}
+
+.property {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 6px 0;
+    height: 30px;
+}
+
+.property.no-help {
+    /* used to align inputs */
+    margin-right: 33px;
+}
+
+.property .name {
+    font-size: small;
+    display: flex;
+    margin-right: 7px;
+    min-width: 85px;
+}
+
+.property .input {
+    height: 100%;
+    background-color: #2c2c2c;
+    color: #ebf1f8;
+    border: 1px solid #9b9b9c;
+}
+
+.property .input.number {
+    width: 130px;
+    padding-left: 5px;
+}
+
+.property .input.text {
+    width: 130px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.property .input.select {
+    width: 130px;
+    padding-left: 5px;
+}
+
+.property .input.wrong {
+    background-color: rgb(255, 92, 92);
+    color: black;
+}
+
+.property .unit {
+    margin-left: 5px;
+    font-size: small;
+}
+
+.side-header {
+    /* border-top: 1px solid grey; */
+    /* border-top: 1px solid grey; */
+    /* color: black; */
+    font-size: small;
+    /* text-align: center; */
+    margin-top: 5px;
+    margin-bottom: 15px;
+    /* font-weight: bold; */
+    /* font-style: italic; */
+    display: flex;
+    align-items: center;
+    padding: 6px 0 6px 0px;
+}
+
+.property .unit-block {
+    margin-left: 5px;
+    gap: 5px;
+    display: flex;
+}
+
+.property .unit-block button {
+    background: none;
+	color: grey;
+	border: 1px solid grey;
+    border-radius: 5px;
+	padding: 3px 4px;
+    font-size: small;
+	cursor: pointer;
+	outline: inherit;
+}
+
+.property .unit-block button.active {
+    color: inherit;
+    background-color: rgba(168, 168, 168, 0.548);
+}

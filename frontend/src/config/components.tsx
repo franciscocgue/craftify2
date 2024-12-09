@@ -153,7 +153,7 @@ const compProperties: Record<keyof CompNames | 'canvas', Properties> = {
         display: 'flex', // not editable
         flexDirection: 'column', // not editable
         flexWrap: 'nowrap',
-        alignItems: 'start',
+        alignItems: 'flex-start',
         justifyContent: 'flex-start',
         gap: '5px',
         paddingTop: '8px',
@@ -213,10 +213,10 @@ const compProperties: Record<keyof CompNames | 'canvas', Properties> = {
     },
     'button': {
         // wrapperStyles
-        width: '100%',
+        width: 'auto',
         maxWidth: 'none',
         minWidth: 'auto',
-        height: '40px',
+        height: 'auto',
         maxHeight: 'none',
         minHeight: '40px',
         marginTop: '0px',

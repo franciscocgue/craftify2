@@ -4,9 +4,9 @@
     border-radius: 5px;
     border: 1px solid grey;
     outline: 1px solid white;
-    padding: 20px 5px 5px 5px;
-    height: 105px;
-    width: 140px;
+    padding: 26px 5px 5px 5px;
+    height: 156px;
+    width: 200px;
 }
 
 .my-input-color .close-button {
@@ -25,13 +25,13 @@
 	outline: none;
     z-index: 999;
     line-height: 15px;
-    height: 19px;
+    height: 25px;
     font-size: small;
 }
 
 .my-input-color .react-colorful {
-    height: 80px;
-    width: 130px;
+    height: 125px;
+    width: 190px;
 }
 
 .my-input-color .react-colorful__saturation {

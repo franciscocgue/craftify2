@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import PropertyGroupHeader from "../common/PropertyGroupHeader";
-import styles from './Property.module.css';
+import stylesLight from './PropertyLight.module.css';
+import stylesDark from './PropertyDark.module.css';
 import InputText from "./InputText";
 import MyPortal from "../helpers/MyPortal";
 import { isValidCssLengthBasicNoAuto } from "../../utils";
@@ -53,6 +54,9 @@ const Padding = () => {
             setIsCollapsed(!expandAllProperties)
         }
     }, [expandAllProperties])
+
+    const colorMode = useDesignerStore(state => state.colorMode);
+    const styles = colorMode === 'light' ? stylesLight : stylesDark;
 
     return <div>
         <PropertyGroupHeader info={"Component's padding styling"} isCollapsed={isCollapsed} title="Padding" setIsCollapsed={setIsCollapsed} />

@@ -1,6 +1,8 @@
 import MyPortal from "../../helpers/MyPortal";
 import InputText from "../InputText";
-import styles from '../Property.module.css';
+import stylesLight from '../PropertyLight.module.css';
+import stylesDark from '../PropertyDark.module.css';
+import useDesignerStore from "../../../stores/designer";
 
 const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 'dark' | 'light', styles: CSSModuleClasses) => <MyPortal styles={{
     position: 'absolute',
@@ -38,11 +40,14 @@ const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 
 </MyPortal>
 
 const PSrc = () => {
+    const colorMode = useDesignerStore(state => state.colorMode);
+    const styles = colorMode === 'light' ? stylesLight : stylesDark;
+
     return <div className={styles.wrapper}>
         <InputText propertyDisplayName={'URL'}
             propertyKey="__src"
             tooltipContent={tooltipContent}
-            isValidInput={()=> true}
+            isValidInput={() => true}
         />
     </div>
 }

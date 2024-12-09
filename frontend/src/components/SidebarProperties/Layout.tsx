@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import PropertyGroupHeader from "../common/PropertyGroupHeader";
-import styles from './Property.module.css';
-import InputText from "./InputText";
+import stylesLight from './PropertyLight.module.css';
+import stylesDark from './PropertyDark.module.css';
 import MyPortal from "../helpers/MyPortal";
-import InputSelect from "./InputSelect";
 import { isValidCssLengthBasicNoAuto } from "../../utils";
 import useDesignerStore from "../../stores/designer";
+import ChoiceChip from "./ChoiceChip";
+import { TbTextWrapColumn, TbTextWrapDisabled } from "react-icons/tb";
+import { RiAlignItemBottomLine, RiAlignItemHorizontalCenterLine, RiAlignItemLeftLine, RiAlignItemRightLine, RiAlignItemTopLine, RiAlignItemVerticalCenterLine, RiPageSeparator } from "react-icons/ri";
+import { LuAlignHorizontalJustifyCenter, LuAlignHorizontalJustifyEnd, LuAlignHorizontalJustifyStart, LuAlignHorizontalSpaceAround, LuAlignHorizontalSpaceBetween, LuAlignVerticalJustifyCenter, LuAlignVerticalJustifyEnd, LuAlignVerticalJustifyStart, LuAlignVerticalSpaceAround, LuAlignVerticalSpaceBetween, LuStretchHorizontal, LuStretchVertical } from "react-icons/lu";
+import InputText from "./InputText";
+
 
 const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 'dark' | 'light', styles: CSSModuleClasses) => <MyPortal styles={{
     position: 'absolute',
@@ -54,6 +59,9 @@ const Layout = () => {
     const [isCollapsed, setIsCollapsed] = useState(true);
 
     const expandAllProperties = useDesignerStore(state => state.expandAllProperties);
+    const selectedId = useDesignerStore(state => state.selectedId);
+    // const flexDirectionPropValue = useDesignerStore.getState().properties[selectedId as string]?.['flexDirection'];
+    const flexDirectionPropValue = useDesignerStore((state) => state.properties[selectedId as string]?.['flexDirection']);
 
     useEffect(() => {
         if (expandAllProperties !== null) {
@@ -61,37 +69,77 @@ const Layout = () => {
         }
     }, [expandAllProperties])
 
+    const colorMode = useDesignerStore(state => state.colorMode);
+    const styles = colorMode === 'light' ? stylesLight : stylesDark;
+
     return <div>
         <PropertyGroupHeader info={"Component's layout styling"} isCollapsed={isCollapsed} title="Layout" setIsCollapsed={setIsCollapsed} />
         {!isCollapsed && <div className={styles.wrapper}>
             <>
-                <InputSelect propertyDisplayName={'Direction'} propertyKey={['flexDirection']} options={[
+                {/* <InputSelect propertyDisplayName={'Direction'} propertyKey={['flexDirection']} options={[
                     { value: 'row', display: 'Row' },
                     { value: 'column', display: 'Column' },
-                ]} />
-                <InputText propertyDisplayName={'Gap'}
+                ]} /> */}
+
+                <p style={{ marginTop: '8px', fontSize: 'small' }}>Direction</p>
+                <div style={{
+                    display: 'flex',
+                    gap: '10px',
+                    justifyContent: 'center',
+                    margin: '3px 0 17px 0',
+                }}>
+                    <ChoiceChip display={'Row'} valueChip="row" propertyKey="flexDirection"></ChoiceChip>
+                    <ChoiceChip display={'Column'} valueChip="column" propertyKey="flexDirection"></ChoiceChip>
+                </div>
+
+
+                <p style={{ fontSize: 'small' }}>Positioning</p>
+                <div style={{
+                    display: 'flex',
+                    gap: '10px',
+                    justifyContent: 'center',
+                    margin: '3px 0 17px 0',
+                }}>
+                    <ChoiceChip display={flexDirectionPropValue === 'row' ? <LuStretchVertical size={18} /> : <LuStretchHorizontal size={18} />} valueChip="stretch" propertyKey="alignItems"></ChoiceChip>
+                    <ChoiceChip display={flexDirectionPropValue === 'row' ? <RiAlignItemTopLine size={18} /> : <RiAlignItemLeftLine size={18} />} valueChip="flex-start" propertyKey="alignItems"></ChoiceChip>
+                    <ChoiceChip display={flexDirectionPropValue === 'row' ? <RiAlignItemVerticalCenterLine size={18} /> : <RiAlignItemHorizontalCenterLine size={18} />} valueChip="center" propertyKey="alignItems"></ChoiceChip>
+                    <ChoiceChip display={flexDirectionPropValue === 'row' ? <RiAlignItemBottomLine size={18} /> : <RiAlignItemRightLine size={18} />} valueChip="flex-end" propertyKey="alignItems"></ChoiceChip>
+                </div>
+
+
+                <p style={{ fontSize: 'small' }}>Alignment</p>
+                <div style={{
+                    display: 'flex',
+                    gap: '10px',
+                    justifyContent: 'center',
+                    margin: '3px 0 17px 0',
+                }}>
+                    <ChoiceChip display={flexDirectionPropValue === 'row' ? <LuAlignHorizontalJustifyStart size={18} /> : <LuAlignVerticalJustifyStart size={18} />} valueChip="flex-start" propertyKey="justifyContent"></ChoiceChip>
+                    <ChoiceChip display={flexDirectionPropValue === 'row' ? <LuAlignHorizontalJustifyCenter size={18} /> : <LuAlignVerticalJustifyCenter size={18} />} valueChip="center" propertyKey="justifyContent"></ChoiceChip>
+                    <ChoiceChip display={flexDirectionPropValue === 'row' ? <LuAlignHorizontalJustifyEnd size={18} /> : <LuAlignVerticalJustifyEnd size={18} />} valueChip="flex-end" propertyKey="justifyContent"></ChoiceChip>
+                    <ChoiceChip display={flexDirectionPropValue === 'row' ? <LuAlignHorizontalSpaceBetween size={18} /> : <LuAlignVerticalSpaceBetween size={18} />} valueChip="space-between" propertyKey="justifyContent"></ChoiceChip>
+                    <ChoiceChip display={flexDirectionPropValue === 'row' ? <LuAlignHorizontalSpaceAround size={18} /> : <LuAlignVerticalSpaceAround size={18} />} valueChip="space-around" propertyKey="justifyContent"></ChoiceChip>
+                </div>
+
+
+                <p style={{ fontSize: 'small' }}>Wrap</p>
+                <div style={{
+                    display: 'flex',
+                    gap: '10px',
+                    justifyContent: 'center',
+                    margin: '3px 0 17px 0',
+                }}>
+                    <ChoiceChip display={<TbTextWrapDisabled size={18} />} valueChip="nowrap" propertyKey="flexWrap"></ChoiceChip>
+                    <ChoiceChip display={<TbTextWrapColumn size={18} />} valueChip="wrap" propertyKey="flexWrap"></ChoiceChip>
+                </div>
+
+                <p style={{ fontSize: 'small' }}>Gap</p>
+                <InputText propertyDisplayName={<RiPageSeparator size={24} color={'grey'} />}
                     propertyKey="gap"
                     tooltipContent={tooltipContent}
                     isValidInput={isValidCssLengthBasicNoAuto}
                 />
-                <InputSelect propertyDisplayName={'Wrap'} propertyKey={['flexWrap']} options={[
-                    { value: 'wrap', display: 'Wrap' },
-                    { value: 'nowrap', display: 'No Wrap' },
-                ]} />
-                <InputSelect propertyDisplayName={'Alignment'} propertyKey={['alignItems']} options={[
-                    { value: 'stretch', display: 'Stretch' },
-                    { value: 'center', display: 'Center' },
-                    { value: 'flex-start', display: 'Start' },
-                    { value: 'flex-end', display: 'End' },
-                ]} />
-                <InputSelect propertyDisplayName={'Distribution'} propertyKey={['justifyContent']} options={[
-                    { value: 'center', display: 'Center' },
-                    { value: 'flex-start', display: 'Start' },
-                    { value: 'flex-end', display: 'End' },
-                    { value: 'space-between', display: 'Space between' },
-                    { value: 'space-around', display: 'Space around' },
-                    { value: 'space-evenly', display: 'Space evenly' },
-                ]} />
+
             </>
         </div>}
     </div>

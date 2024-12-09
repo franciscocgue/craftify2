@@ -1,5 +1,6 @@
 import { ReactElement, useCallback, useEffect, useState } from 'react';
-import generalStyles from './Property.module.css';
+import generalStylesLight from './PropertyLight.module.css';
+import generalStylesDark from './PropertyDark.module.css';
 import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
 import Select from 'react-select'
@@ -21,12 +22,14 @@ const InputSelectAdvanced = ({ propertyDisplayName, propertyKey, options }: Inpu
 
     const selectedId = useDesignerStore(state => state.selectedId);
     const updateProperty = useDesignerStore(state => state.updateProperty);
+    const colorMode = useDesignerStore(state => state.colorMode);
+    const generalStyles = colorMode === 'light' ? generalStylesLight : generalStylesDark;
     // Getting non-reactive fresh state
     const propValue = useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0] as keyof Properties];
 
     const [val, setVal] = useState({
         value: propValue,
-        label: <div style={{ display: 'flex', alignItems: 'center', gap: '3px', flexWrap: 'nowrap' }}><span style={{ minWidth: '20px' }}><MyIcon nameIcon={propValue ??  '__'} propsIcon={{ size: 20, color: 'black' }} /></span> {propValue?.slice(2)}</div>,
+        label: <div style={{ display: 'flex', alignItems: 'center', gap: '3px', flexWrap: 'nowrap' }}><span style={{ minWidth: '20px' }}><MyIcon nameIcon={propValue ?? '__'} propsIcon={{ size: 20, color: 'black' }} /></span> {propValue?.slice(2)}</div>,
     });
     const [inputValue, setInputValue] = useState('');
 

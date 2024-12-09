@@ -1,5 +1,6 @@
 import { ReactElement, useCallback, useEffect, useState } from 'react';
-import generalStyles from './Property.module.css';
+import generalStylesLight from './PropertyLight.module.css';
+import generalStylesDark from './PropertyDark.module.css';
 import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
 import { HexColorPicker } from "react-colorful";
@@ -17,6 +18,10 @@ const InputColor = ({ propertyDisplayName, propertyKey }: InputColorProps) => {
 
     const selectedId = useDesignerStore(state => state.selectedId);
     const updateProperty = useDesignerStore(state => state.updateProperty);
+    const colorMode = useDesignerStore(state => state.colorMode);
+
+    const generalStyles = colorMode === 'light' ? generalStylesLight : generalStylesDark;
+
     // Getting non-reactive fresh state
     const propValue = useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0] as keyof Properties];
 
@@ -68,15 +73,16 @@ const InputColor = ({ propertyDisplayName, propertyKey }: InputColorProps) => {
 
     return (
         <div className={`${generalStyles['property']} ${generalStyles['no-help']}`}>
-            <span className={generalStyles['name']}>{propertyDisplayName}</span>
+            {/* <span className={generalStyles['name']}>{propertyDisplayName}</span> */}
 
             <div style={{
-                width: '130px',
+                width: '100%',
                 height: '25px',
                 position: 'relative',
             }}>
                 <div style={{
                     display: 'flex',
+                    gap: '10px',
                     width: '100%',
                     height: '100%',
                     alignItems: 'center',
@@ -86,10 +92,11 @@ const InputColor = ({ propertyDisplayName, propertyKey }: InputColorProps) => {
                         style={{
                             cursor: 'pointer',
                             backgroundColor: val,
-                            width: '40px',
+                            // width: '40px',
+                            flexGrow: '1',
                             height: '100%',
                             borderRadius: '8px',
-                            border: '3px solid #fff',
+                            border: `2px solid ${colorMode === 'light' ? '#fff' : '#666'}`,
                             boxShadow: "0 0 0 1px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(0, 0, 0, 0.3)"
                         }} />
                     <input
@@ -100,11 +107,11 @@ const InputColor = ({ propertyDisplayName, propertyKey }: InputColorProps) => {
                         style={{
                             fontSize: 'small',
                             padding: '2px 3px',
-                            color: isWrongInput ? 'black' : 'grey',
-                            width: '70px',
-                            backgroundColor: isWrongInput ? 'rgb(255, 92, 92)' : 'white',
+                            color: isWrongInput ? 'black' : colorMode === 'light' ? 'grey' : 'darkgrey',
+                            width: '85px',
+                            backgroundColor: isWrongInput ? 'rgb(255, 92, 92)' : colorMode === 'light' ? '#ffffff' : '#2c2c2c',
                             outline: 'none',
-                            border: '1px solid grey',
+                            border: `1px solid ${colorMode === 'light' ? '#e1e4e8' : '#9b9b9c'}`,
                             borderRadius: '4px'
                         }} />
                 </div>

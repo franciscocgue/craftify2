@@ -1,0 +1,28 @@
+.wrapper {
+    padding: 3px 8px;
+    flex-grow: 1;
+    text-align: center;
+    border-radius: 6px;
+    /* outline: 1px solid grey; */
+    background-color: black;
+    color: rgb(197, 197, 197);
+    user-select: none;
+    cursor: pointer;
+    font-size: small;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.selected {
+    /* outline: 2px solid white; */
+    background-color: rgb(80, 80, 80);
+    color: white;
+    outline: 1px solid grey;
+    /* cursor: auto; */
+}
+
+.wrapper:not(.selected):hover {
+    outline: 1px solid darkgrey;
+    /* background-color: rgb(230, 248, 255); */
+}

@@ -1,6 +1,6 @@
 import { BiSolidData } from "react-icons/bi";
 import { IoMdColorPalette } from "react-icons/io";
-import { LuFunctionSquare } from "react-icons/lu";
+import { LuSquareFunction } from "react-icons/lu";
 import { MdDraw } from "react-icons/md";
 import useDesignerStore from "../../stores/designer";
 import IconButton from "../common/IconButton";
@@ -37,14 +37,14 @@ const SidebarMenu = () => {
                         : 'transparent',
                 }}
                 // if active, hover has no effect
-                hoverStylesOverwrite={page === 'designer' ? {backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'} : {
+                hoverStylesOverwrite={page === 'designer' ? { backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)' } : {
                     backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
                 }}
                 title="Designer"
             />
             <IconButton
                 onClick={() => setPage('variables')}
-                icon={<LuFunctionSquare size={'23px'} />}
+                icon={<LuSquareFunction size={'23px'} />}
                 baseStylesOverwrite={{
                     color: colorMode === 'dark' ? 'white' : '#222',
                     width: '100%',
@@ -56,7 +56,7 @@ const SidebarMenu = () => {
                         : 'transparent',
                 }}
                 // if active, hover has no effect
-                hoverStylesOverwrite={page === 'variables' ? {backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'} : {
+                hoverStylesOverwrite={page === 'variables' ? { backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)' } : {
                     backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
                 }}
                 title="Variables"
@@ -75,7 +75,7 @@ const SidebarMenu = () => {
                         : 'transparent',
                 }}
                 // if active, hover has no effect
-                hoverStylesOverwrite={page === 'data' ? {backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'} : {
+                hoverStylesOverwrite={page === 'data' ? { backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)' } : {
                     backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
                 }}
                 title="Data"
@@ -94,7 +94,7 @@ const SidebarMenu = () => {
                         : 'transparent',
                 }}
                 // if active, hover has no effect
-                hoverStylesOverwrite={page === 'styles' ? {backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'} : {
+                hoverStylesOverwrite={page === 'styles' ? { backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)' } : {
                     backgroundColor: colorMode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
                 }}
                 title="Styles"

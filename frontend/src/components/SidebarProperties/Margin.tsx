@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import PropertyGroupHeader from "../common/PropertyGroupHeader";
-import styles from './Property.module.css';
+import stylesLight from './PropertyLight.module.css';
+import stylesDark from './PropertyDark.module.css';
 import InputText from "./InputText";
 import MyPortal from "../helpers/MyPortal";
 import { isValidCssLengthBasic } from "../../utils";
@@ -46,6 +47,8 @@ const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 
 const Margin = () => {
 
     const [isCollapsed, setIsCollapsed] = useState(true);
+    const colorMode = useDesignerStore(state => state.colorMode);
+    const styles = colorMode === 'light' ? stylesLight : stylesDark;
 
     const expandAllProperties = useDesignerStore(state => state.expandAllProperties);
 

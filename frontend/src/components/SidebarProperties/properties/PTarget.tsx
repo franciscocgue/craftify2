@@ -1,5 +1,7 @@
+import useDesignerStore from "../../../stores/designer";
 import InputSelect from "../InputSelect";
-import styles from '../Property.module.css';
+import stylesLight from '../PropertyLight.module.css';
+import stylesDark from '../PropertyDark.module.css';
 
 const options = [
     {
@@ -14,6 +16,9 @@ const options = [
 
 
 const PTarget = () => {
+    const colorMode = useDesignerStore(state => state.colorMode);
+    const styles = colorMode === 'light' ? stylesLight : stylesDark;
+
     return <div className={styles.wrapper}>
         {/* <Select options={options} /> */}
         {/* <InputText propertyDisplayName={'Icon'}

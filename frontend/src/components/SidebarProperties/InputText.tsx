@@ -1,10 +1,11 @@
 import { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
-import generalStyles from './Property.module.css';
+import generalStylesLight from './PropertyLight.module.css';
+import generalStylesDark from './PropertyDark.module.css';
 import styles from './InputText.module.css';
 import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
-import { MdHelpCenter } from 'react-icons/md';
 import { Properties } from '../../types/designer.types';
+import { IoMdHelpCircleOutline } from 'react-icons/io';
 
 
 type InputTextProps = {
@@ -21,6 +22,7 @@ type InputTextProps = {
 const InputText = ({ propertyDisplayName, propertyKey, tooltipContent, isValidInput }: InputTextProps) => {
 
     const colorMode = useDesignerStore(state => state.colorMode);
+    const generalStyles = colorMode === 'light' ? generalStylesLight : generalStylesDark;
     const selectedId = useDesignerStore(state => state.selectedId);
     const updateProperty = useDesignerStore(state => state.updateProperty);
     // Getting non-reactive fresh state
@@ -99,7 +101,7 @@ const InputText = ({ propertyDisplayName, propertyKey, tooltipContent, isValidIn
                     position: 'relative'
                 }}
             >
-                <MdHelpCenter size={22} style={{ marginLeft: '5px' }} />
+                <IoMdHelpCircleOutline color={colorMode === 'light' ? '#666666' : 'darkgrey'} size={22} style={{ marginLeft: '5px' }} />
                 {tooltipVisible && ref?.current && tooltipContent(ref as React.MutableRefObject<HTMLDivElement>, colorMode, styles)}
             </div>}
         </div>

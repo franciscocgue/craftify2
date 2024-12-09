@@ -24,6 +24,9 @@
 
 .property .input {
     height: 100%;
+    background-color: #ffffff;
+    color: #24292e;
+    border: 1px solid #e1e4e8;
 }
 
 .property .input.number {
@@ -58,7 +61,7 @@
     font-size: small;
     /* text-align: center; */
     margin-top: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     /* font-weight: bold; */
     /* font-style: italic; */
     display: flex;
@@ -74,13 +77,13 @@
 
 .property .unit-block button {
     background: none;
-	color: grey;
-	border: 1px solid grey;
+    color: grey;
+    border: 1px solid grey;
     border-radius: 5px;
-	padding: 3px 4px;
+    padding: 3px 4px;
     font-size: small;
-	cursor: pointer;
-	outline: inherit;
+    cursor: pointer;
+    outline: inherit;
 }
 
 .property .unit-block button.active {

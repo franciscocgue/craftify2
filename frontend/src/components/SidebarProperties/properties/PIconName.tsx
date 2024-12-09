@@ -1,6 +1,8 @@
 import InputSelectAdvanced from "../InputSelectAdvanced";
-import styles from '../Property.module.css';
+import stylesLight from '../PropertyLight.module.css';
+import stylesDark from '../PropertyDark.module.css';
 import * as MdIcons from 'react-icons/md';
+import useDesignerStore from "../../../stores/designer";
 
 // const options = [
 //     { value: 'chocolate', label: 'Chocolate' },
@@ -16,6 +18,9 @@ const options = iconNames.map(icon => ({
 
 
 const PIconName = () => {
+    const colorMode = useDesignerStore(state => state.colorMode);
+    const styles = colorMode === 'light' ? stylesLight : stylesDark;
+
     return <div className={styles.wrapper}>
         {/* <Select options={options} /> */}
         {/* <InputText propertyDisplayName={'Icon'}
