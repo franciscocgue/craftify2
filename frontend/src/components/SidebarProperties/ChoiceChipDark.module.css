@@ -4,7 +4,7 @@
     text-align: center;
     border-radius: 6px;
     /* outline: 1px solid grey; */
-    background-color: black;
+    background-color: rgb(36, 36, 36);
     color: rgb(197, 197, 197);
     user-select: none;
     cursor: pointer;

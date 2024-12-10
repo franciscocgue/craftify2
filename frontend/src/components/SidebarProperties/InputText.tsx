@@ -9,7 +9,7 @@ import { IoMdHelpCircleOutline } from 'react-icons/io';
 
 
 type InputTextProps = {
-    propertyDisplayName: string | ReactElement,
+    propertyDisplayName?: string | ReactElement,
     propertyKey: string,
     isValidInput(value: string): boolean,
     tooltipContent?: (
@@ -90,7 +90,7 @@ const InputText = ({ propertyDisplayName, propertyKey, tooltipContent, isValidIn
 
     return (
         <div className={`${generalStyles['property']}  ${!tooltipContent ? generalStyles['no-help'] : ''}`}>
-            <span className={generalStyles['name']}>{propertyDisplayName}</span>
+            {propertyDisplayName && <span className={generalStyles['name']}>{propertyDisplayName}</span>}
             <input title={val} className={`${generalStyles['input']} ${generalStyles['text']} ${isWrongInput ? generalStyles['wrong'] : ''}`} type="text" onChange={handleChange} value={val} />
             {tooltipContent && <div
                 ref={ref}

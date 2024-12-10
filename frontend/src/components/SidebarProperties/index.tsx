@@ -78,20 +78,20 @@ const SidebarProperties = memo(() => {
                 {/* <p>Name</p> */}
                 <input
                     value={compName}
-                    title='Hex color'
+                    title='Component name'
                     onChange={onChangeHandler}
                     // className={`${generalStyles['input']} ${isWrongInput ? generalStyles['wrong'] : ''}`}
                     style={{
                         fontSize: 'small',
                         padding: '7px 3px',
                         // color: isWrongInput ? 'black' : 'grey',
-                        color: 'black',
+                        color: colorMode === 'light' ? '#555' : '#ddd',
                         // width: '70px',
                         flex: 1,
                         // backgroundColor: isWrongInput ? 'rgb(255, 92, 92)' : 'transparent',
-                        backgroundColor: 'white',
+                        backgroundColor: 'transparent',
                         outline: 'none',
-                        border: '1px solid grey',
+                        border: '0px solid grey',
                         borderRadius: '4px'
                     }} />
                 <div style={{

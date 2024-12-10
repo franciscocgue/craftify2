@@ -45,7 +45,8 @@ const PIconSize = () => {
     const styles = colorMode === 'light' ? stylesLight : stylesDark;
 
     return <div className={styles.wrapper}>
-        <InputText propertyDisplayName={'Size'}
+        <p style={{ fontSize: 'small' }}>Size</p>
+        <InputText
             propertyKey="__iconSize"
             tooltipContent={tooltipContent}
             isValidInput={isValidPositiveNumber}

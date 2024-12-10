@@ -44,7 +44,8 @@ const PAlt = () => {
     const styles = colorMode === 'light' ? stylesLight : stylesDark;
 
     return <div className={styles.wrapper}>
-        <InputText propertyDisplayName={'Fallback text'}
+        <p style={{ fontSize: 'small' }}>Fallback text</p>
+        <InputText
             propertyKey="__alt"
             tooltipContent={tooltipContent}
             isValidInput={() => true}

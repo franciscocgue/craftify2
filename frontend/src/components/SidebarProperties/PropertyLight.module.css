@@ -6,20 +6,20 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 6px 0;
+    margin: 6px 0 15px 0;
     height: 30px;
 }
 
 .property.no-help {
     /* used to align inputs */
-    margin-right: 33px;
+    /* margin-right: 33px; */
 }
 
 .property .name {
     font-size: small;
     display: flex;
     margin-right: 7px;
-    min-width: 85px;
+    min-width: 40px;
 }
 
 .property .input {
@@ -35,7 +35,8 @@
 }
 
 .property .input.text {
-    width: 130px;
+    /* width: 130px; */
+    flex: 1;
     padding-left: 5px;
     padding-right: 5px;
 }

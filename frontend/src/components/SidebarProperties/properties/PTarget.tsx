@@ -1,18 +1,19 @@
 import useDesignerStore from "../../../stores/designer";
-import InputSelect from "../InputSelect";
+// import InputSelect from "../InputSelect";
 import stylesLight from '../PropertyLight.module.css';
 import stylesDark from '../PropertyDark.module.css';
+import ChoiceChip from "../ChoiceChip";
 
-const options = [
-    {
-        value: '_self',
-        display: 'This tab',
-    },
-    {
-        value: '_blank',
-        display: 'New tab',
-    },
-]
+// const options = [
+//     {
+//         value: '_self',
+//         display: 'This tab',
+//     },
+//     {
+//         value: '_blank',
+//         display: 'New tab',
+//     },
+// ]
 
 
 const PTarget = () => {
@@ -26,7 +27,19 @@ const PTarget = () => {
             // tooltipContent={tooltipContent}
             isValidInput={()=> true}
         /> */}
-        <InputSelect propertyDisplayName={'Where to open'} propertyKey={['__target']} options={options} />
+
+        <p style={{ fontSize: 'small' }}>Where to open</p>
+        <div style={{
+            display: 'flex',
+            gap: '10px',
+            justifyContent: 'center',
+            margin: '3px 0 17px 0',
+        }}>
+            <ChoiceChip display={'New window'} valueChip="_blank" propertyKey="__target"></ChoiceChip>
+            <ChoiceChip display={'This window'} valueChip="_self" propertyKey="__target"></ChoiceChip>
+        </div>
+
+        {/* <InputSelect propertyDisplayName={'Where to open'} propertyKey={['__target']} options={options} /> */}
     </div>
 }
 

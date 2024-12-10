@@ -44,7 +44,8 @@ const PSrc = () => {
     const styles = colorMode === 'light' ? stylesLight : stylesDark;
 
     return <div className={styles.wrapper}>
-        <InputText propertyDisplayName={'URL'}
+        <p style={{ fontSize: 'small' }}>URL</p>
+        <InputText
             propertyKey="__src"
             tooltipContent={tooltipContent}
             isValidInput={() => true}

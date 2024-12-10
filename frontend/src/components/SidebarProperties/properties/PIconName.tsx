@@ -28,7 +28,8 @@ const PIconName = () => {
             // tooltipContent={tooltipContent}
             isValidInput={()=> true}
         /> */}
-        <InputSelectAdvanced propertyDisplayName={'Icon'} propertyKey={['__iconName']} options={options} />
+        <p style={{ fontSize: 'small' }}>Icon</p>
+        <InputSelectAdvanced propertyKey={['__iconName']} options={options} />
     </div>
 }
 

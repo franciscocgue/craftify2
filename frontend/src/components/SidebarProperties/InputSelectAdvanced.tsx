@@ -13,7 +13,7 @@ type Option = {
 };
 
 type InputSelectAdvancedProps = {
-    propertyDisplayName: string | ReactElement,
+    propertyDisplayName?: string | ReactElement,
     propertyKey: string[], // use array if simplified input affects multiple properties (eg border style -> left, right, top, bottom)
     options: Option[]
 }
@@ -29,7 +29,7 @@ const InputSelectAdvanced = ({ propertyDisplayName, propertyKey, options }: Inpu
 
     const [val, setVal] = useState({
         value: propValue,
-        label: <div style={{ display: 'flex', alignItems: 'center', gap: '3px', flexWrap: 'nowrap' }}><span style={{ minWidth: '20px' }}><MyIcon nameIcon={propValue ?? '__'} propsIcon={{ size: 20, color: 'black' }} /></span> {propValue?.slice(2)}</div>,
+        label: <div style={{ display: 'flex', alignItems: 'center', gap: '3px', flexWrap: 'nowrap' }}><span style={{ minWidth: '20px' }}><MyIcon nameIcon={propValue ?? '__'} propsIcon={{ size: 20, color: colorMode === 'light' ? '#24292e' : '#ebf1f8' }} /></span> {propValue?.slice(2)}</div>,
     });
     const [inputValue, setInputValue] = useState('');
 
@@ -38,11 +38,11 @@ const InputSelectAdvanced = ({ propertyDisplayName, propertyKey, options }: Inpu
         if (selectedId) {
             setVal({
                 value: useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0] as keyof Properties],
-                label: <div style={{ display: 'flex', alignItems: 'center', gap: '3px', flexWrap: 'nowrap' }}><span style={{ minWidth: '20px' }}><MyIcon nameIcon={useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0] as keyof Properties] ?? '__'} propsIcon={{ size: 20, color: 'black' }} /></span> {useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0] as keyof Properties]?.slice(2)}</div>,
+                label: <div style={{ display: 'flex', alignItems: 'center', gap: '3px', flexWrap: 'nowrap' }}><span style={{ minWidth: '20px' }}><MyIcon nameIcon={useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0] as keyof Properties] ?? '__'} propsIcon={{ size: 20, color: colorMode === 'light' ? '#24292e' : '#ebf1f8' }} /></span> {useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0] as keyof Properties]?.slice(2)}</div>,
                 // label: useDesignerStore.getState().properties[selectedId as string]?.[propertyKey[0]],
             })
         }
-    }, [selectedId])
+    }, [selectedId, colorMode])
 
     const handleDebounceFn = (selectedId: string, value: string) => {
         if (value === '') {
@@ -73,7 +73,7 @@ const InputSelectAdvanced = ({ propertyDisplayName, propertyKey, options }: Inpu
     //     { value: 'vanilla', label: 'Vanilla' }
     // ]
 
-    const reactSelectOpts = options.map(opt => ({ value: opt.value, label: <div style={{ display: 'flex', alignItems: 'center', gap: '3px', flexWrap: 'nowrap' }}><span style={{ minWidth: '20px' }}><MyIcon nameIcon={opt.value} propsIcon={{ size: 20, color: 'black' }} /></span> {opt.value.slice(2)}</div> }));
+    const reactSelectOpts = options.map(opt => ({ value: opt.value, label: <div style={{ display: 'flex', alignItems: 'center', gap: '3px', flexWrap: 'nowrap' }}><span style={{ minWidth: '20px' }}><MyIcon nameIcon={opt.value} propsIcon={{ size: 20, color: colorMode === 'light' ? '#24292e' : '#ebf1f8' }} /></span> {opt.value.slice(2)}</div> }));
 
     const customNoOptionsMessage = () => {
         if (inputValue.length < 3) {
@@ -86,7 +86,7 @@ const InputSelectAdvanced = ({ propertyDisplayName, propertyKey, options }: Inpu
 
     return (
         <div className={`${generalStyles['property']} ${generalStyles['no-help']}`}>
-            <span className={generalStyles['name']}>{propertyDisplayName}</span>
+            {propertyDisplayName && <span className={generalStyles['name']}>{propertyDisplayName}</span>}
             {/* <select title={val} className={`${generalStyles['input']} ${generalStyles['select']}`} onChange={handleChange} value={val}>
                 {options.map(opt => <option key={opt.value} value={opt.value}>{opt.display}</option>)}
             </select> */}
@@ -94,7 +94,8 @@ const InputSelectAdvanced = ({ propertyDisplayName, propertyKey, options }: Inpu
                 styles={{
                     container: (provided) => ({
                         ...provided,
-                        width: '130px',
+                        // width: '130px',
+                        flex: '1',
                         height: '30px',
                     }),
                     control: (provided) => ({
@@ -103,19 +104,34 @@ const InputSelectAdvanced = ({ propertyDisplayName, propertyKey, options }: Inpu
                         borderColor: '#9e9e9e',
                         minHeight: '30px',
                         height: '30px',
+                        backgroundColor: colorMode === 'light' ? '#ffffff' : '#2c2c2c',
                         // boxShadow: state.isFocused ? null : null,
+                    }),
+
+                    singleValue: (provided) => ({
+                        ...provided,
+                        color: colorMode === 'light' ? '#24292e' : '#ebf1f8',
+                    }),
+
+                    option: (provided) => ({
+                        ...provided,
+                        ":hover": {
+                            backgroundColor: colorMode === 'light' ? '#d6eaf8' : 'grey',
+                        }
                     }),
 
                     valueContainer: (provided) => ({
                         ...provided,
-                        height: '30px',
+                        height: '27px',
                         padding: '0 0 0 3px',
                         fontSize: '9pt',
+                        backgroundColor: colorMode === 'light' ? '#ffffff' : '#2c2c2c',
                     }),
 
                     input: (provided) => ({
                         ...provided,
                         margin: '0px',
+                        color: colorMode === 'light' ? '#24292e' : '#ebf1f8',
                     }),
                     indicatorSeparator: () => ({
                         display: 'none',
@@ -132,7 +148,10 @@ const InputSelectAdvanced = ({ propertyDisplayName, propertyKey, options }: Inpu
                     menu: (provided) => ({
                         ...provided,
                         fontSize: 'smaller',
-                        width: '170px'
+                        color: colorMode === 'light' ? '#24292e' : '#ebf1f8',
+                        backgroundColor: colorMode === 'light' ? '#ffffff' : '#222',
+                        border: colorMode === 'light' ? '1px solid lightgrey' : '1px solid grey'
+                        // width: '170px'
                     }),
                 }}
                 // className={`${generalStyles['input']} ${generalStyles['select']}`}

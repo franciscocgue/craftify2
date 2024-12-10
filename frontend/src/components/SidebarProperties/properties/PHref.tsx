@@ -41,9 +41,10 @@ import useDesignerStore from "../../../stores/designer";
 const PHref = () => {
     const colorMode = useDesignerStore(state => state.colorMode);
     const styles = colorMode === 'light' ? stylesLight : stylesDark;
-    
+
     return <div className={styles.wrapper}>
-        <InputText propertyDisplayName={'URL'}
+        <p style={{ fontSize: 'small' }}>URL</p>
+        <InputText
             propertyKey="__href"
             // tooltipContent={tooltipContent}
             isValidInput={() => true}
