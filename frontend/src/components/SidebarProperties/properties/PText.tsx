@@ -1,21 +1,15 @@
 import InputText from "../InputText";
-import stylesLight from '../PropertyLight.module.css';
-import stylesDark from '../PropertyDark.module.css';
-import useDesignerStore from "../../../stores/designer";
 
-const PText = () => {
-    const colorMode = useDesignerStore(state => state.colorMode);
-    const styles = colorMode === 'light' ? stylesLight : stylesDark;
+type PTextProps = {
+    label?: string,
+}
 
-    return <div className={styles.wrapper}>
+const PText = ({label}: PTextProps) => {
 
-        <p style={{ fontSize: 'small' }}>Text</p>
-        {/* <div style={{
-            display: 'flex',
-            gap: '10px',
-            justifyContent: 'center',
-            margin: '3px 0 17px 0',
-        }}> */}
+    return <div>
+
+        <p style={{ fontSize: 'small' }}>{label ?? 'Text'}</p>
+
         <InputText
             propertyKey="__text"
             // tooltipContent={tooltipContent}

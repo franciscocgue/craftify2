@@ -114,15 +114,15 @@ const compPropertiesEditors = {
     },
     'button': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
-        properties: [<PText key={'PText'} />],
+        properties: [<PText label="Label" key={'PText'} />],
     },
     'text': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
-        properties: [<PText key={'PText'} />],
+        properties: [<PText label="Content" key={'PText'} />],
     },
     'header': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
-        properties: [<PText key={'PText'} />],
+        properties: [<PText label="Title" key={'PText'} />],
     },
     'checkbox': {
         styles: [null],
@@ -134,7 +134,7 @@ const compPropertiesEditors = {
     },
     'link': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'marhin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
-        properties: [<PText key={'PText'} />, <PHref key={'PHref'} />, <PTarget key={'PTarget'} />],
+        properties: [<PText label="Display text" key={'PText'} />, <PHref key={'PHref'} />, <PTarget key={'PTarget'} />],
     },
     'icon-button': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />],

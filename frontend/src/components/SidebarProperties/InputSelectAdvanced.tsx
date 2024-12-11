@@ -96,7 +96,7 @@ const InputSelectAdvanced = ({ propertyDisplayName, propertyKey, options }: Inpu
                         ...provided,
                         // width: '130px',
                         flex: '1',
-                        height: '30px',
+                        height: '27px',
                     }),
                     control: (provided) => ({
                         ...provided,

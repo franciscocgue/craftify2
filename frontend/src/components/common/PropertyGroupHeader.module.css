@@ -2,8 +2,9 @@
     display: flex;
     align-items: center;
     /* border-top: 1px solid grey; */
-    border-bottom: 2px solid grey;
+    border-bottom: 2px solid rgb(161, 161, 161);
     margin-top: 10px;
+    margin-bottom: 15px;
     /* background-color: lightgrey; */
 }
 

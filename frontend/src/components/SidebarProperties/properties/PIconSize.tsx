@@ -1,9 +1,6 @@
 import MyPortal from "../../helpers/MyPortal";
 import InputText from "../InputText";
-import stylesLight from '../PropertyLight.module.css';
-import stylesDark from '../PropertyDark.module.css';
 import { isValidPositiveNumber } from "../../../utils";
-import useDesignerStore from "../../../stores/designer";
 
 const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 'dark' | 'light', styles: CSSModuleClasses) => <MyPortal styles={{
     position: 'absolute',
@@ -41,10 +38,8 @@ const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 
 </MyPortal>
 
 const PIconSize = () => {
-    const colorMode = useDesignerStore(state => state.colorMode);
-    const styles = colorMode === 'light' ? stylesLight : stylesDark;
 
-    return <div className={styles.wrapper}>
+    return <div>
         <p style={{ fontSize: 'small' }}>Size</p>
         <InputText
             propertyKey="__iconSize"

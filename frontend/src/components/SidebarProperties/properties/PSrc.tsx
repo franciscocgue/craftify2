@@ -1,8 +1,5 @@
 import MyPortal from "../../helpers/MyPortal";
 import InputText from "../InputText";
-import stylesLight from '../PropertyLight.module.css';
-import stylesDark from '../PropertyDark.module.css';
-import useDesignerStore from "../../../stores/designer";
 
 const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 'dark' | 'light', styles: CSSModuleClasses) => <MyPortal styles={{
     position: 'absolute',
@@ -20,15 +17,6 @@ const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 
     left: ref.current.getBoundingClientRect().left - 300,
 }}>
     <div className={styles['tooltip']}>
-        {/* <div>
-            <p className={styles['header']}>Info</p>
-            <div className={styles['main']}>
-                <p className={styles['sub-header']}>Units</p>
-                <p style={{ marginLeft: '20px', marginBottom: '0px' }}>no units :)</p>
-                <p className={styles['sub-header']}>Dynamic variables</p>
-                <p style={{ marginLeft: '20px', marginBottom: '0px' }}>{`{{myVariable}}`}</p>
-            </div>
-        </div> */}
         <div>
             <p className={styles['header']}>Examples</p>
             <div className={styles['main']}>
@@ -40,10 +28,8 @@ const tooltipContent = (ref: React.MutableRefObject<HTMLDivElement>, colorMode: 
 </MyPortal>
 
 const PSrc = () => {
-    const colorMode = useDesignerStore(state => state.colorMode);
-    const styles = colorMode === 'light' ? stylesLight : stylesDark;
 
-    return <div className={styles.wrapper}>
+    return <div>
         <p style={{ fontSize: 'small' }}>URL</p>
         <InputText
             propertyKey="__src"
