@@ -31,7 +31,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
 
     console.log('C - WrapperContainer ' + props.componentId.slice(0, 5))
 
-    const ref = useRef<HTMLDivElement  | null>(null);
+    const ref = useRef<HTMLDivElement | null>(null);
     const [isHovered, setIsHovered] = useState(false);
     const [isHoveredRemote, setIsHoveredRemote] = useState(false);
     const [isSelected, setIsSelected] = useState(false);
@@ -46,7 +46,9 @@ const WrapperContainer = (props: WrapperContainerProps) => {
     const parsedProperties = parseProperties(otherProperties);
     const [_, setRerender] = useState(false);
 
-    // substcribe to external changes to re-render
+    // const [noContentBorder, setNoContentBorder] = useState<Record<string, string>>({})
+
+    // subscribe to external changes to re-render
     useEffect(() => {
         const unsub = useDesignerStore.subscribe(
             // selector
@@ -122,6 +124,17 @@ const WrapperContainer = (props: WrapperContainerProps) => {
         return unsub
     }, [isHovered])
 
+    // useEffect(() => {
+    //     if (parsedProperties.borderTopStyle === 'none'
+    //         && parsedProperties.borderBottomStyle === 'none'
+    //         && parsedProperties.borderLeftStyle === 'none'
+    //         && parsedProperties.borderRightStyle === 'none') {
+    //         setNoContentBorder({ border: '1px dashed grey' });
+    //     } else {
+    //         setNoContentBorder({});
+    //     }
+    // }, [parsedProperties])
+
 
     return <>
         <div
@@ -144,7 +157,9 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                 position: 'relative',
                 overflow: 'hidden',
 
-                ...parsedProperties
+                ...parsedProperties,
+                // border - text
+                // ...noContentBorder,
             }}
             onMouseOver={(e) => {
                 e.stopPropagation();
@@ -165,7 +180,7 @@ const WrapperContainer = (props: WrapperContainerProps) => {
             {props.children}
 
             {/* outlines */}
-            {!isSelected && !draggable && (isHovered || isHoveredRemote) && ref.current  && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='orange' thickness={3} />}
+            {!isSelected && !draggable && (isHovered || isHoveredRemote) && ref.current && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color='orange' thickness={3} />}
             {isSelected && ref.current && <MyOutline boundingRect={ref.current?.getBoundingClientRect()} color={DESIGN_PARAMETERS.BORDER_COLOR_SELECTED_COMPONENT} thickness={3} />}
 
             {/* {isHovered && !draggable && <MyPortal styles={{ position: 'absolute', top: ref.current?.getBoundingClientRect().top, left: ref.current?.getBoundingClientRect().left + ref.current?.getBoundingClientRect().width }}>

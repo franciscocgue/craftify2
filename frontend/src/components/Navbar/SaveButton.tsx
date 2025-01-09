@@ -2,7 +2,7 @@ import useDesignerStore from "../../stores/designer";
 import axios from "axios";
 import { FaSave } from "react-icons/fa";
 import IconButton from "../common/IconButton";
-import { Variables } from "../../types/variables.types";
+import { Variable } from "../../types/variables.types";
 import { Properties } from "../../types/designer.types";
 import { ComponentCollection } from "../../types/designer.types";
 import { FunctionTypes, LogicEdge, LogicNode } from "../../types/logic.types";
@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 const handleButtonClick = async (
     components: ComponentCollection,
     properties: Properties,
-    variables: Variables,
+    variables: Variable[],
     logicNodes: Record<string, LogicNode<FunctionTypes>[]>,
     logicEdges: Record<string, LogicEdge[]>,
     setIsBuilding: React.Dispatch<React.SetStateAction<boolean>>,

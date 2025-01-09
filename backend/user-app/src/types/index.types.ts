@@ -6,8 +6,8 @@ import { CSSProperties, ReactElement } from 'react';
 // INPUTS (from CONFIG FILES)
 
 type compTypes = "row" | "column" | "button" | "text" | "header" | "checkbox" | "image" | "link" | "icon-button";
-export type FunctionTypes = "open-url" | "on-click-trigger" | "delay" | "docu-note" | 'toast'
-export type FunctionTypesWithHandler = "open-url" | "delay" | 'toast'
+export type FunctionTypes = "open-url" | "on-click-trigger" | "delay" | "docu-note" | 'toast' | 'set-variable'
+// export type FunctionTypesWithHandler = "open-url" | "delay" | 'toast'
 
 // COMPONENTS and PROPERTIES
 
@@ -117,13 +117,13 @@ export interface ComponentLeaf {
 
 // VARIABLES
 
-type Variable<T> = {
-  type: 'text' | 'number' | 'boolean';
-  initialValue: T;
-  value: T;
+export type Variable = {
+  key: string,
+  type: 'string' | 'number' | 'boolean';
+  value: any;
 };
 
-export type Variables = Record<string, Variable<any>>;
+// export type Variables = Record<string, Variable<any>>;
 
 
 // LOGIC
@@ -146,6 +146,11 @@ export type LogicNodeData<FunctionType extends FunctionTypes> = {
     : FunctionType extends 'docu-note'
     ? {
       msg: string,
+    }
+    : FunctionType extends 'set-variable'
+    ? {
+      variableKey: string,
+      value: any
     }
     : FunctionType extends 'toast'
     ? {

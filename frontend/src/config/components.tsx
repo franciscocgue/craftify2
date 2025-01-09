@@ -25,6 +25,7 @@ import PSrc from "../components/SidebarProperties/properties/PSrc";
 import PAlt from "../components/SidebarProperties/properties/PAlt";
 import PHref from "../components/SidebarProperties/properties/PHref";
 import PTarget from "../components/SidebarProperties/properties/PTarget";
+import PChecked from "../components/SidebarProperties/properties/PChecked";
 
 const compTypes = {
     'row': {
@@ -125,8 +126,8 @@ const compPropertiesEditors = {
         properties: [<PText label="Title" key={'PText'} />],
     },
     'checkbox': {
-        styles: [null],
-        properties: [null],
+        styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
+        properties: [<PText label="Label" key={'PText'} />, <PChecked label="Is checked" key={'PChecked'} />],
     },
     'image': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Border key={'border'} />],
@@ -350,17 +351,29 @@ const compProperties: Record<keyof CompNames | 'canvas', Properties> = {
         width: '100%',
         maxWidth: 'none',
         minWidth: 'auto',
-        height: '40px',
+        height: 'auto',
         maxHeight: 'none',
-        minHeight: '40px',
+        minHeight: 'auto',
         marginTop: '0px',
         marginBottom: '0px',
         marginLeft: '0px',
         marginRight: '0px',
         // p: undefined,
         color: 'black',
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+        textAlign: 'start',
         backgroundColor: undefined,
+        backgroundImage: 'none',
+        backgroundSize: 'auto',
+        backgroundRepeat: 'repeat',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'scroll',
         outline: 'none',
+        paddingTop: '8px',
+        paddingBottom: '8px',
+        paddingLeft: '16px',
+        paddingRight: '16px',
         borderRadius: '0px',
         borderTopStyle: 'none',
         borderTopWidth: 'thin',
@@ -374,6 +387,9 @@ const compProperties: Record<keyof CompNames | 'canvas', Properties> = {
         borderRightStyle: 'none',
         borderRightWidth: 'thin',
         borderRightColor: '#4a4a4a',
+        // custom properties
+        __text: 'Checkbox',
+        __checked: undefined, // {{myVariable}} | undefined
     },
     'image': {
         // wrapperStyles

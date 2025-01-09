@@ -1,5 +1,6 @@
 import { ReactNode } from "react"
 import { parseProperties } from "../helpers/utils";
+import { useDynamicVariables } from "../hooks/useVariables";
 
 
 type Props = {
@@ -8,6 +9,10 @@ type Props = {
     [x: string]: any
 }
 const CContainerColumn = ({ onClick, children, ...otherProperties }: Props) => {
+    
+    // subscribes to variable changes
+    useDynamicVariables(otherProperties);
+    
     const parsedProperties = parseProperties(otherProperties);
     return <div
         style={{

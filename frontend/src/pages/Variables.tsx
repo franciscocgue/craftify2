@@ -5,36 +5,15 @@ import style from './Designer.module.css';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-const variables: Record<string, {
-    type: 'number' | 'text' | 'boolean',
-    initialValue: string | number | boolean,
-    value: string | number | boolean,
-}> = {
-    name: {
-        type: 'text',
-        initialValue: 'James',
-        value: 'James'
-    },
-    age: {
-        type: 'number',
-        initialValue: 30,
-        value: 30
-    },
-    hasGlasses: {
-        type: 'boolean',
-        initialValue: true,
-        value: true
-    }
-}
 
 type VariableProps = {
     id: string,
     // @TODO: expand as necessary for more types
-    type: 'number' | 'text' | 'boolean',
-    initialValue: string | number | boolean
+    type: 'number' | 'string' | 'boolean',
+    value: string | number | boolean
 }
 
-const Variable = ({ id, type, initialValue }: VariableProps) => {
+const Variable = ({ id, type, value }: VariableProps) => {
     return (
         <div style={{
             display: 'flex',
@@ -45,9 +24,9 @@ const Variable = ({ id, type, initialValue }: VariableProps) => {
             borderRadius: '4px',
 
         }}>
-            <p>Key: <i>{id}</i></p>
-            <p>Type: {type}</p>
-            <p>Initial Value: {String(initialValue)}</p>
+            <p>{id}</p>
+            <p><i>{type}</i></p>
+            <p>Initial value: {String(value)}</p>
             <button>Edit</button>
             <button>Delete</button>
         </div>
@@ -57,6 +36,9 @@ const Variable = ({ id, type, initialValue }: VariableProps) => {
 const Variables = () => {
 
     const colorMode = useDesignerStore((state) => state.colorMode);
+    const variables = useDesignerStore((state) => state.variables);
+
+    console.log({ variables })
 
     return (
         <div
@@ -124,12 +106,11 @@ const Variables = () => {
                         alignItems: 'flex-start',
                     }}
                 >
-                    {Object.keys(variables).map(varName => {
-                        const v = varName as keyof typeof variables;
+                    {variables.map(variable => {
                         return (<Variable
-                            id={v}
-                            type={variables[v].type}
-                            initialValue={variables[v].initialValue}
+                            id={variable.key}
+                            type={variable.type}
+                            value={variable.value}
                         />)
                     })}
                 </div>

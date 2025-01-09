@@ -75,6 +75,21 @@ const logicFunctions = {
             },
         },
     },
+    'set-variable': {
+        parentType: 'Variables',
+        creatableByUser: true,
+        displayName: 'Set Variable',
+        description: 'Update the value of a variable',
+        defaultData: { // LogicNodeData<'delay'>
+            function: {
+                type: 'set-variable',
+                parameters: {
+                    variableKey: null,
+                    value: null,
+                }
+            },
+        },
+    },
 }
 
 export {

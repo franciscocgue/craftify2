@@ -3,6 +3,7 @@ import OnClickTrigger from "./OnClickTrigger";
 import OpenUrl from "./OpenUrl";
 import DocuNote from "./DocuNote";
 import Toast from "./Toast";
+import SetVariable from "./SetVariable";
 
 
 export {
@@ -11,4 +12,5 @@ export {
     OpenUrl,
     DocuNote,
     Toast,
+    SetVariable,
 }

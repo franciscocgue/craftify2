@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { compProperties, compTypes } from '../config/components';
-import { Variables } from "../types/variables.types";
+import { Variable } from "../types/variables.types";
 import { ComponentCollectionProperties, Properties } from "../types/designer.types";
 import { ComponentCollection } from "../types/designer.types";
 import { CompNames } from "../types/designer.types";
@@ -166,7 +166,7 @@ type designerStore = {
   isCanvasScrolling: boolean,
   components: ComponentCollection,
   properties: ComponentCollectionProperties,
-  variables: Variables,
+  variables: Variable[],
   componentNames: CompNames,
   expandAllProperties: boolean | null,
   // componentIds of component whose properties were updated last
@@ -235,7 +235,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   // appId: '1aaa9406-6687-485d-8276-203bd82bcfe1',
   page: 'designer',
   componentEditorMode: 'styles',
-  colorMode: 'light',
+  colorMode: 'dark',
   draggingId: null,
   draggable: null,
   isResizing: false,
@@ -244,24 +244,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   isCanvasScrolling: false,
   components: {},
   properties: {},
-  variables: {},
-  // variables: {
-  //   name: {
-  //     type: 'text',
-  //     initialValue: 'James',
-  //     value: 'James'
-  //   },
-  //   age: {
-  //     type: 'number',
-  //     initialValue: 30,
-  //     value: 30
-  //   },
-  //   hasGlasses: {
-  //     type: 'boolean',
-  //     initialValue: true,
-  //     value: true
-  //   }
-  // },
+  variables: [],
   componentNames: componentNamesInitial,
   expandAllProperties: false,
   lastUpdatedCompChildren: [],

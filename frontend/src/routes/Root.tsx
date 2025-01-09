@@ -129,7 +129,7 @@ const Root = () => {
     }, [setProjects, isCreating, isDeleting]);
 
     const handleTryoutClick = () => {
-        navigate('/try-out');
+        navigate('/try-out/designer');
     }
 
     return (

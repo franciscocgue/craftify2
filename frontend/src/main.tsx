@@ -28,16 +28,29 @@ const initialComponents: ComponentCollection = {
 const initialProperties: ComponentCollectionProperties = { canvas: compProperties['canvas'] };
 
 const fetchDataTryout = () => {
-  useDesignerStore.setState({ appId: 'try-out' });
-  useDesignerStore.setState({ appName: 'My First Web App' });
-  useDesignerStore.setState({ components: initialComponents });
-  useDesignerStore.setState({ properties: initialProperties });
-  useDesignerStore.setState({ variables: {} });
-  useDesignerStore.setState({ logicEdges: {} });
-  useDesignerStore.setState({ logicNodes: {} });
 
+  const appId = useDesignerStore.getState().appId;
+
+  // reset state if necessary
+  if (appId !== 'try-out') {
+    useDesignerStore.setState({ appId: 'try-out' });
+    useDesignerStore.setState({ appName: 'My First Web App' });
+    useDesignerStore.setState({ components: initialComponents });
+    useDesignerStore.setState({ properties: initialProperties });
+    useDesignerStore.setState({ variables: [] });
+    useDesignerStore.setState({ logicEdges: {} });
+    useDesignerStore.setState({ logicNodes: {} });
+    useDesignerStore.setState({ page: 'designer' });
+  }
   return null;
 };
+
+// reset state on root window opened
+const resetState = () => {
+  useDesignerStore.setState({ appId: null });
+  // @TODO: might need to reset more stuff
+  return null;
+}
 
 const fetchData = async ({ params }) => {
 
@@ -87,7 +100,28 @@ const fetchData = async ({ params }) => {
       "appId": appId,
       "objectName": "variables"
     });
-    const variables = JSON.parse(variablesString);
+    // const variables = JSON.parse(variablesString);
+    // @TODO: remove; just for testing variables until they can be created in UI
+    const variables = [
+      {
+        // id: '5865dc1c-cb5c-4c40-b616-f46349967414',
+        key: 'Name',
+        type: 'string' as const,
+        value: 'Kvothe',
+      },
+      {
+        // id: 'fd78c600-ca80-46c5-9520-132a7a3e6e4b',
+        key: 'Age',
+        type: 'number' as const,
+        value: 35,
+      },
+      {
+        // id: 'f94543a7-d9c3-4fe8-b0a7-95a0563714be',
+        key: 'IsMale',
+        type: 'boolean' as const,
+        value: true,
+      },
+    ];
 
     const { data: logicNodesString } = await axios.post('http://localhost:3000/api/web-service/get-project-object', {
       "appId": appId,
@@ -107,6 +141,7 @@ const fetchData = async ({ params }) => {
     useDesignerStore.setState({ variables });
     useDesignerStore.setState({ logicEdges });
     useDesignerStore.setState({ logicNodes });
+    useDesignerStore.setState({ page: 'designer' });
   } catch {
     throw new Error("Could not load project data");
   }
@@ -118,6 +153,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
+    loader: resetState,
     errorElement: <ErrorPage />,
   },
   {
@@ -127,9 +163,15 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/try-out",
+    path: "/try-out/designer",
     element: <Designer />,
     loader: fetchDataTryout,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/try-out/variables",
+    element: <Variables />,
+    // loader: fetchDataTryout,
     errorElement: <ErrorPage />,
   },
   {

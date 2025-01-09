@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useWrapper } from "../../hooks";
 import { UiComponentProps } from "../../types/designer.types";
 
-const CCheckbox = ({ componentId, componentType, componentName, parentType } : UiComponentProps) => {
+const CCheckbox = ({ componentId, componentType, componentName, parentType }: UiComponentProps) => {
 
     // exclude below from the built version
     console.log('comp render: ' + componentId.slice(0, 5))
@@ -25,10 +25,13 @@ const CCheckbox = ({ componentId, componentType, componentName, parentType } : U
             style={{
                 ...otherProperties,
                 position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
             }}>
-            <label style={{fontSize: 'small'}}>
-                <input type="checkbox" style={{marginRight: '5px'}}/>
-                Checkbox
+            <label style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+                {/* undefined: uncontrolled; here set fixed to true just for preview in designer */}
+                <input type="checkbox" style={{ marginRight: '5px' }} checked={otherProperties.__checked} />
+                {otherProperties.__text}
             </label>
             {/* exclude below from the built version */}
             {wrapperComponent}

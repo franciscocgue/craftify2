@@ -89,6 +89,7 @@ export type Properties = {
     __iconName?: string;
     __iconSize?: string;
     __iconColor?: string;
+    __checked?: boolean | string | number;
 };
 export interface ComponentCollectionProperties {
     [key: string]: Properties;

@@ -1,10 +1,8 @@
 
-type Variable<T> = {
-    type: 'text' | 'number' | 'boolean';
-    initialValue: T;
-    value: T;
+export type Variable = {
+    key: string,
+    type: 'string' | 'number' | 'boolean';
+    value: any;
 };
 
-export type Variables = {
-    [key: string]: Variable<any>;
-};
+// export type Variables = Variable[];

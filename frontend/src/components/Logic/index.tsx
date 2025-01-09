@@ -34,6 +34,7 @@ const nodeTypes = {
     'delay': nodesElements['Delay'],
     'docu-note': nodesElements['DocuNote'],
     'toast': nodesElements['Toast'],
+    'set-variable': nodesElements['SetVariable'],
 };
 
 type LogicProps = {

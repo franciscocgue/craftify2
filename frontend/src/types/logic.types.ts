@@ -22,6 +22,11 @@ export type LogicNodeData<FunctionType extends FunctionTypes> = {
     ? {
       msg: string,
     }
+    : FunctionType extends 'set-variable'
+    ? {
+      variableKey: string,
+      value: any
+    }
     : FunctionType extends 'toast'
     ? {
       msg: string,

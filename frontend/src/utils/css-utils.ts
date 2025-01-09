@@ -228,15 +228,27 @@ const parseProperties = (properties: Properties) => {
         const propertyValue = properties[propertyKey];
 
         if (typeof propertyValue === 'string') {
-            parsedProperties[propertyKey as keyof typeof properties] = propertyValue.replace(/{{([^}]*)}}/g, (match, p1) => {
-                const varName = p1.trim(); // extracted text
-
-                // console.log('varName', varName)
-                if (variables[varName]) {
-                    return `${variables[varName]['initialValue']}`;
+            const matches = propertyValue.match(/{{([^}]*)}}/g);
+            if (matches && matches.length === 1 && matches[0] === propertyValue) {
+                // single value; eg {{param1}} --> parse as actual value
+                const parsedValue = matches[0].slice(2, -2); // remove {{}}
+                const variable = variables.find(v => v.key === parsedValue);
+                if (variable) {
+                    parsedProperties[propertyKey as keyof typeof properties] = variable['value'] as any;
                 }
-                return match;
-            }) as any;
+            } else {
+                // parse as string
+                parsedProperties[propertyKey as keyof typeof properties] = propertyValue.replace(/{{([^}]*)}}/g, (match, p1) => {
+                    const varName = p1.trim(); // extracted text
+                    
+                    // console.log('varName', varName)
+                    const variable = variables.find(v => v.key === varName)
+                    if (variable) {
+                        return variable['value'];
+                    }
+                    return match;
+                }) as any;
+            }
         }
     });
 

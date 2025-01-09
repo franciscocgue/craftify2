@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import { FunctionTypes, LogicFunctionHandler } from "../types/index.types";
 import { parseToastAutoClose } from "../helpers/utils";
+import { useVariableStore } from "../stores/variableStore";
 
 
 // available node logic functions
@@ -41,6 +42,12 @@ const logicFunctionHandlers: Record<FunctionTypes, { handler: Function }> = {
             return Promise.resolve();
         }
     },
+    'set-variable': {
+        handler: (params: LogicFunctionHandler<'set-variable'>) => {
+            useVariableStore.getState().setVariable(params.variableKey, params.value);
+            return Promise.resolve();
+        }
+    }
 }
 
 export {
