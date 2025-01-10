@@ -11,7 +11,7 @@ import { LuMove } from "react-icons/lu";
 import { draggableData } from "../types/designer.types";
 // import { renderNode } from "../helpers/ui-builder";
 import Canvas from "../components/Canvas";
-import style from './Designer.module.css';
+import style from './page.module.css';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { myPointerWithin } from '../utils';

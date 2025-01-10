@@ -227,6 +227,8 @@ type designerStore = {
       keyof LogicNodeData<FunctionType>['function']['parameters']
     ],
   ) => void,
+  upsertVariable: (key: string, value: any, type: Variable["type"]) => void,
+  deleteVariable: (key: string) => void,
 }
 
 const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => ({
@@ -549,6 +551,25 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
 
     return { logicNodes: allLogicNodes };
   }),
+  upsertVariable: (key, value, type) =>
+    set((state) => {
+      // if key exists, overwite
+      return {
+        variables: [
+          ...state.variables.filter(v => v.key !== key),
+          { key, value, type },
+        ],
+      }
+    }),
+  deleteVariable: (key) =>
+    set((state) => {
+      // if key exists, overwite
+      return {
+        variables: [
+          ...state.variables.filter(v => v.key !== key)
+        ],
+      }
+    }),
 })));
 
 export default useDesignerStore;
