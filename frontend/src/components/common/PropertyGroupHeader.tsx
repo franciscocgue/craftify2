@@ -17,7 +17,9 @@ const PropertyGroupHeader = ({ title, info, isCollapsed, setIsCollapsed }: Prope
     };
 
     return <div className={styles.wrapper}>
-        {isCollapsed ? <button onClick={() => setIsCollapsed(prev => !prev)}>⏵</button> : <button>⏷</button>}
+        {isCollapsed
+            ? <button onClick={() => setIsCollapsed(prev => !prev)}>⏵</button>
+            : <button onClick={() => setIsCollapsed(prev => !prev)}>⏷</button>}
         <p onClick={handleHeaderClick} title={info}>{title}</p>
     </div>
 }
