@@ -32,10 +32,12 @@ const componentNamesInitial = Object.keys(compTypes).reduce((acc, compType) => {
 
 
 /**
- * Duplicates component and corresponding proeprties
+ * Duplicates component and corresponding properties
  *
  * @param {ComponentCollection} comps - components
  * @param {ComponentCollectionProperties} props - properties
+ * @param {Record<string, LogicNode<FunctionTypes>[]>} logicNodes - logic nodes
+ * @param {Record<string, LogicEdge[]>} logicEdges - logic edges
  * @param {} compsNames - component names
  * @param {string} compId - component ID
  * @param {Record<string, string>} mapper - mapper originalId:newId
@@ -49,7 +51,16 @@ const componentNamesInitial = Object.keys(compTypes).reduce((acc, compType) => {
  * // Returns 10
  * addNumbers(7, 3);
  */
-const compDuplicator = (comps: ComponentCollection, props: ComponentCollectionProperties, compsNames: CompNames, compId: string, mapper: Record<string, string> = {}, level: number = 0) => {
+const compDuplicator = (
+  comps: ComponentCollection,
+  props: ComponentCollectionProperties,
+  logicNodes: Record<string, LogicNode<FunctionTypes>[]>,
+  logicEdges: Record<string, LogicEdge[]>,
+  compsNames: CompNames,
+  compId: string,
+  mapper: Record<string, string> = {},
+  level: number = 0
+) => {
   const parentId = comps[compId]?.parent;
   if (!parentId) {
     // if this happens, wrong compId --> unexisting component
@@ -85,6 +96,14 @@ const compDuplicator = (comps: ComponentCollection, props: ComponentCollectionPr
   // add properties
   props[mapper[compId] as keyof Properties] = props[compId as keyof Properties];
 
+  // add logic (only if components have logic)
+  if (logicEdges[compId]) {
+    logicEdges[mapper[compId]] = logicEdges[compId];
+  }
+  if (logicNodes[compId]) {
+    logicNodes[mapper[compId]] = logicNodes[compId];
+  }
+
   // update names
   compsNames[comps[mapper[compId]].type as keyof CompNames].current += 1;
 
@@ -98,7 +117,7 @@ const compDuplicator = (comps: ComponentCollection, props: ComponentCollectionPr
 
   // add children
   for (let childId of comps[compId].children) {
-    compDuplicator(comps, props, compsNames, childId, mapper, level);
+    compDuplicator(comps, props, logicNodes, logicEdges, compsNames, childId, mapper, level);
   }
 
 
@@ -461,8 +480,10 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
     const comps = { ...state.components };
     const props = { ...state.properties };
     const compsNames = { ...state.componentNames };
+    const logicNodes = { ...state.logicNodes };
+    const logicEdges = { ...state.logicEdges };
 
-    compDuplicator(comps, props, compsNames, compId, {}, 0);
+    compDuplicator(comps, props, logicNodes, logicEdges, compsNames, compId, {}, 0);
 
 
     // compsNames[comps[compId].type].current += 1;
@@ -483,7 +504,9 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
 
     return {
       components: comps,
-      properties: props
+      properties: props,
+      logicEdges: logicEdges,
+      logicNodes: logicNodes,
       // componentNames: compsNames, 
     }
 
