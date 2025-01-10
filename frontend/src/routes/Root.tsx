@@ -154,7 +154,23 @@ const Root = () => {
                     border: colorMode === 'dark' ? '1px solid lightgrey' : 'none'
                 }}>
                     <h3>Create New Project</h3>
-                    <MyTextInput onChange={(name: string | undefined) => { setNewProjectName(name) }} value={newProjectName} placeholder="Your project name..." />
+                    <MyTextInput
+                        onChange={(name: string | undefined) => { setNewProjectName(name) }}
+                        onKeydown={async e => {
+                            if (e.key === 'Enter') {
+                                if (newProjectName && newProjectName.trim().length) {
+                                    setIsLoading(true);
+                                    await createProject(newProjectName);
+                                    setIsCreating(false);
+                                    setNewProjectName(undefined);
+                                    setIsLoading(false);
+                                };
+                            }
+                        }}
+                        value={newProjectName}
+                        placeholder="Your project name..."
+                        autoFocus={true}
+                    />
                     <IconButton
                         icon={<RiCloseLargeLine />}
                         onClick={() => {
@@ -210,7 +226,28 @@ const Root = () => {
                 }}>
                     <h3>Delete Project</h3>
                     <p>To confirm deletion, type <i>{projectNameDelete}</i> in the text field.</p>
-                    <MyTextInput onChange={(name: string | undefined) => { setConfirmProjectNameDelete(name || '') }} value={confirmProjectNameDelete} placeholder="Project name to be deleted..." />
+                    <MyTextInput
+                        onChange={(name: string | undefined) => { setConfirmProjectNameDelete(name || '') }}
+                        onKeydown={async e => {
+                            if (e.key === 'Enter') {
+                                if (projectNameDelete === confirmProjectNameDelete) {
+                                    setIsLoading(true);
+                                    await deleteProject(projectAppIdToDelete);
+                                    // @TODO: delete in AWS S3 too
+                                    setIsDeleting(false);
+                                    setProjectNameDelete('');
+                                    setProjectAppIdToDelete('');
+                                    setConfirmProjectNameDelete('');
+                                    setIsLoading(false);
+                                } else {
+                                    toast('Project name not matching', { type: 'error', autoClose: 2000, position: 'bottom-right' });
+                                };
+                            }
+                        }}
+                        value={confirmProjectNameDelete}
+                        placeholder="Project name to be deleted..."
+                        autoFocus={true}
+                    />
                     <IconButton
                         icon={<RiCloseLargeLine />}
                         onClick={() => {
@@ -234,8 +271,6 @@ const Root = () => {
                     </IconButton>
                     <IconButton
                         onClick={async () => {
-                            console.log(projectNameDelete)
-                            console.log(confirmProjectNameDelete)
                             if (projectNameDelete === confirmProjectNameDelete) {
                                 setIsLoading(true);
                                 await deleteProject(projectAppIdToDelete);
@@ -269,7 +304,7 @@ const Root = () => {
             {/* navbar */}
             <div className={styles['main-navbar']}>
                 <div className={styles.logo}>
-                    <div><img height={20} src={colorMode === 'light' ? logoLight : logoDark} alt="Logo" /><div style={{marginLeft: '5px'}}>Craftify</div></div>
+                    <div><img height={20} src={colorMode === 'light' ? logoLight : logoDark} alt="Logo" /><div style={{ marginLeft: '5px' }}>Craftify</div></div>
                 </div>
                 <ToggleColorMode />
             </div>

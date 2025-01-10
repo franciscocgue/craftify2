@@ -6,11 +6,13 @@ import { useState } from 'react';
 
 type MyTextInputProps = {
     onChange: (value: string | undefined) => void,
+    onKeydown?: React.KeyboardEventHandler<HTMLInputElement>,
     value: string | undefined,
     placeholder?: string,
+    autoFocus?: boolean,
 }
 
-const MyTextInput = ({ onChange, value, placeholder }: MyTextInputProps) => {
+const MyTextInput = ({ onChange, onKeydown, value, placeholder, autoFocus }: MyTextInputProps) => {
 
     const colorMode = useDesignerStore((state) => state.colorMode);
     const styles = colorMode === 'light' ? lightStyles : darkStyles;
@@ -24,10 +26,12 @@ const MyTextInput = ({ onChange, value, placeholder }: MyTextInputProps) => {
 
     return <input
         value={val}
+        onKeyDown={onKeydown}
         onChange={handleChange}
         placeholder={placeholder}
         className={`${styles.wrapper} nodrag`}
         title={val}
+        autoFocus={!!autoFocus}
     />
 }
 
