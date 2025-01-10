@@ -100,28 +100,8 @@ const fetchData = async ({ params }) => {
       "appId": appId,
       "objectName": "variables"
     });
-    // const variables = JSON.parse(variablesString);
-    // @TODO: remove; just for testing variables until they can be created in UI
-    const variables = [
-      {
-        // id: '5865dc1c-cb5c-4c40-b616-f46349967414',
-        key: 'Name',
-        type: 'string' as const,
-        value: 'Kvothe',
-      },
-      {
-        // id: 'fd78c600-ca80-46c5-9520-132a7a3e6e4b',
-        key: 'Age',
-        type: 'number' as const,
-        value: 35,
-      },
-      {
-        // id: 'f94543a7-d9c3-4fe8-b0a7-95a0563714be',
-        key: 'IsMale',
-        type: 'boolean' as const,
-        value: true,
-      },
-    ];
+    // variables a string! but endpoint returns {} if nothing found
+    const variables = variablesString === '{}' ? [] : JSON.parse(variablesString);
 
     const { data: logicNodesString } = await axios.post('http://localhost:3000/api/web-service/get-project-object', {
       "appId": appId,
