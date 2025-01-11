@@ -8,6 +8,7 @@ import { CompNames } from "../types/designer.types";
 import { draggableData } from "../types/designer.types";
 import { getChildrenNodes } from "../utils";
 import { FunctionTypes, LogicEdge, LogicNode, LogicNodeData } from '../types/logic.types';
+import { cloneDeep } from 'lodash';
 
 // import components_ from '../../../backend/user-app/src/components.json';
 // import properties_ from '../../../backend/user-app/src/properties.json';
@@ -98,11 +99,29 @@ const compDuplicator = (
 
   // add logic (only if components have logic)
   if (logicEdges[compId]) {
-    logicEdges[mapper[compId]] = logicEdges[compId];
+    logicEdges[mapper[compId]] = cloneDeep(logicEdges[compId]);
   }
   if (logicNodes[compId]) {
-    logicNodes[mapper[compId]] = logicNodes[compId];
+    logicNodes[mapper[compId]] = cloneDeep(logicNodes[compId]);
   }
+
+  // // add logic (only if components have logic)
+  // // node IDs need to be updated --> use mapper helper
+  // if (logicNodes[compId]) {
+  //   logicNodes[compId].forEach(ln => {
+  //     // new ID for logic node
+  //     mapper[ln.id] = crypto.randomUUID();
+  //   })
+  //   logicNodes[mapper[compId]] = cloneDeep(logicNodes[compId].map(ln => ({ ...ln, id: mapper[ln.id] })));
+  // }
+  // if (logicEdges[compId]) {
+  //   logicEdges[mapper[compId]] = cloneDeep(logicEdges[compId].map(le => ({
+  //     ...le,
+  //     id: le.id.replace(le.source, mapper[le.source]).replace(le.target, mapper[le.target]),
+  //     source: mapper[le.source],
+  //     target: mapper[le.target],
+  //   })));
+  // }
 
   // update names
   compsNames[comps[mapper[compId]].type as keyof CompNames].current += 1;
@@ -445,6 +464,8 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   }),
   removeComponent: (compId) => set((state) => {
     const comps = { ...state.components };
+    const logicEdges = { ...state.logicEdges };
+    const logicNodes = { ...state.logicNodes };
 
     const getChildrenRecursive = (compId: string, childrenIds: string[], comps: ComponentCollection) => {
       for (let c of comps[compId].children) {
@@ -467,10 +488,30 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
         return obj;
       }, {});
 
+
     if (compId === state.selectedId) {
-      return { components: newComponents, selectedId: null }
+      return {
+        components: newComponents,
+        selectedId: null,
+        // remove logic for deleted components
+        logicEdges: Object.fromEntries(
+          Object.entries(logicEdges).filter(([key]) => !compsToDelete.includes(key))
+        ),
+        logicNodes: Object.fromEntries(
+          Object.entries(logicNodes).filter(([key]) => !compsToDelete.includes(key))
+        )
+      }
     }
-    return { components: newComponents }
+    return {
+      components: newComponents,
+      // remove logic for deleted components
+      logicEdges: Object.fromEntries(
+        Object.entries(logicEdges).filter(([key]) => !compsToDelete.includes(key))
+      ),
+      logicNodes: Object.fromEntries(
+        Object.entries(logicNodes).filter(([key]) => !compsToDelete.includes(key))
+      )
+    }
 
   }),
   duplicateComponent: (compId) => set((state) => {

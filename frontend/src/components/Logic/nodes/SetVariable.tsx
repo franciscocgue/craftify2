@@ -34,7 +34,7 @@ const SetVariable = ({ data, selected, id }: WrapperLogicNodeProps) => {
 
   const [variableType, setVariableType] = useState<Variable['type']>();
 
-  console.log({ variableType })
+  // console.log({ variableType })
 
   // variable key (name)
   const handleVariableKeyChange = useCallback((value: string | undefined) => {
