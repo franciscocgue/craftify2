@@ -6,6 +6,7 @@ import {
     isValidCssLengthBasicNoAuto,
     isValidHexColor,
     isValidPositiveNumber,
+    isValidVariable,
     marginAsPx,
     parseProperties
 } from './css-utils';
@@ -26,6 +27,7 @@ export {
     isValidCssLengthBasicNoAuto,
     isValidPositiveNumber,
     isValidHexColor,
+    isValidVariable,
     parseProperties,
     myPointerWithin,
     getComponentsAsTree,

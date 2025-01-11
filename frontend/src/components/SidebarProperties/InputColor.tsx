@@ -5,7 +5,7 @@ import useDesignerStore from '../../stores/designer';
 import { debounce } from 'lodash';
 import { HexColorPicker } from "react-colorful";
 import './InputColor.css';
-import { isValidHexColor } from "../../utils";
+import { isValidHexColor, isValidVariable } from "../../utils";
 import { Properties } from '../../types/designer.types';
 
 
@@ -45,7 +45,7 @@ const InputColor = ({ propertyDisplayName, propertyKey }: InputColorProps) => {
             updateProperty(selectedId as string, props);
             setIsWrongInput(false);
         }
-        else if (isValidHexColor(value) || CSS.supports('color', value)) {
+        else if (isValidHexColor(value) || CSS.supports('color', value) || isValidVariable(value)) {
             const props = propertyKey.reduce((acc: Record<string, string>, key) => {
                 acc[key] = value;
                 return acc;

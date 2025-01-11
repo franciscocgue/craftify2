@@ -208,6 +208,25 @@ function isValidHexColor(hex: string): boolean {
 // console.log(isValidHexColor("#26g8c5")); // false
 
 
+
+/**
+ * validity examples: 
+ *  {{myVariable}} 
+ *  AND 
+ *  myVariable exists
+ *
+ * @param value
+ * @returns
+ */
+function isValidVariable(value: string): boolean {
+    const variables = useDesignerStore.getState().variables;
+    const variable = '\\{\\{[a-zA-Z_$][a-zA-Z0-9_$]*\\}\\}'; // matches {{variableName}}
+    const variableRegExp = new RegExp(variable);
+
+    return variableRegExp.test(value) && variables.find(v => v.key === value.slice(2,-2)) !== undefined;
+}
+
+
 /**
  * If there are properties linked to variables,
  * then will convert those to actual values.
@@ -266,5 +285,6 @@ export {
     isValidCssLengthBasicNoAuto,
     isValidPositiveNumber,
     isValidHexColor,
+    isValidVariable,
     parseProperties,
 }

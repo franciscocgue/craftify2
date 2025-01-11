@@ -1,5 +1,5 @@
 import useDesignerStore from "../../stores/designer";
-import { renderNode } from "../../utils";
+import { parseProperties, renderNode } from "../../utils";
 import { useEffect, useMemo, useRef } from "react";
 import { DESIGN_PARAMETERS } from "../../config/application";
 
@@ -10,10 +10,12 @@ const Canvas = () => {
 
 
     const components = useDesignerStore((state) => state.components);
-    const properties = useDesignerStore((state) => state.properties['canvas']);
+    // const properties = useDesignerStore((state) => state.properties['canvas']);
     const setIsCanvasScrolling = useDesignerStore((state) => state.setIsCanvasScrolling);
     const toggleSelectedId = useDesignerStore((state) => state.toggleSelectedId);
     const selectedId = useDesignerStore((state) => state.selectedId);
+
+    const otherProperties = parseProperties(useDesignerStore((state) => state.properties['canvas']));
 
     const comps = useMemo(
         () => {
@@ -87,13 +89,13 @@ const Canvas = () => {
                     overflowX: 'auto',
                     outline: selectedId === 'canvas' ? `3px solid ${DESIGN_PARAMETERS.BORDER_COLOR_SELECTED_COMPONENT}` : 'none',
                     // minWidth: `${properties.canvasWidthPx}px`,
-                    minWidth: window.innerWidth - 605 > Number(properties.canvasWidthPx) ? `${properties.canvasWidthPx}px` : `calc(100vw - 605px)`,
+                    minWidth: window.innerWidth - 605 > Number(otherProperties.canvasWidthPx) ? `${otherProperties.canvasWidthPx}px` : `calc(100vw - 605px)`,
                     margin: '0 auto',
-                    minHeight: `min(calc(100%), ${properties.canvasHeightPx}px)`,
+                    minHeight: `min(calc(100%), ${otherProperties.canvasHeightPx}px)`,
                     // maxWidth: `${properties.canvasWidthPx}px`,
-                    maxWidth: window.innerWidth - 605 > Number(properties.canvasWidthPx) ? `${properties.canvasWidthPx}px` : `calc(100vw - 605px)`,
+                    maxWidth: window.innerWidth - 605 > Number(otherProperties.canvasWidthPx) ? `${otherProperties.canvasWidthPx}px` : `calc(100vw - 605px)`,
                     // maxHeight causes issue and comps do not respect height and shrink to minHeight
-                    maxHeight: `${properties.canvasHeightPx}px`,
+                    maxHeight: `${otherProperties.canvasHeightPx}px`,
                 }}>
                 {/* div for scrollable canvas */}
                 <div
@@ -101,28 +103,28 @@ const Canvas = () => {
                     id="my-canvas"
                     style={{
                         // frozen (not editable)
-                        display: properties.display || 'flex',
+                        display: otherProperties.display || 'flex',
                         // frozen (not editable)
-                        flexDirection: properties.flexDirection || 'column',
+                        flexDirection: otherProperties.flexDirection || 'column',
                         position: 'relative',
                         // overflowY: 'auto',
                         // overflowX: 'hidden',
                         minHeight: '100%',
                         margin: '0 auto',
-                        gap: properties.gap || undefined,
-                        flexWrap: properties.flexWrap || undefined,
-                        alignItems: properties.alignItems || undefined,
-                        justifyContent: properties.justifyContent || undefined,
-                        paddingTop: properties.paddingTop || undefined,
-                        paddingBottom: properties.paddingBottom || undefined,
-                        paddingLeft: properties.paddingLeft || undefined,
-                        paddingRight: properties.paddingRight || undefined,
-                        backgroundColor: properties.backgroundColor || undefined,
-                        backgroundImage: properties.backgroundImage || undefined,
-                        backgroundSize: properties.backgroundSize || undefined,
-                        backgroundAttachment: properties.backgroundAttachment || undefined,
-                        backgroundRepeat: properties.backgroundRepeat || undefined,
-                        backgroundPosition: properties.backgroundPosition || undefined,
+                        gap: otherProperties.gap || undefined,
+                        flexWrap: otherProperties.flexWrap || undefined,
+                        alignItems: otherProperties.alignItems || undefined,
+                        justifyContent: otherProperties.justifyContent || undefined,
+                        paddingTop: otherProperties.paddingTop || undefined,
+                        paddingBottom: otherProperties.paddingBottom || undefined,
+                        paddingLeft: otherProperties.paddingLeft || undefined,
+                        paddingRight: otherProperties.paddingRight || undefined,
+                        backgroundColor: otherProperties.backgroundColor || undefined,
+                        backgroundImage: otherProperties.backgroundImage || undefined,
+                        backgroundSize: otherProperties.backgroundSize || undefined,
+                        backgroundAttachment: otherProperties.backgroundAttachment || undefined,
+                        backgroundRepeat: otherProperties.backgroundRepeat || undefined,
+                        backgroundPosition: otherProperties.backgroundPosition || undefined,
                     }}
                 >
                     {comps}

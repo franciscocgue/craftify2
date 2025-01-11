@@ -12,6 +12,7 @@ import CIconButton from '../components/CIconButton';
 // import componentsData from '../components.json';
 import { executeFlow, findLogicNodeByType } from './logic-utils';
 import { ComponentCollection, ComponentCollectionProperties, FunctionTypes, LogicEdge, LogicNode } from '../types/index.types';
+import { parseProperties } from "./utils";
 
 
 // const logicNodes: Record<string, LogicNode<FunctionTypes>[]> = logicNodesData as Record<string, LogicNode<FunctionTypes>[]>;
@@ -37,7 +38,7 @@ const uiMapper2 = {
                 id="my-canvas"
                 style={{
                     minHeight: '100vh',
-                    ...properties[id]
+                    ...parseProperties(properties[id])
                 }}
                 onClick={getClickLogic(id)}
             >
