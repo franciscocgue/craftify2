@@ -14,6 +14,7 @@ import Variables from './pages/Variables.tsx';
 import axios from 'axios';
 import { ComponentCollection, ComponentCollectionProperties } from './types/designer.types.ts';
 import { compProperties } from './config/components.tsx';
+import { cloneDeep } from 'lodash';
 
 // initialize components
 const initialComponents: ComponentCollection = {
@@ -35,8 +36,8 @@ const fetchDataTryout = () => {
   if (appId !== 'try-out') {
     useDesignerStore.setState({ appId: 'try-out' });
     useDesignerStore.setState({ appName: 'My First Web App' });
-    useDesignerStore.setState({ components: initialComponents });
-    useDesignerStore.setState({ properties: initialProperties });
+    useDesignerStore.setState({ components: { ...initialComponents } });
+    useDesignerStore.setState({ properties: { ...initialProperties } });
     useDesignerStore.setState({ variables: [] });
     useDesignerStore.setState({ logicEdges: {} });
     useDesignerStore.setState({ logicNodes: {} });
@@ -87,7 +88,7 @@ const fetchData = async ({ params }) => {
       "objectName": "components"
     });
     // {} if object not yet stored, new project
-    const components = componentsString === '{}' ? initialComponents : JSON.parse(componentsString);
+    const components = componentsString === '{}' ? cloneDeep(initialComponents) : JSON.parse(componentsString);
 
     const { data: propertiesString } = await axios.post('http://localhost:3000/api/web-service/get-project-object', {
       "appId": appId,

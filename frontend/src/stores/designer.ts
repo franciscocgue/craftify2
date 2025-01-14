@@ -295,7 +295,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   setComponentEditorMode: componentEditorMode => set({ componentEditorMode }),
   toggleColorMode: () => set(state => ({ colorMode: state.colorMode === 'dark' ? 'light' : 'dark' })),
   renameComponent: (compId: string, newName: string) => set(state => {
-    const components = { ...state.components };
+    const components = cloneDeep(state.components);
     components[compId].name = newName;
     return {
       components
@@ -318,8 +318,8 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
   }),
   setHoveredId: (hoveredId) => set({ hoveredId: hoveredId }),
   moveComponent: (movedCompId, movedOverCompId, location, positionInContainer = 'last') => set((state) => {
-    const compsBackup = { ...state.components }; // will be returned if errors
-    const comps = { ...state.components };
+    const compsBackup = cloneDeep(state.components); // will be returned if errors
+    const comps = cloneDeep(state.components);
 
     let newParentId: string;
     let newParent;
@@ -390,10 +390,10 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
 
   }),
   addComponent: (compType, addedOverCompId, location) => set((state) => {
-    const compsBackup = { ...state.components }; // will be returned if errors
-    const comps = { ...state.components };
+    const compsBackup = cloneDeep(state.components); // will be returned if errors
+    const comps = cloneDeep(state.components);
     const props = { ...state.properties };
-    const compsNames = { ...state.componentNames };
+    const compsNames = cloneDeep(state.componentNames);
 
 
     if (!Object.keys(compsNames).includes(compType)) {
@@ -463,9 +463,9 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
 
   }),
   removeComponent: (compId) => set((state) => {
-    const comps = { ...state.components };
-    const logicEdges = { ...state.logicEdges };
-    const logicNodes = { ...state.logicNodes };
+    const comps = cloneDeep(state.components);
+    const logicEdges = cloneDeep(state.logicEdges);
+    const logicNodes = cloneDeep(state.logicNodes);
 
     const getChildrenRecursive = (compId: string, childrenIds: string[], comps: ComponentCollection) => {
       for (let c of comps[compId].children) {
@@ -518,11 +518,11 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
     // code taken from addComponent and adapted
     // compType, addedOverCompId, location
 
-    const comps = { ...state.components };
+    const comps = cloneDeep(state.components);
     const props = { ...state.properties };
     const compsNames = { ...state.componentNames };
-    const logicNodes = { ...state.logicNodes };
-    const logicEdges = { ...state.logicEdges };
+    const logicNodes = cloneDeep(state.logicNodes);
+    const logicEdges = cloneDeep(state.logicEdges);
 
     compDuplicator(comps, props, logicNodes, logicEdges, compsNames, compId, {}, 0);
 
@@ -561,7 +561,7 @@ const useDesignerStore = create<designerStore>()(subscribeWithSelector((set) => 
       ...props[compId], ...properties
     };
 
-    const components = { ...state.components }
+    const components = cloneDeep(state.components);
 
     // children of updated component;
     // used for specific-target re-rendering based on subscriber
