@@ -21,7 +21,11 @@ const CImage = ({ componentId, componentType, componentName, parentType }: UiCom
     return <div style={{
         position: 'relative',
         width: otherProperties.width,
+        minWidth: otherProperties.minWidth,
+        maxWidth: otherProperties.maxWidth,
         height: otherProperties.height,
+        minHeight: otherProperties.minHeight,
+        maxHeight: otherProperties.maxHeight,
         // margin managed in div, and in img as 0px,
         // workaround not finished in built version
         marginTop: otherProperties.marginTop,
