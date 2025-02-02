@@ -13,6 +13,7 @@ import CIconButton from '../components/CIconButton';
 import { executeFlow, findLogicNodeByType } from './logic-utils';
 import { ComponentCollection, ComponentCollectionProperties, FunctionTypes, LogicEdge, LogicNode } from '../types/index.types';
 import { parseProperties } from "./utils";
+import { useVariableStore } from "../stores/variableStore";
 
 
 // const logicNodes: Record<string, LogicNode<FunctionTypes>[]> = logicNodesData as Record<string, LogicNode<FunctionTypes>[]>;
@@ -33,12 +34,14 @@ const getClickLogic = (id: string) => {
 
 const uiMapper2 = {
     'canvas': (id: string, properties: ComponentCollectionProperties) => {
+        const variables = useVariableStore((state) => state.variables);
+        const [parsedProperties] = parseProperties(properties[id], variables);
         return (
             <div
                 id="my-canvas"
                 style={{
                     minHeight: '100vh',
-                    ...parseProperties(properties[id])
+                    ...parsedProperties
                 }}
                 onClick={getClickLogic(id)}
             >

@@ -1,5 +1,4 @@
 import MyIcon from '../helpers/MyIcon';
-import { parseProperties } from '../helpers/utils';
 import { useDynamicVariables } from '../hooks/useVariables';
 
 type Props = {
@@ -9,9 +8,8 @@ type Props = {
 const CIconButton = ({ onClick, ...otherProperties }: Props) => {
     
     // subscribes to variable changes
-    useDynamicVariables(otherProperties);
+    const [parsedProperties] = useDynamicVariables(otherProperties);
     
-    const parsedProperties = parseProperties(otherProperties);
     return <>
         <button
             style={{

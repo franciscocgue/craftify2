@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { parseProperties } from '../helpers/utils';
 import { useDynamicVariables } from '../hooks/useVariables';
 import { useVariableStore } from '../stores/variableStore';
 
@@ -10,7 +9,7 @@ type Props = {
 const CCheckbox = ({ onClick, ...otherProperties }: Props) => {
 
     // subscribes to variable changes
-    const propsWithVariables = useDynamicVariables(otherProperties);
+    const [parsedProperties, propsWithVariables] = useDynamicVariables(otherProperties);
     const setVariable = useVariableStore(state => state.setVariable);
 
     const handleChange = useCallback(
@@ -24,7 +23,6 @@ const CCheckbox = ({ onClick, ...otherProperties }: Props) => {
         [propsWithVariables['__checked']]
     );
 
-    const parsedProperties = parseProperties(otherProperties);
     return <div
         style={{
             ...parsedProperties,

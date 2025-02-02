@@ -1,5 +1,4 @@
 import React from 'react';
-import { parseProperties } from '../helpers/utils';
 import { useDynamicVariables } from '../hooks/useVariables';
 
 type Props = {
@@ -9,9 +8,8 @@ type Props = {
 const CButton = ({ onClick, ...otherProperties }: Props) => {
 
     // subscribes to variable changes
-    useDynamicVariables(otherProperties);
+    const [parsedProperties] = useDynamicVariables(otherProperties);
     
-    const parsedProperties = parseProperties(otherProperties);
     return <button
         onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
             // prevent triggering parent onClick events

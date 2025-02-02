@@ -42,9 +42,9 @@ type PCheckedProps = {
     label?: string,
 }
 
-const validValues = [true, 'true', 'yes', 1, '1', 'Yes', 'True', 'TRUE', 'YES',
-    false, 'false', 'no', 0, '0', 'No', 'False', 'FALSE', 'NO'
-];
+// const validValues = [true, 'true', 'yes', 1, '1', 'Yes', 'True', 'TRUE', 'YES',
+//     false, 'false', 'no', 0, '0', 'No', 'False', 'FALSE', 'NO'
+// ];
 
 const patternVariable = /^\{\{[a-zA-Z_][a-zA-Z0-9_]*\}\}$/;
 

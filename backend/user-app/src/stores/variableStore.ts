@@ -12,12 +12,11 @@ type VariableStore = {
 
 export const useVariableStore = create<VariableStore>()(subscribeWithSelector((set) => ({
     variables: initialVariables,
-    setVariable: (key, value) =>
-        set((state) => ({
-            variables: state.variables.map(variable =>
-                variable.key === key ? { ...variable, value } : variable
-            ),
-        })),
+    setVariable: (key, value) => set((state) => ({
+        variables: state.variables.map(variable =>
+            variable.key === key ? { ...variable, value } : variable
+        ),
+    })),
     // createVariable: (key, value, type) =>
     //     set((state) => ({
     //         variables: [

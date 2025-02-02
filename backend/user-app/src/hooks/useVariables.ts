@@ -1,33 +1,20 @@
-import { useEffect, useState } from "react";
 import { useVariableStore } from "../stores/variableStore";
-import { getDynamicVariables } from "../helpers/utils";
+import { parseProperties } from "../helpers/utils";
 import { Properties } from "../types/index.types";
 
 // subscribes component to variables' changes,
-// returning object linking property names and variable names
-const useDynamicVariables = (otherProperties: Properties) => {
+// returning parsedProperties and object linking property names and variable names (to use in 2-way bindings)
+const useDynamicVariables = (otherProperties: Properties): [Properties, Record<string, string[]>] => {
 
-    const [variableDependencies, setVariableDependencies] = useState<string[]>([]);
-    const [propsWithVariables, setPropsWithVariables] = useState<Record<string, string[]>>({});
-
-    useEffect(() => {
-        // get dynamic variables used in component; just once
-        const propsWithVariables_ = getDynamicVariables(otherProperties);
-        const variables = Object.values(propsWithVariables_)
-            .reduce((prev, curr) => {
-                const cum = [...prev, ...curr];
-                return cum;
-            }, [])
-        setVariableDependencies(variables);
-        setPropsWithVariables(propsWithVariables_);
-    }, []);
+    const variables = useVariableStore((state) => state.variables);
+    const [parsedProperties, propsWithVariables, allVariablesUsed] = parseProperties(otherProperties, variables);
 
     // re-render on linked variables changed
     useVariableStore((state) => {
-        state.variables.filter(variable => variableDependencies.includes(variable.key))
+        state.variables.filter(variable => allVariablesUsed.includes(variable.key))
     });
 
-    return propsWithVariables;
+    return [parsedProperties, propsWithVariables];
 
 };
 

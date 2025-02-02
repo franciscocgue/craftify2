@@ -1,5 +1,6 @@
 import useDesignerStore from "../stores/designer";
 import { Properties } from "../types/designer.types";
+import { getValue, myParser } from "./dsl-utils";
 
 
 /**
@@ -223,7 +224,7 @@ function isValidVariable(value: string): boolean {
     const variable = '\\{\\{[a-zA-Z_$][a-zA-Z0-9_$]*\\}\\}'; // matches {{variableName}}
     const variableRegExp = new RegExp(variable);
 
-    return variableRegExp.test(value) && variables.find(v => v.key === value.slice(2,-2)) !== undefined;
+    return variableRegExp.test(value) && variables.find(v => v.key === value.slice(2, -2)) !== undefined;
 }
 
 
@@ -247,27 +248,43 @@ const parseProperties = (properties: Properties) => {
         const propertyValue = properties[propertyKey];
 
         if (typeof propertyValue === 'string') {
-            const matches = propertyValue.match(/{{([^}]*)}}/g);
-            if (matches && matches.length === 1 && matches[0] === propertyValue) {
-                // single value; eg {{param1}} --> parse as actual value
-                const parsedValue = matches[0].slice(2, -2); // remove {{}}
-                const variable = variables.find(v => v.key === parsedValue);
-                if (variable) {
-                    parsedProperties[propertyKey as keyof typeof properties] = variable['value'] as any;
+
+
+            // DSL (user custom expressions)
+            try {
+                if (propertyValue.slice(0, 2) === '{{' && propertyValue.slice(-2) === '}}') {
+                    const [parsedAstObj, _] = myParser(propertyValue.slice(2, -2), variables);
+                    const val = getValue(parsedAstObj, [], variables);
+                    parsedProperties[propertyKey as keyof typeof properties] = val as any;
                 }
-            } else {
-                // parse as string
-                parsedProperties[propertyKey as keyof typeof properties] = propertyValue.replace(/{{([^}]*)}}/g, (match, p1) => {
-                    const varName = p1.trim(); // extracted text
-                    
-                    // console.log('varName', varName)
-                    const variable = variables.find(v => v.key === varName)
-                    if (variable) {
-                        return variable['value'];
-                    }
-                    return match;
-                }) as any;
+            } catch (err) {
+                console.log(err);
             }
+
+
+
+
+            // const matches = propertyValue.match(/{{([^}]*)}}/g);
+            // if (matches && matches.length === 1 && matches[0] === propertyValue) {
+            //     // single value; eg {{param1}} --> parse as actual value
+            //     const parsedValue = matches[0].slice(2, -2); // remove {{}}
+            //     const variable = variables.find(v => v.key === parsedValue);
+            //     if (variable) {
+            //         parsedProperties[propertyKey as keyof typeof properties] = variable['value'] as any;
+            //     }
+            // } else {
+            //     // parse as string
+            //     parsedProperties[propertyKey as keyof typeof properties] = propertyValue.replace(/{{([^}]*)}}/g, (match, p1) => {
+            //         const varName = p1.trim(); // extracted text
+
+            //         // console.log('varName', varName)
+            //         const variable = variables.find(v => v.key === varName)
+            //         if (variable) {
+            //             return variable['value'];
+            //         }
+            //         return match;
+            //     }) as any;
+            // }
         }
     });
 

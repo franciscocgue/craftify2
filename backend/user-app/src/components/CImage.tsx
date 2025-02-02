@@ -1,4 +1,3 @@
-import { parseProperties } from '../helpers/utils';
 import { useDynamicVariables } from '../hooks/useVariables';
 
 type Props = {
@@ -8,9 +7,8 @@ type Props = {
 const CImage = ({ onClick, ...otherProperties }: Props) => {
     
     // subscribes to variable changes
-    useDynamicVariables(otherProperties);
+    const [parsedProperties] = useDynamicVariables(otherProperties);
     
-    const parsedProperties = parseProperties(otherProperties);
     return <img
         style={{
             ...parsedProperties,
