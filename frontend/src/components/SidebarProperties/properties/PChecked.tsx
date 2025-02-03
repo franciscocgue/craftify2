@@ -64,11 +64,8 @@ const PChecked = ({ label }: PCheckedProps) => {
             isValidInput={(checked: string) => {
 
                 try {
-                    console.log('aqr', checked)
                     const [parsedAstObj, _] = myParser(checked.slice(2,-2), variables);
-                    console.log('aqr', parsedAstObj)
                     const val = getValue(parsedAstObj, [], variables);
-                    console.log('aqr', val)
                     if (val === true || val === 1 || val === false || val === 0) {
                         return true;
                     };
