@@ -1,3 +1,5 @@
+import useDesignerStore from "../../../stores/designer";
+import { getValue, myParser } from "../../../utils/dsl-utils";
 import MyPortal from "../../helpers/MyPortal";
 import InputText from "../InputText";
 
@@ -46,9 +48,10 @@ type PCheckedProps = {
 //     false, 'false', 'no', 0, '0', 'No', 'False', 'FALSE', 'NO'
 // ];
 
-const patternVariable = /^\{\{[a-zA-Z_][a-zA-Z0-9_]*\}\}$/;
-
 const PChecked = ({ label }: PCheckedProps) => {
+
+    // non-reactive!
+    const variables = useDesignerStore.getState().variables;
 
     return <div>
 
@@ -58,7 +61,23 @@ const PChecked = ({ label }: PCheckedProps) => {
             propertyKey="__checked"
             tooltipContent={tooltipContent}
             // @TODO: enable dynamic variables in validation
-            isValidInput={(checked: string) => patternVariable.test(checked)}
+            isValidInput={(checked: string) => {
+
+                try {
+                    console.log('aqr', checked)
+                    const [parsedAstObj, _] = myParser(checked.slice(2,-2), variables);
+                    console.log('aqr', parsedAstObj)
+                    const val = getValue(parsedAstObj, [], variables);
+                    console.log('aqr', val)
+                    if (val === true || val === 1 || val === false || val === 0) {
+                        return true;
+                    };
+                    return false;
+                } catch (err) {
+                    return false;
+                }
+
+            }}
         />
     </div>
 

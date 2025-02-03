@@ -58,7 +58,7 @@ export const myParser = (expression: string, variables: Variable[]): [ParsedFunc
                     });
                     acc = '';
                 } else if (next.value === ' ' || next.value === ',' || next.value === ')') {
-                    // boolean / number / variable finished
+                    // check if end of boolean / number / variable finished
                     if (acc.toLocaleLowerCase() === 'true' || acc.toLocaleLowerCase() === 'false') {
                         inputs.push({
                             type: 'basicValue' as const,
