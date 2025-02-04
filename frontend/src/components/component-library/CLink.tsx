@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useWrapper } from "../../hooks";
 import { UiComponentProps } from "../../types/designer.types";
 
-const CLink = ({ componentId, componentType, componentName, parentType } : UiComponentProps) => {
+const CLink = ({ componentId, componentType, componentName, parentType }: UiComponentProps) => {
 
     // exclude below from the built version
     console.log('comp render: ' + componentId.slice(0, 5))
@@ -27,6 +27,8 @@ const CLink = ({ componentId, componentType, componentName, parentType } : UiCom
             style={{
                 ...otherProperties,
                 position: 'relative',
+                // visibility
+                ...(!otherProperties.__visible && { display: 'none' }),
             }}
         >
             {otherProperties.__text}

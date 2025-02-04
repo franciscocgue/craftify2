@@ -8,13 +8,15 @@ type Props = {
     [x: string]: any
 }
 const CContainerColumn = ({ onClick, children, ...otherProperties }: Props) => {
-    
+
     // subscribes to variable changes
     const [parsedProperties] = useDynamicVariables(otherProperties);
-    
+
     return <div
         style={{
             ...parsedProperties,
+            // visibility
+            ...(!parsedProperties.__visible && { display: 'none' }),
         }}
         onClick={(event: React.MouseEvent<HTMLElement>) => {
             // prevent triggering parent onClick events

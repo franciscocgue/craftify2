@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { useWrapper } from "../../hooks";
 import { UiComponentProps } from "../../types/designer.types";
 
-const CText = ({ componentId, componentType, componentName, parentType } : UiComponentProps) => {
+const CText = ({ componentId, componentType, componentName, parentType }: UiComponentProps) => {
 
     // exclude below from the built version
     console.log('comp render: ' + componentId.slice(0, 5))
     const [isRefReady, setIsRefReady] = useState(false);
     const [ref, _, otherProperties, wrapperComponent] = useWrapper(componentId, componentType, componentName, parentType);
-    
+
     // render twice so ref is not null
     useEffect(() => {
         if (ref.current && !isRefReady) {
@@ -25,6 +25,8 @@ const CText = ({ componentId, componentType, componentName, parentType } : UiCom
             style={{
                 ...otherProperties,
                 position: 'relative',
+                // visibility
+                ...(!otherProperties.__visible && { display: 'none' }),
             }}
         >
             {otherProperties.__text}

@@ -5,13 +5,15 @@ type Props = {
     [x: string]: any
 }
 const CImage = ({ onClick, ...otherProperties }: Props) => {
-    
+
     // subscribes to variable changes
     const [parsedProperties] = useDynamicVariables(otherProperties);
-    
+
     return <img
         style={{
             ...parsedProperties,
+            // visibility
+            ...(!parsedProperties.__visible && { display: 'none' }),
         }}
         src={parsedProperties.__src}
         alt={parsedProperties.__alt}

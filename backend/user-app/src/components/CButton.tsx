@@ -9,7 +9,7 @@ const CButton = ({ onClick, ...otherProperties }: Props) => {
 
     // subscribes to variable changes
     const [parsedProperties] = useDynamicVariables(otherProperties);
-    
+
     return <button
         onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
             // prevent triggering parent onClick events
@@ -17,7 +17,9 @@ const CButton = ({ onClick, ...otherProperties }: Props) => {
             if (onClick) onClick();
         }}
         style={{
-            ...parsedProperties
+            ...parsedProperties,
+            // visibility
+            ...(!parsedProperties.__visible && { display: 'none' }),
         }}
     >
         {parsedProperties.__text}

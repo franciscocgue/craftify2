@@ -27,6 +27,8 @@ const CCheckbox = ({ componentId, componentType, componentName, parentType }: Ui
                 position: 'relative',
                 display: 'flex',
                 alignItems: 'center',
+                // visibility
+                ...(!otherProperties.__visible && {display: 'none'}),
             }}>
             <label style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
                 {/* undefined: uncontrolled; here set fixed to true just for preview in designer */}

@@ -26,6 +26,7 @@ import PAlt from "../components/SidebarProperties/properties/PAlt";
 import PHref from "../components/SidebarProperties/properties/PHref";
 import PTarget from "../components/SidebarProperties/properties/PTarget";
 import PChecked from "../components/SidebarProperties/properties/PChecked";
+import PVisible from "../components/SidebarProperties/properties/PVisible";
 
 const compTypes = {
     'row': {
@@ -111,35 +112,35 @@ const compPropertiesEditors = {
     },
     'column': {
         styles: [<Layout key={'layout'} />, <Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Border key={'border'} />, <Padding key={'padding'} />, <Background key={'background'} />],
-        properties: [null],
+        properties: [<PVisible label="Visible" key={'Pvisible'} />],
     },
     'button': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
-        properties: [<PText label="Label" key={'PText'} />],
+        properties: [<PText label="Label" key={'PText'} />, <PVisible label="Visible" key={'Pvisible'} />],
     },
     'text': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
-        properties: [<PText label="Content" key={'PText'} />],
+        properties: [<PText label="Content" key={'PText'} />, <PVisible label="Visible" key={'Pvisible'} />],
     },
     'header': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
-        properties: [<PText label="Title" key={'PText'} />],
+        properties: [<PText label="Title" key={'PText'} />, <PVisible label="Visible" key={'Pvisible'} />],
     },
     'checkbox': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
-        properties: [<PText label="Label" key={'PText'} />, <PChecked label="Is checked" key={'PChecked'} />],
+        properties: [<PText label="Label" key={'PText'} />, <PChecked label="Is checked" key={'PChecked'} />, <PVisible label="Visible" key={'Pvisible'} />],
     },
     'image': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Border key={'border'} />],
-        properties: [<PSrc key={'PSrc'} />, <PAlt key={'PAlt'} />],
+        properties: [<PSrc key={'PSrc'} />, <PAlt key={'PAlt'} />, <PVisible label="Visible" key={'Pvisible'} />],
     },
     'link': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'marhin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
-        properties: [<PText label="Display text" key={'PText'} />, <PHref key={'PHref'} />, <PTarget key={'PTarget'} />],
+        properties: [<PText label="Display text" key={'PText'} />, <PHref key={'PHref'} />, <PTarget key={'PTarget'} />, <PVisible label="Visible" key={'Pvisible'} />],
     },
     'icon-button': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />],
-        properties: [<PIconSize key={'PIconSize'} />, <PIconName key={'PIconName'} />, <PIconColor key={'PIconColor'} />],
+        properties: [<PIconSize key={'PIconSize'} />, <PIconName key={'PIconName'} />, <PIconColor key={'PIconColor'} />, <PVisible label="Visible" key={'Pvisible'} />],
     },
 }
 
@@ -211,6 +212,8 @@ const compProperties: Record<keyof CompNames | 'canvas', Properties> = {
         borderRightStyle: 'none',
         borderRightWidth: 'thin',
         borderRightColor: '#4a4a4a',
+        // custom properties
+        __visible: '{{true}}',
     },
     'button': {
         // wrapperStyles
@@ -255,7 +258,8 @@ const compProperties: Record<keyof CompNames | 'canvas', Properties> = {
         borderRightWidth: 'thin',
         borderRightColor: '#4a4a4a',
         // custom properties
-        __text: 'Button'
+        __text: 'Button',
+        __visible: '{{true}}',
     },
     'text': {
         // wrapperStyles
@@ -300,7 +304,8 @@ const compProperties: Record<keyof CompNames | 'canvas', Properties> = {
         borderRightColor: '#4a4a4a',
         overflow: 'auto',
         // custom properties
-        __text: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
+        __text: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
+        __visible: '{{true}}',
     },
     'header': {
         // wrapperStyles
@@ -344,7 +349,8 @@ const compProperties: Record<keyof CompNames | 'canvas', Properties> = {
         borderRightWidth: 'thin',
         borderRightColor: '#4a4a4a',
         // custom properties
-        __text: 'Header'
+        __text: 'Header',
+        __visible: '{{true}}',
     },
     'checkbox': {
         // wrapperStyles
@@ -390,6 +396,7 @@ const compProperties: Record<keyof CompNames | 'canvas', Properties> = {
         // custom properties
         __text: 'Checkbox',
         __checked: undefined, // {{myVariable}} | undefined
+        __visible: '{{true}}',
     },
     'image': {
         // wrapperStyles
@@ -423,6 +430,7 @@ const compProperties: Record<keyof CompNames | 'canvas', Properties> = {
         // custom properties
         __src: 'https://picsum.photos/id/237/200/300',
         __alt: 'image',
+        __visible: '{{true}}',
     },
     'link': {
         // wrapperStyles
@@ -470,6 +478,7 @@ const compProperties: Record<keyof CompNames | 'canvas', Properties> = {
         __text: 'Learn web development',
         __href: 'https://developer.mozilla.org/en-US/docs/Learn',
         __target: '_blank',
+        __visible: '{{true}}',
     },
     'icon-button': {
         // wrapperStyles
@@ -517,6 +526,7 @@ const compProperties: Record<keyof CompNames | 'canvas', Properties> = {
         __iconName: 'MdHelp',
         __iconSize: '25',
         __iconColor: 'black',
+        __visible: '{{true}}',
     },
 }
 

@@ -160,6 +160,8 @@ const WrapperContainer = (props: WrapperContainerProps) => {
                 ...parsedProperties,
                 // border - text
                 // ...noContentBorder,
+                // visibility
+                ...(!parsedProperties.__visible && { display: 'none' }),
             }}
             onMouseOver={(e) => {
                 e.stopPropagation();

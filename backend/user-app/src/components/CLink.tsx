@@ -5,16 +5,18 @@ type Props = {
     [x: string]: any
 }
 const CLink = ({ onClick, ...otherProperties }: Props) => {
-    
+
     // subscribes to variable changes
     const [parsedProperties] = useDynamicVariables(otherProperties);
-    
+
     return <>
         <a
             href={parsedProperties.__href}
             target={parsedProperties.__target}
             style={{
                 ...parsedProperties,
+                // visibility
+                ...(!parsedProperties.__visible && { display: 'none' }),
             }}
             onClick={(event: React.MouseEvent<HTMLElement>) => {
                 // prevent triggering parent onClick events

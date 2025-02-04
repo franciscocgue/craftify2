@@ -28,6 +28,8 @@ const CCheckbox = ({ onClick, ...otherProperties }: Props) => {
             ...parsedProperties,
             display: 'flex',
             alignItems: 'center',
+            // visibility
+            ...(!parsedProperties.__visible && { display: 'none' }),
         }}
         onClick={(event: React.MouseEvent<HTMLElement>) => {
             // prevent triggering parent onClick events

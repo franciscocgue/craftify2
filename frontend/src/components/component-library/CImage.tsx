@@ -33,6 +33,8 @@ const CImage = ({ componentId, componentType, componentName, parentType }: UiCom
         marginLeft: otherProperties.marginLeft,
         marginRight: otherProperties.marginRight,
         // display: 'inline-block',
+        // visibility
+        ...(!otherProperties.__visible && { display: 'none' }),
     }}>
         <img
             // exclude below from the built version

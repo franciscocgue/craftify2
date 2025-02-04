@@ -6,14 +6,16 @@ type Props = {
     [x: string]: any
 }
 const CIconButton = ({ onClick, ...otherProperties }: Props) => {
-    
+
     // subscribes to variable changes
     const [parsedProperties] = useDynamicVariables(otherProperties);
-    
+
     return <>
         <button
             style={{
                 ...parsedProperties,
+                // visibility
+                ...(!parsedProperties.__visible && { display: 'none' }),
             }}
             onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                 // prevent triggering parent onClick events

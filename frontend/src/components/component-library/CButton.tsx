@@ -25,6 +25,8 @@ const CButton = ({ componentId, componentType, componentName, parentType }: UiCo
             style={{
                 ...otherProperties,
                 position: 'relative',
+                // visibility
+                ...(!otherProperties.__visible && { display: 'none' }),
             }}
         >
             {otherProperties.__text}

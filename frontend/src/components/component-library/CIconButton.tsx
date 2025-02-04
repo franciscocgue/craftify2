@@ -3,7 +3,7 @@ import { useWrapper } from "../../hooks";
 import MyIcon from "../common/MyIcon";
 import { UiComponentProps } from "../../types/designer.types";
 
-const CIconButton = ({ componentId, componentType, componentName, parentType } : UiComponentProps) => {
+const CIconButton = ({ componentId, componentType, componentName, parentType }: UiComponentProps) => {
 
     // exclude below from the built version
     console.log('comp render: ' + componentId.slice(0, 5))
@@ -26,6 +26,8 @@ const CIconButton = ({ componentId, componentType, componentName, parentType } :
             style={{
                 ...otherProperties,
                 position: 'relative',
+                // visibility
+                ...(!otherProperties.__visible && { display: 'none' }),
             }}
         >
             <MyIcon nameIcon={otherProperties.__iconName ?? 'MdQuestionMark'} propsIcon={{ size: otherProperties.__iconSize, color: otherProperties.__iconColor }} />
