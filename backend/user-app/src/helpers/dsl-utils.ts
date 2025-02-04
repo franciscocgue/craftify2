@@ -262,3 +262,22 @@ export const getValue = (parsedObj: ParsedExpression, currPath: number[], variab
     }
 
 };
+
+/**
+ * Converts a user input (expression / value) to value
+ * @param userInput: expression (eg: {{CONCAT(" ", A, B)}}) / value (eg: "Hey there") entered by user
+ * @param variables
+ */
+export const userInputToValue = (userInput: string, variables: Variable[]) => {
+    let val = userInput;
+    try {
+        if (userInput.slice(0, 2) === '{{' && userInput.slice(-2) === '}}') {
+            const [parsedAstObj] = myParser(userInput.slice(2, -2), variables);
+            val = getValue(parsedAstObj, [], variables);
+        }
+    } catch (err) {
+        console.log(err);
+    }
+
+    return val;
+}

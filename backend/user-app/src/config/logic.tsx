@@ -2,13 +2,16 @@ import { toast } from "react-toastify";
 import { FunctionTypes, LogicFunctionHandler } from "../types/index.types";
 import { parseToastAutoClose } from "../helpers/utils";
 import { useVariableStore } from "../stores/variableStore";
+import { userInputToValue } from "../helpers/dsl-utils";
 
 
 // available node logic functions
 const logicFunctionHandlers: Record<FunctionTypes, { handler: Function }> = {
     'open-url': {
         handler: async (params: LogicFunctionHandler<'open-url'>) => {
-            var win = window.open(params.url, params.target);
+            const variables = useVariableStore.getState().variables;
+            const url = userInputToValue(params.url, variables);
+            var win = window.open(url, params.target);
             if (win !== null) { win.focus(); }
             return Promise.resolve();
         }
@@ -33,18 +36,23 @@ const logicFunctionHandlers: Record<FunctionTypes, { handler: Function }> = {
     },
     'toast': {
         handler: (params: LogicFunctionHandler<'toast'>) => {
+            const variables = useVariableStore.getState().variables;
+            const autoClose = userInputToValue(params.autoClose, variables);
             const options = {
-                autoClose: parseToastAutoClose(params.autoClose) as number | false,
+                autoClose: parseToastAutoClose(`${autoClose}`) as number | false,
                 position: params.position,
                 pauseOnHover: true,
             };
-            toast[params.type](params.msg, options);
+            const msg = userInputToValue(params.msg, variables);
+            toast[params.type](msg, options);
             return Promise.resolve();
         }
     },
     'set-variable': {
         handler: (params: LogicFunctionHandler<'set-variable'>) => {
-            useVariableStore.getState().setVariable(params.variableKey, params.value);
+            const variables = useVariableStore.getState().variables;
+            const value = userInputToValue(params.value, variables);
+            useVariableStore.getState().setVariable(params.variableKey, value);
             return Promise.resolve();
         }
     }
