@@ -111,6 +111,19 @@ export const myParser = (expression: string, variables: Variable[]): [ParsedFunc
                     type: 'variable' as const,
                     value: acc,
                 });
+                // or single-boolean/-number expression
+            } else if (acc.toLocaleLowerCase() === 'true' || acc.toLocaleLowerCase() === 'false') {
+                inputs.push({
+                    type: 'basicValue' as const,
+                    value: acc.toLocaleLowerCase() === 'true',
+                })
+            }
+            else if (!isNaN(parseFloat(acc.trim()))) {
+                // add number
+                inputs.push({
+                    type: 'basicValue' as const,
+                    value: parseFloat(acc.trim()),
+                });
             } else {
                 throw new Error(`Variable [${acc}] not found`)
             }
