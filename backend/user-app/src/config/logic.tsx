@@ -55,7 +55,15 @@ const logicFunctionHandlers: Record<FunctionTypes, { handler: Function }> = {
             useVariableStore.getState().setVariable(params.variableKey, value);
             return Promise.resolve();
         }
-    }
+    },
+    'condition': {
+        handler: (params: LogicFunctionHandler<'condition'>) => {
+            const variables = useVariableStore.getState().variables;
+            const conditionExpression = userInputToValue(params.conditionExpression, variables);
+            // true means right; false, left
+            return Promise.resolve(conditionExpression);
+        }
+    },
 }
 
 export {

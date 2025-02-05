@@ -48,6 +48,20 @@ function WrapperLogicNode<Type extends FunctionTypes>({ data, selected, id }: Wr
             position={Position.Bottom}
             isConnectable={true} />
           : undefined}
+        {data.targetHandleLeft
+          ? <Handle
+            id='left'
+            type="source"
+            position={Position.Left}
+            isConnectable={true} />
+          : undefined}
+        {data.targetHandleRight
+          ? <Handle
+            id='right'
+            type="source"
+            position={Position.Right}
+            isConnectable={true} />
+          : undefined}
       </div>
       <NodeToolbar isVisible={data.function.type === 'on-click-trigger' || selected} position={Position.Right} align={'center'}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>

@@ -29,7 +29,7 @@ const functions = Object.entries(logicFunctions).reduce((acc: Record<string, Fun
     const functionMetadata = curr[1];
 
     if (functionMetadata.creatableByUser) {
-        if (functionKey in acc) {
+        if (functionMetadata.parentType in acc) {
             acc[functionMetadata.parentType] = [...acc[functionMetadata.parentType], functionKey];
         } else {
             acc[functionMetadata.parentType] = [functionKey];

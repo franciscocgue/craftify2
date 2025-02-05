@@ -29,7 +29,8 @@ async function executeFlow(
     const executeNode = async (logicNode: LogicNode<FunctionTypes>) => {
         const nodeType: FunctionTypes = logicNode.type;
         const params = logicNode?.data?.function?.parameters;
-        await logicFunctionHandlers[nodeType].handler(params);
+        const result = await logicFunctionHandlers[nodeType].handler(params);
+        return result;
     }
 
     const getNodeById = (nodeId: string, nodes: LogicNode<FunctionTypes>[]) => {
@@ -39,15 +40,26 @@ async function executeFlow(
     let node: LogicNode<FunctionTypes> | undefined;
     // get edges leaving the node
     let connEdges = edges.filter(e => e.source === startNode.id);
+    let nodeResult: any = undefined;
 
     while (connEdges.length) {
         // get node
         node = getNodeById(connEdges[0].target, nodes)
         if (node) {
             console.log('executing node type ', node.type);
-            await executeNode(node);
+            nodeResult = await executeNode(node);
         }
         connEdges = edges.filter(e => e.source === node?.id);
+
+        if (connEdges.length === 2) {
+            // condition node ("if" node)
+            if (nodeResult === true) {
+                connEdges = connEdges.filter(e => e.sourceHandle === 'right');
+            } else {
+                connEdges = connEdges.filter(e => e.sourceHandle === 'left');
+            }
+        }
+
     }
 
     console.log('Current node has no edges')

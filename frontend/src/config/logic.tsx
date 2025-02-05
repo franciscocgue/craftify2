@@ -42,6 +42,24 @@ const logicFunctions = {
             },
         },
     },
+    'condition': {
+        parentType: 'General',
+        creatableByUser: true,
+        displayName: 'Condition',
+        description: 'Branching condiitonal',
+        defaultData: { // LogicNodeData<'condition'>
+            function: {
+                type: 'condition',
+                parameters: {
+                    conditionExpression: '{{true}}',
+                }
+            },
+            targetHandleRight: true, // special case for IF condition
+            targetHandleLeft: true, // special case for IF condition
+            // targetHandleLeft: true, // special case for IF condition
+            sourceHandle: false, // defaults to true if not given
+        },
+    },
     'docu-note': {
         parentType: 'Documentation',
         creatableByUser: true,

@@ -31,6 +31,7 @@ const defaultNode = [{
 const nodeTypes = {
     'open-url': nodesElements['OpenUrl'],
     'on-click-trigger': nodesElements['OnClickTrigger'],
+    'condition': nodesElements['Condition'],
     'delay': nodesElements['Delay'],
     'docu-note': nodesElements['DocuNote'],
     'toast': nodesElements['Toast'],

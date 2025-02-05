@@ -6,7 +6,7 @@ import { CSSProperties, ReactElement } from 'react';
 // INPUTS (from CONFIG FILES)
 
 type compTypes = "row" | "column" | "button" | "text" | "header" | "checkbox" | "image" | "link" | "icon-button";
-export type FunctionTypes = "open-url" | "on-click-trigger" | "delay" | "docu-note" | 'toast' | 'set-variable'
+export type FunctionTypes = "open-url" | "on-click-trigger" | "delay" | "docu-note" | 'toast' | 'set-variable' | 'condition'
 // export type FunctionTypesWithHandler = "open-url" | "delay" | 'toast'
 
 // COMPONENTS and PROPERTIES
@@ -145,6 +145,10 @@ export type LogicNodeData<FunctionType extends FunctionTypes> = {
     ? {
       ms: number,
     }
+    : FunctionType extends 'condition'
+    ? {
+      conditionExpression: string,
+    }
     : FunctionType extends 'docu-note'
     ? {
       msg: string,
@@ -185,6 +189,7 @@ export type LogicEdge = {
   type?: string // 'default' | 'straight' | 'step' | 'smoothstep',
   animated: boolean,
   style: CSSProperties,
+  sourceHandle?: 'left' | 'right'
 }
 
 

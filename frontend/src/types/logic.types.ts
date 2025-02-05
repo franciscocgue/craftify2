@@ -18,6 +18,10 @@ export type LogicNodeData<FunctionType extends FunctionTypes> = {
     ? {
       ms: number,
     }
+    : FunctionType extends 'condition'
+    ? {
+      conditionExpression: string,
+    }
     : FunctionType extends 'docu-note'
     ? {
       msg: string,
@@ -38,7 +42,10 @@ export type LogicNodeData<FunctionType extends FunctionTypes> = {
   },
   targetHandle?: boolean,
   sourceHandle?: boolean,
-};
+}
+  // only conditional node accepts left and rght hanldes 
+  & (FunctionType extends 'condition' ? { targetHandleRight?: boolean } : undefined)
+  & (FunctionType extends 'condition' ? { targetHandleLeft?: boolean } : undefined);
 
 export type LogicNode<FunctionType extends FunctionTypes> = {
   id: string,
@@ -53,9 +60,10 @@ export type LogicNode<FunctionType extends FunctionTypes> = {
 
 export type LogicEdge = {
   id: string,
-  source: string, 
+  source: string,
   target: string,
   type?: string // 'default' | 'straight' | 'step' | 'smoothstep',
   animated: boolean,
   style: CSSProperties,
+  sourceHandle?: 'left' | 'right'
 }
