@@ -51,9 +51,9 @@ async function executeFlow(
         }
         connEdges = edges.filter(e => e.source === node?.id);
 
-        if (connEdges.length === 2) {
+        if (node?.type === 'condition') {
             // condition node ("if" node)
-            if (nodeResult === true) {
+            if (nodeResult === true || nodeResult === 'true') {
                 connEdges = connEdges.filter(e => e.sourceHandle === 'right');
             } else {
                 connEdges = connEdges.filter(e => e.sourceHandle === 'left');
