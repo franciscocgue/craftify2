@@ -16,7 +16,7 @@ export type LogicNodeData<FunctionType extends FunctionTypes> = {
     }
     : FunctionType extends 'delay'
     ? {
-      ms: number,
+      ms: string,
     }
     : FunctionType extends 'condition'
     ? {

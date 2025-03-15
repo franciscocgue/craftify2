@@ -17,7 +17,7 @@ const Delay = ({ data, selected, id }: WrapperLogicNodeProps) => {
 
   const handleDelayChange = useCallback((value: string | undefined) => {
     if (selectedId) {
-      updateLogicParameter<'delay'>(selectedId, id, 'ms', parseInt(value ?? '0'));
+      updateLogicParameter<'delay'>(selectedId, id, 'ms', value);
     }
   }, [])
 

@@ -25,7 +25,9 @@ const logicFunctionHandlers: Record<FunctionTypes, { handler: Function }> = {
     'delay': {
         // handler: async (params: LogicNodeData<'delay'>['function']['parameters']) => {
         handler: async (params: LogicFunctionHandler<'delay'>) => {
-            await new Promise(res => setTimeout(res, params.ms));
+            const variables = useVariableStore.getState().variables;
+            const delaySecs = parseInt(userInputToValue(params.ms, variables) ?? '0');
+            await new Promise(res => setTimeout(res, delaySecs));
             return Promise.resolve();
         }
     },
