@@ -27,6 +27,9 @@ import PHref from "../components/SidebarProperties/properties/PHref";
 import PTarget from "../components/SidebarProperties/properties/PTarget";
 import PChecked from "../components/SidebarProperties/properties/PChecked";
 import PVisible from "../components/SidebarProperties/properties/PVisible";
+import { RiInputField } from "react-icons/ri";
+import PPlaceholder from "../components/SidebarProperties/properties/PPlaceholder";
+import PTextInput from "../components/SidebarProperties/properties/PTextInput";
 
 const compTypes = {
     'row': {
@@ -52,6 +55,10 @@ const compTypes = {
     'checkbox': {
         icon: IoMdCheckboxOutline,
         name: 'Checkbox',
+    },
+    'input-text': {
+        icon: RiInputField,
+        name: 'Text Input',
     },
     'image': {
         icon: IoImageOutline,
@@ -141,6 +148,10 @@ const compPropertiesEditors = {
     'icon-button': {
         styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />],
         properties: [<PIconSize key={'PIconSize'} />, <PIconName key={'PIconName'} />, <PIconColor key={'PIconColor'} />, <PVisible label="Visible" key={'Pvisible'} />],
+    },
+    'input-text': {
+        styles: [<Width key={'width'} />, <Height key={'height'} />, <Margin key={'margin'} />, <Padding key={'padding'} />, <Border key={'border'} />, <Background key={'background'} />, <Text key={'text'} />],
+        properties: [<PTextInput label="Content" key={'PTextInput'} />, <PPlaceholder label="Placeholder" key={'PPlaceholder'} />, <PVisible label="Visible" key={'Pvisible'} />],
     },
 }
 
@@ -396,6 +407,53 @@ const compProperties: Record<keyof CompNames | 'canvas', Properties> = {
         // custom properties
         __text: 'Checkbox',
         __checked: undefined, // {{myVariable}} | undefined
+        __visible: '{{true}}',
+    },
+    'input-text': {
+        // wrapperStyles
+        width: '100%',
+        maxWidth: 'none',
+        minWidth: 'auto',
+        height: 'auto',
+        maxHeight: 'none',
+        minHeight: '26px',
+        marginTop: '0px',
+        marginBottom: '0px',
+        marginLeft: '0px',
+        marginRight: '0px',
+        // p: undefined,
+        color: 'black',
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+        textAlign: 'start',
+        backgroundColor: 'transparent',
+        backgroundImage: 'none',
+        backgroundSize: 'auto',
+        backgroundRepeat: 'repeat',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'scroll',
+        outline: 'none',
+        paddingTop: '4px',
+        paddingBottom: '4px',
+        paddingLeft: '7px',
+        paddingRight: '7px',
+        borderRadius: '0px',
+        borderTopStyle: 'solid',
+        borderTopWidth: 'thin',
+        borderTopColor: '#808b96',
+        borderBottomStyle: 'solid',
+        borderBottomWidth: 'thin',
+        borderBottomColor: '#808b96',
+        borderLeftStyle: 'solid',
+        borderLeftWidth: 'thin',
+        borderLeftColor: '#808b96',
+        borderRightStyle: 'solid',
+        borderRightWidth: 'thin',
+        borderRightColor: '#808b96',
+        overflow: 'auto',
+        // custom properties
+        __textinputcontent: undefined, // {{myVariable}} | undefined
+        __placeholder: 'Type here...', 
         __visible: '{{true}}',
     },
     'image': {

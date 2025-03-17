@@ -11,11 +11,11 @@ import { getValue, myParser } from './dsl-utils';
  * then will convert those to actual values.
  *
  * Use Case: text:{{name}} to text:'James'
- *
+ *  
  * Used for overlay margins and re-resizable.
  *
  * @param {Properties} properties - Object with a single component's properties
- * @returns Array with 1st element as parsed Properties, 2nd link of propertyKeys and variables used, 3rd all variables used in comp
+ * @returns Array with 1st element as parsed Properties, 2nd link of     propertyKeys and variables used, 3rd all variables used in comp
  */
 const parseProperties = (properties: Properties, variables: Variable[]): [Properties, Record<string, string[]>, string[]] => {
 

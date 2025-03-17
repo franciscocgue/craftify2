@@ -14,6 +14,9 @@ const CIconButton = ({ onClick, ...otherProperties }: Props) => {
         <button
             style={{
                 ...parsedProperties,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
                 // visibility
                 ...(!parsedProperties.__visible && { display: 'none' }),
             }}

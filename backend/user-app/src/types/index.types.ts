@@ -92,6 +92,8 @@ export type Properties = {
   borderRightColor?: string;
   // custom
   __text?: string;
+  __textinputcontent?: string;
+  __placeholder?: string;
   __src?: string;
   __alt?: string;
   __href?: string;

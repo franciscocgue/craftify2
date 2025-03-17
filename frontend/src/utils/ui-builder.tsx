@@ -4,6 +4,7 @@ import WrapperContainer from "../components/helpers/WrapperContainer";
 import DroppableCanvas from "../components/helpers/DroppableCanvas";
 import CHeader from "../components/component-library/CHeader";
 import CText from "../components/component-library/CText";
+import CInputText from "../components/component-library/CInputText";
 import CCheckbox from "../components/component-library/CCheckbox";
 import CImage from "../components/component-library/CImage";
 import CLink from "../components/component-library/CLink";
@@ -146,6 +147,15 @@ const uiMapper2 = {
     ),
     'icon-button': (components: ComponentCollection, id: string) => (
         <CIconButton
+            key={id}
+            componentId={id}
+            componentName={components[id].name}
+            componentType={components[id].type}
+            parentType={components[components[id].parent as string]?.type as 'column' | 'row'}
+        />
+    ),
+    'input-text': (components: ComponentCollection, id: string) => (
+        <CInputText
             key={id}
             componentId={id}
             componentName={components[id].name}
