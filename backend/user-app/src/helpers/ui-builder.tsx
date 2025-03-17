@@ -14,6 +14,7 @@ import { executeFlow, findLogicNodeByType } from './logic-utils';
 import { ComponentCollection, ComponentCollectionProperties, FunctionTypes, LogicEdge, LogicNode } from '../types/index.types';
 import { parseProperties } from "./utils";
 import { useVariableStore } from "../stores/variableStore";
+import CInputText from "../components/CInputText";
 
 
 // const logicNodes: Record<string, LogicNode<FunctionTypes>[]> = logicNodesData as Record<string, LogicNode<FunctionTypes>[]>;
@@ -74,6 +75,9 @@ const uiMapper2 = {
     },
     'icon-button': (id: string, properties: ComponentCollectionProperties) => {
         return <CIconButton key={id} onClick={getClickLogic(id)} {...properties[id]} />
+    },
+    'input-text': (id: string, properties: ComponentCollectionProperties) => {
+        return <CInputText key={id} onClick={getClickLogic(id)} {...properties[id]} />
     },
 }
 

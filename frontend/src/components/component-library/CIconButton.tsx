@@ -26,6 +26,9 @@ const CIconButton = ({ componentId, componentType, componentName, parentType }: 
             style={{
                 ...otherProperties,
                 position: 'relative',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
                 // visibility
                 ...(!otherProperties.__visible && { display: 'none' }),
             }}
@@ -34,7 +37,7 @@ const CIconButton = ({ componentId, componentType, componentName, parentType }: 
             {/* exclude below from the built version */}
             {wrapperComponent}
             {/* end exclude block */}
-        </button>
+        </button >
     </>
 }
 
