@@ -19,7 +19,7 @@ const handleButtonClick = async (
 ) => {
 
     if (appId === 'try-out') {
-        toast('Need an account to save', {type: 'info', hideProgressBar: true, autoClose: 1500, position: 'top-center'});
+        toast(<span>An account is needed to use <b>save</b> and <b>build</b> features</span>, {type: 'info', hideProgressBar: true, autoClose: false, position: 'top-center'});
         return null
     }
     setIsBuilding(true); // reset to false after server sends build response
