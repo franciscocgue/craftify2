@@ -1,8 +1,0 @@
-{
-    "ignore": [
-        "user-app/dist/*", 
-        "user-app/src/*.json"
-    ],
-    "watch": ["user-app/src"],
-    "ext": "ts,tsx,js,ts,json"
-}
