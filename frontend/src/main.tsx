@@ -59,7 +59,7 @@ const fetchData = async ({ params }) => {
   const appId = params.appId;
 
   // check appId exists
-  const { data } = await axios.post('http://localhost:3000/api/web-service/validate-appid', { appId });
+  const { data } = await axios.post(import.meta.env.VITE_API_URL + '/api/web-service/validate-appid', { appId });
   if (!data.data.isValid) {
     throw new Error('Invalid Application ID; check the URL')
   }
@@ -67,7 +67,7 @@ const fetchData = async ({ params }) => {
   // fetch project name
   const getData = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:3000/api/web-service/projects/${appId}`);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/web-service/projects/${appId}`);
       const appName = data.data[0].name;
       useDesignerStore.setState({ appName });
     } catch {
@@ -83,34 +83,34 @@ const fetchData = async ({ params }) => {
   }
 
   try {
-    const { data: componentsString } = await axios.post('http://localhost:3000/api/web-service/get-project-object', {
+    const { data: componentsString } = await axios.post(import.meta.env.VITE_API_URL + '/api/web-service/get-project-object', {
       "appId": appId,
       "objectName": "components"
     });
     // {} if object not yet stored, new project
     const components = componentsString === '{}' ? cloneDeep(initialComponents) : JSON.parse(componentsString);
 
-    const { data: propertiesString } = await axios.post('http://localhost:3000/api/web-service/get-project-object', {
+    const { data: propertiesString } = await axios.post(import.meta.env.VITE_API_URL + '/api/web-service/get-project-object', {
       "appId": appId,
       "objectName": "properties"
     });
     // {} if object not yet stored, new project
     const properties = propertiesString === '{}' ? initialProperties : JSON.parse(propertiesString);
 
-    const { data: variablesString } = await axios.post('http://localhost:3000/api/web-service/get-project-object', {
+    const { data: variablesString } = await axios.post(import.meta.env.VITE_API_URL + '/api/web-service/get-project-object', {
       "appId": appId,
       "objectName": "variables"
     });
     // variables a string! but endpoint returns {} if nothing found
     const variables = variablesString === '{}' ? [] : JSON.parse(variablesString);
 
-    const { data: logicNodesString } = await axios.post('http://localhost:3000/api/web-service/get-project-object', {
+    const { data: logicNodesString } = await axios.post(import.meta.env.VITE_API_URL + '/api/web-service/get-project-object', {
       "appId": appId,
       "objectName": "logicNodes"
     });
     const logicNodes = JSON.parse(logicNodesString);
 
-    const { data: logicEdgesString } = await axios.post('http://localhost:3000/api/web-service/get-project-object', {
+    const { data: logicEdgesString } = await axios.post(import.meta.env.VITE_API_URL + '/api/web-service/get-project-object', {
       "appId": appId,
       "objectName": "logicEdges"
     });

@@ -14,7 +14,7 @@ const ErrorPage = () => {
         </p>
         <p>
             {/* @TODO: URL from env variables */}
-            <a href="http://localhost:3000/">Back to Craftify</a>
+            <a href={`${import.meta.env.VITE_API_URL}/`}>Back to Craftify</a>
         </p>
     </div>
 }

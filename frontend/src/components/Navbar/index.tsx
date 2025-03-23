@@ -48,7 +48,7 @@ const Navbar = () => {
   useEffect(() => {
     // open connection to server to start receiving events
     // @TODO: manage error if connection not successfull
-    const eventSource = new EventSource(`http://localhost:3000/api/web-service/events/${appId}`);
+    const eventSource = new EventSource(`${import.meta.env.VITE_API_URL}/api/web-service/events/${appId}`);
 
     // attach handler to receive message events
     eventSource.onmessage = (event) => {

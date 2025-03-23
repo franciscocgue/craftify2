@@ -27,7 +27,7 @@ const handleButtonClick = async (
     try {
         console.log(components)
         // @TODO: manage urls in environments
-        await axios.post('http://localhost:3000/api/web-service/build', {
+        await axios.post(import.meta.env.VITE_API_URL + '/api/web-service/build', {
             "app-id": appId,
             components,
             properties,

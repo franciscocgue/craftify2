@@ -85,12 +85,12 @@ const dateFormatOptions = {
 };
 
 const createProject = async (projectName: string) => {
-    await axios.post('http://localhost:3000/api/web-service/create-project', { projectName });
+    await axios.post(import.meta.env.VITE_API_URL + '/api/web-service/create-project', { projectName });
     return;
 }
 
 const deleteProject = async (appId: string) => {
-    await axios.post('http://localhost:3000/api/web-service/delete-project', { appId });
+    await axios.post(import.meta.env.VITE_API_URL + '/web-service/delete-project', { appId });
     return;
 }
 
@@ -113,7 +113,7 @@ const Root = () => {
     useEffect(() => {
         // if (!isCreating) {
         const getData = async () => {
-            const { data } = await axios.get('http://localhost:3000/api/web-service/projects');
+            const { data } = await axios.get(import.meta.env.VITE_API_URL + '/api/web-service/projects');
             const parsedProjects = data.data.map((proj: Project) => {
                 const dateEdited = new Date(proj.editedOn);
                 const dateCreated = new Date(proj.createdOn);
