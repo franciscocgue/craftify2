@@ -119,7 +119,6 @@ That said, if you are also curious, feel free to take a peek 👀
 * [![Vite][Vite]][Vite-url]
 * [![React][React.js]][React-url]
 * [![Node][Node.js]][Node-url]
-
 * [![Express][Express.js]][Express-url]
 * [![MongoDB][MongoDB]][MongoDB-url]
 * [![zustand][zustand]][zustand-url]
@@ -306,22 +305,22 @@ Project Link: [https://github.com/franciscocgue/craftify2](https://github.com/fr
 [Node.js]: https://img.shields.io/badge/Node.JS-5FA04E?style=for-the-badge&logo=nodedotjs&logoColor=white
 [Node-url]: https://nodejs.org/en
 
-[Express.js]: https://img.shields.io/badge/Express.js-black?style=for-the-badge&logo=Express&logoColor=white
+[Express.js]: https://img.shields.io/badge/Express.js-2c3e50?style=for-the-badge&logo=Express&logoColor=white
 [Express-url]: https://expressjs.com/
 
 [MongoDB]: https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white
 [MongoDB-url]: https://www.mongodb.com/
 
-[zustand]: https://img.shields.io/badge/zustand-black?style=for-the-badge
+[zustand]: https://img.shields.io/badge/zustand-2c3e50?style=for-the-badge
 [zustand-url]: https://github.com/pmndrs/zustand
 
-[Winston]: https://img.shields.io/badge/Winston-black?style=for-the-badge
+[Winston]: https://img.shields.io/badge/Winston-2c3e50?style=for-the-badge
 [Winston-url]: https://www.npmjs.com/package/winston
 
 [AWS]: https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonwebservices&logoColor=white
 [AWS-url]: https://aws.amazon.com/es/sdk-for-javascript/
 
-[dndkit]: https://img.shields.io/badge/dnd%20kit-black?style=for-the-badge
+[dndkit]: https://img.shields.io/badge/dnd%20kit-2c3e50?style=for-the-badge
 [dndkit-url]: https://dndkit.com/
 
 [reactflow]: https://img.shields.io/badge/React%20Flow-1A192B?style=for-the-badge&logo=xyflow&logoColor=white
