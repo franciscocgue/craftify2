@@ -90,7 +90,7 @@ const createProject = async (projectName: string) => {
 }
 
 const deleteProject = async (appId: string) => {
-    await axios.post(import.meta.env.VITE_API_URL + '/web-service/delete-project', { appId });
+    await axios.post(import.meta.env.VITE_API_URL + '/api/web-service/delete-project', { appId });
     return;
 }
 
