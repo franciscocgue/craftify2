@@ -13,7 +13,7 @@ const host = process.env.BACKEND_HOST;
 
 app.use(cors({
     // probably only needed during development
-    origin: 'http://localhost:5173' // React app's URL,
+    origin: process.env.FRONTEND_URL // React app's URL,
 }));
 
 // @TODO: estimate actual limits
