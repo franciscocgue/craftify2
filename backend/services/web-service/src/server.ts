@@ -1,14 +1,15 @@
 import express, { Express } from "express";
 import path from "path";
 const dotenv = require('dotenv');
+dotenv.config();
 import routes from './routes';
 import bodyParser from "body-parser";
 import cors from 'cors';
 
-dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT;
+const host = process.env.BACKEND_HOST;
 
 app.use(cors({
     // probably only needed during development
@@ -46,5 +47,5 @@ app.get('*', (req, res) => {
 })
 
 app.listen(port, () => {
-    console.log(`[web-service]: Server is running at http://localhost:${port} (${process.env.NODE_ENV})`);
+    console.log(`[web-service]: Server is running at ${host}:${port} (${process.env.NODE_ENV})`);
 });

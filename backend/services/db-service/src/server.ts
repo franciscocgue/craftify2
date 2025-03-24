@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 
 const app: Express = express();
 const port = process.env.PORT;
+const host = process.env.BACKEND_HOST;
 
 app.use(bodyParser.json({ limit: '10mb' }))
 
@@ -170,5 +171,5 @@ app.post('/api/db-service/update', async (req: Request<{}, {}, RequestBodyUpdate
 });
 
 app.listen(port, () => {
-    console.log(`[db-service]: Server is running at http://localhost:${port} (${process.env.NODE_ENV})`);
+    console.log(`[db-service]: Server is running at ${host}:${port} (${process.env.NODE_ENV})`);
 });

@@ -33,6 +33,12 @@ type BuildParamsType = {
     logicEdges: any,
 }
 
+const port = process.env.PORT;
+const host = process.env.BACKEND_HOST;
+const apiUrlAws = process.env.API_URL_AWS;
+const apiUrlWeb = process.env.API_URL_WEB;
+const apiUrlDb = process.env.API_URL_DB;
+
 const worker = new Worker<BuildParamsType>(QUEUE_NAMES.appBuilder, async job => {
 
     const devRef = 'development'; // in development, build to dist/development and app-data/development
@@ -84,7 +90,7 @@ const worker = new Worker<BuildParamsType>(QUEUE_NAMES.appBuilder, async job => 
         }
         const presignedUrls = await httpClient.post<
             Record<`${string}/index.html` | `${string}/assets/index.js` | `${string}/assets/style.css`, string>, ObjType[]>(
-                'http://localhost:3002/api/aws-service/s3/presignedUrl',
+                `${apiUrlAws}/api/aws-service/s3/presignedUrl`,
                 [
                     {
                         'bucketName': 'craftify-app-previews',
@@ -116,7 +122,7 @@ const worker = new Worker<BuildParamsType>(QUEUE_NAMES.appBuilder, async job => 
         const cssContent: string = fs.readFileSync(path.join(assetsPath, 'style.css'), 'utf8');
 
         await httpClient.post<{}, { objects: (ObjType & { body: string })[] }>(
-            'http://localhost:3002/api/aws-service/s3/putObject',
+            `${apiUrlAws}/api/aws-service/s3/putObject`,
             {
                 'objects': [
                     {
@@ -140,7 +146,7 @@ const worker = new Worker<BuildParamsType>(QUEUE_NAMES.appBuilder, async job => 
 
         // save JSON objects asynchronously
         httpClient.post<{}, { objects: (ObjType & { body: string })[] }>(
-            'http://localhost:3002/api/aws-service/s3/putObject',
+            `${apiUrlAws}/api/aws-service/s3/putObject`,
             {
                 'objects': [
                     {
@@ -172,7 +178,7 @@ const worker = new Worker<BuildParamsType>(QUEUE_NAMES.appBuilder, async job => 
             }
         );
         // update modified date of project
-        httpClient.post('http://localhost:3003/api/db-service/update', {
+        httpClient.post(`${apiUrlDb}/api/db-service/update`, {
             collectionName: 'projects',
             filter: { appId: appId },
             changes: { editedOn: new Date() },
@@ -182,7 +188,7 @@ const worker = new Worker<BuildParamsType>(QUEUE_NAMES.appBuilder, async job => 
         previewUrl = presignedUrls[`${appId}/index.html`];
     } else {
         // index.html URL
-        previewUrl = 'http://localhost:3000/preview-dev';
+        previewUrl = `${apiUrlWeb}/preview-dev`;
     }
 
     // async clean-up
@@ -209,7 +215,7 @@ worker.on('completed', async (job, returnvalue) => {
 
     const data = { url: previewUrl, error: null };
     try {
-        await httpClient.post<{}, { clientId: string, data: any }>('http://localhost:3000/api/web-service/broadcast', { clientId: appId, data });
+        await httpClient.post<{}, { clientId: string, data: any }>(`${apiUrlWeb}/api/web-service/broadcast`, { clientId: appId, data });
     } catch (error) {
         logger.error(`Error when notifying client ${appId} on success completion of Job ${job.id}`);
     }
@@ -226,7 +232,7 @@ worker.on('failed', async (job, err) => {
         const data = { error: err.message, code: 500 };
 
         try {
-            await httpClient.post<{}, { clientId: string, data: any }>('http://localhost:3000/api/web-service/broadcast', { clientId: appId, data });
+            await httpClient.post<{}, { clientId: string, data: any }>(`${apiUrlWeb}/api/web-service/broadcast`, { clientId: appId, data });
         } catch (error) {
             logger.error(`Error when notifying client ${appId} on failure of Job ${job.id}`);
         }

@@ -1,14 +1,15 @@
 import express from "express";
 import dotenv from 'dotenv';
+dotenv.config();
 import routes from "./routes";
 const bodyParser = require("body-parser");
 
 // const routes = require('./routes');
 
-dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3002;
+const host = process.env.BACKEND_HOST;
 
 app.use(bodyParser.json({limit: '10mb'}))
 
@@ -25,5 +26,5 @@ app.get('/health', (_, res) => {
 app.use('/api/aws-service', routes);
 
 app.listen(port, () => {
-    console.log(`[aws-service]: Server is running at http://localhost:${port} (${process.env.NODE_ENV})`);
+    console.log(`[aws-service]: Server is running at ${host}:${port} (${process.env.NODE_ENV})`);
 });

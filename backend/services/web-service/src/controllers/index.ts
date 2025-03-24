@@ -2,10 +2,14 @@ import { Response, Request } from 'express';
 import { httpClient } from '../utils/http-client';
 import { addClient, clients, removeClient } from '../server-events';
 
+const apiUrlAws = process.env.API_URL_AWS;
+const apiUrlBuild = process.env.API_URL_BUILD;
+const apiUrlDb = process.env.API_URL_DB;
+
 const builder = async (req: Request, res: Response) => {
   try {
     // call build service
-    const data = await httpClient.post<{ message: string }>('http://localhost:3001/api/build-service/build', req.body);
+    const data = await httpClient.post<{ message: string }>(`${apiUrlBuild}/api/build-service/build`, req.body);
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({
@@ -24,7 +28,7 @@ const getProjects = async (req: Request, res: Response) => {
       "filter": req.params.appId ? { appId: req.params.appId } : {}
     };
 
-    const data = await httpClient.post<{ status: 'ok' | 'nok', data: unknown[] }>('http://localhost:3003/api/db-service/read', body);
+    const data = await httpClient.post<{ status: 'ok' | 'nok', data: unknown[] }>(`${apiUrlDb}/api/db-service/read`, body);
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({
@@ -43,7 +47,7 @@ const validateAppId = async (req: Request<{}, {}, { appId: string }>, res: Respo
       filter: { appId: req.body.appId }
     };
 
-    const data = await httpClient.post<{ status: 'ok' | 'nok', data: unknown[] }>('http://localhost:3003/api/db-service/read', body);
+    const data = await httpClient.post<{ status: 'ok' | 'nok', data: unknown[] }>(`${apiUrlDb}/api/db-service/read`, body);
     if (data.data.length === 0) {
       res.status(200).json({
         status: 'ok',
@@ -73,7 +77,7 @@ const getProjectObject = async (req: Request<{}, {}, { appId: string, objectName
     };
     const stringifiedObject = await httpClient.post
       <string, { bucketName: string, key: string }>
-      ('http://localhost:3002/api/aws-service/s3/getObject', body);
+      (`${apiUrlAws}/api/aws-service/s3/getObject`, body);
 
     res.status(200).json(stringifiedObject);
   } catch (error) {
@@ -91,7 +95,7 @@ const addProject = async (req: Request<{}, {}, { projectName: string }>, res: Re
       "documents": [{ "appId": crypto.randomUUID(), "name": req.body.projectName, "createdOn": new Date(), "editedOn": new Date() }]
     };
 
-    const data = await httpClient.post<{ status: 'ok' | 'nok', data: unknown[] }>('http://localhost:3003/api/db-service/create', body);
+    const data = await httpClient.post<{ status: 'ok' | 'nok', data: unknown[] }>(`${apiUrlDb}/api/db-service/create`, body);
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({
@@ -108,54 +112,54 @@ const deleteProject = async (req: Request<{}, {}, { appId: string }>, res: Respo
       "collectionName": "projects",
       "filter": { "appId": req.body.appId }
     };
-    const data = await httpClient.post<{ status: 'ok' | 'nok', data?: unknown[], message?: string }>('http://localhost:3003/api/db-service/delete', body);
+    const data = await httpClient.post<{ status: 'ok' | 'nok', data?: unknown[], message?: string }>(`${apiUrlDb}/api/db-service/delete`, body);
 
     // delete S3 project objects
     httpClient.post
       <string, { bucketName: string, key: string }>
-      ('http://localhost:3002/api/aws-service/s3/deleteObject', {
+      (`${apiUrlAws}/api/aws-service/s3/deleteObject`, {
         'bucketName': 'craftify-app-previews',
         'key': `${req.body.appId}/assets/index.js`,
       });
     httpClient.post
       <string, { bucketName: string, key: string }>
-      ('http://localhost:3002/api/aws-service/s3/deleteObject', {
+      (`${apiUrlAws}/api/aws-service/s3/deleteObject`, {
         'bucketName': 'craftify-app-previews',
         'key': `${req.body.appId}/assets/style.css`,
       });
     httpClient.post
       <string, { bucketName: string, key: string }>
-      ('http://localhost:3002/api/aws-service/s3/deleteObject', {
+      (`${apiUrlAws}/api/aws-service/s3/deleteObject`, {
         'bucketName': 'craftify-app-previews',
         'key': `${req.body.appId}/build-resources/components.json`,
       });
     httpClient.post
       <string, { bucketName: string, key: string }>
-      ('http://localhost:3002/api/aws-service/s3/deleteObject', {
+      (`${apiUrlAws}/api/aws-service/s3/deleteObject`, {
         'bucketName': 'craftify-app-previews',
         'key': `${req.body.appId}/build-resources/properties.json`,
       });
     httpClient.post
       <string, { bucketName: string, key: string }>
-      ('http://localhost:3002/api/aws-service/s3/deleteObject', {
+      (`${apiUrlAws}/api/aws-service/s3/deleteObject`, {
         'bucketName': 'craftify-app-previews',
         'key': `${req.body.appId}/build-resources/variables.json`,
       });
     httpClient.post
       <string, { bucketName: string, key: string }>
-      ('http://localhost:3002/api/aws-service/s3/deleteObject', {
+      (`${apiUrlAws}/api/aws-service/s3/deleteObject`, {
         'bucketName': 'craftify-app-previews',
         'key': `${req.body.appId}/build-resources/logicEdges.json`,
       });
     httpClient.post
       <string, { bucketName: string, key: string }>
-      ('http://localhost:3002/api/aws-service/s3/deleteObject', {
+      (`${apiUrlAws}/api/aws-service/s3/deleteObject`, {
         'bucketName': 'craftify-app-previews',
         'key': `${req.body.appId}/build-resources/logicNodes.json`,
       });
     httpClient.post
       <string, { bucketName: string, key: string }>
-      ('http://localhost:3002/api/aws-service/s3/deleteObject', {
+      (`${apiUrlAws}/api/aws-service/s3/deleteObject`, {
         'bucketName': 'craftify-app-previews',
         'key': `${req.body.appId}/index.html`,
       });

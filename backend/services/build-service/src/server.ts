@@ -1,15 +1,16 @@
 import express, { Express } from "express";
+const dotenv = require('dotenv');
+dotenv.config();
 // import path from "path";
 import routes from './routes';
 // import { authentication } from "./middlewares";
 import './queues/worker'; // get workers running
-const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 
-dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT;
+const host = process.env.BACKEND_HOST;
 
 // Use JSON body parser middleware
 // app.use(express.json());
@@ -33,5 +34,5 @@ app.use('/api/build-service', routes);
 
 
 app.listen(port, () => {
-    console.log(`[build-service]: Server is running at http://localhost:${port} (${process.env.NODE_ENV})`);
+    console.log(`[build-service]: Server is running at ${host}:${port} (${process.env.NODE_ENV})`);
 });
