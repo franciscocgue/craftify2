@@ -106,7 +106,6 @@ You name it!
 
 That said, if you are also curious, feel free to take a peek 👀
 
-<!-- [![Product Name Screen Shot][product-screenshot]](https://github.com/franciscocgue/craftify2) -->
 
 
 
