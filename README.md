@@ -296,7 +296,7 @@ Project Link: [https://github.com/franciscocgue/craftify2](https://github.com/fr
 [stars-url]: https://github.com/franciscocgue/craftify2/stargazers
 [issues-shield]: https://img.shields.io/github/issues/franciscocgue/craftify2.svg?style=for-the-badge
 [issues-url]: https://github.com/franciscocgue/craftify2/issues
-[license-shield]: https://img.shields.io/github/license/franciscocgue/craftify2.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/badge/license-MIT-green?style=for-the-badge
 [license-url]: https://github.com/franciscocgue/craftify2/blob/main/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/francisco-carmona-guerrero-504773118/
