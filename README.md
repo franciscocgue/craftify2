@@ -179,17 +179,13 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-   ```sh
-   @TODO: the idea is to have some built-in help inside the application.
-
-      For example, a tour or a carousel.
-
-      Meanwhile, you can find here some screenshots with main functionality.
-   ```
-
 ### Overview and example
 
-Check out the video in this <a href="https://www.linkedin.com/feed/update/urn:li:activity:7297540478793633793/" target="_blank">Linkedin post</a>!
+Check out this demo video in this <a href="https://www.linkedin.com/feed/update/urn:li:activity:7297540478793633793/" target="_blank">LinkedIn post</a>!
+
+   ```sh
+   @TODO: built-in help in Craftify: tour / carousel.
+   ```
 
 
 ### Create Project
