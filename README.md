@@ -136,8 +136,12 @@ That said, if you are also curious, feel free to take a peek 👀
 
 Oops, this is still work in progress 😅
 
+Until I fill this up and do some testing, feel free to get in contact directly! 
+
+<p><a href="mailto:franciscocguerrero@gmail.com">Email franciscocguerrero@gmail.com</a></p>
+
    ```sh
-   @TODO: add steps to run the project locally, including docker container, config example / sample secrets, etc. Test =)
+   @TODO: add steps to run the project locally, including docker container, config example / sample secrets, MongoDB setup, etc.
    ```
 
 <!-- This is an example of how you may give instructions on setting up your project locally.
