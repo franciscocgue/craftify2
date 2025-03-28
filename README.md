@@ -138,7 +138,7 @@ Oops, this is still work in progress 😅
 
 Until I fill this up and do some testing, feel free to get in contact directly! 
 
-<p><a href="mailto:franciscocguerrero@gmail.com">Email franciscocguerrero@gmail.com</a></p>
+<p>Email to <a href="mailto:franciscocguerrero@gmail.com">franciscocguerrero@gmail.com</a></p>
 
    ```sh
    @TODO: add steps to run the project locally, including docker container, config example / sample secrets, MongoDB setup, etc.
