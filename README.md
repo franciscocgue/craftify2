@@ -222,6 +222,7 @@ This is not an exhaustive list—neither of completed features nor of those stil
 - [x] Basic Variables
 - [x] Domain-Specific-Language (DSL)
 - [x] AWS S3 Bucket to serve built version
+- [ ] GitHub actions (tsc, testing)
 - [ ] More (advanced) components (e.g. Table, Charts)
 - [ ] More logic functions (e.g. send email)
 - [ ] Advanced Variables (arrays, objects)
