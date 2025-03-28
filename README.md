@@ -187,6 +187,11 @@ This is an example of how to list things you need to use the software and how to
       Meanwhile, you can find here some screenshots with main functionality.
    ```
 
+### Overview and example
+
+Check out the video in this <a href="https://www.linkedin.com/feed/update/urn:li:activity:7297540478793633793/" target="_blank">Linkedin post</a>!
+
+
 ### Create Project
 
 ![create-project image](images/help-create-project.png)
@@ -244,11 +249,11 @@ Any contributions you make are **greatly appreciated** 🙌
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thank you!
 
-1. Fork the Project
+<!-- 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+5. Open a Pull Request -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
