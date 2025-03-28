@@ -183,7 +183,7 @@ const serverEvents = (req: Request<{ clientId: string }>, res: Response) => {
   res.setHeader('Connection', 'keep-alive');
 
   const clientId = req.params.clientId;
-  console.log('serverEventsController', clientId)
+  // console.log('serverEventsController', clientId)
 
   // add client (id is app id)
   addClient(res, clientId);
@@ -206,7 +206,7 @@ const clientMessenger = (req: Request<{}, {}, { clientId: string, data: unknown 
   // use case: notify client with user-app url after build-service done
 
   const clientId = req.body.clientId;
-  console.log('clientMessengerController', clientId)
+  // console.log('clientMessengerController', clientId)
   const data = req.body.data;
 
   if (clientId in clients) {

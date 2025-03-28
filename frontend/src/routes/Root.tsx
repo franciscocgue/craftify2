@@ -14,6 +14,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { toast } from "react-toastify";
 import logoDark from '../assets/logo-dark.svg';
 import logoLight from '../assets/logo-light.svg';
+import { FaGithub } from "react-icons/fa6";
+import useAuthStore from "../stores/auth";
 
 // const projects = [
 //     {
@@ -99,6 +101,8 @@ const Root = () => {
     const navigate = useNavigate();
 
     const colorMode = useDesignerStore((state) => state.colorMode);
+    const userEmail = useAuthStore((state) => state.email);
+
 
     const [isLoading, setIsLoading] = useState(true);
     const [isCreating, setIsCreating] = useState(false);
@@ -306,7 +310,38 @@ const Root = () => {
                 <div className={styles.logo}>
                     <div><img height={20} src={colorMode === 'light' ? logoLight : logoDark} alt="Logo" /><div style={{ marginLeft: '5px' }}>Craftify</div></div>
                 </div>
-                <ToggleColorMode />
+                <div style={{
+                    display: 'flex',
+                    alignContent: 'center',
+                    alignItems: 'center',
+                    gap: '15px',
+                }}>
+                    <ToggleColorMode />
+                    <div style={{
+                        // flex: 1,
+                        // width: '100px',
+                        display: 'flex',
+                        fontSize: 'small'
+                    }}>
+                        {userEmail}
+                    </div>
+                    <div style={{
+                        // width: '100px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
+                    }}>
+                        {/* <div>Share</div> */}
+                        <div>
+                            <a
+                                style={{ color: 'inherit' }}
+                                href="https://github.com/franciscocgue/craftify2"
+                                target="_blank">
+                                {<FaGithub size={25} title="GitHub repo" />}
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {/* projects list */}

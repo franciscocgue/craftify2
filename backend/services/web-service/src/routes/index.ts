@@ -23,5 +23,4 @@ router.post('/delete-project', deleteProject);
 router.post('/get-project-object', getProjectObject);
 router.post('/validate-appid', validateAppId);
 
-
 export default router;

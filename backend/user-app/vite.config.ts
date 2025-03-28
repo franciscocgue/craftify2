@@ -19,8 +19,6 @@ const logicNodesData = JSON.parse(fs.readFileSync(logicNodesPath, 'utf8'));
 const logicEdgesPath = path.join(__dirname, 'src', 'app-data', process.env.USER_APP_ID, 'logicEdges.json');
 const logicEdgesData = JSON.parse(fs.readFileSync(logicEdgesPath, 'utf8'));
 
-console.log(JSON.parse(JSON.stringify(logicEdgesData)))
-
 export default defineConfig({
   plugins: [react()],
   build: {

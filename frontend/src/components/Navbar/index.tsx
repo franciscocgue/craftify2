@@ -1,6 +1,7 @@
 import { MdDarkMode } from "react-icons/md";
 import { MdSunny } from "react-icons/md";
 import useDesignerStore from "../../stores/designer";
+import useAuthStore from "../../stores/auth";
 import IconButton from "../common/IconButton";
 import SaveButton from "./SaveButton";
 import { MdOutlineDesktopWindows } from "react-icons/md";
@@ -12,6 +13,7 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import logoLight from './../../assets/logo-light.svg';
 import logoDark from './../../assets/logo-dark.svg';
+import { FaGithub } from "react-icons/fa6";
 
 const ToggleColorMode = () => {
   const toggleColorMode = useDesignerStore((state) => state.toggleColorMode);
@@ -37,6 +39,7 @@ const Navbar = () => {
   console.log('C - Navbar')
 
   const colorMode = useDesignerStore((state) => state.colorMode);
+  const userEmail = useAuthStore((state) => state.email);
 
   const updateProperty = useDesignerStore((state) => state.updateProperty);
   const appName = useDesignerStore((state) => state.appName);
@@ -117,7 +120,7 @@ const Navbar = () => {
         alignItems: 'center',
         gap: '15px',
       }}>
-        <div>File</div>
+        {/* <div>File</div> */}
         <ToggleColorMode />
         <SaveButton setIsBuilding={setIsBuilding} />
         <PreviewActions isBuilding={isBuilding} url={previewUrl} />
@@ -179,8 +182,9 @@ const Navbar = () => {
         // flex: 1,
         // width: '100px',
         display: 'flex',
+        fontSize: 'small'
       }}>
-        My-User-Name
+        {userEmail}
       </div>
       <div style={{
         // width: '100px',
@@ -188,8 +192,15 @@ const Navbar = () => {
         alignItems: 'center',
         gap: '10px',
       }}>
-        <div>Share</div>
-        <div>GitHub</div>
+        {/* <div>Share</div> */}
+        <div>
+          <a
+            style={{ color: 'inherit' }}
+            href="https://github.com/franciscocgue/craftify2"
+            target="_blank">
+            {<FaGithub size={25} title="GitHub repo" />}
+          </a>
+        </div>
       </div>
       {/* <button>Home</button> */}
     </div>

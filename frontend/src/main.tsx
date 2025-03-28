@@ -10,11 +10,28 @@ import ErrorPage from './routes/ErrorPage.tsx';
 import Root from './routes/Root.tsx';
 import Designer from './pages/Designer.tsx';
 import useDesignerStore from './stores/designer.ts';
+import useAuthStore from './stores/auth.ts';
 import Variables from './pages/Variables.tsx';
 import axios from 'axios';
 import { ComponentCollection, ComponentCollectionProperties } from './types/designer.types.ts';
 import { compProperties } from './config/components.tsx';
 import { cloneDeep } from 'lodash';
+
+
+// fetch user and save to store
+const fetchUserEmail = async () => {
+  try {
+    const response = await fetch('/api/user', { credentials: 'include' });
+    const data = await response.json();
+    if (data.userEmail) {
+      useAuthStore.setState({ email: data.userEmail });
+      // console.log('User email:', data.userEmail);
+    }
+  } catch (error) {
+    console.error('Error fetching user email:', error);
+  }
+};
+fetchUserEmail();
 
 // initialize components
 const initialComponents: ComponentCollection = {
