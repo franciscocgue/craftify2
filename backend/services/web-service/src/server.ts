@@ -55,6 +55,17 @@ app.get('/magic-login', (req, res) => {
     res.send(magicLoginDummyHtml());
 });
 
+app.get('/logout', (req, res) => {
+    res.cookie("session", "", {
+        httpOnly: true,
+        secure: true, // Required for SameSite=None cookies
+        sameSite: "lax",
+        expires: new Date(0), // Expire immediately
+        path: "/", // Must match the original path
+    });
+    res.send("Cookie cleared");
+})
+
 app.get('/', authentication, (req, res) => {
     res.sendFile(path.join(__dirname, '../../../../frontend/dist/index.html'))
 })

@@ -14,6 +14,8 @@ import { Link } from "react-router-dom";
 import logoLight from './../../assets/logo-light.svg';
 import logoDark from './../../assets/logo-dark.svg';
 import { FaGithub } from "react-icons/fa6";
+import { FiLogOut } from "react-icons/fi";
+import axios from "axios";
 
 const ToggleColorMode = () => {
   const toggleColorMode = useDesignerStore((state) => state.toggleColorMode);
@@ -190,17 +192,38 @@ const Navbar = () => {
         // width: '100px',
         display: 'flex',
         alignItems: 'center',
-        gap: '10px',
+        alignContent: 'center',
+        gap: '15px',
       }}>
         {/* <div>Share</div> */}
-        <div>
-          <a
-            style={{ color: 'inherit' }}
-            href="https://github.com/franciscocgue/craftify2"
-            target="_blank">
-            {<FaGithub size={25} title="GitHub repo" />}
-          </a>
+        <div
+          style={{
+            color: 'inherit',
+            display: 'flex',
+            alignItems: 'center',
+            cursor: 'pointer',
+          }}
+          onClick={async () => {
+            try {
+              await axios.get(`${import.meta.env.VITE_API_URL}/logout`, { withCredentials: true }),
+                window.location.href = "/login";
+            } catch (err) {
+              console.log('Error when logging out')
+            }
+          }}
+        >
+          {<FiLogOut size={20} title="Logout" />}
         </div>
+        <a
+          style={{
+            color: 'inherit',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+          href="https://github.com/franciscocgue/craftify2"
+          target="_blank">
+          {<FaGithub size={25} title="GitHub repo" />}
+        </a>
       </div>
       {/* <button>Home</button> */}
     </div>

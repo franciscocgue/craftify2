@@ -16,6 +16,7 @@ import logoDark from '../assets/logo-dark.svg';
 import logoLight from '../assets/logo-light.svg';
 import { FaGithub } from "react-icons/fa6";
 import useAuthStore from "../stores/auth";
+import { FiLogOut } from "react-icons/fi";
 
 // const projects = [
 //     {
@@ -332,9 +333,37 @@ const Root = () => {
                         gap: '10px',
                     }}>
                         {/* <div>Share</div> */}
-                        <div>
+                        <div style={{
+                            // width: '100px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            alignContent: 'center',
+                            gap: '15px',
+                        }}>
+                            <div
+                                style={{
+                                    color: 'inherit',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    cursor: 'pointer',
+                                }}
+                                onClick={async () => {
+                                    try {
+                                        await axios.get(`${import.meta.env.VITE_API_URL}/logout`, { withCredentials: true }),
+                                            window.location.href = "/login";
+                                    } catch (err) {
+                                        console.log('Error when logging out')
+                                    }
+                                }}
+                            >
+                                {<FiLogOut size={20} title="Logout" />}
+                            </div>
                             <a
-                                style={{ color: 'inherit' }}
+                                style={{
+                                    color: 'inherit',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                }}
                                 href="https://github.com/franciscocgue/craftify2"
                                 target="_blank">
                                 {<FaGithub size={25} title="GitHub repo" />}
