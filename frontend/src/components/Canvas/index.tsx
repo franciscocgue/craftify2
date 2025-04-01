@@ -10,6 +10,7 @@ const Canvas = () => {
 
 
     const components = useDesignerStore((state) => state.components);
+    const properties = useDesignerStore((state) => state.properties);
     // const properties = useDesignerStore((state) => state.properties['canvas']);
     const setIsCanvasScrolling = useDesignerStore((state) => state.setIsCanvasScrolling);
     const toggleSelectedId = useDesignerStore((state) => state.toggleSelectedId);
@@ -20,11 +21,11 @@ const Canvas = () => {
     const comps = useMemo(
         () => {
             // if (!isScrolling) {
-            return renderNode(components, 'canvas')
+            return renderNode(components, 'canvas', 'column')
             // }
         },
         // [components, properties, renderToggle]
-        [components]
+        [components, properties]
     );
 
     interface ScrollContainerElement extends HTMLDivElement {

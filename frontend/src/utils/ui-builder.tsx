@@ -9,6 +9,7 @@ import CCheckbox from "../components/component-library/CCheckbox";
 import CImage from "../components/component-library/CImage";
 import CLink from "../components/component-library/CLink";
 import CIconButton from "../components/component-library/CIconButton";
+import useDesignerStore from "../stores/designer";
 
 {/* <ContainerWrapper id="subcontainer" componentType="container-row" parentType='container-column' w={'100%'} h={'max-content'} p={1} border="none">
 <Flex direction={'row'} wrap={'wrap'} alignItems={'center'} gap={2} h={'100%'} w={'100%'}>
@@ -71,102 +72,103 @@ import CIconButton from "../components/component-library/CIconButton";
 // }
 
 const uiMapper2 = {
-    'canvas': (components: ComponentCollection, id: string) => (
+    'canvas': (components: ComponentCollection, id: string, parentType: 'column' | 'row' ) => (
         <>
             <DroppableCanvas componentId={id} />
-            {components[id].children.map((id: string) => renderNode(components, id))}
+            {components[id].children.map((id: string) => renderNode(components, id, parentType))}
         </>
     ),
-    'column': (components: ComponentCollection, id: string) => (
+    'column': (components: ComponentCollection, id: string, parentType: 'column' | 'row' ) => (
         <WrapperContainer
             key={id}
             componentId={id}
             componentName={components[id].name}
             componentType={components[id].type}
-            parentType={components[components[id].parent as string]?.type as 'column' | 'row'}
+            parentType={parentType}
         // otherProperties={properties[id]}
         >
             {/* <CContainerColumn componentId={id}> */}
-            {components[id].children.map((id: string) => renderNode(components, id))}
+            {components[id].children.map((id: string) => renderNode(components, id, parentType))}
             {/* </CContainerColumn> */}
         </WrapperContainer>
     ),
-    'button': (components: ComponentCollection, id: string) => (
+    'button': (components: ComponentCollection, id: string, parentType: 'column' | 'row' ) => (
         <CButton
             key={id}
             componentId={id}
             componentName={components[id].name}
             componentType={components[id].type}
-            parentType={components[components[id].parent as string]?.type as 'column' | 'row'}
+            parentType={parentType}
         />
     ),
-    'text': (components: ComponentCollection, id: string) => (
+    'text': (components: ComponentCollection, id: string, parentType: 'column' | 'row' ) => (
         <CText
             key={id}
             componentId={id}
             componentName={components[id].name}
             componentType={components[id].type}
-            parentType={components[components[id].parent as string]?.type as 'column' | 'row'}
+            parentType={parentType}
         />
     ),
-    'header': (components: ComponentCollection, id: string) => (
+    'header': (components: ComponentCollection, id: string, parentType: 'column' | 'row' ) => (
         <CHeader
             key={id}
             componentId={id}
             componentName={components[id].name}
             componentType={components[id].type}
-            parentType={components[components[id].parent as string]?.type as 'column' | 'row'}
+            parentType={parentType}
         />
     ),
-    'checkbox': (components: ComponentCollection, id: string) => (
+    'checkbox': (components: ComponentCollection, id: string, parentType: 'column' | 'row' ) => (
         <CCheckbox
             key={id}
             componentId={id}
             componentName={components[id].name}
             componentType={components[id].type}
-            parentType={components[components[id].parent as string]?.type as 'column' | 'row'}
+            parentType={parentType}
         />
     ),
-    'image': (components: ComponentCollection, id: string) => (
+    'image': (components: ComponentCollection, id: string, parentType: 'column' | 'row' ) => (
         <CImage
             key={id}
             componentId={id}
             componentName={components[id].name}
             componentType={components[id].type}
-            parentType={components[components[id].parent as string]?.type as 'column' | 'row'}
+            parentType={parentType}
         />
     ),
-    'link': (components: ComponentCollection, id: string) => (
+    'link': (components: ComponentCollection, id: string, parentType: 'column' | 'row' ) => (
         <CLink
             key={id}
             componentId={id}
             componentName={components[id].name}
             componentType={components[id].type}
-            parentType={components[components[id].parent as string]?.type as 'column' | 'row'}
+            parentType={parentType}
         />
     ),
-    'icon-button': (components: ComponentCollection, id: string) => (
+    'icon-button': (components: ComponentCollection, id: string, parentType: 'column' | 'row') => (
         <CIconButton
             key={id}
             componentId={id}
             componentName={components[id].name}
             componentType={components[id].type}
-            parentType={components[components[id].parent as string]?.type as 'column' | 'row'}
+            parentType={parentType}
         />
     ),
-    'input-text': (components: ComponentCollection, id: string) => (
+    'input-text': (components: ComponentCollection, id: string, parentType: 'column' | 'row') => (
         <CInputText
             key={id}
             componentId={id}
             componentName={components[id].name}
             componentType={components[id].type}
-            parentType={components[components[id].parent as string]?.type as 'column' | 'row'}
+            parentType={parentType}
         />
     ),
 }
 
-const renderNode = (components: ComponentCollection, id: string): JSX.Element => {
-    return uiMapper2[components[id].type as keyof typeof uiMapper2](components, id)
+const renderNode = (components: ComponentCollection, id: string, parentType: 'column' | 'row'): JSX.Element => {
+    parentType = useDesignerStore.getState().properties[components[id].parent as string]?.flexDirection || 'column';
+    return uiMapper2[components[id].type as keyof typeof uiMapper2](components, id, parentType)
 }
 
 
