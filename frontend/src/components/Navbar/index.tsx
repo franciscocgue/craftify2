@@ -181,49 +181,56 @@ const Navbar = () => {
         {appName}
       </div>
       <div style={{
-        // flex: 1,
-        // width: '100px',
         display: 'flex',
-        fontSize: 'small'
-      }}>
-        {userEmail}
-      </div>
-      <div style={{
-        // width: '100px',
-        display: 'flex',
-        alignItems: 'center',
         alignContent: 'center',
+        alignItems: 'center',
         gap: '15px',
       }}>
-        {/* <div>Share</div> */}
-        <div
-          style={{
-            color: 'inherit',
-            display: 'flex',
-            alignItems: 'center',
-            cursor: 'pointer',
-          }}
-          onClick={async () => {
-            try {
-              await axios.get(`${import.meta.env.VITE_API_URL}/logout`, { withCredentials: true }),
-                window.location.href = "/login";
-            } catch (err) {
-              console.log('Error when logging out')
-            }
-          }}
-        >
-          {<FiLogOut size={20} title="Logout" />}
+        <div style={{
+          // flex: 1,
+          // width: '100px',
+          display: 'flex',
+          fontSize: 'small'
+        }}>
+          {userEmail}
         </div>
-        <a
-          style={{
-            color: 'inherit',
-            display: 'flex',
-            alignItems: 'center',
-          }}
-          href="https://github.com/franciscocgue/craftify2"
-          target="_blank">
-          {<FaGithub size={25} title="GitHub repo" />}
-        </a>
+        <div style={{
+          // width: '100px',
+          display: 'flex',
+          alignItems: 'center',
+          alignContent: 'center',
+          gap: '15px',
+        }}>
+          {/* <div>Share</div> */}
+          <div
+            style={{
+              color: 'inherit',
+              display: 'flex',
+              alignItems: 'center',
+              cursor: 'pointer',
+            }}
+            onClick={async () => {
+              try {
+                await axios.get(`${import.meta.env.VITE_API_URL}/logout`, { withCredentials: true }),
+                  window.location.href = "/login";
+              } catch (err) {
+                console.log('Error when logging out')
+              }
+            }}
+          >
+            {<FiLogOut size={20} title="Logout" />}
+          </div>
+          <a
+            style={{
+              color: 'inherit',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+            href="https://github.com/franciscocgue/craftify2"
+            target="_blank">
+            {<FaGithub size={25} title="GitHub repo" />}
+          </a>
+        </div>
       </div>
       {/* <button>Home</button> */}
     </div>
