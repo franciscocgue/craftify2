@@ -28,10 +28,10 @@ const authentication = (req: CustomRequest, res: Response, next: NextFunction) =
     if (!token) {
 
         // @TODO @TOFIX
-        // Authentication works in dev is frontend verved from backend (port 3000);
+        // Authentication works in dev if frontend served from backend (port 3000);
         // But if using Vite (FE served on 5173 eg), it does not.
         // Fix it and remove code below
-        if (process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV === 'development' && req.get('origin') === process.env.FRONTEND_URL) {
             req.userEmail = 'My-User-Email'
             next();
             return;
