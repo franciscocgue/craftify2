@@ -30,15 +30,16 @@ export const httpClient = {
 const handleHttpError = (error: Error | AxiosError | unknown): never => {
     if (isAxiosError(error)) {
         const status = error.response?.status;
+        const code = error?.code;
         const message = error.response?.data?.message || error.message;
 
         switch (error.status) {
             case 404:
-                throw new Error(`Resource not found: ${message}`);
+                throw new Error(`Resource not found (${code}): ${message}`);
             case 500:
                 throw new Error(`Internal server error: ${message}`);
             default:
-                throw new Error(`HTTP Error (${status}): ${message}`)
+                throw new Error(`HTTP Error (${status} - ${code}): ${message}`)
         }
     } else {
         throw new Error(`An unexpected error occurred: ${(error as Error).message}`);
