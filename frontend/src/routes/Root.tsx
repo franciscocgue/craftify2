@@ -88,12 +88,21 @@ const dateFormatOptions = {
 };
 
 const createProject = async (projectName: string) => {
-    await axios.post(import.meta.env.VITE_API_URL + '/api/web-service/create-project', { projectName });
+    try {
+        await axios.post(import.meta.env.VITE_API_URL + '/api/web-service/create-project', { projectName });
+    } catch {
+        toast('Project could not be created', { type: 'error', autoClose: 2000, position: 'bottom-right' });
+    }
+
     return;
 }
 
 const deleteProject = async (appId: string) => {
-    await axios.post(import.meta.env.VITE_API_URL + '/api/web-service/delete-project', { appId });
+    try {
+        await axios.post(import.meta.env.VITE_API_URL + '/api/web-service/delete-project', { appId });
+    } catch {
+        toast('Project could not be deleted', { type: 'error', autoClose: 2000, position: 'bottom-right' });
+    }
     return;
 }
 
@@ -104,11 +113,10 @@ const Root = () => {
     const colorMode = useDesignerStore((state) => state.colorMode);
     const userEmail = useAuthStore((state) => state.email);
 
-
     const [isLoading, setIsLoading] = useState(true);
     const [isCreating, setIsCreating] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
-    const [projects, setProjects] = useState<Project[]>([]);
+    const [projects, setProjects] = useState<{ error: string | null, data: Project[] }>({ error: null, data: [] });
     const [newProjectName, setNewProjectName] = useState<string | undefined>();
     const [projectNameDelete, setProjectNameDelete] = useState<string>('');
     const [projectAppIdToDelete, setProjectAppIdToDelete] = useState<string>('');
@@ -118,14 +126,20 @@ const Root = () => {
     useEffect(() => {
         // if (!isCreating) {
         const getData = async () => {
-            const { data } = await axios.get(import.meta.env.VITE_API_URL + '/api/web-service/projects');
-            const parsedProjects = data.data.map((proj: Project) => {
-                const dateEdited = new Date(proj.editedOn);
-                const dateCreated = new Date(proj.createdOn);
-                return { ...proj, editedOn: dateEdited, createdOn: dateCreated };
-            })
-            // console.log(parsedProjects)
-            setProjects(parsedProjects);
+            try {
+                const { data } = await axios.get(import.meta.env.VITE_API_URL + '/api/web-service/projects');
+                const parsedProjects = data.data.map((proj: Project) => {
+                    const dateEdited = new Date(proj.editedOn);
+                    const dateCreated = new Date(proj.createdOn);
+                    return { ...proj, editedOn: dateEdited, createdOn: dateCreated };
+                })
+                setProjects({ error: null, data: parsedProjects });
+                // console.log(parsedProjects)
+            } catch {
+                setProjects({ error: `Oops couldn't load the projects. Try again soon`, data: [] });
+                toast("Unexpected error, try again soon", { type: 'error', autoClose: 4000, position: 'bottom-right', toastId: 'err_projects' });
+            }
+
             setIsLoading(false);
             return;
         };
@@ -349,10 +363,16 @@ const Root = () => {
                                 }}
                                 onClick={async () => {
                                     try {
-                                        await axios.get(`${import.meta.env.VITE_API_URL}/logout`, { withCredentials: true }),
+                                        const response = await axios.get(`${import.meta.env.VITE_API_URL}/logout`, { withCredentials: true });
+                                        const data = response.data;
+                                        if (data.success) {
                                             window.location.href = "/login";
+                                        } else {
+                                            throw new Error('Logout failed')
+                                        }
                                     } catch (err) {
-                                        console.log('Error when logging out')
+                                        toast('Error when logging out', { type: 'error', autoClose: 2000, position: 'bottom-right' });
+                                        console.log('Error when logging out');
                                     }
                                 }}
                             >
@@ -375,7 +395,7 @@ const Root = () => {
 
             {/* projects list */}
             <div className={styles.main}>
-                <div style={{
+                {projects.error === null && <div style={{
                     display: 'flex',
                     alignItems: 'center',
                     alignContent: 'center',
@@ -413,7 +433,7 @@ const Root = () => {
                         after="Skip the signup, have some fun!"
                     >
                     </IconButton>
-                </div>
+                </div>}
                 <h2 className={styles.title}>My Projects</h2>
                 <div className={styles['project']}>
                     <div className={styles['action']}>
@@ -429,8 +449,9 @@ const Root = () => {
                     </div>
                 </div>
                 <div className={styles.projects}>
-                    {projects.length === 0 && <p className={styles['no-projects']}>There are no projects.</p>}
-                    {projects.length !== 0 && projects
+                    {projects.error !== null && <p className={styles['no-projects']}>{projects.error}</p>}
+                    {projects.error === null && projects.data.length === 0 && <p className={styles['no-projects']}>There are no projects.</p>}
+                    {projects.error === null && projects.data.length !== 0 && projects.data
                         .filter(project => searchString === '' ? true : project.name.toLowerCase().includes(searchString.toLowerCase()))
                         .map(project => <div key={project.appId} className={styles['project']}>
                             {/* <div className={styles['loader']}>
