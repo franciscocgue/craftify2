@@ -36,25 +36,6 @@ app.get('/health', (_, res) => {
     res.status(200).send(data);
 });
 
-// @TODO: eventually extend this globally for it to be available everywhere
-interface CustomRequest extends Request {
-    userEmail?: string;
-}
-// API endpoint to send userEmail
-app.get('/api/user', authentication, (req: CustomRequest, res) => {
-    res.json({ userEmail: req.userEmail });
-});
-
-app.get('/magic-login', (req, res) => {
-    /**
-     * res.cookies will set cookies for SUBSEQUENT requests.
-     * So a redirect after setting cookies will not find the cookies yet.
-     * Therefore this magic-login page makes this first "subsequent" 
-     * request where cookies should already be in place.
-     */
-    res.send(magicLoginDummyHtml());
-});
-
 app.get('/logout', (req, res) => {
     res.cookie("session", "", {
         httpOnly: true,
@@ -63,11 +44,39 @@ app.get('/logout', (req, res) => {
         expires: new Date(0), // Expire immediately
         path: "/", // Must match the original path
     });
-    res.send("Cookie cleared");
+    res.json({ success: true });
 })
 
-app.get('/', authentication, (req, res) => {
-    res.sendFile(path.join(__dirname, '../../../../frontend/dist/index.html'))
+
+app.get('/magic-login', (req, res) => {
+    /**
+     * res.cookies will set cookies for SUBSEQUENT requests.
+     * So a redirect after setting cookies will not find the cookies yet.
+     * Therefore this magic-login page makes this first "subsequent" 
+     * request where cookies should already be in place.
+    */
+    res.send(magicLoginDummyHtml());
+});
+
+// request access
+app.post<{}, {}, { email: string }>('/api/request-access', (req, res, next) => {
+
+    const { email } = req.body;
+    const token = jwt.sign({ email }, process.env.SECRET_REQUEST_ACCESS_TOKEN as string, { expiresIn: '20m' })
+    const authUrl = `${host}:${port}/magic-login?token=${token}`
+
+
+    const resend = new Resend(process.env.EMAIL_API_KEY);
+
+    resend.emails.send({
+        from: 'craftify@resend.dev',
+        to: 'franciscocguerrero@gmail.com',
+        subject: 'Craftify Login',
+        html: emailHtml(authUrl)
+    });
+
+
+    res.send({ success: true, authUrl })
 })
 
 // magic login
@@ -104,28 +113,24 @@ app.get<{ token: string }>('/api/magic-login/:token', (req, res, next) => {
 
     res.send({ success: true })
 })
-// request access
-app.post<{}, {}, { email: string }>('/api/request-access', (req, res, next) => {
 
-    const { email } = req.body;
-    const token = jwt.sign({ email }, process.env.SECRET_REQUEST_ACCESS_TOKEN as string, { expiresIn: '20m' })
-    const authUrl = `${host}:${port}/magic-login?token=${token}`
+// @TODO: eventually extend this globally for it to be available everywhere
+interface CustomRequest extends Request {
+    userEmail?: string;
+}
+// API endpoint to send userEmail
+app.get('/api/user', authentication, (req: CustomRequest, res) => {
+    res.json({ userEmail: req.userEmail });
+});
 
-
-    const resend = new Resend(process.env.EMAIL_API_KEY);
-
-    resend.emails.send({
-        from: 'craftify@resend.dev',
-        to: 'franciscocguerrero@gmail.com',
-        subject: 'Craftify Login',
-        html: emailHtml(authUrl)
-    });
-
-
-    res.send({ success: true, authUrl })
+app.get('/', authentication, (req, res) => {
+    res.sendFile(path.join(__dirname, '../../../../frontend/dist/index.html'))
 })
 
-app.use(authentication, express.static(path.join(__dirname, '../../../../frontend/dist')));
+
+app.use('/api/web-service', authentication, routes);
+
+app.use(express.static(path.join(__dirname, '../../../../frontend/dist')));
 
 if (process.env.NODE_ENV === 'development') {
     // preview of user-app (in development only)
@@ -135,10 +140,9 @@ if (process.env.NODE_ENV === 'development') {
     })
 }
 
-app.use('/api/web-service', authentication, routes);
 
 
-app.get('*', (req, res) => {
+app.get('*', authentication, (req, res) => {
     res.sendFile(path.join(__dirname, '../../../../frontend/dist/index.html'))
     // res.send(`
     //     <div style="display: flex; align-items: center; align-content: center; flex-direction: column;">

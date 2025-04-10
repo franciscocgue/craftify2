@@ -8,7 +8,7 @@ export const appBuildController = async (req: Request, res: Response) => {
     try {
         const data = req.body;
         // Add job to queue
-        await myQueue.add('new-build', data);
+        await myQueue.add('new-build', {...data, sessionToken: req?.cookies?.session});
 
         res.status(201).json({ message: 'Build job added to queue' });
     } catch (error) {

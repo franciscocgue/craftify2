@@ -1,15 +1,24 @@
 import { Response, Request } from 'express';
 import { httpClient } from '../utils/http-client';
 import { addClient, clients, removeClient } from '../server-events';
+import { buildLogger } from '../utils/logger';
 
 const apiUrlAws = process.env.API_URL_AWS;
 const apiUrlBuild = process.env.API_URL_BUILD;
 const apiUrlDb = process.env.API_URL_DB;
 
+const logger = buildLogger('web-service');
+
 const builder = async (req: Request, res: Response) => {
   try {
     // call build service
-    const data = await httpClient.post<{ message: string }>(`${apiUrlBuild}/api/build-service/build`, req.body);
+    const data = await httpClient.post<{ message: string }>(
+      `${apiUrlBuild}/api/build-service/build`, 
+      req.body,
+      {headers: {
+        Cookie: `session=${req?.cookies?.session};`
+      }}
+    );
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({
@@ -31,6 +40,11 @@ const getProjects = async (req: Request, res: Response) => {
     const data = await httpClient.post<{ status: 'ok' | 'nok', data: unknown[] }>(`${apiUrlDb}/api/db-service/read`, body);
     res.status(200).json(data);
   } catch (error) {
+    let message;
+    if (error instanceof Error) message = error.message;
+    else message = String(error);
+    logger.error(message);
+    // console.log(JSON.stringify(message));
     res.status(500).json({
       error: 'Error occurred when retrieving the projects',
       code: 500,

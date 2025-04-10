@@ -211,9 +211,15 @@ const Navbar = () => {
             }}
             onClick={async () => {
               try {
-                await axios.get(`${import.meta.env.VITE_API_URL}/logout`, { withCredentials: true }),
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/logout`, { withCredentials: true });
+                const data = response.data;
+                if (data.success) {
                   window.location.href = "/login";
+                } else {
+                  throw new Error('Logout failed')
+                }
               } catch (err) {
+                toast('Error when logging out', { type: 'error', autoClose: 2000, position: 'bottom-right' })
                 console.log('Error when logging out')
               }
             }}

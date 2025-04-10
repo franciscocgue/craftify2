@@ -31,10 +31,9 @@ type BuildParamsType = {
     variables: any,
     logicNodes: any,
     logicEdges: any,
+    sessionToken: string,
 }
 
-const port = process.env.PORT;
-const host = process.env.BACKEND_HOST;
 const apiUrlAws = process.env.API_URL_AWS;
 const apiUrlWeb = process.env.API_URL_WEB;
 const apiUrlDb = process.env.API_URL_DB;
@@ -215,7 +214,15 @@ worker.on('completed', async (job, returnvalue) => {
 
     const data = { url: previewUrl, error: null };
     try {
-        await httpClient.post<{}, { clientId: string, data: any }>(`${apiUrlWeb}/api/web-service/broadcast`, { clientId: appId, data });
+        logger.log(`apiUrlWeb: ${apiUrlWeb}`)
+        await httpClient.post<{}, { clientId: string, data: any }>(
+            `${apiUrlWeb}/api/web-service/broadcast`,
+            { clientId: appId, data },
+            {
+                headers: {
+                    Cookie: `session=${job.data.sessionToken}`,
+                },
+            });
     } catch (error) {
         logger.error(`Error when notifying client ${appId} on success completion of Job ${job.id}`);
     }
@@ -232,7 +239,14 @@ worker.on('failed', async (job, err) => {
         const data = { error: err.message, code: 500 };
 
         try {
-            await httpClient.post<{}, { clientId: string, data: any }>(`${apiUrlWeb}/api/web-service/broadcast`, { clientId: appId, data });
+            await httpClient.post<{}, { clientId: string, data: any }>(
+                `${apiUrlWeb}/api/web-service/broadcast`,
+                { clientId: appId, data },
+                {
+                    headers: {
+                        Cookie: `session=${job.data.sessionToken}`,
+                    },
+                });
         } catch (error) {
             logger.error(`Error when notifying client ${appId} on failure of Job ${job.id}`);
         }

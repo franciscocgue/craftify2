@@ -6,6 +6,7 @@ import routes from './routes';
 // import { authentication } from "./middlewares";
 import './queues/worker'; // get workers running
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 
 const app: Express = express();
@@ -17,6 +18,7 @@ const host = process.env.BACKEND_HOST;
 // parse application/json
 // @TODO: estimate actual limits
 app.use(bodyParser.json({limit: '10mb'}));
+app.use(cookieParser());
 // app.use(bodyParser.json())
 
 app.get('/health', (_, res) => {
