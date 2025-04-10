@@ -5,7 +5,7 @@ import { CSSProperties, ReactElement } from 'react';
 
 // INPUTS (from CONFIG FILES)
 
-type compTypes = "row" | "column" | "button" | "text" | "header" | "checkbox" | "image" | "link" | "icon-button";
+type compTypes = "column" | "button" | "text" | "header" | "checkbox" | "image" | "link" | "icon-button";
 export type FunctionTypes = "open-url" | "on-click-trigger" | "delay" | "docu-note" | 'toast' | 'set-variable' | 'condition'
 // export type FunctionTypesWithHandler = "open-url" | "delay" | 'toast'
 

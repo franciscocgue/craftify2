@@ -32,10 +32,6 @@ import PPlaceholder from "../components/SidebarProperties/properties/PPlaceholde
 import PTextInput from "../components/SidebarProperties/properties/PTextInput";
 
 const compTypes = {
-    'row': {
-        icon: CiGrid2V,
-        name: 'Row',
-    },
     'column': {
         icon: CiGrid2H,
         name: 'Column',
@@ -109,10 +105,6 @@ const compTypes = {
 // }
 
 const compPropertiesEditors = {
-    'row': {
-        styles: [null],
-        properties: [null],
-    },
     'canvas': {
         styles: [<Layout key={'layout'} />, <Padding key={'padding'} />, <Background key={'background'} />],
         properties: [null],
@@ -158,7 +150,6 @@ const compPropertiesEditors = {
 
 
 const compProperties: Record<keyof CompNames | 'canvas', Properties> = {
-    'row': {},
     'canvas': {
         canvasWidthPx: '360',
         canvasHeightPx: '760',
